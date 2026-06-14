@@ -3,35 +3,49 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Icon } from "@/components/ui/Icon";
+import type { PlanName } from "@/lib/purchase-store";
 
 type Purchase = {
   user: string;
-  plan: "Lifetime" | "Yearly" | "Monthly";
+  plan: PlanName;
+  location: string;
+  ago: string;
+  isReal?: boolean;
+};
+
+type PoolEntry = {
+  id: string;
+  user: string;
+  plan: PlanName;
   location: string;
 };
 
-const PURCHASE_POOL: Purchase[] = [
-  { user: "NovaFPS", plan: "Lifetime", location: "Texas, US" },
-  { user: "xKryptic", plan: "Monthly", location: "London, UK" },
-  { user: "LagSlayer99", plan: "Yearly", location: "Toronto, CA" },
-  { user: "ProGamer_J", plan: "Lifetime", location: "Sydney, AU" },
-  { user: "TweakGod", plan: "Monthly", location: "Berlin, DE" },
-  { user: "ZeroPing", plan: "Lifetime", location: "Florida, US" },
-  { user: "ClutchVibe", plan: "Yearly", location: "Chicago, US" },
-  { user: "AimbotZero", plan: "Monthly", location: "Paris, FR" },
-  { user: "FrameChaser", plan: "Lifetime", location: "Seoul, KR" },
-  { user: "PingWizard", plan: "Yearly", location: "Dallas, US" },
-  { user: "TurboRyze", plan: "Monthly", location: "Miami, US" },
-  { user: "GhostLatency", plan: "Lifetime", location: "Denver, US" },
-  { user: "HexFPS", plan: "Yearly", location: "Stockholm, SE" },
-  { user: "VoltCore", plan: "Monthly", location: "Phoenix, US" },
-  { user: "NightOwlFPS", plan: "Lifetime", location: "Atlanta, US" },
-  { user: "RawInput", plan: "Yearly", location: "Vancouver, CA" },
-  { user: "ScopeKing", plan: "Monthly", location: "Amsterdam, NL" },
-  { user: "DashFlick", plan: "Lifetime", location: "Portland, US" },
+const PURCHASE_POOL: PoolEntry[] = [
+  { id: "anon-1", user: "Anonymous", plan: "Lifetime", location: "Texas, US" },
+  { id: "anon-2", user: "Anonymous", plan: "Monthly", location: "London, UK" },
+  { id: "anon-3", user: "Anonymous", plan: "Yearly", location: "Toronto, CA" },
+  { id: "anon-4", user: "Anonymous", plan: "Lifetime", location: "Sydney, AU" },
+  { id: "anon-5", user: "Anonymous", plan: "Monthly", location: "Berlin, DE" },
+  { id: "anon-6", user: "Anonymous", plan: "Yearly", location: "Florida, US" },
+  { id: "anon-7", user: "Anonymous", plan: "Lifetime", location: "Chicago, US" },
+  { id: "anon-8", user: "Anonymous", plan: "Monthly", location: "Paris, FR" },
+  { id: "anon-9", user: "Anonymous", plan: "Yearly", location: "Seoul, KR" },
+  { id: "anon-10", user: "Anonymous", plan: "Lifetime", location: "Dallas, US" },
+  { id: "anon-11", user: "Anonymous", plan: "Monthly", location: "Miami, US" },
+  { id: "anon-12", user: "Anonymous", plan: "Yearly", location: "Denver, US" },
+  { id: "anon-13", user: "Anonymous", plan: "Lifetime", location: "Stockholm, SE" },
+  { id: "anon-14", user: "Anonymous", plan: "Monthly", location: "Phoenix, US" },
+  { id: "user-1", user: "NovaFPS", plan: "Lifetime", location: "Atlanta, US" },
+  { id: "user-2", user: "xKryptic", plan: "Monthly", location: "Vancouver, CA" },
+  { id: "user-3", user: "LagSlayer99", plan: "Yearly", location: "Amsterdam, NL" },
+  { id: "user-4", user: "ProGamer_J", plan: "Lifetime", location: "Portland, US" },
+  { id: "user-5", user: "TweakGod", plan: "Monthly", location: "Boston, US" },
+  { id: "user-6", user: "ZeroPing", plan: "Yearly", location: "Seattle, US" },
 ];
 
-const AGO_OPTIONS = ["1m ago", "2m ago", "3m ago", "4m ago", "5m ago", "6m ago", "8m ago", "11m ago", "14m ago"];
+const POLL_MS = 12_000;
+const ROTATE_MS = 4500;
+const SEEN_REAL_KEY = "reflux-seen-real-purchases";
 
 function shuffle<T>(items: T[]): T[] {
   const arr = [...items];
@@ -42,23 +56,61 @@ function shuffle<T>(items: T[]): T[] {
   return arr;
 }
 
-interface PurchasePopupsProps {
-  isActive: boolean;
+function randomAgo(): string {
+  const roll = Math.random();
+
+  if (roll < 0.18) {
+    const mins = 18 + Math.floor(Math.random() * 43);
+    return `${mins} min${mins === 1 ? "" : "s"} ago`;
+  }
+  if (roll < 0.34) {
+    const hours = 1 + Math.floor(Math.random() * 10);
+    return hours === 1 ? "1 hour ago" : `${hours} hours ago`;
+  }
+  if (roll < 0.58) {
+    if (Math.random() < 0.35) return "a day ago";
+    const days = 2 + Math.floor(Math.random() * 2);
+    return `${days} days ago`;
+  }
+  if (roll < 0.82) {
+    const days = 4 + Math.floor(Math.random() * 3);
+    return `${days} days ago`;
+  }
+
+  return Math.random() < 0.5 ? "6 days ago" : "1 week ago";
 }
 
-export function PurchasePopups({ isActive }: PurchasePopupsProps) {
+function readSeenRealIds(): Set<string> {
+  if (typeof window === "undefined") return new Set();
+  try {
+    const raw = sessionStorage.getItem(SEEN_REAL_KEY);
+    if (!raw) return new Set();
+    return new Set(JSON.parse(raw) as string[]);
+  } catch {
+    return new Set();
+  }
+}
+
+function writeSeenRealIds(ids: Set<string>) {
+  sessionStorage.setItem(SEEN_REAL_KEY, JSON.stringify([...ids]));
+}
+
+export function PurchasePopups() {
   const [mounted, setMounted] = useState(false);
-  const [visible, setVisible] = useState<(Purchase & { ago: string }) | null>(null);
+  const [visible, setVisible] = useState<Purchase | null>(null);
   const [show, setShow] = useState(false);
 
-  const queueRef = useRef<Purchase[]>([]);
-  const usedNamesRef = useRef<Set<string>>(new Set());
+  const queueRef = useRef<PoolEntry[]>([]);
+  const usedIdsRef = useRef<Set<string>>(new Set());
+  const seenRealRef = useRef<Set<string>>(readSeenRealIds());
+  const pollSinceRef = useRef(Date.now() - 60_000);
+  const rotateTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const pickNext = useCallback((): Purchase & { ago: string } => {
+  const pickNextFake = useCallback((): Purchase => {
     if (queueRef.current.length === 0) {
-      const remaining = PURCHASE_POOL.filter((p) => !usedNamesRef.current.has(p.user));
+      const remaining = PURCHASE_POOL.filter((p) => !usedIdsRef.current.has(p.id));
       if (remaining.length === 0) {
-        usedNamesRef.current.clear();
+        usedIdsRef.current.clear();
         queueRef.current = shuffle(PURCHASE_POOL);
       } else {
         queueRef.current = shuffle(remaining);
@@ -66,40 +118,84 @@ export function PurchasePopups({ isActive }: PurchasePopupsProps) {
     }
 
     const next = queueRef.current.shift()!;
-    usedNamesRef.current.add(next.user);
-    const ago = AGO_OPTIONS[Math.floor(Math.random() * AGO_OPTIONS.length)];
+    usedIdsRef.current.add(next.id);
 
-    return { ...next, ago };
+    return {
+      user: next.user,
+      plan: next.plan,
+      location: next.location,
+      ago: randomAgo(),
+      isReal: false,
+    };
   }, []);
+
+  const reveal = useCallback((purchase: Purchase) => {
+    setShow(false);
+    window.setTimeout(() => {
+      setVisible(purchase);
+      requestAnimationFrame(() => setShow(true));
+    }, 300);
+  }, []);
+
+  const startRotation = useCallback(() => {
+    if (rotateTimerRef.current) clearInterval(rotateTimerRef.current);
+    rotateTimerRef.current = setInterval(() => reveal(pickNextFake()), ROTATE_MS);
+  }, [pickNextFake, reveal]);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    queueRef.current = shuffle(PURCHASE_POOL);
+    reveal(pickNextFake());
+    startRotation();
+
+    return () => {
+      if (rotateTimerRef.current) clearInterval(rotateTimerRef.current);
+    };
+  }, [pickNextFake, reveal, startRotation]);
 
   useEffect(() => {
-    if (!isActive) {
-      setShow(false);
-      return;
-    }
+    const poll = async () => {
+      try {
+        const response = await fetch(`/api/purchases/recent?since=${pollSinceRef.current}`, {
+          cache: "no-store",
+        });
+        if (!response.ok) return;
 
-    queueRef.current = shuffle(
-      PURCHASE_POOL.filter((p) => !usedNamesRef.current.has(p.user)),
-    );
+        const data = (await response.json()) as {
+          purchases?: Array<{ id: string; user: string; plan: PlanName; location: string; at: number }>;
+        };
 
-    const showNext = () => {
-      setShow(false);
-      setTimeout(() => {
-        setVisible(pickNext());
-        requestAnimationFrame(() => setShow(true));
-      }, 300);
+        const fresh = (data.purchases ?? [])
+          .filter((purchase) => !seenRealRef.current.has(purchase.id))
+          .sort((a, b) => a.at - b.at);
+
+        if (fresh.length === 0) return;
+
+        const latest = fresh[fresh.length - 1];
+        seenRealRef.current.add(latest.id);
+        writeSeenRealIds(seenRealRef.current);
+        pollSinceRef.current = Math.max(pollSinceRef.current, latest.at);
+
+        if (rotateTimerRef.current) clearInterval(rotateTimerRef.current);
+        reveal({
+          user: "Anonymous",
+          plan: latest.plan,
+          location: latest.location,
+          ago: randomAgo(),
+          isReal: true,
+        });
+        startRotation();
+      } catch {
+        // Ignore polling errors — fake popups still run.
+      }
     };
 
-    showNext();
-    const interval = setInterval(showNext, 4500);
+    poll();
+    const interval = setInterval(poll, POLL_MS);
     return () => clearInterval(interval);
-  }, [isActive, pickNext]);
+  }, [reveal, startRotation]);
 
-  if (!mounted || !isActive || !visible) return null;
+  if (!mounted || !visible) return null;
 
   return createPortal(
     <div
@@ -113,15 +209,23 @@ export function PurchasePopups({ isActive }: PurchasePopupsProps) {
         </div>
         <div className="min-w-0">
           <p className="text-sm font-semibold text-white">
-            <span className="text-reflux-accent">{visible.user}</span> just bought{" "}
-            <span className="text-reflux-green">{visible.plan}</span>
+            <span className={visible.user === "Anonymous" ? "text-reflux-muted" : "text-reflux-accent"}>
+              {visible.user}
+            </span>{" "}
+            just bought <span className="text-reflux-green">{visible.plan}</span>
           </p>
           <p className="mt-0.5 text-xs text-reflux-muted">
             {visible.location} · {visible.ago}
           </p>
         </div>
-        <span className="ml-auto shrink-0 rounded-full bg-reflux-green/20 px-2 py-0.5 text-[10px] font-bold text-reflux-green">
-          LIVE
+        <span
+          className={`ml-auto shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold ${
+            visible.isReal
+              ? "bg-reflux-accent/25 text-reflux-accent"
+              : "bg-reflux-green/20 text-reflux-green"
+          }`}
+        >
+          {visible.isReal ? "NEW" : "LIVE"}
         </span>
       </div>
     </div>,

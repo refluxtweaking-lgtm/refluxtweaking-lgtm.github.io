@@ -67,7 +67,6 @@ export function Button({
     return (
       <a
         href={href}
-        download={typeof download === "string" ? download : undefined}
         className={classes}
         onClick={onClick}
       >

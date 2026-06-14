@@ -21,6 +21,10 @@ if (-not $installer) {
   throw "Build finished but REFLUX-FREE-Setup.exe was not found in $distDir"
 }
 
+if ($installer.Length -lt 76200000) {
+  throw "REFLUX-FREE-Setup.exe looks too small ($($installer.Length) bytes). Expected the NSIS installer, not the portable build."
+}
+
 New-Item -ItemType Directory -Force -Path $destDir | Out-Null
 Copy-Item -Path $installer.FullName -Destination $destFile -Force
 Write-Host "Synced $($installer.FullName) -> $destFile"

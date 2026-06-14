@@ -3,7 +3,6 @@
 import { GlowCard } from "@/components/ui/GlowCard";
 import { LatencyChart } from "../LatencyChart";
 import { LiveAppIndicator } from "@/components/ui/LiveAppIndicator";
-import { PurchasePopups } from "@/components/ui/PurchasePopups";
 import { Icon } from "@/components/ui/Icon";
 import { SlideHeading } from "./SlideHeading";
 import type { SlideProps } from "./types";
@@ -17,9 +16,7 @@ const networkTweaks = [
 
 export function LatencySlide({ isActive = false }: SlideProps) {
   return (
-    <>
-      <PurchasePopups isActive={isActive} />
-      <GlowCard centered className="w-full">
+    <GlowCard centered className="w-full">
         <LiveAppIndicator isActive={isActive} />
 
         <SlideHeading icon="globe" title="Low‑Latency Network" />
@@ -58,7 +55,6 @@ export function LatencySlide({ isActive = false }: SlideProps) {
         <p className="mt-2 text-center text-xs text-reflux-muted sm:mt-3 sm:text-sm">
           Real‑time packet prioritization & low‑level tweaks — applied in one click.
         </p>
-      </GlowCard>
-    </>
+    </GlowCard>
   );
 }
