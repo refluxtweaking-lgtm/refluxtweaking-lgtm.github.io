@@ -10,6 +10,15 @@ import {
 
 export const runtime = "nodejs";
 
+/** Browsers open webhooks with GET — return OK so setup/health checks don't look broken. */
+export async function GET() {
+  return NextResponse.json({
+    ok: true,
+    endpoint: "moneymotion-webhook",
+    message: "Webhook is live. MoneyMotion sends POST requests here after checkout.",
+  });
+}
+
 export async function POST(request: Request) {
   const secret = process.env.MONEYMOTION_WEBHOOK_SECRET;
   if (!secret) {
