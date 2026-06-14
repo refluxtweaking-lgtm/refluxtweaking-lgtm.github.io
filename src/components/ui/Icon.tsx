@@ -20,7 +20,9 @@ export type IconName =
   | "download"
   | "sliders"
   | "arrowRight"
-  | "arrowLeft";
+  | "arrowLeft"
+  | "menu"
+  | "close";
 
 const ICONS: Record<IconName, ReactNode> = {
   bolt: <path d="M13 2 5 13h6l-1 9 9-12h-6l1-8z" />,
@@ -134,6 +136,19 @@ const ICONS: Record<IconName, ReactNode> = {
   ),
   arrowRight: <path d="M5 12h13M13 6l6 6-6 6" />,
   arrowLeft: <path d="M19 12H6M11 6l-6 6 6 6" />,
+  menu: (
+    <>
+      <path d="M4 7h16" />
+      <path d="M4 12h16" />
+      <path d="M4 17h16" />
+    </>
+  ),
+  close: (
+    <>
+      <path d="m6 6 12 12" />
+      <path d="m18 6-12 12" />
+    </>
+  ),
 };
 
 interface IconProps {
