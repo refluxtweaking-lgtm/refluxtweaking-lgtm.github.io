@@ -1,4 +1,4 @@
-export function GpuVisual() {
+export function GpuVisual({ compact = false }: { compact?: boolean }) {
   const fans = [
     { cx: 42, cy: 68 },
     { cx: 100, cy: 68 },
@@ -6,10 +6,10 @@ export function GpuVisual() {
   ];
 
   return (
-    <div className="relative mb-4 flex h-[130px] w-full items-center justify-center">
+    <div className={`relative flex w-full items-center justify-center ${compact ? "mb-1 h-[72px]" : "mb-4 h-[130px]"}`}>
       <svg
         viewBox="0 0 200 120"
-        className="h-full w-[200px] drop-shadow-[0_0_14px_rgba(241,91,80,0.5)]"
+        className={`h-full drop-shadow-[0_0_14px_rgba(241,91,80,0.5)] ${compact ? "w-[120px]" : "w-[200px]"}`}
         aria-hidden="true"
       >
         <defs>

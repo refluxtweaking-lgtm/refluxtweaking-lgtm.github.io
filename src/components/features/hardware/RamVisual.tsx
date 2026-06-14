@@ -1,18 +1,19 @@
 interface RamVisualProps {
   fillPercent: number;
+  compact?: boolean;
 }
 
-export function RamVisual({ fillPercent }: RamVisualProps) {
+export function RamVisual({ fillPercent, compact = false }: RamVisualProps) {
   const sticks = [
     { x: 30, chips: 8 },
     { x: 110, chips: 8 },
   ];
 
   return (
-    <div className="relative mb-4 flex h-[130px] w-full items-center justify-center">
+    <div className={`relative flex w-full items-center justify-center ${compact ? "mb-0 h-[72px]" : "mb-4 h-[130px]"}`}>
       <svg
         viewBox="0 0 200 120"
-        className="h-full w-[200px] drop-shadow-[0_0_14px_rgba(179,146,240,0.35)]"
+        className={`h-full drop-shadow-[0_0_14px_rgba(179,146,240,0.35)] ${compact ? "w-[120px]" : "w-[200px]"}`}
         aria-hidden="true"
       >
         {sticks.map((stick, stickIdx) => (

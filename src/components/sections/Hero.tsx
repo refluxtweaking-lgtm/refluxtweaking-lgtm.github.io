@@ -60,6 +60,9 @@ export function Hero() {
           </div>
         ))}
       </div>
+
+      {/* MoneyMotion domain verification — remove after verified */}
+      <p className="mt-10 text-center text-xs text-reflux-muted/60">ORw-nPy-iYE-</p>
     </section>
   );
 }

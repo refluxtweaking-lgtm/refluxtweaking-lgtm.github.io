@@ -9,7 +9,7 @@ import { Icon } from "@/components/ui/Icon";
 
 export const metadata = {
   title: "Pricing – REFLUX TWEAKS",
-  description: "Compare REFLUX TWEAKS plans. Start Monthly at $4.99/mo or go Lifetime.",
+  description: "Compare REFLUX TWEAKS plans. Start Monthly at $6.99/mo or go Lifetime.",
 };
 
 const faqs = [

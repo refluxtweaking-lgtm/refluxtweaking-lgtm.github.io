@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { TweaksSlide } from "./slides/TweaksSlide";
 import { GameScannerSlide } from "./slides/GameScannerSlide";
 import { LatencySlide } from "./slides/LatencySlide";
@@ -22,27 +22,6 @@ const slides: { id: string; label: string; component: ComponentType<SlideProps> 
 
 export function FeatureSlideshow() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [slideHeight, setSlideHeight] = useState<number | null>(null);
-  const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  const measureCurrentSlide = useCallback(() => {
-    const currentEl = slideRefs.current[currentSlide];
-    if (currentEl) {
-      setSlideHeight(currentEl.offsetHeight);
-    }
-  }, [currentSlide]);
-
-  useEffect(() => {
-    measureCurrentSlide();
-    const frame = requestAnimationFrame(measureCurrentSlide);
-    const timer = setTimeout(measureCurrentSlide, 350);
-    window.addEventListener("resize", measureCurrentSlide);
-    return () => {
-      cancelAnimationFrame(frame);
-      clearTimeout(timer);
-      window.removeEventListener("resize", measureCurrentSlide);
-    };
-  }, [measureCurrentSlide, currentSlide]);
 
   const goTo = (index: number) => setCurrentSlide(index);
   const goToPrev = () => goTo((currentSlide - 1 + slides.length) % slides.length);
@@ -50,29 +29,23 @@ export function FeatureSlideshow() {
 
   return (
     <div className="glass-card-static overflow-hidden rounded-3xl p-3 sm:p-5 md:p-8">
-      <div
-        className="relative mx-auto w-full max-w-[960px] overflow-hidden transition-[min-height] duration-300 ease-out"
-        style={slideHeight ? { minHeight: slideHeight } : undefined}
-      >
-        <div
-          className="flex transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"
-          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-        >
-          {slides.map(({ id, component: SlideComponent }, index) => (
-            <div
-              key={id}
-              ref={(el) => {
-                slideRefs.current[index] = el;
-              }}
-              className="flex w-full min-w-full shrink-0 items-start px-1 sm:px-4"
-            >
-              <SlideComponent isActive={currentSlide === index} />
-            </div>
-          ))}
-        </div>
+      <div className="relative mx-auto w-full max-w-[960px]">
+        {slides.map(({ id, component: SlideComponent }, index) => (
+          <div
+            key={id}
+            className={`w-full transition-opacity duration-300 ${
+              index === currentSlide
+                ? "relative opacity-100"
+                : "pointer-events-none absolute inset-0 opacity-0"
+            }`}
+            aria-hidden={index !== currentSlide}
+          >
+            <SlideComponent isActive={currentSlide === index} />
+          </div>
+        ))}
       </div>
 
-      <div className="mt-4 flex flex-col items-center gap-3 md:mt-6 md:gap-4">
+      <div className="mt-3 flex flex-col items-center gap-2.5 md:mt-5 md:gap-3">
         <div className="flex max-w-full flex-wrap justify-center gap-1.5 sm:gap-2">
           {slides.map((slide, index) => (
             <button

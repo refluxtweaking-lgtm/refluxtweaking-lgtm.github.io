@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { GlowCard } from "@/components/ui/GlowCard";
 import { GameImage } from "@/components/games/GameImage";
 import { Icon } from "@/components/ui/Icon";
@@ -43,19 +42,19 @@ const games: Game[] = [
 
 export function GameScannerSlide(_props: SlideProps) {
   return (
-    <GlowCard centered className="w-full">
+    <GlowCard centered hover={false} className="slide-tight w-full !p-3 sm:!p-5">
       <SlideHeading icon="gamepad" title="Game Scanner" />
-      <p className="mb-3 max-w-lg text-center text-sm text-reflux-muted sm:mb-4 sm:text-base">
+      <p className="mb-2 hidden max-w-lg text-center text-sm text-reflux-muted sm:mb-3 sm:block">
         Automatically detects installed games and applies per‑title performance profiles.
       </p>
 
-      <div className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-1 snap-x snap-mandatory sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0">
+      <div className="-mx-0.5 flex gap-2 overflow-x-auto px-0.5 pb-0.5 snap-x snap-mandatory sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-3 sm:overflow-visible sm:pb-0">
         {games.map((game) => (
           <div
             key={game.name}
-            className="flex w-[78%] shrink-0 snap-center flex-col overflow-hidden rounded-2xl border border-reflux-border bg-[#0c0e12] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:w-full"
+            className="flex w-[72%] shrink-0 snap-center flex-col overflow-hidden rounded-xl border border-reflux-border bg-[#0c0e12] sm:w-full sm:rounded-2xl"
           >
-            <div className="relative aspect-video w-full overflow-hidden bg-[#1a1d24]">
+            <div className="relative aspect-[2/1] w-full overflow-hidden bg-[#1a1d24] sm:aspect-video">
               {game.sources ? (
                 <GameImage
                   sources={game.sources}
@@ -65,48 +64,41 @@ export function GameScannerSlide(_props: SlideProps) {
                   fallbackGradient={game.fallbackGradient ?? "from-[#1a1d24] to-[#0c0e12]"}
                 />
               ) : (
-                <Image
-                  src={game.image as string}
+                <img
+                  src={game.image}
                   alt={game.name}
-                  fill
-                  sizes="(max-width: 640px) 100vw, 280px"
-                  className="object-cover transition-transform duration-500 hover:scale-105"
+                  className="h-full w-full object-cover"
                 />
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0c0e12] via-transparent to-transparent" />
-              <span className="absolute top-2 left-2 rounded-md bg-black/60 px-2 py-0.5 text-[10px] font-semibold text-reflux-accent backdrop-blur-sm">
+              <span className="absolute top-1.5 left-1.5 rounded bg-black/60 px-1.5 py-0.5 text-[9px] font-semibold text-reflux-accent sm:top-2 sm:left-2 sm:px-2 sm:text-[10px]">
                 {game.launcher}
               </span>
-              <span className="absolute top-2 right-2 flex items-center gap-1 rounded-md bg-reflux-green/20 px-2 py-0.5 text-[10px] font-bold text-reflux-green">
-                <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-reflux-green" />
+              <span className="absolute top-1.5 right-1.5 flex items-center gap-1 rounded bg-reflux-green/20 px-1.5 py-0.5 text-[9px] font-bold text-reflux-green sm:top-2 sm:right-2 sm:px-2 sm:text-[10px]">
+                <span className="inline-block h-1 w-1 animate-pulse rounded-full bg-reflux-green" />
                 Detected
               </span>
             </div>
 
-            <div className="flex flex-1 flex-col p-3 sm:p-4">
-              <div className="mb-2 text-sm font-semibold sm:mb-3 sm:text-base">{game.name}</div>
-              <div className="mt-auto flex gap-2">
+            <div className="flex flex-col gap-2 p-2 sm:p-3">
+              <div className="text-xs font-semibold sm:text-sm">{game.name}</div>
+              <div className="flex gap-1.5 sm:gap-2">
                 <button
                   type="button"
-                  className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-[rgba(241,91,80,0.4)] bg-[rgba(241,91,80,0.15)] px-3 py-2 text-xs font-semibold text-reflux-accent transition-all hover:bg-[rgba(241,91,80,0.35)] hover:text-white hover:shadow-[0_0_16px_rgba(241,91,80,0.5)]"
+                  className="inline-flex flex-1 items-center justify-center gap-1 rounded-lg border border-[rgba(241,91,80,0.4)] bg-[rgba(241,91,80,0.15)] px-2 py-1.5 text-[10px] font-semibold text-reflux-accent sm:rounded-xl sm:px-3 sm:py-2 sm:text-xs"
                 >
-                  <Icon name="bolt" size={14} /> Optimize
+                  <Icon name="bolt" size={12} /> Optimize
                 </button>
                 <button
                   type="button"
-                  className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-[#2A2F38] bg-[#1A1D24] px-3 py-2 text-xs font-semibold text-reflux-text transition-all hover:border-reflux-accent/40"
+                  className="inline-flex flex-1 items-center justify-center gap-1 rounded-lg border border-[#2A2F38] bg-[#1A1D24] px-2 py-1.5 text-[10px] font-semibold text-reflux-text sm:rounded-xl sm:px-3 sm:py-2 sm:text-xs"
                 >
-                  <Icon name="globe" size={14} glow={false} className="text-reflux-muted" /> Network
+                  <Icon name="globe" size={12} glow={false} className="text-reflux-muted" /> Network
                 </button>
               </div>
             </div>
           </div>
         ))}
       </div>
-
-      <p className="mt-3 text-center text-xs text-reflux-muted sm:mt-5 sm:text-sm">
-        Works with all major launchers – Steam, Epic, Ubisoft, and more.
-      </p>
     </GlowCard>
   );
 }
