@@ -1,4 +1,5 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { getSupabaseServiceRoleKey, getSupabaseUrl } from "./config";
 
 /**
  * Service-role Supabase client. Server-only — bypasses RLS.
@@ -6,8 +7,8 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
  * degrade gracefully (e.g. the webhook still returns 200).
  */
 export function createAdminClient(): SupabaseClient | null {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  const url = getSupabaseUrl();
+  const serviceRoleKey = getSupabaseServiceRoleKey();
 
   if (!url || !serviceRoleKey) return null;
 
