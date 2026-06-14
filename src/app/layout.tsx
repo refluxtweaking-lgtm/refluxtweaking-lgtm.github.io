@@ -8,10 +8,15 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.refluxtweaks.com";
+const SITE_TITLE = "REFLUX TWEAKS – Windows Gaming Optimizer";
+const SITE_DESCRIPTION =
+  "30 free tweaks · 100+ with Pro — lower latency, higher frames, and a cleaner rig with one click.";
+
 export const metadata: Metadata = {
-  title: "REFLUX TWEAKS – Windows Gaming Optimizer",
-  description:
-    "30 free tweaks · 100+ with Pro — lower latency, higher frames, and a cleaner rig with one click.",
+  metadataBase: new URL(SITE_URL),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
   icons: {
     icon: [
       { url: "/web-icon.ico", sizes: "any" },
@@ -19,6 +24,27 @@ export const metadata: Metadata = {
     ],
     shortcut: "/web-icon.ico",
     apple: "/web-icon.png",
+  },
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    siteName: "REFLUX TWEAKS",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "REFLUX TWEAKS",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: ["/og-image.png"],
   },
   referrer: "strict-origin-when-cross-origin",
   robots: {
