@@ -45,15 +45,15 @@ export function GameScannerSlide(_props: SlideProps) {
   return (
     <GlowCard centered className="w-full">
       <SlideHeading icon="gamepad" title="Game Scanner" />
-      <p className="mb-6 max-w-lg text-center text-reflux-muted">
+      <p className="mb-3 max-w-lg text-center text-sm text-reflux-muted sm:mb-4 sm:text-base">
         Automatically detects installed games and applies per‑title performance profiles.
       </p>
 
-      <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-3">
+      <div className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-1 snap-x snap-mandatory sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0">
         {games.map((game) => (
           <div
             key={game.name}
-            className="flex flex-col overflow-hidden rounded-2xl border border-reflux-border bg-[#0c0e12] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
+            className="flex w-[78%] shrink-0 snap-center flex-col overflow-hidden rounded-2xl border border-reflux-border bg-[#0c0e12] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:w-full"
           >
             <div className="relative aspect-video w-full overflow-hidden bg-[#1a1d24]">
               {game.sources ? (
@@ -83,8 +83,8 @@ export function GameScannerSlide(_props: SlideProps) {
               </span>
             </div>
 
-            <div className="flex flex-1 flex-col p-4">
-              <div className="mb-3 text-base font-semibold">{game.name}</div>
+            <div className="flex flex-1 flex-col p-3 sm:p-4">
+              <div className="mb-2 text-sm font-semibold sm:mb-3 sm:text-base">{game.name}</div>
               <div className="mt-auto flex gap-2">
                 <button
                   type="button"
@@ -104,7 +104,7 @@ export function GameScannerSlide(_props: SlideProps) {
         ))}
       </div>
 
-      <p className="mt-6 text-center text-sm text-reflux-muted">
+      <p className="mt-3 text-center text-xs text-reflux-muted sm:mt-5 sm:text-sm">
         Works with all major launchers – Steam, Epic, Ubisoft, and more.
       </p>
     </GlowCard>

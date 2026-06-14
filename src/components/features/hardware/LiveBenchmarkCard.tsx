@@ -41,13 +41,13 @@ export function LiveBenchmarkCard({
   const display = formatValue ? formatValue(value) : formatted;
 
   return (
-    <div className="flex w-full flex-col overflow-hidden rounded-2xl border border-[rgba(241,91,80,0.3)] bg-gradient-to-b from-[#0c0e12] to-[#080a0d] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_8px_32px_rgba(0,0,0,0.3)]">
-      <div className="w-full border-b border-reflux-border/60 pb-3">{visual}</div>
-      <div className={`mt-4 text-center text-4xl font-extrabold tabular-nums transition-all duration-300 ${valueColor}`}>
+    <div className="flex w-full flex-col overflow-hidden rounded-2xl border border-[rgba(241,91,80,0.3)] bg-gradient-to-b from-[#0c0e12] to-[#080a0d] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_8px_32px_rgba(0,0,0,0.3)] sm:p-5">
+      <div className="w-full border-b border-reflux-border/60 pb-2 sm:pb-3">{visual}</div>
+      <div className={`mt-3 text-center text-3xl font-extrabold tabular-nums transition-all duration-300 sm:mt-4 sm:text-4xl ${valueColor}`}>
         {display}
       </div>
-      <div className="mt-1 text-center text-sm font-medium text-reflux-muted">{unit}</div>
-      <div className="mt-3 min-h-[48px] text-center text-xs leading-relaxed text-[#6B7A8A]">
+      <div className="mt-1 text-center text-xs font-medium text-reflux-muted sm:text-sm">{unit}</div>
+      <div className="mt-2 hidden min-h-[36px] text-center text-xs leading-relaxed text-[#6B7A8A] sm:mt-3 sm:block sm:min-h-[48px]">
         {description}
       </div>
       <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-reflux-border">

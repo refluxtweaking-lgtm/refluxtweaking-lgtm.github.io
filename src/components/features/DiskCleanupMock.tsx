@@ -67,7 +67,7 @@ export function DiskCleanupMock({ isActive }: DiskCleanupMockProps) {
           <span className="text-reflux-accent">{totalSize}</span> recoverable
         </p>
 
-        <div className="max-h-[180px] space-y-1 overflow-y-auto">
+        <div className="max-h-[120px] space-y-1 overflow-y-auto sm:max-h-[160px]">
           {cleanupItems.map((item) => (
             <label
               key={item.label}

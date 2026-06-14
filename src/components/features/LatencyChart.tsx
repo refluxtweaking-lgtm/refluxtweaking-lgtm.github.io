@@ -91,7 +91,7 @@ export function LatencyChart() {
   }, []);
 
   return (
-    <div className="relative mx-auto mt-5 w-full max-w-[450px] rounded-[20px] border border-reflux-border bg-reflux-card p-6">
+    <div className="relative mx-auto mt-3 w-full max-w-[450px] rounded-2xl border border-reflux-border bg-reflux-card p-3 sm:mt-4 sm:rounded-[20px] sm:p-5">
       <Line
         ref={chartRef}
         data={chartData}

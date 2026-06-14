@@ -14,13 +14,13 @@ export function SafeReversibleSlide(_props: SlideProps) {
   return (
     <GlowCard centered className="w-full">
       <SlideHeading icon="shield" title="Safe & Reversible" />
-      <p className="mb-6 max-w-lg text-center text-reflux-muted">
+      <p className="mb-3 max-w-lg text-center text-sm text-reflux-muted sm:mb-4 md:mb-6">
         REFLUX creates a Windows System Restore point <em>before</em> it touches anything. If you
         don&apos;t like a change, roll the whole thing back in one click.
       </p>
 
-      <div className="mx-auto w-full max-w-md rounded-2xl border border-reflux-border bg-[#0c0e12] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
-        <div className="mb-4 flex items-center justify-between">
+      <div className="mx-auto w-full max-w-md rounded-2xl border border-reflux-border bg-[#0c0e12] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:p-4 md:p-5">
+        <div className="mb-3 flex items-center justify-between sm:mb-4">
           <span className="text-xs font-semibold uppercase tracking-wider text-reflux-muted">
             Restore Timeline
           </span>
@@ -30,7 +30,7 @@ export function SafeReversibleSlide(_props: SlideProps) {
           </span>
         </div>
 
-        <div className="relative space-y-4 pl-7">
+        <div className="relative space-y-3 pl-7 sm:space-y-4">
           <span className="absolute left-[10px] top-2 bottom-2 w-px bg-gradient-to-b from-reflux-green/60 via-reflux-accent/50 to-reflux-purple/50" />
           {timeline.map((step) => (
             <div key={step.label} className="relative flex items-start gap-3">
@@ -60,7 +60,7 @@ export function SafeReversibleSlide(_props: SlideProps) {
         </div>
       </div>
 
-      <p className="mt-5 text-center text-sm text-[#C0C8D2]">
+      <p className="mt-3 text-center text-xs text-[#C0C8D2] sm:mt-4 sm:text-sm">
         One‑click revert to a previous state. Zero risk.
       </p>
     </GlowCard>

@@ -24,11 +24,11 @@ export function BenchmarksSlide({ isActive = false }: SlideProps) {
   return (
     <GlowCard centered className="w-full">
       <SlideHeading icon="chart" title="Live Benchmarks" />
-      <p className="mb-6 text-center text-reflux-muted">
+      <p className="mb-3 text-center text-sm text-reflux-muted sm:mb-4 md:mb-6">
         Real‑time hardware analysis for the ultimate gaming insight.
       </p>
 
-      <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
         <LiveBenchmarkCard
           isActive={isActive}
           type="gpu"
@@ -52,15 +52,15 @@ export function BenchmarksSlide({ isActive = false }: SlideProps) {
           valueColor="text-reflux-green"
         />
 
-        <div className="flex w-full flex-col overflow-hidden rounded-2xl border border-[rgba(241,91,80,0.35)] bg-[#0c0e12] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_0_20px_rgba(241,91,80,0.08)]">
-          <div className="w-full border-b border-reflux-border/60 pb-3">
+        <div className="flex w-full flex-col overflow-hidden rounded-2xl border border-[rgba(241,91,80,0.35)] bg-[#0c0e12] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_0_20px_rgba(241,91,80,0.08)] sm:p-5">
+          <div className="w-full border-b border-reflux-border/60 pb-2 sm:pb-3">
             <RamVisual fillPercent={ramFillPercent} />
           </div>
-          <div className="mt-4 text-center text-4xl font-extrabold tabular-nums text-reflux-purple transition-all duration-300">
+          <div className="mt-3 text-center text-3xl font-extrabold tabular-nums text-reflux-purple transition-all duration-300 sm:mt-4 sm:text-4xl">
             {ram.formatted}
           </div>
-          <div className="mt-1 text-center text-sm font-medium text-reflux-muted">Free RAM</div>
-          <div className="mt-3 min-h-[48px] text-center text-xs leading-relaxed text-[#6B7A8A]">
+          <div className="mt-1 text-center text-xs font-medium text-reflux-muted sm:text-sm">Free RAM</div>
+          <div className="mt-2 hidden min-h-[36px] text-center text-xs leading-relaxed text-[#6B7A8A] sm:mt-3 sm:block sm:min-h-[48px]">
             Reads current memory timings, CAS latency, and free capacity to ensure smooth
             multitasking.
           </div>
@@ -73,7 +73,7 @@ export function BenchmarksSlide({ isActive = false }: SlideProps) {
         </div>
       </div>
 
-      <p className="mt-6 text-center text-sm text-reflux-muted">
+      <p className="mt-3 text-center text-xs text-reflux-muted sm:mt-5 sm:text-sm">
         Benchmark scores are normalized against thousands of similar systems – see exactly
         where your rig stands.
       </p>

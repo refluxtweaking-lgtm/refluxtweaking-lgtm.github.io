@@ -31,12 +31,14 @@ export function TweaksSlide(_props: SlideProps) {
   return (
     <GlowCard>
       <SlideHeading icon="bolt" title="100+ Tweaks" />
-      <p className="mb-5 text-reflux-muted">
+      <p className="mb-3 text-sm text-reflux-muted sm:mb-4">
         Pre‑configured optimizations ready to fire.
       </p>
-      {tweaks.map((tweak) => (
-        <TweakCardMini key={tweak.title} {...tweak} />
-      ))}
+      <div className="space-y-2">
+        {tweaks.map((tweak) => (
+          <TweakCardMini key={tweak.title} {...tweak} />
+        ))}
+      </div>
     </GlowCard>
   );
 }

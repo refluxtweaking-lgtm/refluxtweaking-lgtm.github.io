@@ -3,7 +3,7 @@ import { FeatureSlideshow } from "@/components/features/FeatureSlideshow";
 
 export function Features() {
   return (
-    <section id="features" className="py-20">
+    <section id="features" className="py-12 md:py-20">
       <SectionHeader
         eyebrow="What You Get"
         title={

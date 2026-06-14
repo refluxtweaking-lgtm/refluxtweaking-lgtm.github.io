@@ -23,13 +23,13 @@ export function LatencySlide({ isActive = false }: SlideProps) {
         <LiveAppIndicator isActive={isActive} />
 
         <SlideHeading icon="globe" title="Low‑Latency Network" />
-        <p className="mb-4 max-w-lg text-center text-reflux-muted">
+        <p className="mb-3 max-w-lg text-center text-sm text-reflux-muted sm:mb-4">
           Windows ships with settings that <strong className="text-white">add 40–80ms</strong> of
           hidden latency. REFLUX strips them out at the driver and registry level — that&apos;s why
           your ping drops without changing your ISP.
         </p>
 
-        <div className="mb-5 grid w-full max-w-lg grid-cols-2 gap-2">
+        <div className="mb-3 grid w-full max-w-lg grid-cols-2 gap-1.5 sm:mb-4 sm:gap-2">
           {networkTweaks.map((t) => (
             <div
               key={t.name}
@@ -43,7 +43,7 @@ export function LatencySlide({ isActive = false }: SlideProps) {
 
         {isActive && <LatencyChart key="latency-chart" />}
 
-        <div className="mt-5 flex flex-wrap justify-center gap-6 text-center">
+        <div className="mt-3 flex flex-wrap justify-center gap-4 text-center sm:mt-4 sm:gap-6">
           <div>
             <div className="text-2xl font-extrabold text-[#5F6A7A] line-through">85 ms</div>
             <div className="text-xs text-reflux-muted">Before REFLUX</div>
@@ -55,7 +55,7 @@ export function LatencySlide({ isActive = false }: SlideProps) {
           </div>
         </div>
 
-        <p className="mt-4 text-center text-sm text-reflux-muted">
+        <p className="mt-2 text-center text-xs text-reflux-muted sm:mt-3 sm:text-sm">
           Real‑time packet prioritization & low‑level tweaks — applied in one click.
         </p>
       </GlowCard>
