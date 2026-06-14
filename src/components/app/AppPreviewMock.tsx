@@ -59,7 +59,7 @@ export function AppPreviewMock() {
         {activeTab === "Tweaks" && (
           <div className="space-y-2.5">
             <div className="mb-4 flex items-center justify-between">
-              <span className="font-semibold">130+ Optimizations</span>
+              <span className="font-semibold">30 Free · 100+ Pro</span>
               <button
                 type="button"
                 className="rounded-lg bg-gradient-to-r from-reflux-accent to-[#c43d35] px-4 py-2 text-xs font-bold text-white shadow-[0_0_16px_rgba(241,91,80,0.4)]"

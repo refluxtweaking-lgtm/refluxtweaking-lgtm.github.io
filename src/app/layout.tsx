@@ -11,7 +11,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "REFLUX TWEAKS – Windows Gaming Optimizer",
   description:
-    "100+ hardcore working tweaks that boost performance – lower latency, higher frames, and a cleaner rig with one click.",
+    "30 free tweaks · 100+ with Pro — lower latency, higher frames, and a cleaner rig with one click.",
   icons: {
     icon: "/favicon.ico",
   },

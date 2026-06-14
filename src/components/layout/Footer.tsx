@@ -4,6 +4,7 @@ const footerLinks = [
   { href: "/pricing", label: "Pricing" },
   { href: "/compare", label: "Compare Tweaks" },
   { href: "/app-preview", label: "The App" },
+  { href: "/banner", label: "Banner" },
   { href: "/#faq", label: "FAQ" },
   { href: "https://discord.gg/xGpHKY8AAC", label: "Discord", external: true },
   { href: "mailto:refluxtweaking@gmail.com", label: "Contact", external: true },
@@ -21,7 +22,7 @@ export function Footer() {
           <div className="text-center md:text-left">
             <div className="mb-2 text-2xl font-extrabold gradient-text">REFLUX TWEAKS</div>
             <p className="max-w-sm text-sm text-reflux-muted">
-              130+ proven Windows gaming tweaks. Lower ping, higher FPS, cleaner PC.
+              30 free tweaks · 100+ with Pro. Lower ping, higher FPS, cleaner PC.
             </p>
           </div>
           <div className="flex flex-wrap justify-center gap-2">

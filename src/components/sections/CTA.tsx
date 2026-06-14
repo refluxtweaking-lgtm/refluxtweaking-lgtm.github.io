@@ -16,7 +16,7 @@ export function CTA() {
             Take control of your <span className="gradient-text">rig</span>
           </h2>
           <p className="mx-auto mb-10 max-w-lg text-reflux-muted">
-            Join hundreds of gamers who trust REFLUX TWEAKS. Download free, upgrade when you&apos;re hooked.
+            Join hundreds of gamers who trust REFLUX TWEAKS. Download free with 30 tweaks — upgrade when you&apos;re hooked.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button

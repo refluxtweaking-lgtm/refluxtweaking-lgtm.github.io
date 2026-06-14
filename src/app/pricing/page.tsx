@@ -4,7 +4,7 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { PricingCards } from "@/components/pricing/PricingCards";
 import { CTA } from "@/components/sections/CTA";
 import { plans } from "@/data/plans";
-import { countTweaksForPlan } from "@/data/tweaks";
+import { displayTweakCountForPlan } from "@/data/tweaks";
 import { Icon } from "@/components/ui/Icon";
 
 export const metadata = {
@@ -23,7 +23,7 @@ const faqs = [
   },
   {
     q: "Is the Free plan useful?",
-    a: "Yes. 30 core tweaks, manual game scanning, and basic network optimizations — enough to feel the difference.",
+    a: "Yes. 30 core tweaks, 2 power plans, and basic network optimizations — enough to feel the difference.",
   },
   {
     q: "Are tweaks safe?",
@@ -101,7 +101,7 @@ function GlowTable() {
               <td className="py-4 font-medium">Total tweaks</td>
               {plans.map((p) => (
                 <td key={p.id} className="px-3 py-4 text-center text-lg font-extrabold text-reflux-accent">
-                  {countTweaksForPlan(p.id)}
+                  {displayTweakCountForPlan(p.id)}
                 </td>
               ))}
             </tr>

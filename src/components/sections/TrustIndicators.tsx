@@ -1,7 +1,7 @@
 import { Icon, type IconName } from "@/components/ui/Icon";
 
 const indicators: { icon: IconName; text: string; color: string }[] = [
-  { icon: "bolt", text: "Hundreds of tweaks applied", color: "from-reflux-accent/20 to-reflux-accent/5" },
+  { icon: "bolt", text: "30 free tweaks included", color: "from-reflux-accent/20 to-reflux-accent/5" },
   { icon: "chat", text: "Active Discord community", color: "from-reflux-discord/20 to-reflux-discord/5" },
   { icon: "disk", text: "Safe restore points", color: "from-reflux-green/20 to-reflux-green/5" },
   { icon: "undo", text: "Fully reversible", color: "from-reflux-purple/20 to-reflux-purple/5" },

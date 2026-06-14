@@ -33,6 +33,7 @@ export const plans: Plan[] = [
     downloadFilename: REFLUX_FREE_DOWNLOAD.filename,
     highlights: [
       "30 core tweaks",
+      "2 power plans",
       "Manual game scanner",
       "Basic network optimizations",
       "Community Discord support",

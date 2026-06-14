@@ -20,7 +20,7 @@ const steps: {
     icon: "sliders",
     step: "02",
     title: "Choose Tweaks",
-    description: "Toggle what you want, or apply all 130+ optimizations with one click.",
+    description: "Toggle what you want, or apply all 100+ optimizations with one click.",
     pulse: true,
   },
   {

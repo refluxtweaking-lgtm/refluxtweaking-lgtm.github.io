@@ -1,7 +1,7 @@
 import { GlowCard } from "@/components/ui/GlowCard";
 import { Button } from "@/components/ui/Button";
 import { plans } from "@/data/plans";
-import { countTweaksForPlan } from "@/data/tweaks";
+import { displayTweakCountForPlan } from "@/data/tweaks";
 
 interface PricingCardsProps {
   compact?: boolean;
@@ -52,7 +52,7 @@ export function PricingCards({ compact = false }: PricingCardsProps) {
           </div>
 
           <div className="mb-5 inline-flex rounded-full border border-reflux-accent/25 bg-reflux-accent/10 px-4 py-1.5 text-sm font-bold text-reflux-accent">
-            {countTweaksForPlan(plan.id)} tweaks
+            {displayTweakCountForPlan(plan.id)} tweaks
           </div>
 
           <ul className="my-5 grow list-none space-y-3 pl-0 text-left">
