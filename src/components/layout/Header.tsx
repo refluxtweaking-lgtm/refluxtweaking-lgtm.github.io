@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
+import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
 
 const navLinks = [
   { href: "/#features", label: "Features" },
@@ -57,10 +58,10 @@ export function Header() {
               Discord
             </Button>
             <Button
-              href="https://app.refluxtweaks.com?plan=lifetime"
+              href={REFLUX_FREE_DOWNLOAD.href}
+              download={REFLUX_FREE_DOWNLOAD.filename}
               variant="primary"
               showIcon
-              external
             >
               Get App
             </Button>
@@ -115,10 +116,10 @@ export function Header() {
                   Discord
                 </Button>
                 <Button
-                  href="https://app.refluxtweaks.com?plan=lifetime"
+                  href={REFLUX_FREE_DOWNLOAD.href}
+                  download={REFLUX_FREE_DOWNLOAD.filename}
                   variant="primary"
                   showIcon
-                  external
                   className="w-full"
                   onClick={closeMenu}
                 >

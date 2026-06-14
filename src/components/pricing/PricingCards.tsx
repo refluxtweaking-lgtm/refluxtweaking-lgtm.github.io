@@ -66,7 +66,8 @@ export function PricingCards({ compact = false }: PricingCardsProps) {
           <Button
             href={plan.ctaHref}
             variant={plan.highlighted ? "discord" : "primary"}
-            external
+            external={!plan.downloadFilename}
+            download={plan.downloadFilename}
             className="mt-auto w-full"
           >
             {plan.cta}

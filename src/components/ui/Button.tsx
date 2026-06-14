@@ -9,6 +9,8 @@ interface ButtonProps {
   variant?: ButtonVariant;
   children: React.ReactNode;
   external?: boolean;
+  /** Triggers a browser file download (same-origin paths only). */
+  download?: string | boolean;
   large?: boolean;
   showIcon?: boolean;
   className?: string;
@@ -31,6 +33,7 @@ export function Button({
   variant = "primary",
   children,
   external = false,
+  download,
   large = false,
   showIcon = false,
   className = "",
@@ -57,6 +60,21 @@ export function Button({
   );
 
   const classes = `${baseStyles} ${sizeStyles} ${variantStyles[variant]} ${className}`;
+
+  const isFileDownload = Boolean(download) || href.startsWith("/downloads/");
+
+  if (isFileDownload) {
+    return (
+      <a
+        href={href}
+        download={typeof download === "string" ? download : undefined}
+        className={classes}
+        onClick={onClick}
+      >
+        {content}
+      </a>
+    );
+  }
 
   if (external) {
     return (

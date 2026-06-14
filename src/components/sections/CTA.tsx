@@ -1,5 +1,6 @@
 import { GlowCard } from "@/components/ui/GlowCard";
 import { Button } from "@/components/ui/Button";
+import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
 
 export function CTA() {
   return (
@@ -19,9 +20,9 @@ export function CTA() {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button
-              href="https://app.refluxtweaks.com?plan=lifetime"
+              href={REFLUX_FREE_DOWNLOAD.href}
+              download={REFLUX_FREE_DOWNLOAD.filename}
               variant="primary"
-              external
               large
               showIcon
             >

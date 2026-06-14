@@ -4,6 +4,7 @@ import { AppPreviewMock } from "@/components/app/AppPreviewMock";
 import { Button } from "@/components/ui/Button";
 import { CTA } from "@/components/sections/CTA";
 import { Icon, type IconName } from "@/components/ui/Icon";
+import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
 
 export const metadata = {
   title: "The App – REFLUX TWEAKS",
@@ -57,7 +58,12 @@ export default function AppPreviewPage() {
           subtitle="The actual app your tweaks run in — built for gamers who want results, not 1000 settings to dig through."
         />
         <div className="mt-8 flex flex-wrap justify-center gap-4">
-          <Button href="https://app.refluxtweaks.com" external large showIcon>
+          <Button
+            href={REFLUX_FREE_DOWNLOAD.href}
+            download={REFLUX_FREE_DOWNLOAD.filename}
+            large
+            showIcon
+          >
             Download REFLUX
           </Button>
           <Button href="/compare" variant="ghost" large>

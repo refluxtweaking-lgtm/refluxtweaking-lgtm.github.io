@@ -63,7 +63,7 @@ export function LatencyChart() {
 
       if (!pointBefore || !pointAfter) return;
 
-      overlay.innerHTML = "";
+      overlay.replaceChildren();
 
       const beforeSpan = document.createElement("span");
       beforeSpan.className =

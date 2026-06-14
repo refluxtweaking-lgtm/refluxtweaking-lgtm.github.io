@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
+import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
 
 export function Hero() {
   return (
@@ -33,9 +34,9 @@ export function Hero() {
 
       <div className="animate-fade-in-up flex flex-wrap justify-center gap-4" style={{ animationDelay: "0.3s" }}>
         <Button
-          href="https://app.refluxtweaks.com?plan=lifetime"
+          href={REFLUX_FREE_DOWNLOAD.href}
+          download={REFLUX_FREE_DOWNLOAD.filename}
           variant="primary"
-          external
           large
           showIcon
         >

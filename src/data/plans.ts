@@ -1,5 +1,7 @@
 export type PlanId = "free" | "monthly" | "yearly" | "lifetime";
 
+import { REFLUX_FREE_DOWNLOAD, proCheckoutUrl } from "./downloads";
+
 export interface Plan {
   id: PlanId;
   name: string;
@@ -12,6 +14,8 @@ export interface Plan {
   popular?: boolean;
   cta: string;
   ctaHref: string;
+  /** When set, the CTA triggers a direct file download instead of opening an external app URL. */
+  downloadFilename?: string;
   tagline: string;
   highlights: string[];
 }
@@ -25,7 +29,8 @@ export const plans: Plan[] = [
     suffix: "",
     tagline: "Try the essentials — no card required",
     cta: "Download Free",
-    ctaHref: "https://app.refluxtweaks.com?plan=free",
+    ctaHref: REFLUX_FREE_DOWNLOAD.href,
+    downloadFilename: REFLUX_FREE_DOWNLOAD.filename,
     highlights: [
       "30 core tweaks",
       "Manual game scanner",
@@ -44,7 +49,7 @@ export const plans: Plan[] = [
     highlighted: true,
     tagline: "Full power, low commitment — cancel anytime",
     cta: "Start Monthly",
-    ctaHref: "https://app.refluxtweaks.com?plan=monthly",
+    ctaHref: proCheckoutUrl("monthly"),
     highlights: [
       "100+ full tweaks unlocked",
       "Automatic game scanner",
@@ -65,7 +70,7 @@ export const plans: Plan[] = [
     badge: "SAVE 34%",
     tagline: "Pay once a year, save vs monthly",
     cta: "Go Yearly",
-    ctaHref: "https://app.refluxtweaks.com?plan=yearly",
+    ctaHref: proCheckoutUrl("yearly"),
     highlights: [
       "Everything in Monthly",
       "Save over $28 per year",
@@ -85,7 +90,7 @@ export const plans: Plan[] = [
     popular: true,
     tagline: "One payment. Every tweak. Forever.",
     cta: "Get Lifetime",
-    ctaHref: "https://app.refluxtweaks.com?plan=lifetime",
+    ctaHref: proCheckoutUrl("lifetime"),
     highlights: [
       "Everything in Yearly",
       "Lifetime updates — no renewals",
