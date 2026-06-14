@@ -89,7 +89,7 @@ export async function createMoneyMotionCheckout(
     return { ok: true, checkoutUrl: directLink, id: "" };
   }
 
-  const apiKey = process.env.MONEYMOTION_API_KEY;
+  const apiKey = process.env.MONEYMOTION_API_KEY?.trim();
   if (!apiKey) {
     return { ok: false, error: "Checkout is not configured yet" };
   }

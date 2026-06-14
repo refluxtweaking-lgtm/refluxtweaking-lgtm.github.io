@@ -26,6 +26,16 @@ export async function GET(
   if (!result.ok) {
     const errorUrl = new URL(`/checkout/${plan}`, request.url);
     errorUrl.searchParams.set("error", "checkout");
+    const reason = result.error.toLowerCase();
+    if (reason.includes("not configured")) {
+      errorUrl.searchParams.set("reason", "missing_key");
+    } else if (reason.includes("invalidauth") || reason.includes("unauthorized") || reason.includes("invalid api")) {
+      errorUrl.searchParams.set("reason", "invalid_key");
+    } else if (reason.includes("could not reach")) {
+      errorUrl.searchParams.set("reason", "network");
+    } else {
+      errorUrl.searchParams.set("reason", "api_error");
+    }
     return NextResponse.redirect(errorUrl);
   }
 

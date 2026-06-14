@@ -26,10 +26,10 @@ export default async function CheckoutPage({
   searchParams,
 }: {
   params: Promise<{ plan: string }>;
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; reason?: string }>;
 }) {
   const { plan: planParam } = await params;
-  const { error } = await searchParams;
+  const { error, reason } = await searchParams;
 
   if (!VALID_PLANS.has(planParam as ProPlanId)) {
     redirect("/pricing");
@@ -43,6 +43,16 @@ export default async function CheckoutPage({
   }
 
   const hasCheckoutError = error === "checkout";
+  const errorMessage =
+    reason === "missing_key"
+      ? "Payment API key isn't active on the server yet. Add MONEYMOTION_API_KEY in Vercel, then redeploy."
+      : reason === "invalid_key"
+        ? "MoneyMotion rejected the API key. Create a new mk_live_ key in MoneyMotion and update Vercel, then redeploy."
+        : reason === "network"
+          ? "Couldn't reach MoneyMotion. Try again in a minute."
+          : reason === "api_error"
+            ? "MoneyMotion returned an error. Check your MoneyMotion account is active and try again."
+            : "Payment setup isn't ready yet — please contact support or try again later.";
 
   return (
     <SiteShell mainClassName="flex min-h-[80vh] items-center justify-center py-16">
@@ -121,7 +131,7 @@ export default async function CheckoutPage({
           {/* Checkout error banner */}
           {hasCheckoutError && (
             <div className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
-              Payment setup isn&apos;t ready yet — please contact support or try again later.
+              {errorMessage}
             </div>
           )}
 
