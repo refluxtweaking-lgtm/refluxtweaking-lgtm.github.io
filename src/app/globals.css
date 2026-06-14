@@ -91,6 +91,44 @@ body {
   50% { opacity: 0.7; }
 }
 
+@keyframes powerDripFall {
+  0% {
+    transform: translateY(0) translateX(0) scaleY(0.4);
+    opacity: 0;
+  }
+  6% {
+    opacity: 0.85;
+    transform: translateY(12px) translateX(1px) scaleY(0.9);
+  }
+  35% {
+    transform: translateY(28vh) translateX(-3px) scaleY(1.1);
+  }
+  62% {
+    transform: translateY(58vh) translateX(4px) scaleY(1);
+    opacity: 0.7;
+  }
+  88% {
+    opacity: 0.45;
+  }
+  100% {
+    transform: translateY(105vh) translateX(-1px) scaleY(0.7);
+    opacity: 0;
+  }
+}
+
+@keyframes dripWobble {
+  0%, 100% { margin-left: 0; }
+  33% { margin-left: 3px; }
+  66% { margin-left: -4px; }
+}
+
+@keyframes holoFlicker {
+  0%, 92%, 100% { opacity: 1; }
+  93% { opacity: 0.2; }
+  95% { opacity: 0.8; }
+  97% { opacity: 0.1; }
+}
+
 /* ── Utilities ── */
 .logo-glow { animation: glowPulse 2.5s infinite ease-in-out; }
 .pulse-anim { animation: pulse 2s infinite; }
@@ -286,6 +324,22 @@ body {
   box-shadow:
     0 0 32px rgba(241, 91, 80, 0.3),
     inset 0 0 18px rgba(241, 91, 80, 0.12);
+}
+
+.power-drip {
+  position: fixed;
+  z-index: 4;
+  pointer-events: none;
+  border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
+  background: linear-gradient(180deg, rgba(255, 100, 90, 0.95) 0%, rgba(241, 91, 80, 0.85) 40%, rgba(120, 10, 10, 0.9) 100%);
+  filter: drop-shadow(0 0 5px rgba(241, 91, 80, 0.7));
+  animation: powerDripFall linear infinite, dripWobble ease-in-out infinite;
+}
+
+.power-drip-streak {
+  border-radius: 40% 60% 50% 50% / 30% 30% 70% 70%;
+  background: linear-gradient(180deg, rgba(241, 91, 80, 0.6) 0%, rgba(80, 0, 0, 0.4) 70%, transparent 100%);
+  filter: blur(0.3px);
 }
 
 /* Toggles & misc */

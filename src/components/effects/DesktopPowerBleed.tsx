@@ -1,6 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+
+const DRIP_SEEDS = [
+  { left: 12, top: 140, w: 5, h: 14, dur: 7.2, delay: 0, wobble: 2.1, streak: false },
+  { left: 28, top: 155, w: 3, h: 22, dur: 9.8, delay: 1.4, wobble: 3.4, streak: true },
+  { left: 8, top: 130, w: 4, h: 10, dur: 5.5, delay: 3.1, wobble: 1.8, streak: false },
+  { left: 42, top: 148, w: 6, h: 16, dur: 11.3, delay: 0.6, wobble: 4.2, streak: false },
+  { left: 18, top: 162, w: 3, h: 28, dur: 13.7, delay: 5.2, wobble: 2.9, streak: true },
+  { left: 34, top: 138, w: 4, h: 12, dur: 6.9, delay: 2.8, wobble: 3.1, streak: false },
+  { left: 52, top: 152, w: 5, h: 18, dur: 10.4, delay: 7.1, wobble: 5.0, streak: true },
+  { left: 22, top: 145, w: 3, h: 9, dur: 4.8, delay: 4.5, wobble: 1.5, streak: false },
+  { left: 46, top: 168, w: 4, h: 20, dur: 12.1, delay: 8.3, wobble: 3.8, streak: true },
+  { left: 14, top: 172, w: 5, h: 13, dur: 8.6, delay: 6.0, wobble: 2.4, streak: false },
+  { left: 38, top: 128, w: 3, h: 24, dur: 14.5, delay: 9.7, wobble: 4.6, streak: true },
+  { left: 56, top: 142, w: 4, h: 11, dur: 6.2, delay: 3.9, wobble: 1.9, streak: false },
+  { left: 6, top: 158, w: 6, h: 15, dur: 9.1, delay: 11.2, wobble: 3.3, streak: false },
+  { left: 30, top: 175, w: 3, h: 26, dur: 15.8, delay: 1.9, wobble: 5.5, streak: true },
+  { left: 48, top: 134, w: 4, h: 8, dur: 5.1, delay: 10.4, wobble: 2.0, streak: false },
+];
 
 export function DesktopPowerBleed() {
   const [power, setPower] = useState(1);
@@ -24,318 +42,208 @@ export function DesktopPowerBleed() {
 
   const p = power;
   const corrupt = 1 - p;
-  const fanDur = 0.35 + p * 2.2;
-  const rgb = 0.15 + p * 0.85;
-  const pcb = 0.25 + p * 0.75;
-  const glitchX = corrupt * 4;
-  const hudAlpha = 0.2 + p * 0.8;
+  const cyan = 0.2 + p * 0.8;
+  const red = 0.15 + p * 0.85;
+  const fanDur = 0.4 + p * 2.4;
+
+  const activeDrips = useMemo(
+    () =>
+      DRIP_SEEDS.filter((_, i) => corrupt > 0.08 + (i % 7) * 0.06).map((d, i) => ({
+        ...d,
+        opacity: Math.min(0.9, corrupt * (0.35 + (i % 5) * 0.12)),
+        dur: d.dur * (0.6 + corrupt * 0.5),
+      })),
+    [corrupt],
+  );
 
   return (
-    <div
-      className="pointer-events-none fixed top-[84px] left-2 z-[5] hidden w-[300px] lg:block lg:w-[340px] xl:left-5 xl:w-[400px]"
-      aria-hidden="true"
-    >
-      <div
-        className="relative overflow-hidden rounded-2xl border border-[rgba(241,91,80,0.12)] bg-[rgba(4,5,8,0.55)] backdrop-blur-[2px]"
-        style={{
-          opacity: 0.5 + p * 0.5,
-          filter: `drop-shadow(0 0 ${8 + p * 32}px rgba(241, 91, 80, ${0.1 + p * 0.45})) saturate(${0.4 + p * 0.6})`,
-        }}
-      >
-        {/* HUD label */}
-        <div
-          className="absolute top-2 right-2 z-20 rounded border px-2 py-0.5 font-mono text-[9px] tracking-wider"
+    <>
+      {/* Uncoordinated blood-power drips down the page */}
+      {activeDrips.map((d, i) => (
+        <span
+          key={i}
+          className={`power-drip ${d.streak ? "power-drip-streak" : ""}`}
           style={{
-            borderColor: `rgba(241, 91, 80, ${0.2 + p * 0.5})`,
-            color: corrupt > 0.6 ? "#ff4444" : "#f15b50",
-            background: `rgba(0,0,0,${0.4 + corrupt * 0.3})`,
-            opacity: hudAlpha,
+            left: `${d.left}px`,
+            top: `${d.top}px`,
+            width: `${d.w}px`,
+            height: `${d.h}px`,
+            opacity: d.opacity,
+            animationDuration: `${d.dur}s, ${d.wobble}s`,
+            animationDelay: `${d.delay}s, ${d.delay * 0.37}s`,
+          }}
+        />
+      ))}
+
+      {/* Isometric PC — top left */}
+      <div
+        className="pointer-events-none fixed top-[80px] left-2 z-[5] hidden w-[280px] lg:block lg:w-[320px] xl:left-4 xl:w-[360px]"
+        aria-hidden="true"
+      >
+        <div
+          className="relative"
+          style={{
+            opacity: 0.45 + p * 0.55,
+            filter: `saturate(${0.35 + p * 0.65}) brightness(${0.5 + p * 0.5})`,
           }}
         >
-          {corrupt > 0.85 ? "SYS_CORRUPT" : corrupt > 0.4 ? "PWR_DRAIN" : "INTERNAL_VIEW"}
-        </div>
+          <svg viewBox="0 0 420 400" className="h-auto w-full" fill="none">
+            <defs>
+              <linearGradient id="isoBase" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#1a6fff" stopOpacity={cyan * 0.35} />
+                <stop offset="50%" stopColor="#b392f0" stopOpacity={cyan * 0.2} />
+                <stop offset="100%" stopColor="#f15b50" stopOpacity={red * 0.45} />
+              </linearGradient>
+              <linearGradient id="caseFace" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#1a2030" />
+                <stop offset="100%" stopColor="#0a0c14" />
+              </linearGradient>
+              <linearGradient id="glassPanel" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#1a3050" stopOpacity="0.5" />
+                <stop offset="100%" stopColor="#0a1020" stopOpacity="0.2" />
+              </linearGradient>
+              <linearGradient id="corruptBleed" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0%" stopColor="#6b0000" stopOpacity="0.85" />
+                <stop offset="50%" stopColor="#f15b50" stopOpacity="0.45" />
+                <stop offset="100%" stopColor="#f15b50" stopOpacity="0" />
+              </linearGradient>
+              <filter id="neonGlow">
+                <feGaussianBlur stdDeviation={2 + p * 4} result="b" />
+                <feMerge>
+                  <feMergeNode in="b" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
 
-        <svg viewBox="0 0 400 460" className="h-auto w-full" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="pcCase" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#1a1f28" />
-              <stop offset="100%" stopColor="#0c0e12" />
-            </linearGradient>
-            <linearGradient id="pcbGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#1e3a2f" />
-              <stop offset="100%" stopColor="#0f1a14" />
-            </linearGradient>
-            <linearGradient id="gpuShroud" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="#222830" />
-              <stop offset="50%" stopColor="#2a3040" />
-              <stop offset="100%" stopColor="#1a1f28" />
-            </linearGradient>
-            <linearGradient id="corruptPool" x1="0" y1="1" x2="0" y2="0">
-              <stop offset="0%" stopColor="#8b0000" stopOpacity="0.9" />
-              <stop offset="40%" stopColor="#f15b50" stopOpacity="0.55" />
-              <stop offset="100%" stopColor="#f15b50" stopOpacity="0" />
-            </linearGradient>
-            <pattern id="pcbTraces" width="8" height="8" patternUnits="userSpaceOnUse">
-              <path d="M0 4 H8 M4 0 V8" stroke="#2d5a45" strokeWidth="0.3" opacity={pcb * 0.5} />
-            </pattern>
-            <pattern id="scanlines" width="4" height="4" patternUnits="userSpaceOnUse">
-              <line x1="0" y1="0" x2="400" y2="0" stroke="#000" strokeWidth="1" opacity={corrupt * 0.25} />
-            </pattern>
-            <filter id="pcGlow">
-              <feGaussianBlur stdDeviation={1 + p * 3} result="b" />
-              <feMerge>
-                <feMergeNode in="b" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
+            {/* Glowing platform */}
+            <path d="M60 310 L210 380 L360 310 L210 240 Z" fill="url(#isoBase)" opacity={0.5 + p * 0.4} />
+            <path d="M60 310 L210 380 L360 310 L210 240 Z" fill="none" stroke="#f15b50" strokeWidth="1" opacity={red * 0.5} />
+            <path d="M90 300 L210 355 L330 300 L210 255 Z" fill="#0a0c14" opacity="0.6" />
 
-          {/* ═══ CASE CHASSIS (open side panel) ═══ */}
-          <rect x="24" y="20" width="352" height="400" rx="10" fill="url(#pcCase)" stroke="#3a4250" strokeWidth="2" />
-          {/* Top panel vents */}
-          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => (
-            <rect key={i} x={40 + i * 26} y="26" width="18" height="4" rx="1" fill="#0a0c10" stroke="#2a3040" strokeWidth="0.5" opacity={0.5 + p * 0.5} />
-          ))}
-          {/* Case feet */}
-          <rect x="40" y="412" width="24" height="6" rx="2" fill="#141820" />
-          <rect x="336" y="412" width="24" height="6" rx="2" fill="#141820" />
-          {/* Removed side panel — edge highlight */}
-          <path d="M24 30 L24 410" stroke="#f15b50" strokeWidth="1.5" opacity={0.15 + rgb * 0.35} />
-
-          {/* ═══ TOP AIO RADIATOR ═══ */}
-          <g opacity={0.3 + p * 0.7} style={{ transform: `translateX(${glitchX * 0.3}px)` }}>
-            <rect x="60" y="38" width="280" height="36" rx="4" fill="#141820" stroke="#2a3040" strokeWidth="1" />
-            {[0, 1, 2, 3, 4, 5].map((i) => (
-              <g key={i}>
-                <rect x={72 + i * 42} y="44" width="32" height="24" rx="2" fill="#10141c" stroke="#2a3040" strokeWidth="0.8" />
-                <circle cx={88 + i * 42} cy="56" r="9" fill="#0c0e12" stroke="#f15b50" strokeWidth="0.6" opacity={0.4 + rgb * 0.5} />
-                <g>
-                  <animateTransform attributeName="transform" type="rotate" from={`0 ${88 + i * 42} 56`} to={`360 ${88 + i * 42} 56`} dur={`${fanDur}s`} repeatCount="indefinite" />
-                  {[0, 60, 120].map((a) => (
-                    <line key={a} x1={88 + i * 42} y1="56" x2={88 + i * 42} y2="49" stroke="#f15b50" strokeWidth="1.2" opacity={0.3 + rgb * 0.6} transform={`rotate(${a} ${88 + i * 42} 56)`} />
-                  ))}
-                </g>
-              </g>
-            ))}
-            {/* Tubes to CPU */}
-            <path d="M200 74 Q200 100 185 120" stroke="#2a3040" strokeWidth="3" fill="none" />
-            <path d="M220 74 Q220 100 235 120" stroke="#2a3040" strokeWidth="3" fill="none" />
-          </g>
-
-          {/* ═══ MOTHERBOARD ═══ */}
-          <g opacity={pcb} style={{ transform: `translateX(${-glitchX * 0.2}px)` }}>
-            <rect x="48" y="110" width="200" height="260" rx="4" fill="url(#pcbGrad)" stroke="#3d6b55" strokeWidth="1.2" />
-            <rect x="48" y="110" width="200" height="260" rx="4" fill="url(#pcbTraces)" />
-
-            {/* VRM heatsink */}
-            <rect x="52" y="114" width="48" height="28" rx="2" fill="#1a1f28" stroke="#4a5568" strokeWidth="0.8" />
-            {[0, 1, 2, 3].map((i) => <rect key={i} x={56 + i * 10} y="118" width="6" height="20" rx="1" fill="#222830" stroke="#3a4250" strokeWidth="0.4" />)}
-
-            {/* CPU socket + cooler block */}
-            <rect x="118" y="130" width="56" height="56" rx="3" fill="#111318" stroke="#5a6070" strokeWidth="1" />
-            <rect x="126" y="138" width="40" height="40" rx="2" fill="#0a0c10" stroke="#f15b50" strokeWidth="0.8" opacity={0.4 + rgb * 0.5} filter="url(#pcGlow)" />
-            {/* Heat pipes */}
-            {[0, 1, 2].map((i) => (
-              <path key={i} d={`M${134 + i * 8} 178 Q${120 + i * 12} 200 ${110 + i * 6} 220`} stroke="#6a7080" strokeWidth="3" fill="none" opacity={0.5 + p * 0.5} />
-            ))}
-            <text x="146" y="165" textAnchor="middle" fill="#f15b50" fontSize="6" fontWeight="bold" opacity={rgb * 0.8}>RYZEN</text>
-
-            {/* RAM sticks x2 */}
-            {[0, 1].map((i) => (
-              <g key={i}>
-                <rect x={178 + i * 18} y="128" width="12" height="72" rx="1" fill="#1a1f28" stroke="#f15b50" strokeWidth="0.6" opacity={0.5 + rgb * 0.5} />
-                {[0, 1, 2, 3, 4, 5].map((j) => (
-                  <rect key={j} x={179 + i * 18} y={132 + j * 10} width="10" height="6" rx="0.5" fill={j % 2 === 0 ? "#b392f0" : "#1e2229"} opacity={0.3 + rgb * 0.6} />
-                ))}
-                <rect x={178 + i * 18} y="128" width="12" height="4" fill="#f15b50" opacity={rgb * 0.7} />
-              </g>
-            ))}
-
-            {/* PCIe x16 slot + GPU */}
-            <rect x="52" y="230" width="180" height="8" rx="1" fill="#0a0c10" stroke="#4a5568" strokeWidth="0.6" />
-            <rect x="52" y="248" width="180" height="8" rx="1" fill="#0a0c10" stroke="#4a5568" strokeWidth="0.6" />
-
-            {/* M.2 SSD */}
-            <rect x="52" y="200" width="36" height="8" rx="1" fill="#222830" stroke="#f15b50" strokeWidth="0.5" opacity={0.4 + rgb * 0.4} />
-            <text x="70" y="206" textAnchor="middle" fill="#9aa4b2" fontSize="4">NVMe</text>
-
-            {/* 24-pin ATX */}
-            <rect x="52" y="340" width="28" height="14" rx="1" fill="#1a1f28" stroke="#4a5568" strokeWidth="0.6" />
-            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => (
-              <rect key={i} x={54 + (i % 6) * 4} y={342 + Math.floor(i / 6) * 5} width="3" height="4" fill="#f15b50" opacity={0.2 + rgb * 0.5} />
-            ))}
-
-            {/* Rear I/O shield */}
-            <rect x="230" y="120" width="14" height="100" rx="2" fill="#1a1f28" stroke="#3a4250" strokeWidth="1" />
-            {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
-              <rect key={i} x="232" y={126 + i * 11} width="10" height="7" rx="1" fill="#0c0e12" stroke="#2a3040" strokeWidth="0.4" />
-            ))}
-
-            {/* PCB capacitors & chips */}
+            {/* Circuit traces on platform */}
             {[
-              [60, 160], [72, 168], [88, 210], [100, 218], [64, 300], [90, 310], [140, 320], [170, 200],
-            ].map(([x, y], i) => (
-              <rect key={i} x={x} y={y} width={i % 2 === 0 ? 6 : 4} height={i % 2 === 0 ? 4 : 6} rx="0.5" fill="#222830" stroke="#3a4250" strokeWidth="0.3" opacity={pcb} />
+              "M100 320 L160 350", "M260 350 L320 320", "M180 340 L240 340",
+              "M130 305 L190 335", "M230 335 L290 305",
+            ].map((d, i) => (
+              <path key={i} d={d} stroke={i % 2 === 0 ? "#3d8bff" : "#f15b50"} strokeWidth="0.8" opacity={(0.15 + p * 0.35) * (i % 2 === 0 ? cyan : red)} />
             ))}
-          </g>
 
-          {/* ═══ GPU (triple fan) ═══ */}
-          <g opacity={0.35 + p * 0.65} style={{ transform: `translateX(${glitchX}px)` }}>
-            <rect x="44" y="262" width="210" height="72" rx="6" fill="url(#gpuShroud)" stroke="#f15b50" strokeWidth="1" opacity={0.5 + rgb * 0.5} />
-            {/* Backplate */}
-            <rect x="44" y="262" width="210" height="6" rx="2" fill="#2a3040" />
-            {/* Fans */}
-            {[0, 1, 2].map((i) => (
-              <g key={i}>
-                <circle cx={88 + i * 60} cy="298" r="22" fill="#0c0e12" stroke="#3a4250" strokeWidth="1" />
+            {/* ═══ ISOMETRIC CASE — left face (glass) ═══ */}
+            <path d="M210 80 L210 280 L60 355 L60 155 Z" fill="#0c1018" stroke="#2a3548" strokeWidth="1.5" />
+            <path d="M65 160 L205 88 L205 275 L65 348 Z" fill="url(#glassPanel)" stroke="#3d8bff" strokeWidth="0.8" opacity={0.4 + cyan * 0.4} />
+
+            {/* Internals visible through glass */}
+            <g opacity={0.35 + p * 0.65} style={{ animation: p > 0.3 ? "holoFlicker 4s infinite" : undefined }}>
+              {/* Motherboard plane */}
+              <path d="M75 200 L195 135 L195 250 L75 315 Z" fill="#0f1a14" stroke="#2d5a45" strokeWidth="0.8" />
+              {/* CPU tower cooler */}
+              <path d="M120 175 L165 152 L165 210 L120 233 Z" fill="#1a1f28" stroke="#f15b50" strokeWidth="0.8" opacity={0.5 + red * 0.5} filter="url(#neonGlow)" />
+              <circle cx="143" cy="192" r="14" fill="#0c0e12" stroke="#3d8bff" strokeWidth="0.8" opacity={cyan * 0.8} />
+              <g>
+                <animateTransform attributeName="transform" type="rotate" from="0 143 192" to="360 143 192" dur={`${fanDur}s`} repeatCount="indefinite" />
+                {[0, 72, 144].map((a) => (
+                  <line key={a} x1="143" y1="192" x2="143" y2="180" stroke="#3d8bff" strokeWidth="1.5" opacity={cyan * 0.7} transform={`rotate(${a} 143 192)`} />
+                ))}
+              </g>
+              {/* GPU horizontal */}
+              <path d="M80 255 L190 195 L190 230 L80 290 Z" fill="#1a2030" stroke="#f15b50" strokeWidth="1" opacity={0.5 + red * 0.4} />
+              {[0, 1, 2].map((i) => (
+                <circle key={i} cx={105 + i * 28} cy={248 - i * 8} r="9" fill="#0c0e12" stroke="#3d8bff" strokeWidth="0.6" opacity={cyan * 0.6} />
+              ))}
+              {/* RAM sticks */}
+              <path d="M170 155 L182 148 L182 200 L170 207 Z" fill="#1a1f28" stroke="#b392f0" strokeWidth="0.6" opacity={0.4 + red * 0.4} />
+              <path d="M184 147 L196 140 L196 192 L184 199 Z" fill="#1a1f28" stroke="#f15b50" strokeWidth="0.6" opacity={0.4 + red * 0.4} />
+              {/* RGB strip inside */}
+              <path d="M78 220 L192 158" stroke="#f15b50" strokeWidth="2" opacity={red * 0.7} filter="url(#neonGlow)" />
+            </g>
+
+            {/* ═══ ISOMETRIC CASE — right face (front fans) ═══ */}
+            <path d="M210 80 L360 155 L360 355 L210 280 Z" fill="url(#caseFace)" stroke="#2a3548" strokeWidth="1.5" />
+            {/* Front mesh */}
+            <path d="M230 120 L340 170 L340 310 L230 260 Z" fill="#080a10" stroke="#1e2838" strokeWidth="1" />
+
+            {/* Three front intake fans */}
+            {[
+              { cy: 175, r: 28 },
+              { cy: 235, r: 28 },
+              { cy: 295, r: 28 },
+            ].map(({ cy, r }, fi) => (
+              <g key={fi} opacity={0.4 + p * 0.6}>
+                <circle cx="285" cy={cy} r={r} fill="#0a0c12" stroke={fi === 1 ? "#f15b50" : "#3d8bff"} strokeWidth="1.2" opacity={0.6 + (fi === 1 ? red : cyan) * 0.4} />
+                <circle cx="285" cy={cy} r={r - 6} fill="none" stroke={fi === 1 ? "#f15b50" : "#3d8bff"} strokeWidth="0.5" opacity={0.3 + p * 0.4} filter="url(#neonGlow)" />
                 <g>
-                  <animateTransform attributeName="transform" type="rotate" from={`0 ${88 + i * 60} 298`} to={`360 ${88 + i * 60} 298`} dur={`${fanDur * (1 + i * 0.1)}s`} repeatCount="indefinite" />
+                  <animateTransform attributeName="transform" type="rotate" from={`0 285 ${cy}`} to={`360 285 ${cy}`} dur={`${fanDur * (0.9 + fi * 0.15)}s`} repeatCount="indefinite" />
                   {[0, 45, 90, 135].map((a) => (
-                    <line key={a} x1={88 + i * 60} y1="298" x2={88 + i * 60} y2="282" stroke="#f15b50" strokeWidth="2" opacity={0.25 + rgb * 0.65} transform={`rotate(${a} ${88 + i * 60} 298)`} />
+                    <line key={a} x1="285" y1={cy} x2="285" y2={cy - r + 8} stroke={fi === 1 ? "#f15b50" : "#3d8bff"} strokeWidth="2" opacity={0.25 + (fi === 1 ? red : cyan) * 0.55} transform={`rotate(${a} 285 ${cy})`} />
                   ))}
                 </g>
               </g>
             ))}
-            {/* RGB stripe on GPU */}
-            <rect x="50" y="328" width="198" height="3" rx="1" fill="#f15b50" opacity={rgb * 0.8} filter="url(#pcGlow)" />
-            {/* 8-pin power */}
-            <rect x="220" y="280" width="16" height="8" rx="1" fill="#1a1f28" stroke="#f15b50" strokeWidth="0.5" opacity={0.4 + rgb * 0.4} />
-            <text x="149" y="292" textAnchor="middle" fill="#9aa4b2" fontSize="5" opacity={0.4 + p * 0.5}>RTX 4070</text>
-          </g>
 
-          {/* ═══ PSU (bottom) ═══ */}
-          <g opacity={0.3 + p * 0.7}>
-            <rect x="260" y="300" width="100" height="100" rx="4" fill="#141820" stroke="#3a4250" strokeWidth="1.2" />
-            <text x="310" y="340" textAnchor="middle" fill="#5a6070" fontSize="7" fontWeight="bold">850W</text>
-            <text x="310" y="352" textAnchor="middle" fill="#5a6070" fontSize="5">80+ GOLD</text>
-            {/* PSU fan */}
-            <circle cx="310" cy="380" r="18" fill="#0c0e12" stroke="#2a3040" strokeWidth="1" />
-            <g>
-              <animateTransform attributeName="transform" type="rotate" from="0 310 380" to="360 310 380" dur={`${fanDur * 1.2}s`} repeatCount="indefinite" />
-              {[0, 72, 144].map((a) => (
-                <line key={a} x1="310" y1="380" x2="310" y2="366" stroke="#4a5568" strokeWidth="1.5" opacity={0.3 + p * 0.5} transform={`rotate(${a} 310 380)`} />
-              ))}
-            </g>
-            {/* Modular cables */}
-            <path d="M260 320 Q220 310 200 300" stroke="#2a3040" strokeWidth="2.5" fill="none" opacity={0.5 + p * 0.3} />
-            <path d="M260 340 Q210 350 180 340" stroke="#f15b50" strokeWidth="1.5" fill="none" opacity={0.15 + rgb * 0.4} />
-            <path d="M260 360 Q200 370 160 360" stroke="#2a3040" strokeWidth="2" fill="none" opacity={0.4 + p * 0.3} />
-          </g>
-
-          {/* ═══ FRONT / REAR CASE FANS ═══ */}
-          <g opacity={0.25 + p * 0.75}>
-            <circle cx="36" cy="200" r="16" fill="#10141c" stroke="#2a3040" strokeWidth="1" />
-            <g>
-              <animateTransform attributeName="transform" type="rotate" from="0 36 200" to="360 36 200" dur={`${fanDur}s`} repeatCount="indefinite" />
-              {[0, 72, 144].map((a) => (
-                <line key={a} x1="36" y1="200" x2="36" y2="188" stroke="#5dde86" strokeWidth="1.2" opacity={0.2 + p * 0.6} transform={`rotate(${a} 36 200)`} />
-              ))}
-            </g>
-            <circle cx="364" cy="180" r="14" fill="#10141c" stroke="#2a3040" strokeWidth="1" />
-            <g>
-              <animateTransform attributeName="transform" type="rotate" from="0 364 180" to="360 364 180" dur={`${fanDur * 0.9}s`} repeatCount="indefinite" />
-              {[0, 72, 144].map((a) => (
-                <line key={a} x1="364" y1="180" x2="364" y2="170" stroke="#f15b50" strokeWidth="1" opacity={0.2 + p * 0.5} transform={`rotate(${a} 364 180)`} />
-              ))}
-            </g>
-          </g>
-
-          {/* ═══ CABLE BUNDLE ═══ */}
-          <g opacity={0.2 + p * 0.5}>
-            <path d="M80 354 Q120 370 160 380 Q200 390 240 370" stroke="#2a3040" strokeWidth="2" fill="none" />
-            <path d="M90 358 Q130 375 170 384" stroke="#f15b50" strokeWidth="0.8" fill="none" opacity={rgb * 0.5} />
-            <rect x="155" y="376" width="14" height="6" rx="2" fill="#1a1f28" stroke="#3a4250" strokeWidth="0.5" />
-          </g>
-
-          {/* ═══ RGB STRIPS ═══ */}
-          <rect x="32" y="108" width="3" height="280" rx="1" fill="#f15b50" opacity={rgb * 0.6} filter="url(#pcGlow)" />
-          <rect x="32" y="108" width="3" height={280 * p} rx="1" fill="#ff6b6b" opacity={corrupt * 0.8} />
-
-          {/* ═══ POWER LEDS ═══ */}
-          <circle cx="350" cy="40" r="4" fill="#5dde86" opacity={0.15 + p * 0.85} filter="url(#pcGlow)" />
-          <circle cx="362" cy="40" r="3" fill="#f15b50" opacity={0.1 + rgb * 0.7} />
-
-          {/* ═══ LIVE STATS OVERLAY (inside case) ═══ */}
-          <g opacity={hudAlpha}>
-            <rect x="270" y="130" width="90" height="56" rx="3" fill="#0a0c10" stroke="#f15b50" strokeWidth="0.8" opacity={0.7} />
-            <text x="315" y="148" textAnchor="middle" fill="#f15b50" fontSize="7" fontWeight="bold">PWR CORE</text>
-            <text x="315" y="162" textAnchor="middle" fill={corrupt > 0.5 ? "#ff4444" : "#5dde86"} fontSize="10" fontWeight="bold">
-              {Math.round(p * 100)}%
-            </text>
-            <text x="315" y="176" textAnchor="middle" fill="#9aa4b2" fontSize="6">
-              {Math.round(60 + p * 264)} FPS
-            </text>
-          </g>
-
-          {/* ═══ CORRUPTION: rising red pool ═══ */}
-          <rect x="24" y={20 + (1 - corrupt) * 400} width="352" height={corrupt * 400 + 20} fill="url(#corruptPool)" opacity={0.3 + corrupt * 0.65} />
-
-          {/* Corruption glitch slices */}
-          {corrupt > 0.2 && (
-            <>
-              <rect x="24" y={180 + corrupt * 40} width="352" height="3" fill="#f15b50" opacity={corrupt * 0.4} style={{ transform: `translateX(${glitchX * 2}px)` }} />
-              <rect x="24" y={260 + corrupt * 30} width="352" height="2" fill="#ff0000" opacity={corrupt * 0.35} style={{ transform: `translateX(${-glitchX * 3}px)` }} />
-              <rect x="24" y={320 + corrupt * 20} width="352" height="4" fill="#8b0000" opacity={corrupt * 0.5} />
-            </>
-          )}
-
-          {/* Static / scanlines */}
-          <rect x="24" y="20" width="352" height="400" fill="url(#scanlines)" opacity={corrupt * 0.6} />
-
-          {/* Dead static blocks */}
-          {corrupt > 0.35 &&
-            [
-              [60, 280], [140, 190], [200, 340], [280, 250], [100, 360], [180, 150],
-            ].map(([x, y], i) => (
-              <rect
-                key={i}
-                x={x + (i % 2) * corrupt * 6}
-                y={y}
-                width={8 + (i % 3) * 4}
-                height={4}
-                fill={i % 2 === 0 ? "#f15b50" : "#1a0000"}
-                opacity={corrupt * 0.5}
-              />
+            {/* ═══ ISOMETRIC CASE — top face ═══ */}
+            <path d="M60 155 L210 80 L360 155 L210 230 Z" fill="#141820" stroke="#2a3548" strokeWidth="1.5" />
+            {/* Top exhaust vents */}
+            {[0, 1, 2, 3, 4, 5].map((i) => (
+              <path key={i} d={`M${100 + i * 22} 178 L${118 + i * 22} 168 L${136 + i * 22} 178 L${118 + i * 22} 188 Z`} fill="#0c0e12" stroke="#3a4250" strokeWidth="0.5" opacity={0.4 + p * 0.4} />
             ))}
 
-          {/* Corruption text */}
-          {corrupt > 0.55 && (
-            <text
-              x="200"
-              y={200 + corrupt * 60}
-              textAnchor="middle"
-              fill="#ff2222"
-              fontSize="11"
-              fontWeight="bold"
-              opacity={corrupt * 0.7}
-              style={{ transform: `translateX(${glitchX * 5}px)` }}
-            >
-              {corrupt > 0.8 ? "KERNEL_DEAD" : "DRAINING..."}
-            </text>
-          )}
+            {/* ═══ HOLOGRAPHIC UI FRAGMENTS (original, not copied) ═══ */}
+            <g opacity={(0.2 + p * 0.5) * (1 - corrupt * 0.7)} style={{ animation: "holoFlicker 6s infinite" }}>
+              {/* Mini chart */}
+              <rect x="30" y="300" width="50" height="36" rx="2" fill="#0a1020" stroke="#3d8bff" strokeWidth="0.6" opacity="0.7" />
+              {[12, 22, 16, 28, 20].map((h, i) => (
+                <rect key={i} x={36 + i * 8} y={330 - h} width="5" height={h} fill={i % 2 === 0 ? "#3d8bff" : "#f15b50"} opacity="0.6" />
+              ))}
+              {/* Floating ping readout */}
+              <rect x="330" y="290" width="58" height="28" rx="3" fill="#0a0c10" stroke="#f15b50" strokeWidth="0.6" opacity="0.6" />
+              <text x="359" y="302" textAnchor="middle" fill="#3d8bff" fontSize="5" opacity={cyan}>PING</text>
+              <text x="359" y="314" textAnchor="middle" fill="#5dde86" fontSize="8" fontWeight="bold">{Math.round(12 + corrupt * 73)}ms</text>
+              {/* Orbit ring */}
+              <ellipse cx="210" cy="200" rx="80" ry="20" fill="none" stroke="#3d8bff" strokeWidth="0.5" opacity={cyan * 0.3} transform="rotate(-25 210 200)" />
+              <ellipse cx="210" cy="200" rx="60" ry="14" fill="none" stroke="#f15b50" strokeWidth="0.4" opacity={red * 0.3} transform="rotate(15 210 200)" />
+            </g>
 
-          {/* Vignette drain */}
-          <rect x="24" y="20" width="352" height="400" rx="10" fill="#000" opacity={corrupt * 0.45} />
-        </svg>
-
-        {/* Power bar */}
-        <div className="absolute right-3 bottom-2 left-3 z-10">
-          <div className="mb-0.5 flex justify-between font-mono text-[8px] tracking-wider text-reflux-muted/70">
-            <span>SYSTEM PWR</span>
-            <span style={{ color: corrupt > 0.5 ? "#ff4444" : "#f15b50" }}>{Math.round(p * 100)}%</span>
-          </div>
-          <div className="h-1.5 overflow-hidden rounded-full bg-[#1a0000]/60">
-            <div
-              className="h-full rounded-full transition-[width] duration-100"
-              style={{
-                width: `${p * 100}%`,
-                background: corrupt > 0.6 ? "linear-gradient(90deg, #8b0000, #ff2222)" : "linear-gradient(90deg, #c43d35, #f15b50)",
-                boxShadow: `0 0 ${p * 14}px rgba(241, 91, 80, ${p * 0.8})`,
-              }}
+            {/* ═══ CORRUPTION — red bleed rising through case ═══ */}
+            <rect
+              x="30"
+              y={75 + p * 290}
+              width="360"
+              height={corrupt * 310 + 30}
+              fill="url(#corruptBleed)"
+              opacity={0.25 + corrupt * 0.55}
             />
-          </div>
+
+            {/* Glitch slices across case */}
+            {corrupt > 0.25 && (
+              <>
+                <rect x="55" y={160 + corrupt * 30} width="310" height="2" fill="#ff2222" opacity={corrupt * 0.5} />
+                <rect x="60" y={220 + corrupt * 20} width="300" height="3" fill="#f15b50" opacity={corrupt * 0.35} />
+                <rect x="50" y={280 + corrupt * 15} width="320" height="2" fill="#8b0000" opacity={corrupt * 0.45} />
+              </>
+            )}
+
+            {/* Corruption vignette on PC */}
+            <rect x="30" y="70" width="360" height="310" fill="#000" opacity={corrupt * 0.4} rx="4" />
+
+            {corrupt > 0.7 && (
+              <text x="210" y="200" textAnchor="middle" fill="#ff3333" fontSize="10" fontWeight="bold" opacity={corrupt * 0.6}>
+                PWR LOSS
+              </text>
+            )}
+          </svg>
+
+          {/* Drip origin glow — where blood leaks from case bottom */}
+          <div
+            className="absolute bottom-[18%] left-[38%] h-3 w-3 rounded-full bg-[#f15b50]"
+            style={{
+              opacity: corrupt * 0.8,
+              boxShadow: `0 0 ${corrupt * 16}px rgba(241,91,80,0.9)`,
+              animation: corrupt > 0.15 ? "pulse 1.8s infinite" : undefined,
+            }}
+          />
         </div>
       </div>
-    </div>
+    </>
   );
 }
