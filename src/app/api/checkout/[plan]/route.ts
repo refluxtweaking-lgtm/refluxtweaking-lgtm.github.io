@@ -24,10 +24,7 @@ export async function GET(
   const result = await createMoneyMotionCheckout(plan, { userIp });
 
   if (!result.ok) {
-    const failUrl = new URL("/pricing", request.url);
-    failUrl.searchParams.set("checkout", "error");
-    failUrl.searchParams.set("plan", plan);
-    return NextResponse.redirect(failUrl);
+    return NextResponse.redirect(new URL(`/checkout/${plan}`, request.url));
   }
 
   return NextResponse.redirect(result.checkoutUrl);

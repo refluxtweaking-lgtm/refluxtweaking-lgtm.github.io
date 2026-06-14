@@ -19,5 +19,5 @@ export const REFLUX_PRO_APP_URL = "https://app.refluxtweaks.com";
 export type ProPlanId = "monthly" | "yearly" | "lifetime";
 
 export function proCheckoutUrl(plan: ProPlanId) {
-  return `/api/checkout/${plan}`;
+  return `/checkout/${plan}`;
 }

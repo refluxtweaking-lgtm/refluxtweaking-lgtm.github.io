@@ -48,10 +48,47 @@ export type MoneyMotionCheckoutOptions = {
   userIp?: string;
 };
 
+function directCheckoutLink(plan: ProPlanId): string | undefined {
+  const links: Record<ProPlanId, string | undefined> = {
+    monthly: process.env.MONEYMOTION_LINK_MONTHLY,
+    yearly: process.env.MONEYMOTION_LINK_YEARLY,
+    lifetime: process.env.MONEYMOTION_LINK_LIFETIME,
+  };
+  const url = links[plan]?.trim();
+  return url?.startsWith("http") ? url : undefined;
+}
+
+function extractCheckoutUrl(data: Record<string, unknown>): string | null {
+  if (typeof data.checkoutUrl === "string" && data.checkoutUrl) {
+    return data.checkoutUrl;
+  }
+
+  const id = data.id ?? data.checkoutSessionId;
+  if (typeof id === "string" && id) {
+    return `https://moneymotion.io/checkout/${id}`;
+  }
+
+  const result = data.result as Record<string, unknown> | undefined;
+  const json = (result?.data as Record<string, unknown> | undefined)?.json as
+    | Record<string, unknown>
+    | undefined;
+  const sessionId = json?.checkoutSessionId;
+  if (typeof sessionId === "string" && sessionId) {
+    return `https://moneymotion.io/checkout/${sessionId}`;
+  }
+
+  return null;
+}
+
 export async function createMoneyMotionCheckout(
   plan: ProPlanId,
   options: MoneyMotionCheckoutOptions = {},
 ): Promise<MoneyMotionCheckoutResult> {
+  const directLink = directCheckoutLink(plan);
+  if (directLink) {
+    return { ok: true, checkoutUrl: directLink, id: "" };
+  }
+
   const apiKey = process.env.MONEYMOTION_API_KEY;
   if (!apiKey) {
     return { ok: false, error: "Checkout is not configured yet" };
@@ -97,24 +134,29 @@ export async function createMoneyMotionCheckout(
       cache: "no-store",
     });
 
-    const data = (await response.json()) as {
-      checkoutUrl?: string;
-      id?: string;
+    const data = (await response.json()) as Record<string, unknown> & {
       errors?: string[];
       message?: string;
     };
 
     if (!response.ok) {
       const reason = data.errors?.join(", ") || data.message || `HTTP ${response.status}`;
-      console.error("[MoneyMotion] createCheckoutSession failed:", reason);
+      console.error("[MoneyMotion] createCheckoutSession failed:", reason, data);
       return { ok: false, error: reason };
     }
 
-    if (!data.checkoutUrl) {
+    const checkoutUrl = extractCheckoutUrl(data);
+    if (!checkoutUrl) {
+      console.error("[MoneyMotion] missing checkout URL in response:", data);
       return { ok: false, error: "MoneyMotion did not return a checkout URL" };
     }
 
-    return { ok: true, checkoutUrl: data.checkoutUrl, id: data.id ?? "" };
+    const id =
+      (typeof data.id === "string" && data.id) ||
+      (typeof data.checkoutSessionId === "string" && data.checkoutSessionId) ||
+      "";
+
+    return { ok: true, checkoutUrl, id };
   } catch {
     return { ok: false, error: "Could not reach MoneyMotion" };
   }
