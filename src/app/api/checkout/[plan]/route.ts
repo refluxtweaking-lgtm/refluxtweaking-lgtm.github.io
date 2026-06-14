@@ -17,7 +17,11 @@ export async function GET(
   }
 
   const plan = planParam as ProPlanId;
-  const result = await createMoneyMotionCheckout(plan);
+  const userIp =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    request.headers.get("x-real-ip") ??
+    undefined;
+  const result = await createMoneyMotionCheckout(plan, { userIp });
 
   if (!result.ok) {
     const failUrl = new URL("/pricing", request.url);

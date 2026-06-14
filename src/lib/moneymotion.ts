@@ -44,7 +44,14 @@ function siteBaseUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.refluxtweaks.com";
 }
 
-export async function createMoneyMotionCheckout(plan: ProPlanId): Promise<MoneyMotionCheckoutResult> {
+export type MoneyMotionCheckoutOptions = {
+  userIp?: string;
+};
+
+export async function createMoneyMotionCheckout(
+  plan: ProPlanId,
+  options: MoneyMotionCheckoutOptions = {},
+): Promise<MoneyMotionCheckoutResult> {
   const apiKey = process.env.MONEYMOTION_API_KEY;
   if (!apiKey) {
     return { ok: false, error: "Checkout is not configured yet" };
@@ -53,7 +60,7 @@ export async function createMoneyMotionCheckout(plan: ProPlanId): Promise<MoneyM
   const planConfig = MONEYMOTION_CHECKOUT_PLANS[plan];
   const siteUrl = siteBaseUrl();
 
-  const body = {
+  const body: Record<string, unknown> = {
     description: planConfig.label,
     total: planConfig.total,
     successUrl: `${siteUrl}/pricing?checkout=success&plan=${plan}`,
@@ -73,6 +80,10 @@ export async function createMoneyMotionCheckout(plan: ProPlanId): Promise<MoneyM
       darkMode: "#e8453a",
     },
   };
+
+  if (options.userIp) {
+    body.userIp = options.userIp;
+  }
 
   try {
     const response = await fetch(`${moneyMotionApiBase()}/createCheckoutSession`, {
@@ -95,6 +106,7 @@ export async function createMoneyMotionCheckout(plan: ProPlanId): Promise<MoneyM
 
     if (!response.ok) {
       const reason = data.errors?.join(", ") || data.message || `HTTP ${response.status}`;
+      console.error("[MoneyMotion] createCheckoutSession failed:", reason);
       return { ok: false, error: reason };
     }
 

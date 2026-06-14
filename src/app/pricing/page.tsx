@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { PricingCards } from "@/components/pricing/PricingCards";
+import { CheckoutNotice } from "@/components/pricing/CheckoutNotice";
 import { CTA } from "@/components/sections/CTA";
 import { plans } from "@/data/plans";
 import { displayTweakCountForPlan } from "@/data/tweaks";
@@ -45,6 +47,10 @@ export default function PricingPage() {
           subtitle="Monthly gives you everything for less than a coffee a week. Lifetime pays for itself in under 2 years."
         />
       </section>
+
+      <Suspense fallback={null}>
+        <CheckoutNotice />
+      </Suspense>
 
       <PricingCards />
 
