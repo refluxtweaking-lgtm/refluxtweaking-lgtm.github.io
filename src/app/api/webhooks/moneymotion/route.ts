@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { addPurchase } from "@/lib/purchase-store";
+import { addPurchase, type PlanName } from "@/lib/purchase-store";
 import {
   customerLabel,
   customerLocation,
@@ -7,8 +7,64 @@ import {
   verifyMoneyMotionSignature,
   type MoneyMotionWebhookPayload,
 } from "@/lib/moneymotion";
+import { createKeyAuthLicense, type KeyAuthPlan } from "@/lib/keyauth";
+import { sendLicenseEmail } from "@/lib/email";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
+
+const PLAN_TO_KEYAUTH: Record<PlanName, KeyAuthPlan> = {
+  Monthly: "monthly",
+  Yearly: "yearly",
+  Lifetime: "lifetime",
+};
+
+/**
+ * Issues a KeyAuth license, stores it in Supabase, and emails it to the buyer.
+ * Never throws — returns whether a license was successfully issued so the
+ * webhook can always reply 200 (a failure here must not trigger retries).
+ */
+async function deliverLicense(
+  email: string,
+  plan: PlanName,
+): Promise<boolean> {
+  try {
+    const keyauthPlan = PLAN_TO_KEYAUTH[plan];
+    const license = await createKeyAuthLicense(keyauthPlan);
+    if (!license.ok) {
+      console.error("[webhook] KeyAuth license generation skipped/failed:", license.error);
+      return false;
+    }
+
+    console.log(`[webhook] KeyAuth license generated for ${email} (${keyauthPlan}).`);
+
+    const admin = createAdminClient();
+    if (admin) {
+      const { error } = await admin.from("licenses").insert({
+        email,
+        plan: keyauthPlan,
+        license_key: license.key,
+        status: "active",
+        created_at: new Date().toISOString(),
+      });
+      if (error) {
+        console.error("[webhook] Supabase license insert failed:", error.message);
+      } else {
+        console.log("[webhook] License stored in Supabase.");
+      }
+    } else {
+      console.warn("[webhook] Supabase admin not configured — license not stored.");
+    }
+
+    const emailed = await sendLicenseEmail(email, keyauthPlan, license.key);
+    console.log(`[webhook] License email ${emailed ? "sent" : "skipped/failed"} for ${email}.`);
+
+    return true;
+  } catch (err) {
+    console.error("[webhook] License delivery threw:", err);
+    return false;
+  }
+}
 
 /** Browsers open webhooks with GET — return OK so setup/health checks don't look broken. */
 export async function GET() {
@@ -55,11 +111,22 @@ export async function POST(request: Request) {
     location: customerLocation(payload),
   });
 
-  // License delivery (KeyAuth, email, etc.) can be added here later.
+  const buyerEmail =
+    (typeof payload.checkoutSession?.metadata?.email === "string"
+      ? payload.checkoutSession.metadata.email.trim()
+      : "") || payload.customer?.email?.trim() || "";
+
+  let licenseIssued = false;
+  if (buyerEmail) {
+    licenseIssued = await deliverLicense(buyerEmail, plan);
+  } else {
+    console.warn("[webhook] No buyer email on payload — skipping license delivery.");
+  }
 
   return NextResponse.json({
     ok: true,
     sessionId: payload.checkoutSession?.id ?? null,
     plan,
+    licenseIssued,
   });
 }

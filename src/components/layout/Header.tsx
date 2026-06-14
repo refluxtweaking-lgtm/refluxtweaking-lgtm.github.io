@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
+import { HeaderAuth } from "./HeaderAuth";
 import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
 
 const navLinks = [
@@ -54,6 +55,7 @@ export function Header() {
           </nav>
 
           <div className="hidden items-center gap-3 md:flex">
+            <HeaderAuth />
             <Button href="https://discord.gg/xGpHKY8AAC" variant="discord" external>
               Discord
             </Button>
@@ -106,6 +108,7 @@ export function Header() {
               </nav>
 
               <div className="flex flex-col gap-3 border-t border-reflux-border/50 p-4">
+                <HeaderAuth className="w-full" onNavigate={closeMenu} />
                 <Button
                   href="https://discord.gg/xGpHKY8AAC"
                   variant="discord"

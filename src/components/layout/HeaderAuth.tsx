@@ -1,0 +1,56 @@
+"use client";
+
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
+
+const linkClass =
+  "inline-flex items-center justify-center gap-2 rounded-xl border border-reflux-border/60 bg-transparent px-5 py-2.5 text-sm font-semibold text-reflux-muted transition-all duration-300 hover:border-reflux-accent/40 hover:bg-white/5 hover:text-white";
+
+interface HeaderAuthProps {
+  className?: string;
+  onNavigate?: () => void;
+}
+
+export function HeaderAuth({ className = "", onNavigate }: HeaderAuthProps) {
+  const configured = isSupabaseConfigured();
+  const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (!configured) return;
+
+    let active = true;
+    let unsubscribe: (() => void) | undefined;
+
+    // Import lazily so the browser client is only created when configured.
+    import("@/lib/supabase/client").then(({ createClient }) => {
+      const supabase = createClient();
+
+      supabase.auth.getUser().then(({ data }) => {
+        if (active) setLoggedIn(Boolean(data.user));
+      });
+
+      const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+        if (active) setLoggedIn(Boolean(session?.user));
+      });
+      unsubscribe = () => sub.subscription.unsubscribe();
+    });
+
+    return () => {
+      active = false;
+      unsubscribe?.();
+    };
+  }, [configured]);
+
+  if (!configured || loggedIn === null) return null;
+
+  return (
+    <Link
+      href={loggedIn ? "/account" : "/login"}
+      className={`${linkClass} ${className}`}
+      onClick={onNavigate}
+    >
+      {loggedIn ? "Account" : "Log In"}
+    </Link>
+  );
+}

@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { createMoneyMotionCheckout } from "@/lib/moneymotion";
+import { createClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import type { ProPlanId } from "@/data/downloads";
 
 export const runtime = "nodejs";
@@ -21,7 +23,21 @@ export async function GET(
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
     request.headers.get("x-real-ip") ??
     undefined;
-  const result = await createMoneyMotionCheckout(plan, { userIp });
+
+  let email: string | undefined;
+  if (isSupabaseConfigured()) {
+    try {
+      const supabase = await createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      email = user?.email ?? undefined;
+    } catch {
+      email = undefined;
+    }
+  }
+
+  const result = await createMoneyMotionCheckout(plan, { userIp, email });
 
   if (!result.ok) {
     const errorUrl = new URL(`/checkout/${plan}`, request.url);

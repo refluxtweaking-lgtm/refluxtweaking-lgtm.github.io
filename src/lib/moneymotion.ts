@@ -46,6 +46,7 @@ function siteBaseUrl() {
 
 export type MoneyMotionCheckoutOptions = {
   userIp?: string;
+  email?: string;
 };
 
 function directCheckoutLink(plan: ProPlanId): string | undefined {
@@ -109,6 +110,7 @@ async function createViaRestCheckoutSession(
   const siteUrl = siteBaseUrl();
   const urls = checkoutUrls(siteUrl, plan);
   const userIp = options.userIp ?? "0.0.0.0";
+  const email = options.email?.trim();
 
   const body: Record<string, unknown> = {
     description: planConfig.label,
@@ -116,7 +118,8 @@ async function createViaRestCheckoutSession(
     successUrl: urls.success,
     failureUrl: urls.failure,
     cancelUrl: urls.cancel,
-    metadata: { plan },
+    metadata: { plan, ...(email ? { email } : {}) },
+    ...(email ? { userEmail: email } : {}),
     userIp,
     userFingerprint: checkoutFingerprint(userIp, plan),
     lineItems: [
@@ -169,16 +172,18 @@ async function createViaRestCheckoutSession(
 async function createViaTrpcCheckoutSession(
   apiKey: string,
   plan: ProPlanId,
+  options: MoneyMotionCheckoutOptions = {},
 ): Promise<MoneyMotionCheckoutResult> {
   const planConfig = MONEYMOTION_CHECKOUT_PLANS[plan];
   const siteUrl = siteBaseUrl();
   const urls = checkoutUrls(siteUrl, plan);
+  const email = options.email?.trim();
 
   const body = {
     json: {
       description: planConfig.label,
       urls,
-      userInfo: { email: "checkout@refluxtweaks.com" },
+      userInfo: { email: email || "checkout@refluxtweaks.com" },
       lineItems: [
         {
           name: planConfig.label,
@@ -187,7 +192,7 @@ async function createViaTrpcCheckoutSession(
           quantity: 1,
         },
       ],
-      metadata: { plan },
+      metadata: { plan, ...(email ? { email } : {}) },
     },
   };
 
@@ -243,7 +248,7 @@ export async function createMoneyMotionCheckout(
     if (restResult.ok) return restResult;
 
     console.warn("[MoneyMotion] REST failed, trying tRPC fallback:", restResult.error);
-    return await createViaTrpcCheckoutSession(apiKey, plan);
+    return await createViaTrpcCheckoutSession(apiKey, plan, options);
   } catch {
     return { ok: false, error: "Could not reach MoneyMotion" };
   }
@@ -262,7 +267,7 @@ export type MoneyMotionWebhookPayload = {
     id?: string;
     status?: string;
     totalInCents?: number;
-    metadata?: Record<string, unknown>;
+    metadata?: { plan?: string; email?: string } & Record<string, unknown>;
   };
   customer?: {
     email?: string;

@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
+import { updateSession } from "@/lib/supabase/middleware";
 
 const BLOCKED_PATTERNS = [
   /^\/\.env/i,
@@ -21,7 +23,7 @@ const CONTENT_SECURITY_POLICY = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://cdn.cloudflare.steamstatic.com https://shared.fastly.steamstatic.com https://cdn.akamai.steamstatic.com https://cdn2.unrealengine.com https://images.unsplash.com",
   "font-src 'self' data:",
-  "connect-src 'self'",
+  "connect-src 'self' https://*.supabase.co",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -29,14 +31,16 @@ const CONTENT_SECURITY_POLICY = [
   "upgrade-insecure-requests",
 ].join("; ");
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (BLOCKED_PATTERNS.some((pattern) => pattern.test(pathname))) {
     return new NextResponse(null, { status: 404 });
   }
 
-  const response = NextResponse.next();
+  const response = isSupabaseConfigured()
+    ? await updateSession(request)
+    : NextResponse.next();
 
   response.headers.set("X-DNS-Prefetch-Control", "on");
   response.headers.set("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload");
