@@ -1,4 +1,4 @@
-import { createHmac, timingSafeEqual } from "crypto";
+import { createHash, createHmac, timingSafeEqual } from "crypto";
 import type { PlanName } from "@/lib/purchase-store";
 import type { ProPlanId } from "@/data/downloads";
 
@@ -80,30 +80,45 @@ function extractCheckoutUrl(data: Record<string, unknown>): string | null {
   return null;
 }
 
-export async function createMoneyMotionCheckout(
+function checkoutFingerprint(userIp: string, plan: ProPlanId) {
+  return createHash("sha256").update(`${userIp}:${plan}:refluxtweaks`).digest("hex").slice(0, 32);
+}
+
+function checkoutUrls(siteUrl: string, plan: ProPlanId) {
+  return {
+    success: `${siteUrl}/pricing?checkout=success&plan=${plan}`,
+    failure: `${siteUrl}/pricing?checkout=failed&plan=${plan}`,
+    cancel: `${siteUrl}/pricing?checkout=cancelled&plan=${plan}`,
+  };
+}
+
+async function parseMoneyMotionResponse(response: Response) {
+  const data = (await response.json()) as Record<string, unknown> & {
+    errors?: string[];
+    message?: string;
+  };
+  return data;
+}
+
+async function createViaRestCheckoutSession(
+  apiKey: string,
   plan: ProPlanId,
-  options: MoneyMotionCheckoutOptions = {},
+  options: MoneyMotionCheckoutOptions,
 ): Promise<MoneyMotionCheckoutResult> {
-  const directLink = directCheckoutLink(plan);
-  if (directLink) {
-    return { ok: true, checkoutUrl: directLink, id: "" };
-  }
-
-  const apiKey = process.env.MONEYMOTION_API_KEY?.trim();
-  if (!apiKey) {
-    return { ok: false, error: "Checkout is not configured yet" };
-  }
-
   const planConfig = MONEYMOTION_CHECKOUT_PLANS[plan];
   const siteUrl = siteBaseUrl();
+  const urls = checkoutUrls(siteUrl, plan);
+  const userIp = options.userIp ?? "0.0.0.0";
 
   const body: Record<string, unknown> = {
     description: planConfig.label,
     total: planConfig.total,
-    successUrl: `${siteUrl}/pricing?checkout=success&plan=${plan}`,
-    failureUrl: `${siteUrl}/pricing?checkout=failed&plan=${plan}`,
-    cancelUrl: `${siteUrl}/pricing?checkout=cancelled&plan=${plan}`,
+    successUrl: urls.success,
+    failureUrl: urls.failure,
+    cancelUrl: urls.cancel,
     metadata: { plan },
+    userIp,
+    userFingerprint: checkoutFingerprint(userIp, plan),
     lineItems: [
       {
         name: planConfig.label,
@@ -118,45 +133,117 @@ export async function createMoneyMotionCheckout(
     },
   };
 
-  if (options.userIp) {
-    body.userIp = options.userIp;
+  const response = await fetch(`${moneyMotionApiBase()}/createCheckoutSession`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-API-Key": apiKey,
+      "x-currency": "USD",
+    },
+    body: JSON.stringify(body),
+    cache: "no-store",
+  });
+
+  const data = await parseMoneyMotionResponse(response);
+
+  if (!response.ok) {
+    const reason = data.errors?.join(", ") || data.message || `HTTP ${response.status}`;
+    console.error("[MoneyMotion] REST createCheckoutSession failed:", reason, data);
+    return { ok: false, error: reason };
+  }
+
+  const checkoutUrl = extractCheckoutUrl(data);
+  if (!checkoutUrl) {
+    console.error("[MoneyMotion] REST missing checkout URL:", data);
+    return { ok: false, error: "MoneyMotion did not return a checkout URL" };
+  }
+
+  const id =
+    (typeof data.id === "string" && data.id) ||
+    (typeof data.checkoutSessionId === "string" && data.checkoutSessionId) ||
+    "";
+
+  return { ok: true, checkoutUrl, id };
+}
+
+async function createViaTrpcCheckoutSession(
+  apiKey: string,
+  plan: ProPlanId,
+): Promise<MoneyMotionCheckoutResult> {
+  const planConfig = MONEYMOTION_CHECKOUT_PLANS[plan];
+  const siteUrl = siteBaseUrl();
+  const urls = checkoutUrls(siteUrl, plan);
+
+  const body = {
+    json: {
+      description: planConfig.label,
+      urls,
+      userInfo: { email: "checkout@refluxtweaks.com" },
+      lineItems: [
+        {
+          name: planConfig.label,
+          description: planConfig.tagline,
+          pricePerItemInCents: MONEYMOTION_PLAN_PRICES_CENTS[plan],
+          quantity: 1,
+        },
+      ],
+      metadata: { plan },
+    },
+  };
+
+  const response = await fetch(`${moneyMotionApiBase()}/checkoutSessions.createCheckoutSession`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-API-Key": apiKey,
+      "x-currency": "USD",
+    },
+    body: JSON.stringify(body),
+    cache: "no-store",
+  });
+
+  const data = await parseMoneyMotionResponse(response);
+
+  if (!response.ok) {
+    const reason = data.errors?.join(", ") || data.message || `HTTP ${response.status}`;
+    console.error("[MoneyMotion] tRPC createCheckoutSession failed:", reason, data);
+    return { ok: false, error: reason };
+  }
+
+  const checkoutUrl = extractCheckoutUrl(data);
+  if (!checkoutUrl) {
+    console.error("[MoneyMotion] tRPC missing checkout URL:", data);
+    return { ok: false, error: "MoneyMotion did not return a checkout URL" };
+  }
+
+  const id =
+    (typeof data.id === "string" && data.id) ||
+    (typeof data.checkoutSessionId === "string" && data.checkoutSessionId) ||
+    "";
+
+  return { ok: true, checkoutUrl, id };
+}
+
+export async function createMoneyMotionCheckout(
+  plan: ProPlanId,
+  options: MoneyMotionCheckoutOptions = {},
+): Promise<MoneyMotionCheckoutResult> {
+  const directLink = directCheckoutLink(plan);
+  if (directLink) {
+    return { ok: true, checkoutUrl: directLink, id: "" };
+  }
+
+  const apiKey = process.env.MONEYMOTION_API_KEY?.trim();
+  if (!apiKey) {
+    return { ok: false, error: "Checkout is not configured yet" };
   }
 
   try {
-    const response = await fetch(`${moneyMotionApiBase()}/createCheckoutSession`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-API-Key": apiKey,
-        "x-currency": "USD",
-      },
-      body: JSON.stringify(body),
-      cache: "no-store",
-    });
+    const restResult = await createViaRestCheckoutSession(apiKey, plan, options);
+    if (restResult.ok) return restResult;
 
-    const data = (await response.json()) as Record<string, unknown> & {
-      errors?: string[];
-      message?: string;
-    };
-
-    if (!response.ok) {
-      const reason = data.errors?.join(", ") || data.message || `HTTP ${response.status}`;
-      console.error("[MoneyMotion] createCheckoutSession failed:", reason, data);
-      return { ok: false, error: reason };
-    }
-
-    const checkoutUrl = extractCheckoutUrl(data);
-    if (!checkoutUrl) {
-      console.error("[MoneyMotion] missing checkout URL in response:", data);
-      return { ok: false, error: "MoneyMotion did not return a checkout URL" };
-    }
-
-    const id =
-      (typeof data.id === "string" && data.id) ||
-      (typeof data.checkoutSessionId === "string" && data.checkoutSessionId) ||
-      "";
-
-    return { ok: true, checkoutUrl, id };
+    console.warn("[MoneyMotion] REST failed, trying tRPC fallback:", restResult.error);
+    return await createViaTrpcCheckoutSession(apiKey, plan);
   } catch {
     return { ok: false, error: "Could not reach MoneyMotion" };
   }
