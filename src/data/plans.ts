@@ -1,6 +1,6 @@
-export type PlanId = "free" | "monthly" | "yearly" | "lifetime";
-
 import { REFLUX_FREE_DOWNLOAD, proCheckoutUrl } from "./downloads";
+
+export type PlanId = "free" | "monthly" | "yearly" | "lifetime";
 
 export interface Plan {
   id: PlanId;
