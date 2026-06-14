@@ -23,10 +23,13 @@ export async function generateMetadata({
 
 export default async function CheckoutPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ plan: string }>;
+  searchParams: Promise<{ error?: string }>;
 }) {
   const { plan: planParam } = await params;
+  const { error } = await searchParams;
 
   if (!VALID_PLANS.has(planParam as ProPlanId)) {
     redirect("/pricing");
@@ -38,6 +41,8 @@ export default async function CheckoutPage({
   if (!planData) {
     redirect("/pricing");
   }
+
+  const hasCheckoutError = error === "checkout";
 
   return (
     <SiteShell mainClassName="flex min-h-[80vh] items-center justify-center py-16">
@@ -112,6 +117,13 @@ export default async function CheckoutPage({
               </li>
             ))}
           </ul>
+
+          {/* Checkout error banner */}
+          {hasCheckoutError && (
+            <div className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+              Payment setup isn&apos;t ready yet — please contact support or try again later.
+            </div>
+          )}
 
           {/* CTA button */}
           <CheckoutButton plan={plan} />
