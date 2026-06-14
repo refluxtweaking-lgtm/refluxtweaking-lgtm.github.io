@@ -30,7 +30,7 @@ export async function signUp(
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: { emailRedirectTo: `${siteUrl()}/auth/callback` },
@@ -38,6 +38,14 @@ export async function signUp(
 
   if (error) {
     return { error: error.message };
+  }
+
+  // When email confirmation is disabled in Supabase, signUp returns an active
+  // session and the user is logged in immediately — send them to their account.
+  // When confirmation is enabled, there's no session yet, so tell them to check
+  // their inbox.
+  if (data.session) {
+    redirect("/account");
   }
 
   redirect("/login?checkEmail=1");
