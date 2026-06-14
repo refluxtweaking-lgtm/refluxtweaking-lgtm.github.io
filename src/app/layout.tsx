@@ -13,7 +13,12 @@ export const metadata: Metadata = {
   description:
     "30 free tweaks · 100+ with Pro — lower latency, higher frames, and a cleaner rig with one click.",
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/web-icon.ico", sizes: "any" },
+      { url: "/web-icon.png", type: "image/png", sizes: "512x512" },
+    ],
+    shortcut: "/web-icon.ico",
+    apple: "/web-icon.png",
   },
   referrer: "strict-origin-when-cross-origin",
   robots: {
