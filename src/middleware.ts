@@ -32,10 +32,19 @@ const CONTENT_SECURITY_POLICY = [
 ].join("; ");
 
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname, searchParams } = request.nextUrl;
 
   if (BLOCKED_PATTERNS.some((pattern) => pattern.test(pathname))) {
     return new NextResponse(null, { status: 404 });
+  }
+
+  // Safety net: Supabase auth confirmation links can land on "/" with a
+  // ?code=... param (when the project's Site URL points at the root). Forward
+  // it to the real callback route so the session exchange still completes.
+  if (pathname === "/" && searchParams.has("code")) {
+    const callbackUrl = request.nextUrl.clone();
+    callbackUrl.pathname = "/auth/callback";
+    return NextResponse.redirect(callbackUrl);
   }
 
   const response = isSupabaseConfigured()
