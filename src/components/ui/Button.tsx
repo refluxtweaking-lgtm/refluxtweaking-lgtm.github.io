@@ -62,8 +62,9 @@ export function Button({
   const classes = `${baseStyles} ${sizeStyles} ${variantStyles[variant]} ${className}`;
 
   const isFileDownload = Boolean(download) || href.startsWith("/downloads/");
+  const isCheckoutRedirect = href.startsWith("/api/checkout/");
 
-  if (isFileDownload) {
+  if (isFileDownload || isCheckoutRedirect) {
     return (
       <a
         href={href}

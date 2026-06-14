@@ -16,6 +16,8 @@ export const REFLUX_BRAND_BANNER = {
 
 export const REFLUX_PRO_APP_URL = "https://app.refluxtweaks.com";
 
-export function proCheckoutUrl(plan: "monthly" | "yearly" | "lifetime") {
-  return `${REFLUX_PRO_APP_URL}?plan=${plan}`;
+export type ProPlanId = "monthly" | "yearly" | "lifetime";
+
+export function proCheckoutUrl(plan: ProPlanId) {
+  return `/api/checkout/${plan}`;
 }
