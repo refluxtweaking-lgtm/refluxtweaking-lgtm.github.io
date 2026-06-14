@@ -60,9 +60,6 @@ export function Hero() {
           </div>
         ))}
       </div>
-
-      {/* MoneyMotion domain verification — remove after verified */}
-      <span className="sr-only">ORw-nPy-iYE-</span>
     </section>
   );
 }

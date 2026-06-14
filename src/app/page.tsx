@@ -1,4 +1,5 @@
 import { SiteShell } from "@/components/layout/SiteShell";
+import { DesktopPowerBleed } from "@/components/effects/DesktopPowerBleed";
 import { Hero } from "@/components/sections/Hero";
 import { TrustIndicators } from "@/components/sections/TrustIndicators";
 import { Features } from "@/components/sections/Features";
@@ -12,6 +13,7 @@ import { CTA } from "@/components/sections/CTA";
 export default function Home() {
   return (
     <SiteShell>
+      <DesktopPowerBleed />
       <Hero />
       <TrustIndicators />
       <Features />

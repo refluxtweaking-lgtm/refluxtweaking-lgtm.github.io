@@ -38,10 +38,7 @@ export function Header() {
     <header className="sticky top-0 z-100 px-4 py-3 md:px-6">
       <div className="relative mx-auto max-w-[1200px]">
         <div className="flex items-center justify-between gap-4 rounded-2xl border border-[rgba(241,91,80,0.2)] bg-[rgba(8,10,14,0.75)] px-4 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(255,255,255,0.04)_inset] backdrop-blur-2xl md:px-5 md:py-3.5">
-          <Link href="/" className="group flex min-w-0 items-center gap-2" onClick={closeMenu}>
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-reflux-accent to-[#c43d35] text-sm font-black text-white shadow-[0_0_20px_rgba(241,91,80,0.4)] transition-transform group-hover:scale-105">
-              R
-            </span>
+          <Link href="/" className="group flex min-w-0 items-center" onClick={closeMenu}>
             <span className="logo-glow truncate text-lg font-extrabold tracking-tight gradient-text sm:text-xl md:text-2xl">
               REFLUX TWEAKS
             </span>
