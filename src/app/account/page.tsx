@@ -5,6 +5,7 @@ import { LicenseKeyBox } from "@/components/auth/LicenseKeyBox";
 import { signOut } from "@/app/auth/actions";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
+import { REFLUX_PRO_DOWNLOAD } from "@/data/downloads";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -98,6 +99,19 @@ export default async function AccountPage() {
           </div>
         ) : (
           <div className="flex flex-col gap-4">
+            <div className="glass-card-static rounded-2xl border border-reflux-border/60 bg-[rgba(10,12,17,0.85)] p-6 shadow-[0_0_60px_rgba(241,91,80,0.08)]">
+              <h3 className="text-lg font-bold text-white">Download REFLUX PRO</h3>
+              <p className="mt-2 text-sm text-reflux-muted">
+                Install the desktop app, then paste any of your license keys below when prompted.
+              </p>
+              <a
+                href={REFLUX_PRO_DOWNLOAD.href}
+                download={REFLUX_PRO_DOWNLOAD.filename}
+                className="mt-4 inline-flex items-center justify-center rounded-xl border border-[rgba(241,91,80,0.5)] bg-gradient-to-r from-[rgba(241,91,80,0.25)] to-[rgba(241,91,80,0.12)] px-5 py-2.5 text-sm font-semibold text-white transition-all hover:border-reflux-accent hover:shadow-[0_0_24px_rgba(241,91,80,0.4)]"
+              >
+                Download {REFLUX_PRO_DOWNLOAD.label}
+              </a>
+            </div>
             {licenses.map((license) => (
               <div
                 key={license.id}
@@ -125,7 +139,7 @@ export default async function AccountPage() {
         )}
 
         <p className="mt-8 text-center text-xs text-reflux-muted">
-          To activate: open REFLUX, go to Activate / Upgrade, and paste your key.
+          Install REFLUX PRO, paste your key when prompted, and your access countdown starts on activation day.
         </p>
       </div>
     </SiteShell>

@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { proDownloadUrl } from "@/data/downloads";
 
 function planLabel(plan: string) {
   const value = plan.trim().toLowerCase();
@@ -8,7 +9,7 @@ function planLabel(plan: string) {
   return `REFLUX PRO ${plan}`;
 }
 
-function buildHtml(plan: string, licenseKey: string) {
+function buildHtml(plan: string, licenseKey: string, downloadUrl: string) {
   const label = planLabel(plan);
   return `<!doctype html>
 <html>
@@ -22,11 +23,15 @@ function buildHtml(plan: string, licenseKey: string) {
         <div style="margin:0 0 24px;padding:18px;border-radius:12px;border:1px solid rgba(241,91,80,0.4);background:#05070b;text-align:center;">
           <code style="font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:20px;font-weight:700;letter-spacing:0.06em;color:#f15b50;word-break:break-all;">${licenseKey}</code>
         </div>
+        <p style="margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:0.12em;color:#8b94a3;">Download REFLUX PRO</p>
+        <div style="margin:0 0 24px;text-align:center;">
+          <a href="${downloadUrl}" style="display:inline-block;padding:14px 28px;border-radius:12px;border:1px solid rgba(241,91,80,0.5);background:linear-gradient(135deg,rgba(241,91,80,0.25),rgba(241,91,80,0.12));color:#ffffff;font-size:15px;font-weight:700;text-decoration:none;letter-spacing:0.04em;">Download REFLUX PRO Installer</a>
+        </div>
         <p style="margin:0 0 8px;font-size:14px;color:#c0c8d2;font-weight:600;">How to activate</p>
         <ol style="margin:0 0 24px;padding-left:20px;color:#a8b1bd;font-size:14px;line-height:1.7;">
-          <li>Open REFLUX.</li>
-          <li>Go to <strong style="color:#e7ecf2;">Activate / Upgrade</strong>.</li>
-          <li>Paste this key and confirm.</li>
+          <li>Install and open <strong style="color:#e7ecf2;">REFLUX PRO</strong>.</li>
+          <li>When prompted, paste your license key below.</li>
+          <li>Your access countdown starts the day you activate.</li>
         </ol>
         <p style="margin:0;font-size:12px;color:#6b7280;">You can always find your keys by logging in at refluxtweaks.com. Keep this key private.</p>
       </div>
@@ -35,7 +40,7 @@ function buildHtml(plan: string, licenseKey: string) {
 </html>`;
 }
 
-function buildText(plan: string, licenseKey: string) {
+function buildText(plan: string, licenseKey: string, downloadUrl: string) {
   const label = planLabel(plan);
   return [
     `REFLUX TWEAKS`,
@@ -44,10 +49,12 @@ function buildText(plan: string, licenseKey: string) {
     ``,
     `Your license key: ${licenseKey}`,
     ``,
+    `Download REFLUX PRO: ${downloadUrl}`,
+    ``,
     `How to activate:`,
-    `1. Open REFLUX.`,
-    `2. Go to Activate / Upgrade.`,
-    `3. Paste this key and confirm.`,
+    `1. Install and open REFLUX PRO.`,
+    `2. When prompted, paste your license key.`,
+    `3. Your access countdown starts the day you activate.`,
     ``,
     `You can always find your keys by logging in at refluxtweaks.com. Keep this key private.`,
   ].join("\n");
@@ -72,12 +79,13 @@ export async function sendLicenseEmail(
 
   try {
     const resend = new Resend(apiKey);
+    const downloadUrl = proDownloadUrl();
     const { error } = await resend.emails.send({
       from,
       to,
-      subject: "Your REFLUX PRO license key",
-      html: buildHtml(plan, licenseKey),
-      text: buildText(plan, licenseKey),
+      subject: "Your REFLUX PRO license key & download",
+      html: buildHtml(plan, licenseKey, downloadUrl),
+      text: buildText(plan, licenseKey, downloadUrl),
     });
 
     if (error) {

@@ -6,20 +6,19 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: "/downloads/:path*",
+        source: "/downloads/REFLUX-FREE-Setup.exe",
         headers: [
-          {
-            key: "Content-Type",
-            value: "application/octet-stream",
-          },
-          {
-            key: "Content-Disposition",
-            value: 'attachment; filename="REFLUX-FREE-Setup.exe"',
-          },
-          {
-            key: "Cache-Control",
-            value: "public, max-age=3600, immutable",
-          },
+          { key: "Content-Type", value: "application/octet-stream" },
+          { key: "Content-Disposition", value: 'attachment; filename="REFLUX-FREE-Setup.exe"' },
+          { key: "Cache-Control", value: "public, max-age=3600, immutable" },
+        ],
+      },
+      {
+        source: "/downloads/REFLUX-PRO-Setup.exe",
+        headers: [
+          { key: "Content-Type", value: "application/octet-stream" },
+          { key: "Content-Disposition", value: 'attachment; filename="REFLUX-PRO-Setup.exe"' },
+          { key: "Cache-Control", value: "public, max-age=3600, immutable" },
         ],
       },
     ];
