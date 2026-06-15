@@ -1,10 +1,11 @@
-# Copies the latest REFLUX PRO installer into the website public folder.
+# Copies the latest REFLUX PRO installer into the gated private downloads folder.
 $ErrorActionPreference = "Stop"
 
 $proProject = "C:\Users\nothi\Desktop\! REFLUX PRO TWEAKING UTILITY"
 $distDir = Join-Path $proProject "dist"
-$destDir = Join-Path $PSScriptRoot "..\public\downloads"
+$destDir = Join-Path $PSScriptRoot "..\private\downloads"
 $destFile = Join-Path $destDir "REFLUX-PRO-Setup.exe"
+$legacyPublicFile = Join-Path $PSScriptRoot "..\public\downloads\REFLUX-PRO-Setup.exe"
 
 Push-Location $proProject
 try {
@@ -34,4 +35,7 @@ if ($installer.Length -lt 50000000) {
 
 New-Item -ItemType Directory -Force -Path $destDir | Out-Null
 Copy-Item -Path $installer.FullName -Destination $destFile -Force
+if (Test-Path $legacyPublicFile) {
+  Remove-Item -Path $legacyPublicFile -Force
+}
 Write-Host "Synced $($installer.FullName) -> $destFile"

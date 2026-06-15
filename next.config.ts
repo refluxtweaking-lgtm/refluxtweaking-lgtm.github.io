@@ -13,14 +13,6 @@ const nextConfig: NextConfig = {
           { key: "Cache-Control", value: "public, max-age=3600, immutable" },
         ],
       },
-      {
-        source: "/downloads/REFLUX-PRO-Setup.exe",
-        headers: [
-          { key: "Content-Type", value: "application/octet-stream" },
-          { key: "Content-Disposition", value: 'attachment; filename="REFLUX-PRO-Setup.exe"' },
-          { key: "Cache-Control", value: "public, max-age=3600, immutable" },
-        ],
-      },
     ];
   },
   images: {

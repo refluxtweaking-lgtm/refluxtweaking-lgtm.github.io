@@ -150,7 +150,7 @@ export async function sendLicenseEmail(
 
   try {
     const resend = new Resend(apiKey);
-    const downloadUrl = proDownloadUrl();
+    const downloadUrl = proDownloadUrl(to);
     const { error } = await resend.emails.send({
       from,
       to,
@@ -188,7 +188,7 @@ export async function sendLicenseUpdateEmail(
 
   try {
     const resend = new Resend(apiKey);
-    const downloadUrl = proDownloadUrl();
+    const downloadUrl = proDownloadUrl(to);
     const { error } = await resend.emails.send({
       from,
       to,

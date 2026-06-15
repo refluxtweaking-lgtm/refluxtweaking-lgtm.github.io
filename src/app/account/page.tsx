@@ -60,6 +60,8 @@ export default async function AccountPage() {
     licenses = (data as LicenseRow[] | null) ?? [];
   }
 
+  const activeLicenses = licenses.filter((license) => license.status.toLowerCase() === "active");
+
   return (
     <SiteShell mainClassName="py-16">
       <div className="mx-auto w-full max-w-2xl">
@@ -84,29 +86,45 @@ export default async function AccountPage() {
           Your license keys
         </h2>
 
-        {licenses.length === 0 ? (
+        {activeLicenses.length === 0 ? (
           <div className="glass-card-static rounded-2xl border border-reflux-border/60 bg-[rgba(10,12,17,0.85)] p-8 text-center shadow-[0_0_60px_rgba(241,91,80,0.08)]">
-            <p className="text-sm text-reflux-text">No licenses yet.</p>
-            <p className="mt-2 text-sm text-reflux-muted">
-              Grab a plan to unlock REFLUX PRO — your key shows up here automatically after purchase.
-            </p>
-            <Link
-              href="/pricing"
-              className="mt-6 inline-flex items-center justify-center rounded-xl border border-[rgba(241,91,80,0.5)] bg-gradient-to-r from-[rgba(241,91,80,0.25)] to-[rgba(241,91,80,0.12)] px-5 py-2.5 text-sm font-semibold text-white transition-all hover:border-reflux-accent hover:shadow-[0_0_24px_rgba(241,91,80,0.4)]"
-            >
-              View plans
-            </Link>
+            {licenses.length === 0 ? (
+              <>
+                <p className="text-sm text-reflux-text">No licenses yet.</p>
+                <p className="mt-2 text-sm text-reflux-muted">
+                  Grab a plan to unlock REFLUX PRO — your key shows up here automatically after purchase.
+                </p>
+                <Link
+                  href="/pricing"
+                  className="mt-6 inline-flex items-center justify-center rounded-xl border border-[rgba(241,91,80,0.5)] bg-gradient-to-r from-[rgba(241,91,80,0.25)] to-[rgba(241,91,80,0.12)] px-5 py-2.5 text-sm font-semibold text-white transition-all hover:border-reflux-accent hover:shadow-[0_0_24px_rgba(241,91,80,0.4)]"
+                >
+                  View plans
+                </Link>
+              </>
+            ) : (
+              <>
+                <p className="text-sm text-reflux-text">No active license.</p>
+                <p className="mt-2 text-sm text-reflux-muted">
+                  Purchase a new plan or check your email for the latest update key.
+                </p>
+                <Link
+                  href="/pricing"
+                  className="mt-6 inline-flex items-center justify-center rounded-xl border border-[rgba(241,91,80,0.5)] bg-gradient-to-r from-[rgba(241,91,80,0.25)] to-[rgba(241,91,80,0.12)] px-5 py-2.5 text-sm font-semibold text-white transition-all hover:border-reflux-accent hover:shadow-[0_0_24px_rgba(241,91,80,0.4)]"
+                >
+                  View plans
+                </Link>
+              </>
+            )}
           </div>
         ) : (
           <div className="flex flex-col gap-4">
             <div className="glass-card-static rounded-2xl border border-reflux-border/60 bg-[rgba(10,12,17,0.85)] p-6 shadow-[0_0_60px_rgba(241,91,80,0.08)]">
               <h3 className="text-lg font-bold text-white">Download REFLUX PRO</h3>
               <p className="mt-2 text-sm text-reflux-muted">
-                Install the desktop app, then paste any of your license keys below when prompted.
+                Install the desktop app, then paste your active license key below when prompted.
               </p>
               <a
                 href={REFLUX_PRO_DOWNLOAD.href}
-                download={REFLUX_PRO_DOWNLOAD.filename}
                 className="mt-4 inline-flex items-center justify-center rounded-xl border border-[rgba(241,91,80,0.5)] bg-gradient-to-r from-[rgba(241,91,80,0.25)] to-[rgba(241,91,80,0.12)] px-5 py-2.5 text-sm font-semibold text-white transition-all hover:border-reflux-accent hover:shadow-[0_0_24px_rgba(241,91,80,0.4)]"
               >
                 Download {REFLUX_PRO_DOWNLOAD.label}
@@ -139,7 +157,9 @@ export default async function AccountPage() {
         )}
 
         <p className="mt-8 text-center text-xs text-reflux-muted">
-          Install REFLUX PRO, paste your key when prompted, and your access countdown starts on activation day.
+          {activeLicenses.length > 0
+            ? "Install REFLUX PRO, paste your key when prompted, and your access countdown starts on activation day."
+            : "Purchase a plan to unlock REFLUX PRO and get your license key here."}
         </p>
       </div>
     </SiteShell>
