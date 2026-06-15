@@ -33,11 +33,13 @@ export const tweakCategories: TweakCategory[] = [
   "Cleanup & Maintenance",
 ];
 
-/** Matches REFLUX FREE app limits (FREE_LIMITS.maxTweaks / maxPowerPlans). */
+/** Matches REFLUX FREE / PRO app limits (FREE_LIMITS.maxTweaks, PRO tweak arrays). */
 export const PRODUCT_LIMITS = {
   freeTweaks: 30,
-  proTweaksLabel: "70+",
-  totalTweaksLabel: "100+",
+  proTweaks: 129,
+  proTweaksExclusive: 99,
+  proTweaksLabel: "99",
+  totalTweaksLabel: "129",
   freePowerPlans: 2,
 } as const;
 

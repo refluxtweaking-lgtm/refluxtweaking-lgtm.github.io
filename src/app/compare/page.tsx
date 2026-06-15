@@ -2,7 +2,7 @@ import { SiteShell } from "@/components/layout/SiteShell";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { TweakComparisonTable } from "@/components/pricing/TweakComparisonTable";
 import { PricingCards } from "@/components/pricing/PricingCards";
-import { tweaks } from "@/data/tweaks";
+import { PRODUCT_LIMITS } from "@/data/tweaks";
 
 export const metadata = {
   title: "Compare Tweaks – REFLUX TWEAKS",
@@ -20,7 +20,7 @@ export default function ComparePage() {
               Every tweak. <span className="gradient-text">Every plan.</span>
             </>
           }
-          subtitle={`No guesswork — all ${tweaks.length} tweaks in one searchable table.`}
+          subtitle={`No guesswork — all ${PRODUCT_LIMITS.proTweaks} optimizations in REFLUX PRO, with highlights searchable below.`}
         />
       </section>
 

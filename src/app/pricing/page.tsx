@@ -6,7 +6,7 @@ import { PricingCards } from "@/components/pricing/PricingCards";
 import { CheckoutNotice } from "@/components/pricing/CheckoutNotice";
 import { CTA } from "@/components/sections/CTA";
 import { plans } from "@/data/plans";
-import { displayTweakCountForPlan } from "@/data/tweaks";
+import { displayTweakCountForPlan, PRODUCT_LIMITS } from "@/data/tweaks";
 import { Icon } from "@/components/ui/Icon";
 
 export const metadata = {
@@ -25,7 +25,7 @@ const faqs = [
   },
   {
     q: "Is the Free plan useful?",
-    a: "Yes. 30 core tweaks, 2 power plans, and basic network optimizations — enough to feel the difference.",
+    a: `Yes. ${PRODUCT_LIMITS.freeTweaks} core tweaks, 2 power plans, and basic network optimizations — enough to feel the difference.`,
   },
   {
     q: "Are tweaks safe?",

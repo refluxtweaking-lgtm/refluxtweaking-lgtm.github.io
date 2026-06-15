@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { PRODUCT_LIMITS } from "@/data/tweaks";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -11,7 +12,7 @@ const inter = Inter({
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.refluxtweaks.com";
 const SITE_TITLE = "REFLUX TWEAKS – Windows Gaming Optimizer";
 const SITE_DESCRIPTION =
-  "30 free tweaks · 100+ with Pro — lower latency, higher frames, and a cleaner rig with one click.";
+  `${PRODUCT_LIMITS.freeTweaks} free tweaks · ${PRODUCT_LIMITS.totalTweaksLabel} with Pro — lower latency, higher frames, and a cleaner rig with one click.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

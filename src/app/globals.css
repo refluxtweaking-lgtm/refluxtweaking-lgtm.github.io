@@ -344,3 +344,131 @@ body {
 .stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
 .stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
 .stagger-children > *:nth-child(6) { animation-delay: 0.3s; }
+
+/* ── Hero showcase ── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes heroFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes heroRingPulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.85; }
+}
+
+@keyframes beamPulse {
+  0%, 100% { opacity: 0.45; transform: translateX(-50%) scaleY(1); }
+  50% { opacity: 0.75; transform: translateX(-50%) scaleY(1.05); }
+}
+
+@keyframes barGrow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.marquee-track {
+  animation: marquee 40s linear infinite;
+}
+
+.hero-beam {
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(241, 91, 80, 0.22) 0%, transparent 70%);
+  filter: blur(20px);
+  animation: beamPulse 6s ease-in-out infinite;
+}
+
+.hero-showcase-glow {
+  background: radial-gradient(circle at 50% 40%, rgba(241, 91, 80, 0.28) 0%, transparent 65%);
+}
+
+.hero-showcase-ring {
+  border: 1px solid rgba(241, 91, 80, 0.35);
+  box-shadow: 0 0 60px rgba(241, 91, 80, 0.15), inset 0 0 40px rgba(241, 91, 80, 0.05);
+  animation: heroRingPulse 4s ease-in-out infinite;
+}
+
+.hero-showcase-tilt {
+  transform: perspective(1200px) rotateY(-4deg) rotateX(2deg);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-showcase-tilt:hover {
+  transform: perspective(1200px) rotateY(0deg) rotateX(0deg);
+}
+
+.hero-float-card {
+  animation: heroFloat 5s ease-in-out infinite;
+}
+
+.hero-scanlines {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.015) 2px,
+    rgba(255, 255, 255, 0.015) 4px
+  );
+  opacity: 0.35;
+}
+
+.hero-stat-card {
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+.hero-stat-card:hover {
+  border-color: rgba(241, 91, 80, 0.35);
+  box-shadow: 0 0 24px rgba(241, 91, 80, 0.12);
+  transform: translateY(-2px);
+}
+
+.result-bar-fill {
+  transform-origin: left;
+  animation: barGrow 1.2s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.trust-bento-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.trust-bento-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 0% 0%, rgba(241, 91, 80, 0.12), transparent 55%);
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+
+.trust-bento-card:hover::before {
+  opacity: 1;
+}
+
+.section-glow-wrap {
+  position: relative;
+}
+
+.section-glow-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -40px;
+  background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(241, 91, 80, 0.08), transparent 70%);
+  pointer-events: none;
+}
+
+.timeline-connector {
+  background: linear-gradient(90deg, transparent, rgba(241, 91, 80, 0.5), transparent);
+}
+
+.testimonial-quote-mark {
+  font-size: 4rem;
+  line-height: 1;
+  background: linear-gradient(135deg, rgba(241, 91, 80, 0.5), rgba(241, 91, 80, 0.08));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

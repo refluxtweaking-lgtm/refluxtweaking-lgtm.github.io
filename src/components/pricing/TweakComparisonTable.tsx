@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { tweaks, tweakCategories, type TweakCategory } from "@/data/tweaks";
+import { PRODUCT_LIMITS, tweaks, tweakCategories, type TweakCategory } from "@/data/tweaks";
 import { planOrder, plans } from "@/data/plans";
 import { Icon } from "@/components/ui/Icon";
 
@@ -37,7 +37,7 @@ export function TweakComparisonTable() {
         </div>
         <div className="flex flex-wrap gap-2">
           <FilterPill active={filter === "All"} onClick={() => setFilter("All")}>
-            All ({tweaks.length})
+            Highlights ({tweaks.length})
           </FilterPill>
           {tweakCategories.map((cat) => (
             <FilterPill
@@ -105,6 +105,11 @@ export function TweakComparisonTable() {
       {filtered.length === 0 && (
         <p className="mt-8 text-center text-reflux-muted">No tweaks match your search.</p>
       )}
+
+      <p className="mt-6 text-center text-sm text-reflux-muted">
+        REFLUX PRO includes {PRODUCT_LIMITS.proTweaks} total optimizations. This table highlights the
+        most popular ones — the full library lives in the desktop app.
+      </p>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { REFLUX_FREE_DOWNLOAD, proCheckoutUrl } from "./downloads";
+import { PRODUCT_LIMITS } from "./tweaks";
 
 export type PlanId = "free" | "monthly" | "yearly" | "lifetime";
 
@@ -32,7 +33,7 @@ export const plans: Plan[] = [
     ctaHref: REFLUX_FREE_DOWNLOAD.href,
     downloadFilename: REFLUX_FREE_DOWNLOAD.filename,
     highlights: [
-      "30 core tweaks",
+      `${PRODUCT_LIMITS.freeTweaks} core tweaks`,
       "2 power plans",
       "Manual game scanner",
       "Basic network optimizations",
@@ -52,7 +53,7 @@ export const plans: Plan[] = [
     cta: "Start Monthly",
     ctaHref: proCheckoutUrl("monthly"),
     highlights: [
-      "100+ full tweaks unlocked",
+      `${PRODUCT_LIMITS.totalTweaksLabel} full tweaks unlocked`,
       "Automatic game scanner",
       "Advanced network & latency pack",
       "Live benchmarks dashboard",

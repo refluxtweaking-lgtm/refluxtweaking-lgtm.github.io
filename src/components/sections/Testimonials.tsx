@@ -106,14 +106,17 @@ export function Testimonials() {
         }
         subtitle="Real feedback from our Discord community."
       />
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {testimonials.map((t) => (
-          <GlowCard key={t.quote} className="relative text-left">
-            <div className="mb-4 flex items-center justify-between">
+          <GlowCard key={t.quote} className="relative overflow-hidden text-left">
+            <span className="testimonial-quote-mark pointer-events-none absolute -top-2 left-4 select-none" aria-hidden="true">
+              &ldquo;
+            </span>
+            <div className="relative mb-4 flex items-center justify-between pt-6">
               <StarRating rating={t.rating} />
               <span className="badge-pill badge-accent text-[10px]">{t.game}</span>
             </div>
-            <p className="mb-6 leading-relaxed text-[#c8d0dc]">&ldquo;{t.quote}&rdquo;</p>
+            <p className="relative mb-6 leading-relaxed text-[#c8d0dc]">{t.quote}</p>
             <div className="mt-auto flex items-center gap-3 border-t border-reflux-border/50 pt-4">
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-reflux-accent to-[#c43d35] text-xs font-bold text-white">
                 {t.author.charAt(0).toUpperCase()}

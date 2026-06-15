@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { PRODUCT_LIMITS } from "@/data/tweaks";
 
 const tabs = ["Tweaks", "Games", "Network", "Cleanup", "Benchmarks"] as const;
 
@@ -12,11 +13,31 @@ const sampleTweaks = [
   { name: "Shader Cache Cleanup", on: true },
 ];
 
-export function AppPreviewMock() {
+interface AppPreviewMockProps {
+  hero?: boolean;
+  autoPlay?: boolean;
+}
+
+export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMockProps) {
   const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Tweaks");
 
+  useEffect(() => {
+    if (!autoPlay) return;
+    const interval = setInterval(() => {
+      setActiveTab((current) => {
+        const idx = tabs.indexOf(current);
+        return tabs[(idx + 1) % tabs.length];
+      });
+    }, 3200);
+    return () => clearInterval(interval);
+  }, [autoPlay]);
+
   return (
-    <div className="mx-auto w-full max-w-4xl overflow-hidden rounded-2xl border border-[rgba(241,91,80,0.35)] bg-[#080a0d] shadow-[0_0_60px_rgba(241,91,80,0.12),0_0_0_1px_rgba(255,255,255,0.04)_inset]">
+    <div
+      className={`mx-auto w-full overflow-hidden border border-[rgba(241,91,80,0.35)] bg-[#080a0d] shadow-[0_0_60px_rgba(241,91,80,0.12),0_0_0_1px_rgba(255,255,255,0.04)_inset] ${
+        hero ? "rounded-[24px] shadow-[0_24px_80px_rgba(0,0,0,0.55),0_0_80px_rgba(241,91,80,0.18)]" : "max-w-4xl rounded-2xl"
+      }`}
+    >
       <div className="flex items-center gap-2 border-b border-reflux-border/80 bg-[#0a0b0e] px-4 py-3">
         <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
         <span className="h-3 w-3 rounded-full bg-[#febc2e]" />
@@ -55,11 +76,11 @@ export function AppPreviewMock() {
         ))}
       </div>
 
-      <div className="min-h-[280px] bg-gradient-to-b from-[#0c0e12] to-[#080a0d] p-6">
+      <div className={`min-h-[280px] bg-gradient-to-b from-[#0c0e12] to-[#080a0d] ${hero ? "p-5 sm:p-6" : "p-6"}`}>
         {activeTab === "Tweaks" && (
           <div className="space-y-2.5">
             <div className="mb-4 flex items-center justify-between">
-              <span className="font-semibold">30 Free · 100+ Pro</span>
+              <span className="font-semibold">{PRODUCT_LIMITS.freeTweaks} Free · {PRODUCT_LIMITS.totalTweaksLabel} Pro</span>
               <button
                 type="button"
                 className="rounded-lg bg-gradient-to-r from-reflux-accent to-[#c43d35] px-4 py-2 text-xs font-bold text-white shadow-[0_0_16px_rgba(241,91,80,0.4)]"

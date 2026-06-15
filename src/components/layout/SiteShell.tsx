@@ -17,7 +17,7 @@ export function SiteShell({ children, mainClassName = "" }: SiteShellProps) {
       <AmbientBackground />
       <ParticlesCanvas />
       <Header />
-      <main className={`relative z-1 mx-auto max-w-[1200px] px-5 ${mainClassName}`}>
+      <main className={`relative z-1 mx-auto max-w-7xl px-5 ${mainClassName}`}>
         {children}
       </main>
       <Footer />

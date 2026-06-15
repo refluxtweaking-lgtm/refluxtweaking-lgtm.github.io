@@ -1,6 +1,7 @@
 import { GlowCard } from "@/components/ui/GlowCard";
 import { TweakCardMini } from "../TweakCardMini";
 import { SlideHeading } from "./SlideHeading";
+import { PRODUCT_LIMITS } from "@/data/tweaks";
 
 const tweaks = [
   {
@@ -30,7 +31,7 @@ import type { SlideProps } from "./types";
 export function TweaksSlide(_props: SlideProps) {
   return (
     <GlowCard>
-      <SlideHeading icon="bolt" title="100+ Tweaks" />
+      <SlideHeading icon="bolt" title={`${PRODUCT_LIMITS.totalTweaksLabel} Tweaks`} />
       <p className="mb-3 text-sm text-reflux-muted sm:mb-4">
         Pre‑configured optimizations ready to fire.
       </p>

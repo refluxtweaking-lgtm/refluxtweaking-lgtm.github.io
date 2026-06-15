@@ -1,12 +1,13 @@
 import { GlowCard } from "@/components/ui/GlowCard";
 import { Icon } from "@/components/ui/Icon";
 import { SlideHeading } from "./SlideHeading";
+import { PRODUCT_LIMITS } from "@/data/tweaks";
 
 import type { SlideProps } from "./types";
 
 const timeline = [
   { label: "Restore point created", state: "done" as const, time: "Before any change" },
-  { label: "Tweaks applied", state: "active" as const, time: "100+ optimizations" },
+  { label: "Tweaks applied", state: "active" as const, time: `${PRODUCT_LIMITS.proTweaks} optimizations` },
   { label: "One‑click revert ready", state: "ready" as const, time: "Anytime, zero risk" },
 ];
 

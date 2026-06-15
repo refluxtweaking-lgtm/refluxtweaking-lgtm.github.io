@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { CTA } from "@/components/sections/CTA";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
+import { PRODUCT_LIMITS } from "@/data/tweaks";
 
 export const metadata = {
   title: "The App – REFLUX TWEAKS",
@@ -15,7 +16,7 @@ const features: { icon: IconName; title: string; desc: string }[] = [
   {
     icon: "bolt",
     title: "One-click tweak batches",
-    desc: "Toggle individual optimizations or apply all 100+ at once. Restore points created automatically.",
+    desc: `Toggle individual optimizations or apply all ${PRODUCT_LIMITS.proTweaks} at once. Restore points created automatically.`,
   },
   {
     icon: "gamepad",

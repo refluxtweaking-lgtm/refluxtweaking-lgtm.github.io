@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PRODUCT_LIMITS } from "@/data/tweaks";
 
 const footerLinks = [
   { href: "/pricing", label: "Pricing" },
@@ -22,7 +23,7 @@ export function Footer() {
           <div className="text-center md:text-left">
             <div className="mb-2 text-2xl font-extrabold gradient-text">REFLUX TWEAKS</div>
             <p className="max-w-sm text-sm text-reflux-muted">
-              30 free tweaks · 100+ with Pro. Lower ping, higher FPS, cleaner PC.
+              {PRODUCT_LIMITS.freeTweaks} free tweaks · {PRODUCT_LIMITS.totalTweaksLabel} with Pro. Lower ping, higher FPS, cleaner PC.
             </p>
           </div>
           <div className="flex flex-wrap justify-center gap-2">
