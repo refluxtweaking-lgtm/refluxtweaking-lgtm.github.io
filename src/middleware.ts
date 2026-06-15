@@ -10,12 +10,15 @@ const BLOCKED_PATTERNS = [
   /^\/wpadmin/i,
   /^\/phpmyadmin/i,
   /^\/administrator/i,
+  /^\/private(\/|$)/i,
   /^\/\.well-known\/acme-challenge\/\.\./i,
   /\.\./,
   /\.php$/i,
   /\.asp$/i,
   /\.aspx$/i,
 ];
+
+const BLOCKED_PATHS = new Set(["/downloads/REFLUX-PRO-Setup.exe"]);
 
 const CONTENT_SECURITY_POLICY = [
   "default-src 'self'",
@@ -31,26 +34,7 @@ const CONTENT_SECURITY_POLICY = [
   "upgrade-insecure-requests",
 ].join("; ");
 
-export async function middleware(request: NextRequest) {
-  const { pathname, searchParams } = request.nextUrl;
-
-  if (BLOCKED_PATTERNS.some((pattern) => pattern.test(pathname))) {
-    return new NextResponse(null, { status: 404 });
-  }
-
-  // Safety net: Supabase auth confirmation links can land on "/" with a
-  // ?code=... param (when the project's Site URL points at the root). Forward
-  // it to the real callback route so the session exchange still completes.
-  if (pathname === "/" && searchParams.has("code")) {
-    const callbackUrl = request.nextUrl.clone();
-    callbackUrl.pathname = "/auth/callback";
-    return NextResponse.redirect(callbackUrl);
-  }
-
-  const response = isSupabaseConfigured()
-    ? await updateSession(request)
-    : NextResponse.next();
-
+function applySecurityHeaders(response: NextResponse) {
   response.headers.set("X-DNS-Prefetch-Control", "on");
   response.headers.set("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload");
   response.headers.set("X-Frame-Options", "DENY");
@@ -61,12 +45,38 @@ export async function middleware(request: NextRequest) {
   response.headers.set("Cross-Origin-Opener-Policy", "same-origin");
   response.headers.set("Cross-Origin-Resource-Policy", "same-site");
   response.headers.set("Content-Security-Policy", CONTENT_SECURITY_POLICY);
-
   return response;
+}
+
+export async function middleware(request: NextRequest) {
+  const { pathname, searchParams } = request.nextUrl;
+
+  if (BLOCKED_PATTERNS.some((pattern) => pattern.test(pathname)) || BLOCKED_PATHS.has(pathname)) {
+    return new NextResponse(null, { status: 404 });
+  }
+
+  if (pathname === "/" && searchParams.has("code")) {
+    const callbackUrl = request.nextUrl.clone();
+    callbackUrl.pathname = "/auth/callback";
+    return NextResponse.redirect(callbackUrl);
+  }
+
+  const session = isSupabaseConfigured()
+    ? await updateSession(request)
+    : { response: NextResponse.next(), user: null };
+
+  if (pathname.startsWith("/account") && isSupabaseConfigured() && !session.user) {
+    const loginUrl = request.nextUrl.clone();
+    loginUrl.pathname = "/login";
+    loginUrl.searchParams.set("next", pathname);
+    return applySecurityHeaders(NextResponse.redirect(loginUrl));
+  }
+
+  return applySecurityHeaders(session.response);
 }
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|downloads/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|exe)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|downloads/REFLUX-FREE-Setup.exe|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
   ],
 };

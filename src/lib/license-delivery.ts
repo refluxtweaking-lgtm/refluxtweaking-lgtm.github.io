@@ -1,6 +1,7 @@
 import { createKeyAuthLicense, type KeyAuthPlan } from "@/lib/keyauth";
 import { sendLicenseEmail } from "@/lib/email";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { normalizeBuyerEmail } from "@/lib/normalize-email";
 
 export type DeliverLicenseResult =
   | { ok: true; key: string; emailed: boolean; stored: boolean }
@@ -16,6 +17,7 @@ export async function deliverLicense(
   options?: { appVersion?: string },
 ): Promise<DeliverLicenseResult> {
   try {
+    const buyerEmail = normalizeBuyerEmail(email);
     const license = await createKeyAuthLicense(plan, options?.appVersion);
     if (!license.ok) {
       return { ok: false, error: license.error };
@@ -25,7 +27,7 @@ export async function deliverLicense(
     const admin = createAdminClient();
     if (admin) {
       const row: Record<string, string | null> = {
-        email,
+        email: buyerEmail,
         plan,
         license_key: license.key,
         status: "active",
@@ -45,7 +47,7 @@ export async function deliverLicense(
       console.warn("[license-delivery] Supabase admin not configured — license not stored.");
     }
 
-    const emailed = await sendLicenseEmail(email, plan, license.key);
+    const emailed = await sendLicenseEmail(buyerEmail, plan, license.key);
     return { ok: true, key: license.key, emailed, stored };
   } catch (err) {
     const message = err instanceof Error ? err.message : "License delivery failed";

@@ -55,23 +55,12 @@ export async function POST(request: Request) {
     email: body.email,
   });
 
-  return NextResponse.json(summary);
+  return NextResponse.json({
+    ...summary,
+    results: summary.results.map(({ newKey: _removed, ...result }) => result),
+  });
 }
 
 export async function GET() {
-  return NextResponse.json({
-    ok: true,
-    endpoint: "license-updates",
-    configured: Boolean(process.env.LICENSE_UPDATE_SECRET?.trim()),
-    usage: {
-      method: "POST",
-      auth: "Authorization: Bearer <LICENSE_UPDATE_SECRET>",
-      body: {
-        version: "1.1.0",
-        notes: "Optional release notes shown in the email.",
-        dryRun: true,
-        email: "optional-single-customer@test.com",
-      },
-    },
-  });
+  return NextResponse.json({ error: "Not found" }, { status: 404 });
 }

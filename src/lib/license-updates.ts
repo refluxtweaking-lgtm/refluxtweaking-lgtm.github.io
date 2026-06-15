@@ -1,6 +1,7 @@
 import { createKeyAuthLicense, deleteKeyAuthLicense, type KeyAuthPlan } from "@/lib/keyauth";
 import { sendLicenseUpdateEmail } from "@/lib/email";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { normalizeBuyerEmail } from "@/lib/normalize-email";
 
 export type LicenseRow = {
   id: string;
@@ -37,9 +38,9 @@ function normalizePlan(plan: string): KeyAuthPlan | null {
 function pickLatestLicensePerEmail(rows: LicenseRow[]): LicenseRow[] {
   const byEmail = new Map<string, LicenseRow>();
   for (const row of rows) {
-    const existing = byEmail.get(row.email);
+    const existing = byEmail.get(normalizeBuyerEmail(row.email));
     if (!existing || new Date(row.created_at).getTime() > new Date(existing.created_at).getTime()) {
-      byEmail.set(row.email, row);
+      byEmail.set(normalizeBuyerEmail(row.email), row);
     }
   }
   return [...byEmail.values()];
@@ -92,10 +93,12 @@ async function replaceLicensesForEmail(
   const admin = createAdminClient();
   if (!admin) return { licenseId: null, revoked: 0 };
 
+  const buyerEmail = normalizeBuyerEmail(email);
+
   const { data: existing, error: fetchError } = await admin
     .from("licenses")
     .select("id, license_key")
-    .eq("email", email)
+    .ilike("email", buyerEmail)
     .eq("status", "active");
 
   if (fetchError) {
@@ -112,7 +115,7 @@ async function replaceLicensesForEmail(
     const { error: replaceError } = await admin
       .from("licenses")
       .update({ status: "replaced", replaced_at: new Date().toISOString() })
-      .eq("email", email)
+      .ilike("email", buyerEmail)
       .eq("status", "active");
 
     if (replaceError) {
@@ -123,7 +126,7 @@ async function replaceLicensesForEmail(
   const { data: inserted, error: insertError } = await admin
     .from("licenses")
     .insert({
-      email,
+      email: buyerEmail,
       plan,
       license_key: newKey,
       status: "active",
@@ -191,7 +194,7 @@ export async function sendLicenseUpdates(options: {
     .order("created_at", { ascending: false });
 
   if (options.email?.trim()) {
-    query = query.eq("email", options.email.trim());
+    query = query.ilike("email", normalizeBuyerEmail(options.email));
   }
 
   const { data, error } = await query;

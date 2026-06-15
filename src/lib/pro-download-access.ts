@@ -1,10 +1,11 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import { normalizeBuyerEmail } from "@/lib/normalize-email";
 
 export async function emailHasActiveProLicense(email: string): Promise<boolean> {
   const admin = createAdminClient();
   if (!admin) return false;
 
-  const normalized = email.trim().toLowerCase();
+  const normalized = normalizeBuyerEmail(email);
   const { data, error } = await admin
     .from("licenses")
     .select("id")

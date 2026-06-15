@@ -2,16 +2,24 @@ import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
-/** Public health check — confirms payment + license delivery env vars (never exposes secrets). */
-export async function GET() {
-  const apiKey = process.env.MONEYMOTION_API_KEY?.trim();
-  const sandbox = process.env.MONEYMOTION_SANDBOX === "true";
+function healthAuthorized(request: Request): boolean {
+  const secret = process.env.CHECKOUT_HEALTH_SECRET?.trim();
+  if (!secret) return process.env.NODE_ENV !== "production";
+
+  const header = request.headers.get("authorization")?.trim() ?? "";
+  return header === `Bearer ${secret}`;
+}
+
+/** Ops health check — hidden in production unless CHECKOUT_HEALTH_SECRET is set. */
+export async function GET(request: Request) {
+  if (!healthAuthorized(request)) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
 
   return NextResponse.json({
     checkout: {
-      apiKeyConfigured: Boolean(apiKey),
-      keyPrefix: apiKey ? apiKey.slice(0, 7) + "..." : null,
-      sandbox,
+      apiKeyConfigured: Boolean(process.env.MONEYMOTION_API_KEY?.trim()),
+      sandbox: process.env.MONEYMOTION_SANDBOX === "true",
       webhookSecretConfigured: Boolean(process.env.MONEYMOTION_WEBHOOK_SECRET?.trim()),
     },
     licenseDelivery: {
@@ -19,6 +27,7 @@ export async function GET() {
       resendApiKeyConfigured: Boolean(process.env.RESEND_API_KEY?.trim()),
       resendFromEmailConfigured: Boolean(process.env.RESEND_FROM_EMAIL?.trim()),
       supabaseServiceRoleConfigured: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY?.trim()),
+      downloadSecretConfigured: Boolean(process.env.LICENSE_DOWNLOAD_SECRET?.trim()),
       ready:
         Boolean(process.env.KEYAUTH_SELLER_KEY?.trim()) &&
         Boolean(process.env.RESEND_API_KEY?.trim()) &&

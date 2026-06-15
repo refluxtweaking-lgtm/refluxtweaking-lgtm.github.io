@@ -6,6 +6,7 @@ import { signOut } from "@/app/auth/actions";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { REFLUX_PRO_DOWNLOAD } from "@/data/downloads";
+import { normalizeBuyerEmail } from "@/lib/normalize-email";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -52,10 +53,11 @@ export default async function AccountPage() {
 
   let licenses: LicenseRow[] = [];
   if (user.email) {
+    const accountEmail = normalizeBuyerEmail(user.email);
     const { data } = await supabase
       .from("licenses")
       .select("id, email, plan, license_key, status, created_at")
-      .eq("email", user.email)
+      .ilike("email", accountEmail)
       .order("created_at", { ascending: false });
     licenses = (data as LicenseRow[] | null) ?? [];
   }

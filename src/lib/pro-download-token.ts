@@ -6,11 +6,7 @@ type TokenPayload = {
 };
 
 function signingSecret(): string | null {
-  return (
-    process.env.LICENSE_DOWNLOAD_SECRET?.trim() ||
-    process.env.MONEYMOTION_WEBHOOK_SECRET?.trim() ||
-    null
-  );
+  return process.env.LICENSE_DOWNLOAD_SECRET?.trim() || null;
 }
 
 function encodePayload(payload: TokenPayload): string {
@@ -28,7 +24,7 @@ function decodePayload(encoded: string): TokenPayload | null {
 }
 
 /** Signed link for purchase emails — only valid for the buyer's email. */
-export function createProDownloadToken(email: string, ttlMs = 365 * 24 * 60 * 60 * 1000): string | null {
+export function createProDownloadToken(email: string, ttlMs = 90 * 24 * 60 * 60 * 1000): string | null {
   const secret = signingSecret();
   if (!secret) return null;
 

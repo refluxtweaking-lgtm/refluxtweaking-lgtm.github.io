@@ -9,6 +9,8 @@ import {
 } from "@/lib/moneymotion";
 import { deliverLicense } from "@/lib/license-delivery";
 import type { KeyAuthPlan } from "@/lib/keyauth";
+import { claimCheckoutSession } from "@/lib/checkout-idempotency";
+import { normalizeBuyerEmail } from "@/lib/normalize-email";
 
 export const runtime = "nodejs";
 
@@ -63,14 +65,29 @@ export async function POST(request: Request) {
     location: customerLocation(payload),
   });
 
-  const buyerEmail =
+  const buyerEmail = normalizeBuyerEmail(
     (typeof payload.checkoutSession?.metadata?.email === "string"
-      ? payload.checkoutSession.metadata.email.trim()
-      : "") || payload.customer?.email?.trim() || "";
+      ? payload.checkoutSession.metadata.email
+      : "") || payload.customer?.email || "",
+  );
+
+  const sessionId = payload.checkoutSession?.id?.trim() || "";
 
   let licenseIssued = false;
   if (buyerEmail) {
     const keyauthPlan = PLAN_TO_KEYAUTH[plan];
+    const claimed = await claimCheckoutSession(sessionId, buyerEmail, keyauthPlan);
+    if (!claimed) {
+      console.log(`[webhook] Duplicate checkout session ignored: ${sessionId}`);
+      return NextResponse.json({
+        ok: true,
+        sessionId: sessionId || null,
+        plan,
+        licenseIssued: false,
+        duplicate: true,
+      });
+    }
+
     const delivered = await deliverLicense(buyerEmail, keyauthPlan);
     licenseIssued = delivered.ok;
     if (!delivered.ok) {

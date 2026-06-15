@@ -36,7 +36,16 @@ create table if not exists public.license_update_dispatches (
 create index if not exists license_update_dispatches_version_idx
   on public.license_update_dispatches (version);
 
-create index if not exists licenses_email_idx on public.licenses (email);
+create index if not exists licenses_email_idx on public.licenses (lower(email));
+
+create table if not exists public.processed_checkouts (
+  session_id  text primary key,
+  email       text not null,
+  plan        text not null,
+  created_at  timestamptz not null default now()
+);
+
+create index if not exists processed_checkouts_email_idx on public.processed_checkouts (lower(email));
 
 alter table public.licenses enable row level security;
 
@@ -46,4 +55,6 @@ create policy "Users can read their own licenses"
   on public.licenses
   for select
   to authenticated
-  using (email = (auth.jwt() ->> 'email'));
+  using (lower(email) = lower(auth.jwt() ->> 'email'));
+
+alter table public.license_update_dispatches enable row level security;

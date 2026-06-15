@@ -5,6 +5,7 @@ import { REFLUX_PRO_DOWNLOAD } from "@/data/downloads";
 import { emailHasActiveProLicense } from "@/lib/pro-download-access";
 import { verifyProDownloadToken } from "@/lib/pro-download-token";
 import { createClient } from "@/lib/supabase/server";
+import { normalizeBuyerEmail } from "@/lib/normalize-email";
 
 export const runtime = "nodejs";
 
@@ -27,7 +28,7 @@ async function resolveBuyerEmail(request: Request): Promise<string | null> {
     data: { user },
   } = await supabase.auth.getUser();
 
-  return user?.email?.trim().toLowerCase() ?? null;
+  return user?.email ? normalizeBuyerEmail(user.email) : null;
 }
 
 export async function GET(request: Request) {

@@ -28,6 +28,9 @@ export async function signUp(
   if (!email || !password) {
     return { error: "Enter both an email and a password." };
   }
+  if (password.length < 8) {
+    return { error: "Password must be at least 8 characters." };
+  }
 
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signUp({
@@ -62,6 +65,9 @@ export async function signIn(
   const { email, password } = readCredentials(formData);
   if (!email || !password) {
     return { error: "Enter both an email and a password." };
+  }
+  if (password.length < 8) {
+    return { error: "Password must be at least 8 characters." };
   }
 
   const supabase = await createClient();
