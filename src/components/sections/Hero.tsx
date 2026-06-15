@@ -8,20 +8,20 @@ export function Hero() {
       <div className="animate-fade-in-up">
         <span className="section-eyebrow mb-6 inline-flex">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-reflux-green" />
-          30 Free Tweaks · 70+ Pro
+          30 Free Tweaks · 100+ Pro
         </span>
       </div>
 
       <h1 className="animate-fade-in-up mb-6 text-4xl leading-[1.1] font-extrabold tracking-tight md:text-6xl lg:text-7xl" style={{ animationDelay: "0.1s" }}>
-        Get More FPS, Lower Ping,
+        More FPS. Lower Latency.
         <br />
-        <span className="gradient-text">Less Input Lag</span>
-        <br />
-        <span className="text-3xl text-reflux-muted md:text-5xl lg:text-6xl">in Under 5 Minutes</span>
+        <span className="gradient-text">Maximum Performance.</span>
       </h1>
 
       <p className="animate-fade-in-up mx-auto mb-6 max-w-2xl text-lg text-reflux-muted md:text-xl" style={{ animationDelay: "0.2s" }}>
-        One click. No filler. Start with 30 free tweaks — unlock 70+ more with Pro.
+        Skip the thousands of useless tweaks. REFLUX delivers 100+ carefully selected gaming
+        optimizations that actually matter. Start free with 30 tweaks and unlock the complete toolkit
+        with Pro.
       </p>
 
       <div className="animate-fade-in-up mb-12 flex flex-wrap items-center justify-center gap-3" style={{ animationDelay: "0.25s" }}>
@@ -50,7 +50,7 @@ export function Hero() {
       <div className="animate-fade-in-up mx-auto mt-16 grid max-w-2xl grid-cols-3 gap-4" style={{ animationDelay: "0.4s" }}>
         {[
           { val: "30", label: "Free Tweaks" },
-          { val: "70+", label: "Pro Tweaks" },
+          { val: "100+", label: "Pro Tweaks" },
           { val: "5 min", label: "Setup" },
         ].map((stat) => (
           <div key={stat.label} className="glass-card-static rounded-2xl px-4 py-5">
