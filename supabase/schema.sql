@@ -23,6 +23,9 @@ create table if not exists public.licenses (
 
 alter table public.licenses add column if not exists app_version text;
 alter table public.licenses add column if not exists replaced_at timestamptz;
+alter table public.licenses add column if not exists activated_at timestamptz;
+alter table public.licenses add column if not exists activated_hwid text;
+alter table public.licenses add column if not exists access_expires_at timestamptz;
 
 create table if not exists public.license_update_dispatches (
   id         uuid primary key default gen_random_uuid(),
@@ -58,3 +61,6 @@ create policy "Users can read their own licenses"
   using (lower(email) = lower(auth.jwt() ->> 'email'));
 
 alter table public.license_update_dispatches enable row level security;
+
+-- Webhook idempotency table: service-role only (no policies for anon/authenticated).
+alter table public.processed_checkouts enable row level security;
