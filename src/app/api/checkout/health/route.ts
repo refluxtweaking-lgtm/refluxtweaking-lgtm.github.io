@@ -23,6 +23,7 @@ export async function GET() {
         Boolean(process.env.KEYAUTH_SELLER_KEY?.trim()) &&
         Boolean(process.env.RESEND_API_KEY?.trim()) &&
         Boolean(process.env.RESEND_FROM_EMAIL?.trim()),
+      updateDispatchSecretConfigured: Boolean(process.env.LICENSE_UPDATE_SECRET?.trim()),
     },
   });
 }

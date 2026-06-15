@@ -8,21 +8,29 @@ const PLAN_EXPIRY_DAYS: Record<KeyAuthPlan, number> = {
   lifetime: 3650,
 };
 
+function sellerKeyOrError(): { ok: true; sellerKey: string } | { ok: false; error: string } {
+  const sellerKey = process.env.KEYAUTH_SELLER_KEY?.trim();
+  if (!sellerKey) return { ok: false, error: "KeyAuth not configured" };
+  return { ok: true, sellerKey };
+}
+
 /**
  * Generates a single license key via the KeyAuth Seller API.
  * Degrades gracefully: returns { ok:false } instead of throwing when the
  * seller key is missing or KeyAuth is unreachable.
  */
-export async function createKeyAuthLicense(plan: KeyAuthPlan): Promise<KeyAuthResult> {
-  const sellerKey = process.env.KEYAUTH_SELLER_KEY?.trim();
-  if (!sellerKey) {
-    return { ok: false, error: "KeyAuth not configured" };
-  }
+export async function createKeyAuthLicense(
+  plan: KeyAuthPlan,
+  appVersion?: string,
+): Promise<KeyAuthResult> {
+  const auth = sellerKeyOrError();
+  if (!auth.ok) return auth;
 
   const days = PLAN_EXPIRY_DAYS[plan];
-  const note = encodeURIComponent(`REFLUX PRO ${plan}`);
+  const versionSuffix = appVersion?.trim() ? ` v${appVersion.trim()}` : "";
+  const note = encodeURIComponent(`REFLUX PRO ${plan}${versionSuffix}`);
   const url =
-    `https://keyauth.win/api/seller/?sellerkey=${sellerKey}` +
+    `https://keyauth.win/api/seller/?sellerkey=${auth.sellerKey}` +
     `&type=add&format=JSON&expiry=${days}&mask=******-******-******` +
     `&level=1&amount=1&owner=REFLUX&character=2&note=${note}`;
 
@@ -45,6 +53,28 @@ export async function createKeyAuthLicense(plan: KeyAuthPlan): Promise<KeyAuthRe
     }
 
     return { ok: false, error: data.message || "KeyAuth did not return a key" };
+  } catch {
+    return { ok: false, error: "Could not reach KeyAuth" };
+  }
+}
+
+/** Deletes a license key in KeyAuth so replaced keys stop working after an update blast. */
+export async function deleteKeyAuthLicense(licenseKey: string): Promise<KeyAuthResult> {
+  const auth = sellerKeyOrError();
+  if (!auth.ok) return auth;
+
+  const key = licenseKey.trim();
+  if (!key) return { ok: false, error: "Missing license key" };
+
+  const url =
+    `https://keyauth.win/api/seller/?sellerkey=${auth.sellerKey}` +
+    `&type=del&format=JSON&key=${encodeURIComponent(key)}`;
+
+  try {
+    const response = await fetch(url, { method: "GET", cache: "no-store" });
+    const data = (await response.json()) as { success?: boolean; message?: string };
+    if (data.success) return { ok: true, key };
+    return { ok: false, error: data.message || "KeyAuth did not delete the key" };
   } catch {
     return { ok: false, error: "Could not reach KeyAuth" };
   }

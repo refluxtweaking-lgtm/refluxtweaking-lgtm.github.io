@@ -60,6 +60,77 @@ function buildText(plan: string, licenseKey: string, downloadUrl: string) {
   ].join("\n");
 }
 
+function buildUpdateHtml(
+  plan: string,
+  licenseKey: string,
+  downloadUrl: string,
+  version: string,
+  notes?: string,
+) {
+  const label = planLabel(plan);
+  const notesBlock = notes
+    ? `<p style="margin:0 0 16px;padding:14px 16px;border-radius:12px;background:rgba(241,91,80,0.08);border:1px solid rgba(241,91,80,0.25);color:#d7dee8;font-size:14px;line-height:1.6;">${notes}</p>`
+    : "";
+  return `<!doctype html>
+<html>
+  <body style="margin:0;padding:0;background:#05070b;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+    <div style="max-width:560px;margin:0 auto;padding:40px 24px;">
+      <div style="background:rgba(13,16,22,0.95);border:1px solid rgba(241,91,80,0.25);border-radius:16px;padding:32px;box-shadow:0 0 60px rgba(241,91,80,0.08);">
+        <h1 style="margin:0 0 4px;font-size:22px;font-weight:800;letter-spacing:0.04em;color:#f15b50;text-transform:uppercase;">REFLUX TWEAKS</h1>
+        <div style="height:2px;width:64px;background:linear-gradient(90deg,rgba(241,91,80,0.6),rgba(241,91,80,0));margin:12px 0 24px;"></div>
+        <p style="margin:0 0 16px;font-size:16px;color:#e7ecf2;">A new <strong style="color:#ffffff;">REFLUX PRO v${version}</strong> update is ready for your <strong style="color:#ffffff;">${label}</strong> plan.</p>
+        ${notesBlock}
+        <p style="margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:0.12em;color:#8b94a3;">Your new license key</p>
+        <div style="margin:0 0 24px;padding:18px;border-radius:12px;border:1px solid rgba(241,91,80,0.4);background:#05070b;text-align:center;">
+          <code style="font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;font-size:20px;font-weight:700;letter-spacing:0.06em;color:#f15b50;word-break:break-all;">${licenseKey}</code>
+        </div>
+        <p style="margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:0.12em;color:#8b94a3;">Download the update</p>
+        <div style="margin:0 0 24px;text-align:center;">
+          <a href="${downloadUrl}" style="display:inline-block;padding:14px 28px;border-radius:12px;border:1px solid rgba(241,91,80,0.5);background:linear-gradient(135deg,rgba(241,91,80,0.25),rgba(241,91,80,0.12));color:#ffffff;font-size:15px;font-weight:700;text-decoration:none;letter-spacing:0.04em;">Download REFLUX PRO v${version}</a>
+        </div>
+        <p style="margin:0 0 8px;font-size:14px;color:#c0c8d2;font-weight:600;">How to update</p>
+        <ol style="margin:0 0 24px;padding-left:20px;color:#a8b1bd;font-size:14px;line-height:1.7;">
+          <li>Install the new <strong style="color:#e7ecf2;">REFLUX PRO</strong> build.</li>
+          <li>Open the app and enter your <strong style="color:#e7ecf2;">new license key</strong> above.</li>
+          <li>Your previous key was replaced for this update.</li>
+        </ol>
+        <p style="margin:0;font-size:12px;color:#6b7280;">You can also find your latest key by logging in at refluxtweaks.com.</p>
+      </div>
+    </div>
+  </body>
+</html>`;
+}
+
+function buildUpdateText(
+  plan: string,
+  licenseKey: string,
+  downloadUrl: string,
+  version: string,
+  notes?: string,
+) {
+  const label = planLabel(plan);
+  return [
+    `REFLUX TWEAKS`,
+    ``,
+    `REFLUX PRO v${version} is ready for your ${label} plan.`,
+    notes ? `` : null,
+    notes ? notes : null,
+    notes ? `` : null,
+    `Your new license key: ${licenseKey}`,
+    ``,
+    `Download REFLUX PRO v${version}: ${downloadUrl}`,
+    ``,
+    `How to update:`,
+    `1. Install the new REFLUX PRO build.`,
+    `2. Open the app and enter your new license key.`,
+    `3. Your previous key was replaced for this update.`,
+    ``,
+    `You can also find your latest key by logging in at refluxtweaks.com.`,
+  ]
+    .filter((line): line is string => line !== null)
+    .join("\n");
+}
+
 /**
  * Sends the license key email via Resend. Degrades gracefully: returns false
  * (and warns) when Resend env vars are missing or sending fails.
@@ -95,6 +166,44 @@ export async function sendLicenseEmail(
     return true;
   } catch (err) {
     console.error("[email] Resend send threw:", err);
+    return false;
+  }
+}
+
+/** Sends an update email with a replacement license key and installer link. */
+export async function sendLicenseUpdateEmail(
+  to: string,
+  plan: string,
+  licenseKey: string,
+  version: string,
+  notes?: string,
+): Promise<boolean> {
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  const from = process.env.RESEND_FROM_EMAIL?.trim();
+
+  if (!apiKey || !from) {
+    console.warn("[email] Resend not configured — skipping license update email.");
+    return false;
+  }
+
+  try {
+    const resend = new Resend(apiKey);
+    const downloadUrl = proDownloadUrl();
+    const { error } = await resend.emails.send({
+      from,
+      to,
+      subject: `REFLUX PRO v${version} update — your new license key`,
+      html: buildUpdateHtml(plan, licenseKey, downloadUrl, version, notes),
+      text: buildUpdateText(plan, licenseKey, downloadUrl, version, notes),
+    });
+
+    if (error) {
+      console.error("[email] Resend update send failed:", error);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error("[email] Resend update send threw:", err);
     return false;
   }
 }
