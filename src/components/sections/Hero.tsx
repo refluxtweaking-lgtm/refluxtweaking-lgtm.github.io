@@ -103,7 +103,9 @@ export function Hero() {
         </div>
       </div>
 
-      <MarqueeStrip />
+      <div className="relative left-1/2 mt-14 w-screen max-w-[100vw] -translate-x-1/2">
+        <MarqueeStrip />
+      </div>
     </section>
   );
 }

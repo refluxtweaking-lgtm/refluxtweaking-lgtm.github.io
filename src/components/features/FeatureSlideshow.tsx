@@ -29,6 +29,26 @@ export function FeatureSlideshow() {
 
   return (
     <div className="glass-card-static overflow-hidden rounded-3xl p-3 sm:p-5 md:p-8">
+      <div className="mb-4 flex items-center justify-between gap-3 border-b border-white/6 pb-4 sm:mb-6">
+        <div className="text-sm font-semibold text-reflux-muted">
+          Feature <span className="text-white">{currentSlide + 1}</span>
+          <span className="text-reflux-muted/70"> / {slides.length}</span>
+        </div>
+        <div className="flex gap-1.5">
+          {slides.map((_, index) => (
+            <button
+              key={slides[index].id}
+              type="button"
+              onClick={() => goTo(index)}
+              aria-label={`Go to ${slides[index].label}`}
+              className={`h-2 rounded-full transition-all ${
+                currentSlide === index ? "w-6 bg-reflux-accent shadow-[0_0_10px_rgba(241,91,80,0.6)]" : "w-2 bg-reflux-border hover:bg-reflux-accent/40"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+
       <div className="relative mx-auto w-full max-w-[960px]">
         {slides.map(({ id, component: SlideComponent }, index) => (
           <div

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Particle {
   x: number;
@@ -10,10 +10,30 @@ interface Particle {
   color: string;
 }
 
+function canUseParticles() {
+  if (typeof window === "undefined") return false;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+  if ((navigator.hardwareConcurrency ?? 4) < 4) return false;
+  if (window.matchMedia("(max-width: 768px)").matches) return false;
+  return true;
+}
+
 export function ParticlesCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
+    const ok = canUseParticles();
+    if (!ok) {
+      document.documentElement.classList.add("reduce-effects");
+      return;
+    }
+    setEnabled(true);
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -21,7 +41,9 @@ export function ParticlesCanvas() {
     if (!ctx) return;
 
     let animationId = 0;
+    let running = true;
     const particles: Particle[] = [];
+    const count = 40;
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
@@ -31,20 +53,21 @@ export function ParticlesCanvas() {
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    for (let i = 0; i < 100; i++) {
-      const isAccent = Math.random() > 0.7;
+    for (let i = 0; i < count; i++) {
+      const isAccent = Math.random() > 0.75;
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        radius: Math.random() * 2.5 + 0.5,
-        speed: Math.random() * 1.2 + 0.3,
+        radius: Math.random() * 2 + 0.5,
+        speed: Math.random() * 0.9 + 0.25,
         color: isAccent
-          ? `rgba(241, ${Math.floor(Math.random() * 40 + 70)}, ${Math.floor(Math.random() * 30 + 60)}, ${Math.random() * 0.5 + 0.2})`
-          : `rgba(${Math.floor(Math.random() * 80 + 140)},${Math.floor(Math.random() * 50 + 40)},${Math.floor(Math.random() * 30 + 10)},${Math.random() * 0.35 + 0.15})`,
+          ? `rgba(241, ${Math.floor(Math.random() * 40 + 70)}, ${Math.floor(Math.random() * 30 + 60)}, ${Math.random() * 0.4 + 0.15})`
+          : `rgba(${Math.floor(Math.random() * 80 + 140)},${Math.floor(Math.random() * 50 + 40)},${Math.floor(Math.random() * 30 + 10)},${Math.random() * 0.25 + 0.1})`,
       });
     }
 
     const drawParticles = () => {
+      if (!running) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       for (const particle of particles) {
@@ -63,18 +86,31 @@ export function ParticlesCanvas() {
       animationId = requestAnimationFrame(drawParticles);
     };
 
+    const onVisibility = () => {
+      running = !document.hidden;
+      if (running) {
+        cancelAnimationFrame(animationId);
+        drawParticles();
+      }
+    };
+
+    document.addEventListener("visibilitychange", onVisibility);
     drawParticles();
 
     return () => {
+      running = false;
       window.removeEventListener("resize", resizeCanvas);
+      document.removeEventListener("visibilitychange", onVisibility);
       cancelAnimationFrame(animationId);
     };
-  }, []);
+  }, [enabled]);
+
+  if (!enabled) return null;
 
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none fixed inset-0 -z-10 opacity-80"
+      className="particles-canvas pointer-events-none fixed inset-0 -z-10 opacity-70"
       aria-hidden="true"
     />
   );

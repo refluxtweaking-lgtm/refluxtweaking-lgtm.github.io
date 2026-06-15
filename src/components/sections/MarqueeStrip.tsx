@@ -19,7 +19,7 @@ export function MarqueeStrip() {
   const doubled = [...items, ...items];
 
   return (
-    <div className="marquee-strip relative mt-16 overflow-hidden border-y border-white/5 py-4">
+    <div className="marquee-strip relative overflow-hidden py-3.5">
       <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-reflux-bg to-transparent" />
       <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-reflux-bg to-transparent" />
       <div className="marquee-track flex w-max gap-3">
