@@ -1,0 +1,32 @@
+---
+description: Auto commit and push website changes to main after successful work
+alwaysApply: true
+---
+
+# Auto-deploy refluxtweaks.com
+
+When the user asks you to build, change, fix, or improve anything on the **refluxtweaks.com website** (this repo):
+
+1. Complete the requested website work.
+2. Run `npm run build` when you changed app code, styles, or components (skip only for pure copy or config-only edits if build is unnecessary).
+3. **Automatically commit and push to `main`** — do not wait for the user to ask separately.
+4. Use a clear commit message focused on why the change helps users.
+5. Tell the user the commit hash and that it is pushed live.
+
+## Exceptions — do NOT auto-push without explicit approval
+
+- Changes that include secrets (`.env`, credentials, API keys)
+- `private/downloads/REFLUX-PRO-Setup.exe` or other large binaries unless the user asked to update installers
+- The user explicitly says "don't push", "local only", or "don't commit"
+
+## Push workflow
+
+```bash
+git status
+git diff --stat
+git add <relevant files>
+git commit -m "..."
+git push origin main
+```
+
+If push to `main` is blocked, retry with approval rather than leaving changes uncommitted.
