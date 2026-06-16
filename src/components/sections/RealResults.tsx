@@ -3,43 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { GlowCard } from "@/components/ui/GlowCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { ResultMetricChart, type ResultMetric } from "./ResultMetricChart";
-
-const results: ResultMetric[] = [
-  {
-    label: "Fortnite FPS",
-    before: 280,
-    after: 332,
-    unit: "FPS",
-    delta: "+52 FPS",
-    color: "text-reflux-accent",
-    stroke: "#F15B50",
-    fill: "from-reflux-accent to-reflux-accent-light",
-    gain: "82%",
-  },
-  {
-    label: "Input Latency",
-    before: 21,
-    after: 15,
-    unit: "ms",
-    delta: "-6 ms",
-    color: "text-reflux-green",
-    stroke: "#5DDE86",
-    fill: "from-reflux-green/80 to-reflux-green",
-    gain: "71%",
-  },
-  {
-    label: "1% Lows",
-    before: 170,
-    after: 220,
-    unit: "FPS",
-    delta: "+50 FPS",
-    color: "text-reflux-purple",
-    stroke: "#B392F0",
-    fill: "from-reflux-purple/80 to-reflux-purple",
-    gain: "78%",
-  },
-];
+import { ResultsSlideshow } from "./ResultsSlideshow";
 
 export function RealResults() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -70,7 +34,7 @@ export function RealResults() {
   }, []);
 
   return (
-    <section id="results" ref={sectionRef} className="section-glow-wrap py-20 md:py-24">
+    <section id="results" ref={sectionRef} className="section-glow-wrap py-16 md:py-20">
       <SectionHeader
         eyebrow="Real Results"
         title={
@@ -78,20 +42,20 @@ export function RealResults() {
             Measured gains. <span className="gradient-text">Not simulated.</span>
           </>
         }
-        subtitle="Real before/after on the same PC — squiggly line on top, smooth line on bottom."
+        subtitle="Watch before vs after frame lines — each metric has its own pattern."
       />
 
-      <GlowCard className="mx-auto max-w-5xl overflow-hidden" hover={false}>
-        <div className="mb-8 flex flex-col gap-6 rounded-2xl border border-reflux-border/60 bg-gradient-to-r from-[#0c0e12] via-reflux-card/50 to-transparent p-6 md:flex-row md:items-center md:justify-between">
+      <GlowCard className="mx-auto max-w-4xl overflow-hidden" hover={false}>
+        <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-white/8 bg-white/[0.02] p-5 md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="mb-2 text-xs font-bold tracking-[0.2em] text-reflux-muted uppercase">Test System</p>
+            <p className="mb-1 text-xs font-bold tracking-[0.2em] text-reflux-muted uppercase">Test System</p>
             <p className="text-sm text-reflux-muted">Same hardware, before & after REFLUX Pro</p>
           </div>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2">
             {["RTX 4070", "Ryzen 7 7800X3D", "32GB DDR5"].map((spec) => (
               <span
                 key={spec}
-                className="rounded-full border border-reflux-accent/30 bg-reflux-accent/10 px-4 py-2 text-sm font-semibold text-white"
+                className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-sm font-medium text-white"
               >
                 {spec}
               </span>
@@ -99,13 +63,9 @@ export function RealResults() {
           </div>
         </div>
 
-        <div className={`grid w-full gap-5 lg:grid-cols-3 ${animate ? "results-charts-active" : ""}`}>
-          {results.map((metric) => (
-            <ResultMetricChart key={metric.label} metric={metric} animate={animate} />
-          ))}
-        </div>
+        <ResultsSlideshow animate={animate} />
 
-        <p className="mt-8 text-center text-xs text-reflux-muted">
+        <p className="mt-6 text-center text-xs text-reflux-muted">
           Results vary by hardware. REFLUX creates a restore point before every change.
         </p>
       </GlowCard>
