@@ -94,6 +94,13 @@ export function AuthForm({ mode, notice }: AuthFormProps) {
               placeholder="••••••••"
               className="rounded-xl border border-reflux-border/60 bg-[rgba(8,10,14,0.8)] px-4 py-2.5 text-sm text-white placeholder:text-reflux-muted/60 transition-colors focus:border-reflux-accent/60 focus:outline-none focus:ring-2 focus:ring-reflux-accent/20"
             />
+            {isLogin && (
+              <div className="mt-1.5 flex justify-end">
+                <Link href="/forgot-password" className="text-xs font-medium text-reflux-muted hover:text-reflux-accent">
+                  Forgot password?
+                </Link>
+              </div>
+            )}
           </div>
 
           {state?.error && (

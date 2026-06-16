@@ -12,20 +12,25 @@ export const metadata: Metadata = {
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ checkEmail?: string }>;
+  searchParams: Promise<{ checkEmail?: string; passwordUpdated?: string; error?: string }>;
 }) {
-  const { checkEmail } = await searchParams;
+  const { checkEmail, passwordUpdated, error } = await searchParams;
+
+  let notice: string | null = null;
+  if (checkEmail) {
+    notice = "Account created. Check your email to confirm, then log in.";
+  } else if (passwordUpdated) {
+    notice = "Password updated. Log in with your new password.";
+  } else if (error === "auth") {
+    notice = "That link expired or is invalid. Try logging in or reset your password.";
+  }
 
   return (
     <SiteShell mainClassName="flex min-h-[80vh] items-center justify-center py-16">
       {isSupabaseConfigured() ? (
         <AuthForm
           mode="login"
-          notice={
-            checkEmail
-              ? "Account created. Check your email to confirm, then log in."
-              : null
-          }
+          notice={notice}
         />
       ) : (
         <AccountsDisabledNotice />

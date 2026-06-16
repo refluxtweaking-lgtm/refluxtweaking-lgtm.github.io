@@ -6,12 +6,16 @@ import { isSupabaseConfigured } from "@/lib/supabase/config";
 
 export type AuthActionState = { error: string } | null;
 
+function readEmail(formData: FormData) {
+  return String(formData.get("email") ?? "").trim();
+}
+
 function siteUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.refluxtweaks.com";
 }
 
 function readCredentials(formData: FormData) {
-  const email = String(formData.get("email") ?? "").trim();
+  const email = readEmail(formData);
   const password = String(formData.get("password") ?? "");
   return { email, password };
 }
@@ -78,6 +82,67 @@ export async function signIn(
   }
 
   redirect("/account");
+}
+
+export async function requestPasswordReset(
+  _prevState: AuthActionState,
+  formData: FormData,
+): Promise<AuthActionState> {
+  if (!isSupabaseConfigured()) {
+    return { error: "Accounts aren't enabled yet. Please try again later." };
+  }
+
+  const email = readEmail(formData);
+  if (!email) {
+    return { error: "Enter the email on your account." };
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${siteUrl()}/auth/callback?next=/reset-password`,
+  });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  redirect("/forgot-password?sent=1");
+}
+
+export async function updatePassword(
+  _prevState: AuthActionState,
+  formData: FormData,
+): Promise<AuthActionState> {
+  if (!isSupabaseConfigured()) {
+    return { error: "Accounts aren't enabled yet. Please try again later." };
+  }
+
+  const password = String(formData.get("password") ?? "");
+  const confirmPassword = String(formData.get("confirmPassword") ?? "");
+
+  if (password.length < 8) {
+    return { error: "Password must be at least 8 characters." };
+  }
+  if (password !== confirmPassword) {
+    return { error: "Passwords do not match." };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "Your reset link expired. Request a new one from the login page." };
+  }
+
+  const { error } = await supabase.auth.updateUser({ password });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  redirect("/login?passwordUpdated=1");
 }
 
 export async function signOut() {
