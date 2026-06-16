@@ -114,9 +114,34 @@ h3,
   50% { opacity: 0.65; transform: scale(1.03) translateY(-12px); }
 }
 
-@keyframes borderFlow {
+@keyframes heroTextShimmer {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
+}
+
+@keyframes heroLivePulse {
+  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(93, 222, 134, 0.5); }
+  50% { opacity: 0.85; transform: scale(0.92); box-shadow: 0 0 0 6px rgba(93, 222, 134, 0); }
+}
+
+@keyframes heroFloatA {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-10px) rotate(1deg); }
+}
+
+@keyframes heroFloatB {
+  0%, 100% { transform: translateY(0) rotate(2deg); }
+  50% { transform: translateY(-14px) rotate(-1deg); }
+}
+
+@keyframes heroFloatC {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes heroRingSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes gpuFanSpin {
@@ -444,6 +469,163 @@ h3,
   animation: beamPulse 9s ease-in-out infinite;
 }
 
+/* ── Epic hero (above the fold) ── */
+.hero-stage {
+  min-height: min(92vh, 920px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-spotlight {
+  background:
+    radial-gradient(ellipse 90% 60% at 50% -5%, rgba(255, 107, 91, 0.22), transparent 58%),
+    radial-gradient(ellipse 55% 45% at 85% 25%, rgba(110, 184, 224, 0.12), transparent 55%),
+    radial-gradient(ellipse 45% 35% at 10% 60%, rgba(88, 101, 242, 0.08), transparent 50%);
+}
+
+.hero-grid-fade {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 65% at 50% 35%, black 10%, transparent 75%);
+  opacity: 0.55;
+}
+
+.hero-headline {
+  font-size: clamp(2.75rem, 7.5vw, 4.75rem);
+  line-height: 1.02;
+}
+
+.hero-gradient-shimmer {
+  background: linear-gradient(
+    120deg,
+    #ffb4a8 0%,
+    #ff6b5b 25%,
+    #ff8a7a 45%,
+    #6eb8e0 65%,
+    #ff6b5b 85%,
+    #ffb4a8 100%
+  );
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: heroTextShimmer 5s ease-in-out infinite;
+  filter: drop-shadow(0 0 28px rgba(255, 107, 91, 0.35));
+}
+
+.hero-game-ticker {
+  background: linear-gradient(135deg, #6eb8e0, #ff8a7a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+}
+
+.hero-live-dot {
+  animation: heroLivePulse 2s ease-in-out infinite;
+}
+
+.hero-live-badge {
+  box-shadow: 0 0 24px -6px rgba(93, 222, 134, 0.45);
+}
+
+.hero-cta-glow {
+  position: relative;
+}
+
+.hero-cta-glow::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 1rem;
+  background: linear-gradient(120deg, rgba(255, 107, 91, 0.55), rgba(110, 184, 224, 0.35), rgba(255, 107, 91, 0.55));
+  background-size: 200% 200%;
+  animation: borderFlow 4s ease infinite;
+  filter: blur(10px);
+  opacity: 0.75;
+  z-index: -1;
+}
+
+.hero-proof-card {
+  transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.hero-proof-card:hover {
+  border-color: rgba(255, 107, 91, 0.28);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px -18px rgba(255, 107, 91, 0.35);
+}
+
+.hero-ring {
+  animation: heroRingSpin 28s linear infinite;
+}
+
+.hero-ring-delay {
+  animation-duration: 36s;
+  animation-direction: reverse;
+}
+
+.hero-showcase-wrap {
+  perspective: 1200px;
+}
+
+.hero-device-stage {
+  transform: rotateY(-10deg) rotateX(4deg);
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hero-showcase-wrap:hover .hero-device-stage {
+  transform: rotateY(-6deg) rotateX(2deg) scale(1.02);
+}
+
+.hero-device-glow {
+  background: radial-gradient(circle, rgba(255, 107, 91, 0.35), rgba(110, 184, 224, 0.15), transparent 70%);
+  opacity: 0.85;
+}
+
+.hero-float-badge-a {
+  top: 8%;
+  left: -4%;
+  animation: heroFloatA 5s ease-in-out infinite;
+}
+
+.hero-float-badge-b {
+  top: 42%;
+  right: -6%;
+  animation: heroFloatB 6s ease-in-out infinite;
+}
+
+.hero-float-badge-c {
+  bottom: 14%;
+  left: 6%;
+  animation: heroFloatC 4.5s ease-in-out infinite;
+}
+
+.hero-marquee {
+  border-top: 1px solid rgba(255, 107, 91, 0.15);
+  border-bottom: 1px solid rgba(255, 107, 91, 0.1);
+  background: linear-gradient(180deg, rgba(255, 107, 91, 0.04), rgba(255, 255, 255, 0.02));
+  padding: 20px 0 22px;
+}
+
+@media (max-width: 1023px) {
+  .hero-device-stage {
+    transform: none;
+  }
+
+  .hero-showcase-wrap:hover .hero-device-stage {
+    transform: scale(1.01);
+  }
+
+  .hero-stage {
+    min-height: auto;
+  }
+}
+
 .marquee-strip {
   position: relative;
   overflow: hidden;
@@ -691,6 +873,13 @@ h3,
   .ambient-orb,
   .ambient-mesh,
   .hero-beam,
+  .hero-gradient-shimmer,
+  .hero-live-dot,
+  .hero-float-badge-a,
+  .hero-float-badge-b,
+  .hero-float-badge-c,
+  .hero-ring,
+  .hero-cta-glow::before,
   .hero-showcase,
   .hero-device-shell,
   .section-glow-wrap::before,
@@ -736,6 +925,13 @@ html.reduce-effects .hero-glow,
 html.reduce-effects .ambient-orb,
 html.reduce-effects .ambient-mesh,
 html.reduce-effects .hero-beam,
+html.reduce-effects .hero-gradient-shimmer,
+html.reduce-effects .hero-live-dot,
+html.reduce-effects .hero-float-badge-a,
+html.reduce-effects .hero-float-badge-b,
+html.reduce-effects .hero-float-badge-c,
+html.reduce-effects .hero-ring,
+html.reduce-effects .hero-cta-glow::before,
 html.reduce-effects .hero-showcase,
 html.reduce-effects .hero-device-shell,
 html.reduce-effects .section-glow-wrap::before,
