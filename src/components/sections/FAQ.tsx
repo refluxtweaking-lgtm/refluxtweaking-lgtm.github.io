@@ -43,7 +43,8 @@ export function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="py-20">
+    <section id="faq" className="section-flow">
+      <div className="section-flow-divider" aria-hidden="true" />
       <SectionHeader
         eyebrow="FAQ"
         title="Got questions?"
@@ -54,10 +55,10 @@ export function FAQ() {
         {faqs.map((faq, i) => (
           <div
             key={faq.q}
-            className={`overflow-hidden rounded-2xl border transition-all duration-300 ${
+            className={`overflow-hidden rounded-2xl border transition-all duration-300 ease-out ${
               open === i
-                ? "border-reflux-accent/40 bg-gradient-to-br from-reflux-accent/8 to-transparent shadow-[0_0_30px_rgba(241,91,80,0.1)]"
-                : "border-reflux-border/60 bg-[#0a0c10]/80 hover:border-reflux-border"
+                ? "border-reflux-accent/40 bg-gradient-to-br from-reflux-accent/8 to-transparent shadow-[0_0_30px_rgba(241,91,80,0.12)]"
+                : "border-reflux-border/60 bg-[#0a0c10]/80 hover:border-reflux-accent/25 hover:-translate-y-0.5"
             }`}
           >
             <button

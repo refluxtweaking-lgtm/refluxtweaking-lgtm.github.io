@@ -34,7 +34,8 @@ export function RealResults() {
   }, []);
 
   return (
-    <section id="results" ref={sectionRef} className="section-glow-wrap py-16 md:py-20">
+    <section id="results" ref={sectionRef} className="section-flow section-glow-wrap">
+      <div className="section-flow-divider" aria-hidden="true" />
       <SectionHeader
         eyebrow="Real Results"
         title={

@@ -1,5 +1,8 @@
+"use client";
+
 import { GlowCard } from "@/components/ui/GlowCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { FlowIn } from "@/components/ui/FlowIn";
 
 const testimonials = [
   {
@@ -96,7 +99,8 @@ function StarRating({ rating, size = 16 }: { rating: number; size?: number }) {
 
 export function Testimonials() {
   return (
-    <section className="py-20">
+    <section className="section-flow">
+      <div className="section-flow-divider" aria-hidden="true" />
       <SectionHeader
         eyebrow="Social Proof"
         title={
@@ -107,8 +111,9 @@ export function Testimonials() {
         subtitle="Real feedback from our Discord community."
       />
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {testimonials.map((t) => (
-          <GlowCard key={t.quote} className="relative overflow-hidden text-left">
+        {testimonials.map((t, index) => (
+          <FlowIn key={t.quote} delay={index * 80}>
+            <GlowCard className="relative h-full overflow-hidden text-left">
             <span className="testimonial-quote-mark pointer-events-none absolute -top-2 left-4 select-none" aria-hidden="true">
               &ldquo;
             </span>
@@ -123,7 +128,8 @@ export function Testimonials() {
               </div>
               <span className="text-sm font-semibold text-reflux-muted">{t.author}</span>
             </div>
-          </GlowCard>
+            </GlowCard>
+          </FlowIn>
         ))}
       </div>
     </section>

@@ -1,4 +1,7 @@
+"use client";
+
 import { Icon, type IconName } from "@/components/ui/Icon";
+import { FlowIn } from "@/components/ui/FlowIn";
 import { PRODUCT_LIMITS } from "@/data/tweaks";
 
 const indicators: {
@@ -16,21 +19,21 @@ const indicators: {
 
 export function TrustIndicators() {
   return (
-    <section className="py-10 md:py-14">
+    <section className="section-flow">
+      <div className="section-flow-divider" aria-hidden="true" />
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {indicators.map((item) => (
-          <div
-            key={item.text}
-            className="trust-bento-card flex items-center gap-4 rounded-2xl border border-white/8 bg-white/[0.02] p-4 sm:p-5"
-          >
-            <span className="icon-chip flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03]">
-              <Icon name={item.icon} size={20} className="text-reflux-calm" />
-            </span>
-            <div className="min-w-0">
-              <div className="font-semibold text-white">{item.text}</div>
-              <div className="mt-0.5 text-sm text-reflux-muted">{item.sub}</div>
+        {indicators.map((item, index) => (
+          <FlowIn key={item.text} delay={index * 70}>
+            <div className="trust-bento-card flex h-full items-center gap-4 rounded-2xl border border-white/8 bg-white/[0.02] p-4 sm:p-5">
+              <span className="icon-chip flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03]">
+                <Icon name={item.icon} size={20} className="text-reflux-calm" glow />
+              </span>
+              <div className="min-w-0">
+                <div className="font-semibold text-white">{item.text}</div>
+                <div className="mt-0.5 text-sm text-reflux-muted">{item.sub}</div>
+              </div>
             </div>
-          </div>
+          </FlowIn>
         ))}
       </div>
     </section>

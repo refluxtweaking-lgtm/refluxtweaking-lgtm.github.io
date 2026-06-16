@@ -13,7 +13,7 @@ const highlights = [
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden pb-4 pt-10 md:pt-14 lg:pt-16">
+    <section className="relative overflow-hidden pb-6 pt-10 md:pb-8 md:pt-14 lg:pt-16">
       <div className="hero-beam pointer-events-none absolute top-0 left-1/2 h-[480px] w-[min(100%,820px)] -translate-x-1/2" aria-hidden="true" />
 
       <div className="relative grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12 xl:gap-16">

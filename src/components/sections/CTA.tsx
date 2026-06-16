@@ -6,8 +6,9 @@ import { PRODUCT_LIMITS } from "@/data/tweaks";
 
 export function CTA() {
   return (
-    <section className="py-16 md:py-20">
-      <GlowCard className="relative mx-auto max-w-4xl overflow-hidden text-center" hover={false}>
+    <section className="section-flow">
+      <div className="section-flow-divider" aria-hidden="true" />
+      <GlowCard className="cta-flow-card relative mx-auto max-w-4xl overflow-hidden text-center" hover={false}>
         <div
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(110,184,224,0.1),transparent_55%)]"
           aria-hidden="true"

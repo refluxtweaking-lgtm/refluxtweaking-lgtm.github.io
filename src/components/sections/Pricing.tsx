@@ -7,7 +7,8 @@ import { PRODUCT_LIMITS } from "@/data/tweaks";
 
 export function Pricing() {
   return (
-    <section id="pricing" className="section-glow-wrap py-20 md:py-24">
+    <section id="pricing" className="section-flow section-glow-wrap">
+      <div className="section-flow-divider" aria-hidden="true" />
       <SectionHeader
         eyebrow="Pricing"
         title={

@@ -18,6 +18,7 @@ const navLinks = [
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -25,6 +26,13 @@ export function Header() {
       document.body.style.overflow = "";
     };
   }, [menuOpen]);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     const onResize = () => {
@@ -39,7 +47,11 @@ export function Header() {
   return (
     <header className="sticky top-0 z-100 px-4 py-3 md:px-6">
       <div className="relative mx-auto max-w-[1200px]">
-        <div className="flex items-center justify-between gap-4 rounded-2xl border border-white/8 bg-[rgba(12,15,22,0.88)] px-4 py-3 md:px-5 md:py-3.5">
+        <div
+          className={`header-shell flex items-center justify-between gap-4 rounded-2xl border border-white/8 bg-[rgba(12,15,22,0.88)] px-4 py-3 md:px-5 md:py-3.5 ${
+            scrolled ? "header-shell-scrolled" : ""
+          }`}
+        >
           <Link href="/" className="group flex min-w-0 items-center" onClick={closeMenu}>
             <span className="truncate text-lg font-extrabold tracking-tight gradient-text sm:text-xl md:text-2xl">
               REFLUX TWEAKS
