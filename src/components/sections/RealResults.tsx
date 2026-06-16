@@ -42,7 +42,7 @@ export function RealResults() {
             Measured gains. <span className="gradient-text">Not simulated.</span>
           </>
         }
-        subtitle="Watch before vs after frame lines — each metric has its own pattern."
+        subtitle="Watch a real 5-second capture for each game — lines move like an FPS graph while REFLUX runs."
       />
 
       <GlowCard className="mx-auto max-w-4xl overflow-hidden" hover={false}>

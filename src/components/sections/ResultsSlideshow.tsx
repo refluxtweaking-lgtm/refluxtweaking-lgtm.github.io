@@ -2,14 +2,17 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { ResultMetricChart, type ResultMetric } from "./ResultMetricChart";
+import { LIVE_DURATION_MS } from "./resultChartPaths";
 
-const SLIDE_MS = 5500;
+/** Live capture per slide + short pause before next */
+const SLIDE_MS = LIVE_DURATION_MS + 1200;
 
 const results: ResultMetric[] = [
   {
     id: "fps",
-    label: "Fortnite FPS",
-    game: "Same rig · competitive settings",
+    label: "Fortnite · Arena",
+    session: "RTX 4070 · Ryzen 7 7800X3D · Performance mode",
+    scenario: "Avg FPS while fighting in endgame — same creative map, same 15 min session",
     before: 280,
     after: 332,
     unit: "FPS",
@@ -17,13 +20,15 @@ const results: ResultMetric[] = [
     color: "text-reflux-accent",
     stroke: "#ff6b5b",
     fill: "from-reflux-accent to-reflux-accent-light",
-    gain: "82%",
-    hint: "Higher line = more frames",
+    gain: "0.82",
+    beforeLabel: "Without REFLUX",
+    afterLabel: "With REFLUX Pro",
   },
   {
     id: "latency",
-    label: "Input Latency",
-    game: "Same rig · mouse + display chain",
+    label: "Valorant · Range",
+    session: "240 Hz monitor · same mouse polling · wired connection",
+    scenario: "Click-to-shot input delay measured in the practice range",
     before: 21,
     after: 15,
     unit: "ms",
@@ -31,13 +36,15 @@ const results: ResultMetric[] = [
     color: "text-reflux-green",
     stroke: "#5dde86",
     fill: "from-reflux-green/80 to-reflux-green",
-    gain: "71%",
-    hint: "Lower line = snappier inputs",
+    gain: "0.71",
+    beforeLabel: "Before tweaks",
+    afterLabel: "After tweaks",
   },
   {
     id: "lows",
-    label: "1% Lows",
-    game: "Same rig · worst-frame spikes",
+    label: "Cyberpunk · City",
+    session: "Same save · Night City drive loop · RT medium",
+    scenario: "1% low FPS during heavy NPC traffic — worst frames in the run",
     before: 170,
     after: 220,
     unit: "FPS",
@@ -45,8 +52,9 @@ const results: ResultMetric[] = [
     color: "text-reflux-purple",
     stroke: "#a78bfa",
     fill: "from-reflux-purple/80 to-reflux-purple",
-    gain: "78%",
-    hint: "Smoother floor = fewer stutters",
+    gain: "0.78",
+    beforeLabel: "Stutters & drops",
+    afterLabel: "Smoother floor",
   },
 ];
 
@@ -56,18 +64,18 @@ interface ResultsSlideshowProps {
 
 export function ResultsSlideshow({ animate }: ResultsSlideshowProps) {
   const [index, setIndex] = useState(0);
-  const [drawKey, setDrawKey] = useState(0);
+  const [liveKey, setLiveKey] = useState(0);
 
   const goTo = useCallback((next: number) => {
     setIndex(next);
-    setDrawKey((k) => k + 1);
+    setLiveKey((k) => k + 1);
   }, []);
 
   useEffect(() => {
     if (!animate) return;
     const id = setInterval(() => {
       setIndex((i) => (i + 1) % results.length);
-      setDrawKey((k) => k + 1);
+      setLiveKey((k) => k + 1);
     }, SLIDE_MS);
     return () => clearInterval(id);
   }, [animate]);
@@ -83,7 +91,7 @@ export function ResultsSlideshow({ animate }: ResultsSlideshowProps) {
               key={item.id}
               type="button"
               onClick={() => goTo(i)}
-              className={`rounded-full border px-4 py-2 text-xs font-bold transition-colors sm:text-sm ${
+              className={`rounded-full border px-3 py-2 text-xs font-semibold transition-colors sm:px-4 sm:text-sm ${
                 i === index
                   ? "border-reflux-accent/40 bg-reflux-accent/12 text-white"
                   : "border-white/8 bg-white/[0.02] text-reflux-muted hover:border-white/14 hover:text-white"
@@ -108,17 +116,14 @@ export function ResultsSlideshow({ animate }: ResultsSlideshowProps) {
         </div>
       </div>
 
-      <div className={`results-charts-active overflow-hidden rounded-2xl border border-white/8 bg-[#080b12] p-5 sm:p-7 ${animate ? "" : ""}`}>
-        <div
-          key={`${metric.id}-${drawKey}`}
-          className="result-slide-enter"
-        >
-          <ResultMetricChart metric={metric} animate={animate} large />
+      <div className="overflow-hidden rounded-2xl border border-white/8 bg-[#080b12] p-5 sm:p-7">
+        <div key={`${metric.id}-${liveKey}`} className="result-slide-enter">
+          <ResultMetricChart metric={metric} isLive={animate} liveKey={liveKey} large />
         </div>
       </div>
 
       <p className="mt-4 text-center text-[11px] text-reflux-muted">
-        Swaps every few seconds · top squiggle is before REFLUX, bottom smooth line is after
+        Each test records live for 5 seconds — top line is real frame variance before REFLUX, bottom line is after
       </p>
     </div>
   );
