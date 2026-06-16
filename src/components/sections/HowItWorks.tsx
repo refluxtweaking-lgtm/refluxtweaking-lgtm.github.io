@@ -8,67 +8,56 @@ const steps: {
   step: string;
   title: string;
   description: string;
-  pulse: boolean;
 }[] = [
   {
     icon: "download",
     step: "01",
-    title: "Download & Run",
-    description: "Grab the installer, launch as Administrator. No complex setup.",
-    pulse: false,
+    title: "Download",
+    description: "Get the app, run as admin. That's it — no weird setup.",
   },
   {
     icon: "sliders",
     step: "02",
-    title: "Choose Tweaks",
-    description: `Toggle what you want, or apply all ${PRODUCT_LIMITS.proTweaks} optimizations with one click.`,
-    pulse: true,
+    title: "Pick your tweaks",
+    description: `Toggle what you want, or apply all ${PRODUCT_LIMITS.proTweaks} with one click.`,
   },
   {
     icon: "gamepad",
     step: "03",
-    title: "Dominate",
-    description: "Lower input lag, higher FPS — feel the difference in your next match.",
-    pulse: false,
+    title: "Queue up & play",
+    description: "Jump into your game and feel smoother frames and snappier inputs.",
   },
 ];
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-20 md:py-24">
+    <section id="how-it-works" className="py-16 md:py-20">
       <SectionHeader
         eyebrow="How It Works"
         title={
           <>
-            Three steps. <span className="gradient-text">Massive gains.</span>
+            Three steps. <span className="gradient-text">Better games.</span>
           </>
         }
-        subtitle="No registry diving. No YouTube rabbit holes. Just results."
+        subtitle="No registry rabbit holes. No sketchy downloads. Just a clean optimizer."
       />
 
-      <div className="relative">
-        <div className="timeline-connector absolute top-[4.5rem] right-[16%] left-[16%] hidden h-px md:block" aria-hidden="true" />
+      <div className="grid gap-5 md:grid-cols-3">
+        {steps.map((step) => (
+          <GlowCard key={step.title} className="relative overflow-hidden text-center" hover={false}>
+            <span className="absolute top-4 right-4 text-4xl font-black text-white/[0.04]">{step.step}</span>
 
-        <div className="grid gap-6 md:grid-cols-3">
-          {steps.map((step) => (
-            <GlowCard key={step.title} className="relative overflow-hidden text-center">
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-reflux-accent/10 to-transparent" />
-              <span className="absolute top-5 right-5 text-5xl font-black text-reflux-accent/10">{step.step}</span>
+            <span className="icon-chip relative mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03]">
+              <Icon name={step.icon} size={28} className="text-reflux-calm" />
+            </span>
 
-              <span
-                className={`icon-chip relative mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-3xl border border-reflux-accent/30 bg-gradient-to-br from-reflux-accent/20 to-transparent shadow-[0_0_30px_rgba(241,91,80,0.15)] ${step.pulse ? "pulse-anim" : ""}`}
-              >
-                <Icon name={step.icon} size={34} className="icon-glow-strong" />
-              </span>
-
-              <div className="relative mb-2 inline-flex rounded-full border border-reflux-accent/25 bg-reflux-accent/10 px-3 py-1 text-[10px] font-bold tracking-widest text-reflux-accent uppercase">
-                Step {step.step}
-              </div>
-              <h3 className="relative mb-3 text-xl font-bold">{step.title}</h3>
-              <p className="relative text-sm leading-relaxed text-reflux-muted">{step.description}</p>
-            </GlowCard>
-          ))}
-        </div>
+            <div className="relative mb-2 inline-flex rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[10px] font-bold tracking-widest text-reflux-muted uppercase">
+              Step {step.step}
+            </div>
+            <h3 className="relative mb-2 text-lg font-bold">{step.title}</h3>
+            <p className="relative text-sm leading-relaxed text-reflux-muted">{step.description}</p>
+          </GlowCard>
+        ))}
       </div>
     </section>
   );

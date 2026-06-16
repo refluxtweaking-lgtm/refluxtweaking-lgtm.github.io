@@ -19,13 +19,13 @@ interface ButtonProps {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "btn-shimmer bg-gradient-to-r from-[rgba(241,91,80,0.25)] to-[rgba(241,91,80,0.12)] text-white border-[rgba(241,91,80,0.5)] hover:from-[rgba(241,91,80,0.45)] hover:to-[rgba(241,91,80,0.25)] hover:shadow-[0_0_32px_rgba(241,91,80,0.5)] hover:scale-[1.03] hover:border-reflux-accent",
+    "bg-gradient-to-r from-[#ff6b5b] to-[#e85a4d] text-white border-[rgba(255,107,91,0.45)] hover:brightness-110 hover:border-[rgba(255,107,91,0.6)]",
   discord:
-    "btn-shimmer bg-gradient-to-r from-[#5865f2] to-[#4752c4] text-white border-[#5865f2] hover:shadow-[0_0_32px_rgba(88,101,242,0.55)] hover:scale-[1.03]",
+    "bg-gradient-to-r from-[#5865f2] to-[#4752c4] text-white border-[#5865f2] hover:brightness-110",
   secondary:
-    "bg-[rgba(26,29,36,0.9)] border border-[#2A2F38] text-reflux-text hover:border-reflux-accent/50 hover:bg-[rgba(241,91,80,0.08)] hover:text-white hover:shadow-[0_0_20px_rgba(241,91,80,0.15)]",
+    "bg-white/[0.04] border border-white/10 text-reflux-text hover:border-white/18 hover:bg-white/[0.06] hover:text-white",
   ghost:
-    "bg-transparent border border-reflux-border/60 text-reflux-muted hover:border-reflux-accent/40 hover:text-white hover:bg-white/5",
+    "bg-transparent border border-reflux-border/60 text-reflux-muted hover:border-white/15 hover:text-white hover:bg-white/[0.03]",
 };
 
 export function Button({

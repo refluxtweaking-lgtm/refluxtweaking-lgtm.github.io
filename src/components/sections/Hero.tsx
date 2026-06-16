@@ -6,47 +6,46 @@ import { HeroShowcase } from "./HeroShowcase";
 import { MarqueeStrip } from "./MarqueeStrip";
 
 const highlights = [
-  { icon: "shield" as const, label: "Restore points" },
-  { icon: "undo" as const, label: "Fully reversible" },
-  { icon: "sparkle" as const, label: "No background bloat" },
+  { icon: "shield" as const, label: "Safe restore points" },
+  { icon: "undo" as const, label: "Undo anytime" },
+  { icon: "sparkle" as const, label: "No extra bloat" },
 ];
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden pb-4 pt-8 md:pt-12 lg:pt-16">
-      <div className="hero-beam pointer-events-none absolute top-0 left-1/2 h-[520px] w-[min(100%,900px)] -translate-x-1/2" aria-hidden="true" />
+    <section className="relative overflow-hidden pb-4 pt-10 md:pt-14 lg:pt-16">
+      <div className="hero-beam pointer-events-none absolute top-0 left-1/2 h-[480px] w-[min(100%,820px)] -translate-x-1/2" aria-hidden="true" />
 
-      <div className="relative grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10 xl:gap-16">
+      <div className="relative grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12 xl:gap-16">
         <div className="text-center lg:text-left">
-          <div className="animate-fade-in-up mb-6 flex justify-center lg:justify-start">
+          <div className="animate-fade-in-up mb-5 flex justify-center lg:justify-start">
             <span className="section-eyebrow inline-flex">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-reflux-green" />
-              Windows gaming optimizer
+              Built for PC gamers
             </span>
           </div>
 
           <h1
-            className="animate-fade-in-up mb-6 text-[clamp(2.25rem,6vw,4.5rem)] leading-[1.05] font-extrabold tracking-tight"
-            style={{ animationDelay: "0.08s" }}
+            className="animate-fade-in-up mb-5 text-[clamp(2.35rem,6vw,4.25rem)] leading-[1.08] font-extrabold tracking-tight"
+            style={{ animationDelay: "0.06s" }}
           >
-            More FPS.
+            Play smoother.
             <br />
-            Lower latency.
+            Hit more shots.
             <br />
-            <span className="gradient-text">One clean app.</span>
+            <span className="gradient-text">Feel the difference.</span>
           </h1>
 
           <p
-            className="animate-fade-in-up mx-auto mb-8 max-w-xl text-lg leading-relaxed text-reflux-muted md:text-xl lg:mx-0"
-            style={{ animationDelay: "0.16s" }}
+            className="animate-fade-in-up mx-auto mb-7 max-w-lg text-base leading-relaxed text-reflux-muted md:text-lg lg:mx-0"
+            style={{ animationDelay: "0.12s" }}
           >
-            {PRODUCT_LIMITS.proTweaks} hand-picked optimizations — not thousands of random registry edits.
-            Start free with {PRODUCT_LIMITS.freeTweaks} tweaks, then unlock the full toolkit with Pro.
+            REFLUX tunes your PC for gaming — more FPS, lower delay, cleaner Windows.
+            Start free with {PRODUCT_LIMITS.freeTweaks} tweaks. Go Pro for {PRODUCT_LIMITS.totalTweaksLabel}.
           </p>
 
           <div
-            className="animate-fade-in-up mb-8 flex flex-wrap justify-center gap-3 lg:justify-start"
-            style={{ animationDelay: "0.22s" }}
+            className="animate-fade-in-up mb-7 flex flex-wrap justify-center gap-2.5 lg:justify-start"
+            style={{ animationDelay: "0.18s" }}
           >
             {highlights.map((item) => (
               <span key={item.label} className="badge-pill badge-accent inline-flex items-center gap-1.5 text-[11px]">
@@ -57,8 +56,8 @@ export function Hero() {
           </div>
 
           <div
-            className="animate-fade-in-up flex flex-wrap justify-center gap-4 lg:justify-start"
-            style={{ animationDelay: "0.28s" }}
+            className="animate-fade-in-up flex flex-wrap justify-center gap-3 lg:justify-start"
+            style={{ animationDelay: "0.24s" }}
           >
             <Button
               href={REFLUX_FREE_DOWNLOAD.href}
@@ -67,30 +66,30 @@ export function Hero() {
               large
               showIcon
             >
-              Download Free — {PRODUCT_LIMITS.freeTweaks} Tweaks
+              Download Free
             </Button>
             <Button href="#pricing" variant="secondary" large>
-              See Pro Plans
+              See Pro
             </Button>
           </div>
 
           <div
-            className="animate-fade-in-up mt-10 grid grid-cols-3 gap-3 sm:max-w-md lg:max-w-none"
-            style={{ animationDelay: "0.36s" }}
+            className="animate-fade-in-up mt-8 grid grid-cols-3 gap-2.5 sm:max-w-md lg:max-w-none"
+            style={{ animationDelay: "0.3s" }}
           >
             {[
               { val: String(PRODUCT_LIMITS.freeTweaks), label: "Free tweaks", accent: false },
               { val: PRODUCT_LIMITS.totalTweaksLabel, label: "Pro tweaks", accent: true },
-              { val: "5 min", label: "To optimize", accent: false },
+              { val: "5 min", label: "Setup time", accent: false },
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="hero-stat-card rounded-2xl border border-white/8 bg-white/[0.03] px-3 py-4 text-center backdrop-blur-sm sm:px-4 sm:py-5"
+                className="hero-stat-card rounded-2xl border border-white/8 bg-white/[0.025] px-3 py-3.5 text-center sm:px-4 sm:py-4"
               >
-                <div className={`text-2xl font-extrabold tabular-nums md:text-3xl ${stat.accent ? "gradient-text" : "text-white"}`}>
+                <div className={`text-xl font-extrabold tabular-nums md:text-2xl ${stat.accent ? "gradient-text" : "text-white"}`}>
                   {stat.val}
                 </div>
-                <div className="mt-1 text-[10px] font-bold tracking-wider text-reflux-muted uppercase sm:text-xs">
+                <div className="mt-1 text-[10px] font-semibold tracking-wider text-reflux-muted uppercase">
                   {stat.label}
                 </div>
               </div>
@@ -98,12 +97,12 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="animate-fade-in-up relative" style={{ animationDelay: "0.2s" }}>
+        <div className="animate-fade-in-up relative" style={{ animationDelay: "0.14s" }}>
           <HeroShowcase />
         </div>
       </div>
 
-      <div className="relative left-1/2 mt-14 w-screen max-w-[100vw] -translate-x-1/2">
+      <div className="relative left-1/2 mt-12 w-screen max-w-[100vw] -translate-x-1/2">
         <MarqueeStrip />
       </div>
     </section>

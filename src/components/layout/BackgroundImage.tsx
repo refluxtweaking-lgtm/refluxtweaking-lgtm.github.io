@@ -1,15 +1,13 @@
 export function BackgroundImage() {
   return (
-    <div className="fixed inset-0 -z-20" aria-hidden="true">
+    <div className="pointer-events-none fixed inset-0 -z-20" aria-hidden="true">
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0"
         style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1555618254-1e2e0e9c3db0?q=80&w=2070&auto=format&fit=crop')",
-          filter: "brightness(0.18) saturate(0.7)",
+          background:
+            "radial-gradient(ellipse 80% 55% at 15% -5%, rgba(110, 184, 224, 0.12), transparent 55%), radial-gradient(ellipse 60% 45% at 90% 10%, rgba(88, 101, 242, 0.1), transparent 50%), radial-gradient(ellipse 50% 40% at 50% 100%, rgba(255, 107, 91, 0.08), transparent 55%), linear-gradient(180deg, #080b12 0%, #0a0e16 50%, #080b12 100%)",
         }}
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#030507]/40 via-[#030507]/70 to-[#030507]" />
     </div>
   );
 }

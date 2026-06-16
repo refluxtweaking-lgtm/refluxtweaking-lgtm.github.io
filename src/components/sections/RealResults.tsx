@@ -78,7 +78,7 @@ export function RealResults() {
             Measured gains. <span className="gradient-text">Not simulated.</span>
           </>
         }
-        subtitle="Gray squiggly line on top = before. Smooth colored line on bottom = after."
+        subtitle="Real before/after on the same PC — squiggly line on top, smooth line on bottom."
       />
 
       <GlowCard className="mx-auto max-w-5xl overflow-hidden" hover={false}>

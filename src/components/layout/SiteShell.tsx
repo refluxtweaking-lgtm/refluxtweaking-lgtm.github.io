@@ -1,6 +1,5 @@
 import { BackgroundImage } from "./BackgroundImage";
 import { AmbientBackground } from "./AmbientBackground";
-import { ParticlesCanvas } from "./ParticlesCanvas";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { PurchasePopups } from "@/components/ui/PurchasePopups";
@@ -15,7 +14,6 @@ export function SiteShell({ children, mainClassName = "" }: SiteShellProps) {
     <>
       <BackgroundImage />
       <AmbientBackground />
-      <ParticlesCanvas />
       <Header />
       <main className={`relative z-1 mx-auto max-w-7xl px-5 ${mainClassName}`}>
         {children}

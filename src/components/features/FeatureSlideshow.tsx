@@ -42,7 +42,7 @@ export function FeatureSlideshow() {
               onClick={() => goTo(index)}
               aria-label={`Go to ${slides[index].label}`}
               className={`h-2 rounded-full transition-all ${
-                currentSlide === index ? "w-6 bg-reflux-accent shadow-[0_0_10px_rgba(241,91,80,0.6)]" : "w-2 bg-reflux-border hover:bg-reflux-accent/40"
+                currentSlide === index ? "w-5 bg-reflux-accent" : "w-2 bg-reflux-border hover:bg-white/20"
               }`}
             />
           ))}

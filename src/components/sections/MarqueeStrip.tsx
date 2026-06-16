@@ -1,34 +1,29 @@
 const items = [
   "Fortnite",
   "Valorant",
-  "Apex Legends",
+  "Apex",
   "CS2",
   "Warzone",
   "Rocket League",
-  "Cyberpunk 2077",
+  "Cyberpunk",
   "Minecraft",
   "Overwatch 2",
   "Rainbow Six",
-  "Lower latency",
-  "Higher FPS",
-  "Cleaner Windows",
-  "One-click tweaks",
 ];
 
 export function MarqueeStrip() {
-  const doubled = [...items, ...items];
-
   return (
-    <div className="marquee-strip relative overflow-hidden py-3.5">
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-reflux-bg to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-reflux-bg to-transparent" />
-      <div className="marquee-track flex w-max gap-3">
-        {doubled.map((item, i) => (
+    <div className="marquee-strip px-4">
+      <p className="mb-3 text-center text-[10px] font-bold tracking-[0.2em] text-reflux-muted uppercase">
+        Works with your favorite games
+      </p>
+      <div className="mx-auto flex max-w-5xl flex-wrap justify-center gap-2">
+        {items.map((item) => (
           <span
-            key={`${item}-${i}`}
-            className="inline-flex shrink-0 items-center gap-2 rounded-full border border-white/8 bg-white/[0.03] px-5 py-2 text-sm font-semibold text-[#b8c2ce] backdrop-blur-sm"
+            key={item}
+            className="inline-flex items-center gap-2 rounded-full border border-white/8 bg-white/[0.03] px-4 py-2 text-sm font-medium text-[#b8c2ce]"
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-reflux-accent shadow-[0_0_8px_rgba(241,91,80,0.8)]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-reflux-calm/80" />
             {item}
           </span>
         ))}

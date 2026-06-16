@@ -121,8 +121,8 @@ export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMoc
           </span>
           <span className="text-base font-extrabold gradient-text sm:text-lg">REFLUX PRO</span>
           <span className="badge-pill badge-live text-[9px] sm:text-[10px]">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-reflux-green" />
-            LIVE
+            <span className="h-1.5 w-1.5 rounded-full bg-reflux-green" />
+            Ready
           </span>
         </div>
         <span className="hidden text-[10px] text-reflux-muted sm:inline">Administrator</span>
