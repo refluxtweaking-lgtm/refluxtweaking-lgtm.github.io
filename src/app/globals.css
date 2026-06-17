@@ -1295,7 +1295,10 @@ html.reduce-effects .particles-canvas {
 }
 
 .network-proof-section {
+  position: relative;
   background: rgba(255, 255, 255, 0.01);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 @keyframes pingDotScroll {

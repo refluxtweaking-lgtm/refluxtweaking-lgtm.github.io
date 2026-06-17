@@ -4,7 +4,6 @@ import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
 import { PRODUCT_LIMITS } from "@/data/tweaks";
 import { HeroGameTicker } from "./HeroGameTicker";
 import { HeroShowcase } from "./HeroShowcase";
-import { MarqueeStrip } from "./MarqueeStrip";
 
 const proofPoints = [
   { icon: "bolt" as const, label: "+52", unit: "avg FPS", sub: "Real user results" },
@@ -92,10 +91,6 @@ export function Hero() {
             <HeroShowcase />
           </div>
         </div>
-      </div>
-
-      <div className="relative left-1/2 mt-14 w-screen max-w-[100vw] -translate-x-1/2 md:mt-16">
-        <MarqueeStrip />
       </div>
     </section>
   );

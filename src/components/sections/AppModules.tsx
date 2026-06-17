@@ -10,13 +10,11 @@ export function AppModules() {
     <section id="app-modules" className="section-flow">
       <div className="section-flow-divider" aria-hidden="true" />
       <SectionHeader
-        eyebrow="Will it work on MY rig?"
         title={
           <>
             Every tool. <span className="gradient-text">One sidebar.</span>
           </>
         }
-        subtitle="Same icons you get in the desktop app — CPU, GPU, games, network, cleanup, debloat, and more. Matched to what you actually have installed."
       />
 
       <div className="mx-auto max-w-6xl">
@@ -46,18 +44,9 @@ export function AppModules() {
                   </div>
                 ))}
               </aside>
-              <div className="hidden flex-1 p-6 sm:block">
-                <div className="mb-2 flex items-center gap-2">
-                  <AppIcon name="home" size={22} />
-                  <span className="text-lg font-bold text-white">Home</span>
-                  <span className="badge-pill badge-live text-[10px]">Live</span>
-                </div>
-                <p className="max-w-md text-sm leading-relaxed text-reflux-muted">
-                  Detects Intel, AMD & NVIDIA on launch — then surfaces matched CPU, GPU, and RAM tweak pages
-                  automatically. No guessing which settings apply to your rig.
-                </p>
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {(["cpu", "gpu", "ram", "internet"] as const).map((icon) => (
+              <div className="hidden flex-1 items-center justify-center p-6 sm:flex">
+                <div className="flex flex-wrap gap-2">
+                  {(["cpu", "gpu", "ram", "internet", "games", "cleanup"] as const).map((icon) => (
                     <span
                       key={icon}
                       className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[11px] font-semibold text-white/90 uppercase"
@@ -75,10 +64,9 @@ export function AppModules() {
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {APP_NAV_MODULES.map((mod, i) => (
             <FlowIn key={mod.label} delay={i * 40}>
-              <div className="module-card group h-full rounded-2xl border border-white/10 bg-[#12151c] p-4 transition-all hover:border-reflux-accent/35 hover:bg-[#151922] hover:shadow-[0_0_32px_-12px_rgba(255,107,91,0.4)]">
+              <div className="module-card group flex h-full flex-col items-start rounded-2xl border border-white/10 bg-[#12151c] p-4 transition-all hover:border-reflux-accent/35 hover:bg-[#151922] hover:shadow-[0_0_32px_-12px_rgba(255,107,91,0.4)]">
                 <AppIconChip name={mod.icon} size={20} chipSize={44} className="mb-3 group-hover:border-reflux-accent/40" />
                 <div className="font-bold text-white">{mod.label}</div>
-                <div className="mt-1 text-xs leading-relaxed text-reflux-muted">{mod.desc}</div>
               </div>
             </FlowIn>
           ))}
