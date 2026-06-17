@@ -55,6 +55,19 @@ export function buildPathFromSeries(yValues: number[], width = CHART_WIDTH) {
   return buildSmoothPathFromSeries(yValues, width);
 }
 
+/** Straight segments — stable jagged line without bezier overshoot */
+export function buildJaggedPathFromSeries(yValues: number[], width = CHART_WIDTH) {
+  const n = yValues.length;
+  if (n < 2) return `M 0 ${(yValues[0] ?? 0).toFixed(2)}`;
+
+  return yValues
+    .map((y, i) => {
+      const x = (i / (n - 1)) * width;
+      return `${i === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`;
+    })
+    .join(" ");
+}
+
 /** Catmull-Rom style cubic bezier through explicit x/y points */
 export function buildSmoothPathFromPoints(points: { x: number; y: number }[]) {
   const n = points.length;

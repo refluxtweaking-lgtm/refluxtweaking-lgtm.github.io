@@ -1214,10 +1214,7 @@ h3,
     width: var(--result-gain, 80%);
   }
 }
-html.reduce-effects .proof-chart-intro .proof-chart-scan,
-html.reduce-effects .proof-chart-intro .proof-line-draw,
-html.reduce-effects .proof-chart-intro .proof-area-fill,
-html.reduce-effects .proof-chart-intro .proof-line-after {
+html.reduce-effects .proof-chart-intro .proof-chart-scan {
   animation: none !important;
 }
 
@@ -1291,7 +1288,7 @@ html.reduce-effects .particles-canvas {
 }
 
 .ambient-graph-wrap {
-  mask-image: linear-gradient(90deg, transparent, black 5%, black 95%, transparent);
+  overflow: visible;
 }
 
 .ambient-graph-fade {
@@ -1311,9 +1308,10 @@ html.reduce-effects .particles-canvas {
   vector-effect: non-scaling-stroke;
 }
 
-/* Static proof charts — 5s intro animation, then frozen */
+/* Proof charts — 5s scan intro, full paths always visible */
 .proof-chart-stage {
   border-radius: inherit;
+  overflow: visible;
 }
 
 .proof-chart-intro .proof-chart-scan {
@@ -1335,29 +1333,6 @@ html.reduce-effects .particles-canvas {
   animation: proofChartScan 5s linear 1 forwards;
 }
 
-.proof-chart-intro .proof-line-draw {
-  animation: proofLineDraw 5s ease-out 1 forwards;
-}
-
-.proof-chart-intro .proof-area-fill {
-  opacity: 0;
-  animation: proofAreaFade 5s ease-out 1 forwards;
-}
-
-.proof-chart-intro .proof-line-after {
-  animation:
-    proofLineDraw 5s ease-out 1 forwards,
-    proofLineGlow 5s ease-in-out 1 forwards;
-}
-
-.proof-chart-done .proof-line-draw {
-  stroke-dashoffset: 0;
-}
-
-.proof-chart-done .proof-area-fill {
-  opacity: 1;
-}
-
 @keyframes proofChartScan {
   0% {
     background-position: 100% 0;
@@ -1367,34 +1342,12 @@ html.reduce-effects .particles-canvas {
   }
 }
 
-@keyframes proofLineDraw {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes proofAreaFade {
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes proofLineGlow {
-  0%,
-  100% {
-    opacity: 0.88;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
 .ambient-line-before {
-  filter: drop-shadow(0 0 6px rgba(232, 85, 72, 0.6));
+  filter: drop-shadow(0 0 4px rgba(232, 85, 72, 0.35));
 }
 
 .ambient-line-after {
-  filter: drop-shadow(0 0 8px rgba(94, 196, 239, 0.7));
+  filter: drop-shadow(0 0 5px rgba(94, 196, 239, 0.4));
 }
 
 .network-proof-section {
