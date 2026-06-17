@@ -227,26 +227,41 @@ export function AppScreenshotFrame({ id }: { id: GalleryId }) {
   }
 
   if (id === "network") {
+    const tweaks = [
+      { name: "Disable Nagle's Algorithm", on: true, desc: "Cuts micro-delays on small packets" },
+      { name: "Flush DNS Cache", on: true, desc: "Clears stale resolver entries" },
+      { name: "Optimize TCP/IP Stack", on: true, desc: "Tunes Windows network defaults" },
+      { name: "Reset Winsock Catalog", on: false, desc: "Repairs broken socket bindings" },
+    ];
     return (
-      <div className="space-y-3 p-1">
-        <div className="grid grid-cols-2 gap-2">
-          <div className="rounded-xl border border-white/8 bg-[#0f1217] p-3 text-center">
-            <div className="text-[9px] font-bold text-reflux-muted uppercase">Before</div>
-            <div className="text-3xl font-extrabold text-[#5a6578] line-through">85</div>
-            <div className="text-[10px] text-reflux-muted">ms ping</div>
+      <div className="space-y-2 p-1">
+        <div className="mb-2 flex items-center justify-between">
+          <div className="flex items-center gap-2 text-xs font-bold text-white">
+            <span className="flex h-5 w-5 items-center justify-center rounded-md bg-reflux-accent/15 text-reflux-accent">
+              <Icon name="globe" size={12} />
+            </span>
+            Network tweaks
           </div>
-          <div className="rounded-xl border border-reflux-green/25 bg-reflux-green/5 p-3 text-center">
-            <div className="text-[9px] font-bold text-reflux-green uppercase">After REFLUX</div>
-            <div className="text-3xl font-extrabold text-reflux-green">18</div>
-            <div className="text-[10px] text-reflux-muted">ms ping</div>
+          <span className="text-[10px] font-semibold text-reflux-muted">4 available</span>
+        </div>
+        {tweaks.map((tweak) => (
+          <div
+            key={tweak.name}
+            className="flex items-center justify-between gap-3 rounded-xl border border-white/8 bg-[#0f1217] px-3 py-2.5"
+          >
+            <div className="min-w-0">
+              <div className="text-[11px] font-semibold text-white">{tweak.name}</div>
+              <div className="text-[9px] text-reflux-muted">{tweak.desc}</div>
+            </div>
+            <div
+              className={`relative h-5 w-9 shrink-0 rounded-full ${tweak.on ? "bg-reflux-accent" : "bg-white/15"}`}
+            >
+              <div
+                className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-md ${tweak.on ? "translate-x-4" : "translate-x-0.5"}`}
+              />
+            </div>
           </div>
-        </div>
-        <div className="rounded-xl border border-white/8 bg-[#0a0c10] p-3">
-          <div className="mb-2 text-[10px] font-bold text-white">Latency trend</div>
-          <svg viewBox="0 0 200 48" className="h-12 w-full" aria-hidden="true">
-            <polyline fill="none" stroke="#5DDE86" strokeWidth="2" points="0,38 30,32 60,26 90,20 120,16 150,12 180,10 200,8" />
-          </svg>
-        </div>
+        ))}
       </div>
     );
   }

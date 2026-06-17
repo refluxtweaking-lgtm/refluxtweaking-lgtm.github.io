@@ -64,11 +64,7 @@ export function AppGallery() {
                 {current.caption}
               </p>
               <ul className="mb-8 space-y-3">
-                {[
-                  "Custom icons & glowy UI — not a web wrapper",
-                  "Detects Intel, AMD & NVIDIA automatically",
-                  "Restore points before risky tweaks",
-                ].map((line) => (
+                {current.bullets.map((line) => (
                   <li key={line} className="flex items-start gap-2.5 text-sm text-[#c4ccd8]">
                     <Icon name="check" size={16} className="mt-0.5 shrink-0 text-reflux-green" />
                     {line}

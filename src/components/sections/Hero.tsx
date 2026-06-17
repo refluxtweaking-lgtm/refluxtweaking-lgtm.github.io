@@ -25,10 +25,6 @@ export function Hero() {
                 <span className="hero-live-dot h-2 w-2 rounded-full bg-reflux-green" />
                 Free to download
               </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-reflux-accent/30 bg-reflux-accent/10 px-4 py-2 text-[11px] font-semibold text-[#ffc4bb]">
-                <AppIcon name="optimizer" size={14} glow={false} />
-                {PRODUCT_LIMITS.freeTweaks} tweaks · no card
-              </span>
             </div>
 
             <h1 className="hero-headline animate-fade-in-up mb-5 font-extrabold tracking-tight" style={{ animationDelay: "0.05s" }}>

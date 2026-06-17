@@ -74,7 +74,7 @@ export const refluxFeatures = [
   },
   {
     feature: "Live hardware detection",
-    detail: "Auto-detects Intel, AMD & NVIDIA — matches vendor-specific tweak profiles",
+    detail: "Reads your CPU and GPU on launch — shows the matching tweak pages",
     highlight: true,
   },
   {
@@ -105,6 +105,7 @@ export const appGalleryItems: {
   icon: AppIconName;
   title: string;
   caption: string;
+  bullets: string[];
 }[] = [
   {
     id: "detect",
@@ -112,6 +113,11 @@ export const appGalleryItems: {
     icon: "search",
     title: "Knows your rig instantly",
     caption: "Intel + NVIDIA? AMD + AMD? REFLUX detects your combo and unlocks the right CPU & GPU profiles automatically.",
+    bullets: [
+      "Scans your PC the first time you open it",
+      "Picks the right CPU and GPU tweak pages for your build",
+      "No guessing which vendor profile to use",
+    ],
   },
   {
     id: "dashboard",
@@ -119,6 +125,11 @@ export const appGalleryItems: {
     icon: "home",
     title: "Real-time performance monitor",
     caption: "Live CPU, GPU & RAM charts with one-click quick actions — clean RAM, optimize network, boost graphics.",
+    bullets: [
+      "CPU, GPU, and RAM meters on one screen",
+      "Quick actions without digging through menus",
+      "Only runs when you have the app open",
+    ],
   },
   {
     id: "tweaks",
@@ -126,6 +137,11 @@ export const appGalleryItems: {
     icon: "optimizer",
     title: "100+ optimizations, one toggle away",
     caption: "Network, CPU, GPU, RAM, system, cleanup & debloat — each tweak explains what it does before you apply.",
+    bullets: [
+      "Flip tweaks on or off — nothing hidden",
+      "Windows restore point before each batch",
+      "Full desktop app you actually install",
+    ],
   },
   {
     id: "games",
@@ -133,13 +149,23 @@ export const appGalleryItems: {
     icon: "games",
     title: "Auto-find & optimize games",
     caption: "Scans Steam, Epic, and installed titles. Hit Optimize on CS2, Apex, Fortnite, and more.",
+    bullets: [
+      "Finds Steam and Epic games automatically",
+      "One Optimize button per title",
+      "Network Priority toggles per game in Pro",
+    ],
   },
   {
     id: "network",
     label: "Network",
     icon: "internet",
     title: "Latency you can feel",
-    caption: "DNS flush, TCP tuning, Winsock repair — measured before/after ping improvements in-app.",
+    caption: "DNS flush, TCP tuning, and Winsock reset — same toggles you get in the installed app.",
+    bullets: [
+      "Nagle's, DNS flush, TCP stack — grouped in one tab",
+      "Turn on what you want, leave the rest off",
+      "No fake ping counters or demo graphs",
+    ],
   },
   {
     id: "optimizer",
@@ -147,5 +173,10 @@ export const appGalleryItems: {
     icon: "bolt",
     title: "One-click pro suites",
     caption: "Quick command library plus custom PowerShell runner — tuned recommendations for your detected hardware.",
+    bullets: [
+      "One-click suites for your detected hardware",
+      "Copy or run commands from the built-in library",
+      "Custom PowerShell runner when you need it",
+    ],
   },
 ];

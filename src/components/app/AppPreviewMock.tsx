@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { GameImage } from "@/components/games/GameImage";
 import { AppIcon, AppIconChip } from "@/components/ui/AppIcon";
-import { LiveEqualizer, LiveMetricBar } from "@/components/ui/LiveMetricBar";
+import { LiveMetricBar } from "@/components/ui/LiveMetricBar";
 import { useInViewport } from "@/hooks/useInViewport";
 import { PRODUCT_LIMITS } from "@/data/tweaks";
 import type { AppIconName } from "@/data/app-icons";
@@ -100,6 +100,13 @@ const sampleTweaks = [
   { name: "High Performance Power Plan", on: true, tag: "CPU", icon: "cpu" as AppIconName },
   { name: "Disable Core Parking", on: true, tag: "CPU", icon: "cpu" as AppIconName },
   { name: "QoS Packet Prioritization", on: false, tag: "Network", icon: "internet" as AppIconName },
+];
+
+const networkTweaks = [
+  { name: "Disable Nagle's Algorithm", on: true, desc: "Cuts micro-delays on small game packets" },
+  { name: "Flush DNS Cache", on: true, desc: "Clears stale resolver entries" },
+  { name: "Optimize TCP/IP Stack", on: true, desc: "Tunes Windows network defaults" },
+  { name: "Reset Winsock Catalog", on: false, desc: "Repairs broken socket bindings" },
 ];
 
 interface AppPreviewMockProps {
@@ -266,26 +273,40 @@ export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMoc
             )}
 
             {activeTab === "Network" && (
-              <div className="py-2 sm:py-4">
-                <div className="mb-3 flex items-center gap-2">
-                  <AppIcon name="internet" size={18} />
-                  <span className="text-sm font-bold text-white">Network Tools</span>
-                </div>
-                <div className="mb-4 grid grid-cols-2 gap-2 sm:gap-3">
-                  <div className="rounded-xl border border-reflux-border/50 bg-[#0f1217]/80 p-3 text-center">
-                    <div className="text-[10px] font-bold tracking-wider text-reflux-muted uppercase">Before</div>
-                    <div className="mt-1 text-2xl font-extrabold text-[#5a6578] line-through sm:text-3xl">85</div>
-                    <div className="text-[10px] text-reflux-muted">ms ping</div>
+              <div className="space-y-2">
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2">
+                    <AppIcon name="internet" size={20} />
+                    <div>
+                      <div className="text-sm font-bold text-white">Network</div>
+                      <div className="text-[11px] text-reflux-muted">Latency & connection tweaks</div>
+                    </div>
                   </div>
-                  <div className="rounded-xl border border-reflux-green/25 bg-reflux-green/5 p-3 text-center shadow-[0_0_20px_rgba(93,222,134,0.08)]">
-                    <div className="text-[10px] font-bold tracking-wider text-reflux-green uppercase">After</div>
-                    <div className="mt-1 text-2xl font-extrabold gradient-text sm:text-3xl">18</div>
-                    <div className="text-[10px] text-reflux-muted">ms ping</div>
+                  <button
+                    type="button"
+                    className="shrink-0 rounded-lg border border-reflux-accent/40 bg-reflux-accent/10 px-3 py-1.5 text-[10px] font-bold text-reflux-accent sm:px-4 sm:py-2 sm:text-xs"
+                  >
+                    Apply All
+                  </button>
+                </div>
+                {networkTweaks.map((tweak) => (
+                  <div
+                    key={tweak.name}
+                    className="flex items-center justify-between gap-3 rounded-xl border border-reflux-border/50 bg-[#0f1217]/90 px-3 py-2.5 sm:px-4 sm:py-3"
+                  >
+                    <div className="min-w-0">
+                      <div className="truncate text-xs font-semibold text-white sm:text-sm">{tweak.name}</div>
+                      <div className="mt-0.5 text-[10px] text-reflux-muted">{tweak.desc}</div>
+                    </div>
+                    <div
+                      className={`relative h-5 w-9 shrink-0 rounded-full sm:h-6 sm:w-11 ${tweak.on ? "bg-reflux-accent shadow-[0_0_10px_rgba(241,91,80,0.45)]" : "bg-reflux-border"}`}
+                    >
+                      <div
+                        className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-md transition-transform sm:h-5 sm:w-5 ${tweak.on ? "translate-x-4 sm:translate-x-5" : "translate-x-0.5"}`}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="h-16 overflow-hidden rounded-xl border border-reflux-border/40 bg-[#0a0c10] px-3 py-2">
-                  <LiveEqualizer bars={16} color="#ff6b5b" className="h-full" />
-                </div>
+                ))}
               </div>
             )}
 
