@@ -50,9 +50,9 @@ export function Button({
         <Image
           src="/favicon.ico"
           alt=""
-          width={large ? 22 : 18}
-          height={large ? 22 : 18}
-          className="shrink-0 rounded-sm"
+          width={large ? 24 : 20}
+          height={large ? 24 : 20}
+          className="shrink-0 rounded-md"
         />
       )}
       {children}

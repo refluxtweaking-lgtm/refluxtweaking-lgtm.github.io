@@ -764,6 +764,26 @@ h3,
     backdrop-filter 0.35s ease;
 }
 
+.header-brand-icon {
+  filter: drop-shadow(0 0 10px rgba(255, 107, 91, 0.45));
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.header-brand:hover .header-brand-icon {
+  transform: scale(1.06);
+  filter: drop-shadow(0 0 14px rgba(255, 107, 91, 0.65));
+}
+
+.header-nav-link {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.header-auth-btn {
+  padding: 0.7rem 1.35rem !important;
+  font-size: 15px !important;
+}
+
 .header-shell-scrolled {
   background: rgba(8, 11, 18, 0.92) !important;
   border-color: rgba(255, 107, 91, 0.18) !important;

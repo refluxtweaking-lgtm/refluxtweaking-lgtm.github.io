@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
@@ -46,30 +47,48 @@ export function Header() {
   const closeMenu = () => setMenuOpen(false);
 
   return (
-    <header className="sticky top-0 z-100 px-4 py-3 md:px-6">
-      <div className="relative mx-auto max-w-[1200px]">
+    <header className="sticky top-0 z-100 px-4 py-4 md:px-6 md:py-5">
+      <div className="relative mx-auto max-w-[1280px]">
         <div
-          className={`header-shell flex items-center justify-between gap-4 rounded-2xl border border-white/8 bg-[rgba(12,15,22,0.88)] px-4 py-3 md:px-5 md:py-3.5 ${
+          className={`header-shell flex min-h-[72px] items-center justify-between gap-5 rounded-2xl border border-white/8 bg-[rgba(12,15,22,0.88)] px-5 py-4 md:min-h-[80px] md:gap-6 md:px-7 md:py-5 ${
             scrolled ? "header-shell-scrolled" : ""
           }`}
         >
-          <Link href="/" className="group flex min-w-0 items-center" onClick={closeMenu}>
-            <span className="truncate text-lg font-extrabold tracking-tight gradient-text sm:text-xl md:text-2xl">
-              REFLUX TWEAKS
+          <Link
+            href="/"
+            className="header-brand group flex shrink-0 items-center gap-1 sm:gap-1.5"
+            onClick={closeMenu}
+            aria-label="REFLUX TWEAKS home"
+          >
+            <Image
+              src="/favicon.ico"
+              alt=""
+              width={40}
+              height={40}
+              className="header-brand-icon h-9 w-9 shrink-0 rounded-lg sm:h-10 sm:w-10 md:h-11 md:w-11"
+              priority
+            />
+            <span className="whitespace-nowrap text-xl font-extrabold tracking-tight gradient-text sm:text-2xl md:text-[1.75rem] md:leading-none">
+              EFLUX TWEAKS
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-x-6 md:flex">
+          <nav className="hidden items-center gap-x-7 md:flex xl:gap-x-8">
             {navLinks.map((link) => (
-              <Link key={link.href} href={link.href} className="nav-link text-sm">
+              <Link key={link.href} href={link.href} className="nav-link header-nav-link">
                 {link.label}
               </Link>
             ))}
           </nav>
 
-          <div className="hidden items-center gap-3 md:flex">
-            <HeaderAuth />
-            <Button href="https://discord.gg/xGpHKY8AAC" variant="discord" external>
+          <div className="hidden items-center gap-3.5 md:flex md:gap-4">
+            <HeaderAuth className="header-auth-btn" />
+            <Button
+              href="https://discord.gg/xGpHKY8AAC"
+              variant="discord"
+              external
+              className="header-action-btn !px-6 !py-3 !text-[15px]"
+            >
               Discord
             </Button>
             <Button
@@ -77,6 +96,7 @@ export function Header() {
               download={REFLUX_FREE_DOWNLOAD.filename}
               variant="primary"
               showIcon
+              className="header-action-btn !px-6 !py-3 !text-[15px]"
             >
               Get App
             </Button>
@@ -84,13 +104,13 @@ export function Header() {
 
           <button
             type="button"
-            className="icon-chip flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-reflux-accent/30 bg-reflux-accent/10 md:hidden"
+            className="icon-chip flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-reflux-accent/30 bg-reflux-accent/10 md:hidden"
             onClick={() => setMenuOpen((open) => !open)}
             aria-expanded={menuOpen}
             aria-controls="mobile-nav"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
           >
-            <Icon name={menuOpen ? "close" : "menu"} size={22} strokeWidth={2} />
+            <Icon name={menuOpen ? "close" : "menu"} size={24} strokeWidth={2} />
           </button>
         </div>
 
