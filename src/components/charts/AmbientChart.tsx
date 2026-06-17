@@ -1,9 +1,13 @@
+"use client";
+
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { buildSmoothPathFromSeries } from "@/components/sections/resultChartPaths";
+
+const INTRO_MS = 5000;
 
 const W = 900;
 const H = 220;
 
-/** Fixed curves — no live JS updates, animation is CSS-only */
 const FPS_BEFORE = [
   16, 34, 12, 30, 18, 36, 14, 32, 20, 28, 15, 33, 17, 29, 13, 35, 19, 27, 14, 31,
   21, 26, 16, 34, 18, 24, 15, 30, 20, 28, 17, 33, 14, 29, 19, 25, 16, 32, 18, 27,
@@ -35,6 +39,60 @@ const LAT_H = 100;
 const LATENCY_BEFORE_PATH = toPath(LATENCY_BEFORE, LAT_W, LAT_H);
 const LATENCY_AFTER_PATH = toPath(LATENCY_AFTER, LAT_W, LAT_H);
 
+function setupLineDraw(svg: SVGSVGElement | null) {
+  if (!svg) return;
+  svg.querySelectorAll<SVGPathElement>(".proof-line-draw").forEach((path) => {
+    const len = path.getTotalLength();
+    path.style.setProperty("--path-len", `${len}`);
+    path.style.strokeDasharray = `${len}`;
+    path.style.strokeDashoffset = `${len}`;
+  });
+}
+
+function ProofChartStage({
+  children,
+  mini = false,
+  className = "",
+}: {
+  children: (svgRef: React.RefObject<SVGSVGElement | null>) => ReactNode;
+  mini?: boolean;
+  className?: string;
+}) {
+  const [intro, setIntro] = useState(true);
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  useEffect(() => {
+    const svg = svgRef.current;
+    setupLineDraw(svg);
+
+    const finish = () => {
+      svg?.querySelectorAll<SVGPathElement>(".proof-line-draw").forEach((path) => {
+        path.style.strokeDashoffset = "0";
+      });
+      setIntro(false);
+    };
+
+    if (document.documentElement.classList.contains("reduce-effects")) {
+      finish();
+      return;
+    }
+
+    const timer = window.setTimeout(finish, INTRO_MS);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  return (
+    <div
+      className={`proof-chart-stage relative overflow-hidden ${intro ? "proof-chart-intro" : "proof-chart-done"} ${className}`}
+    >
+      {intro ? (
+        <div className={`proof-chart-scan ${mini ? "proof-chart-scan-mini" : ""}`} aria-hidden="true" />
+      ) : null}
+      <div className="proof-chart-svg-wrap relative z-[1]">{children(svgRef)}</div>
+    </div>
+  );
+}
+
 interface AmbientFpsGraphProps {
   className?: string;
 }
@@ -52,46 +110,48 @@ export function AmbientFpsGraph({ className = "" }: AmbientFpsGraphProps) {
           Before
         </span>
       </div>
-      <div className="proof-chart-stage relative overflow-hidden">
-        <div className="proof-chart-scan" aria-hidden="true" />
-        <svg
-          viewBox={`0 0 ${W} ${H}`}
-          className="ambient-graph-svg relative z-[1] w-full"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <defs>
-            <linearGradient id="ambientBeforeFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="rgba(232,85,72,0.16)" />
-              <stop offset="100%" stopColor="rgba(232,85,72,0)" />
-            </linearGradient>
-            <linearGradient id="ambientAfterFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="rgba(94,196,239,0.2)" />
-              <stop offset="100%" stopColor="rgba(94,196,239,0)" />
-            </linearGradient>
-          </defs>
-          <path d={FPS_BEFORE_AREA} fill="url(#ambientBeforeFill)" />
-          <path d={FPS_AFTER_AREA} fill="url(#ambientAfterFill)" />
-          <path
-            d={FPS_BEFORE_PATH}
-            fill="none"
-            stroke="#e85548"
-            strokeWidth="2.5"
-            strokeLinejoin="round"
-            strokeLinecap="round"
-            className="ambient-line-before proof-line-before"
-          />
-          <path
-            d={FPS_AFTER_PATH}
-            fill="none"
-            stroke="#5ec4ef"
-            strokeWidth="3"
-            strokeLinejoin="round"
-            strokeLinecap="round"
-            className="ambient-line-after proof-line-after"
-          />
-        </svg>
-      </div>
+      <ProofChartStage>
+        {(svgRef) => (
+          <svg
+            ref={svgRef}
+            viewBox={`0 0 ${W} ${H}`}
+            className="ambient-graph-svg w-full"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <defs>
+              <linearGradient id="ambientBeforeFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="rgba(232,85,72,0.16)" />
+                <stop offset="100%" stopColor="rgba(232,85,72,0)" />
+              </linearGradient>
+              <linearGradient id="ambientAfterFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="rgba(94,196,239,0.2)" />
+                <stop offset="100%" stopColor="rgba(94,196,239,0)" />
+              </linearGradient>
+            </defs>
+            <path d={FPS_BEFORE_AREA} fill="url(#ambientBeforeFill)" className="proof-area-fill" />
+            <path d={FPS_AFTER_AREA} fill="url(#ambientAfterFill)" className="proof-area-fill" />
+            <path
+              d={FPS_BEFORE_PATH}
+              fill="none"
+              stroke="#e85548"
+              strokeWidth="2.5"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              className="ambient-line-before proof-line-before proof-line-draw"
+            />
+            <path
+              d={FPS_AFTER_PATH}
+              fill="none"
+              stroke="#5ec4ef"
+              strokeWidth="3"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              className="ambient-line-after proof-line-after proof-line-draw"
+            />
+          </svg>
+        )}
+      </ProofChartStage>
       <div className="ambient-graph-fade pointer-events-none absolute inset-x-0 bottom-0 h-24" aria-hidden="true" />
     </div>
   );
@@ -110,34 +170,36 @@ export function LatencyMiniChart() {
           After 2 ms
         </span>
       </div>
-      <div className="proof-chart-stage relative overflow-hidden rounded-lg">
-        <div className="proof-chart-scan proof-chart-scan-mini" aria-hidden="true" />
-        <svg
-          viewBox={`0 0 ${LAT_W} ${LAT_H}`}
-          className="ambient-graph-svg relative z-[1] w-full"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <path
-            d={LATENCY_BEFORE_PATH}
-            fill="none"
-            stroke="#e85548"
-            strokeWidth="2"
-            strokeLinejoin="round"
-            strokeLinecap="round"
-            className="ambient-line-before proof-line-before"
-          />
-          <path
-            d={LATENCY_AFTER_PATH}
-            fill="none"
-            stroke="#5ec4ef"
-            strokeWidth="2.5"
-            strokeLinejoin="round"
-            strokeLinecap="round"
-            className="ambient-line-after proof-line-after"
-          />
-        </svg>
-      </div>
+      <ProofChartStage mini className="rounded-lg">
+        {(svgRef) => (
+          <svg
+            ref={svgRef}
+            viewBox={`0 0 ${LAT_W} ${LAT_H}`}
+            className="ambient-graph-svg w-full"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path
+              d={LATENCY_BEFORE_PATH}
+              fill="none"
+              stroke="#e85548"
+              strokeWidth="2"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              className="ambient-line-before proof-line-before proof-line-draw"
+            />
+            <path
+              d={LATENCY_AFTER_PATH}
+              fill="none"
+              stroke="#5ec4ef"
+              strokeWidth="2.5"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              className="ambient-line-after proof-line-after proof-line-draw"
+            />
+          </svg>
+        )}
+      </ProofChartStage>
     </div>
   );
 }
