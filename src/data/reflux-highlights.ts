@@ -1,27 +1,66 @@
 import { PRODUCT_LIMITS } from "./tweaks";
 
+import type { AppIconName } from "./app-icons";
+
 export const refluxAdvantages = [
   {
-    title: "Built for your exact hardware",
-    body: "REFLUX detects your CPU and GPU brands on launch, shows real Intel / AMD / NVIDIA logos, and surfaces the tweak pages that actually match your rig.",
+    objection: "Will this work on my PC?",
+    title: "Detects your exact hardware",
+    body: "Intel + NVIDIA? AMD + AMD? REFLUX reads your CPU & GPU on launch and only shows tweaks that match your rig — with real vendor logos, not generic sliders.",
     icon: "search" as const,
   },
   {
-    title: "Try before you upgrade",
-    body: `${PRODUCT_LIMITS.freeTweaks} free tweaks in the full desktop app — not a stripped web demo. Real optimizations, restore points, and the live dashboard from day one.`,
+    objection: "Is the free version fake?",
+    title: "Real app, real tweaks — free",
+    body: `${PRODUCT_LIMITS.freeTweaks} optimizations in the full desktop app. Not a web demo. Restore points, live dashboard, and honest toggles from day one — no card required.`,
     icon: "download" as const,
   },
   {
-    title: "No background bloat",
-    body: "REFLUX runs when you open it. No always-on services, no extra launchers, no surprise startup entries.",
+    objection: "Will it slow my PC down?",
+    title: "Zero background bloat",
+    body: "REFLUX only runs when you open it. No always-on services, no extra launchers, no surprise startup entries eating your RAM.",
     icon: "shield" as const,
   },
   {
-    title: "Own it forever",
-    body: "Lifetime Pro at $89.99 — one payment, every future update included. Or start free and upgrade when you're ready.",
+    objection: "Another subscription trap?",
+    title: "Own Pro forever if you want",
+    body: "Lifetime at $89.99 — one payment, every future update. Or stay free until you're ready. Your call, not ours.",
     icon: "sparkle" as const,
   },
 ];
+
+export const trustObjections = [
+  {
+    objection: "Will this brick Windows?",
+    proof: "Restore point before every batch",
+    icon: "save" as const,
+  },
+  {
+    objection: "Is this malware?",
+    proof: "Clean code, no hidden miners",
+    icon: "shield" as const,
+  },
+  {
+    objection: "Does free actually work?",
+    proof: `${PRODUCT_LIMITS.freeTweaks} real tweaks, no card`,
+    icon: "bolt" as const,
+  },
+  {
+    objection: "Will it find my games?",
+    proof: "Steam & Epic auto-scanner",
+    icon: "games" as const,
+  },
+  {
+    objection: "Wrong CPU/GPU tweaks?",
+    proof: "Live Intel / AMD / NVIDIA detect",
+    icon: "cpu" as const,
+  },
+  {
+    objection: "Always running in background?",
+    proof: "Opens when you open it — that's it",
+    icon: "processkiller" as const,
+  },
+] as const;
 
 export const refluxFeatures = [
   {
@@ -60,41 +99,53 @@ export const refluxFeatures = [
   },
 ];
 
-export const appGalleryItems = [
+export const appGalleryItems: {
+  id: string;
+  label: string;
+  icon: AppIconName;
+  title: string;
+  caption: string;
+}[] = [
   {
     id: "detect",
     label: "Live Detection",
+    icon: "search",
     title: "Knows your rig instantly",
     caption: "Intel + NVIDIA? AMD + AMD? REFLUX detects your combo and unlocks the right CPU & GPU profiles automatically.",
   },
   {
     id: "dashboard",
     label: "Dashboard",
+    icon: "home",
     title: "Real-time performance monitor",
     caption: "Live CPU, GPU & RAM charts with one-click quick actions — clean RAM, optimize network, boost graphics.",
   },
   {
     id: "tweaks",
     label: "Tweaks",
+    icon: "optimizer",
     title: "100+ optimizations, one toggle away",
     caption: "Network, CPU, GPU, RAM, system, cleanup & debloat — each tweak explains what it does before you apply.",
   },
   {
     id: "games",
     label: "Game Scanner",
+    icon: "games",
     title: "Auto-find & optimize games",
     caption: "Scans Steam, Epic, and installed titles. Hit Optimize on CS2, Apex, Fortnite, and more.",
   },
   {
     id: "network",
     label: "Network",
+    icon: "internet",
     title: "Latency you can feel",
     caption: "DNS flush, TCP tuning, Winsock repair — measured before/after ping improvements in-app.",
   },
   {
     id: "optimizer",
     label: "Smart Optimizer",
+    icon: "bolt",
     title: "One-click pro suites",
     caption: "Quick command library plus custom PowerShell runner — tuned recommendations for your detected hardware.",
   },
-] as const;
+];

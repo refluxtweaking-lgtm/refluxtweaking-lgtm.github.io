@@ -1,32 +1,44 @@
 import { FlowIn } from "@/components/ui/FlowIn";
 import { GlowCard } from "@/components/ui/GlowCard";
+import { AppIcon } from "@/components/ui/AppIcon";
 import { Icon } from "@/components/ui/Icon";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
 import { refluxAdvantages, refluxFeatures } from "@/data/reflux-highlights";
 import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
 import { PRODUCT_LIMITS } from "@/data/tweaks";
+import type { AppIconName } from "@/data/app-icons";
+
+const advantageIcons: Record<string, AppIconName> = {
+  search: "cpu",
+  download: "home",
+  shield: "shield",
+  sparkle: "optimizer",
+};
 
 export function WhyReflux() {
   return (
     <section id="why-reflux" className="section-flow">
       <div className="section-flow-divider" aria-hidden="true" />
       <SectionHeader
-        eyebrow="Why REFLUX"
+        eyebrow="Still deciding?"
         title={
           <>
-            Built different. <span className="gradient-text">Built for gamers.</span>
+            Four doubts. <span className="gradient-text">Four shutdowns.</span>
           </>
         }
-        subtitle="Live hardware detection, a real free tier, and a desktop app that stays out of your way."
+        subtitle="We designed REFLUX around the questions people actually ask before installing a PC tweaker."
       />
 
       <div className="mx-auto mb-12 grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {refluxAdvantages.map((item, i) => (
           <FlowIn key={item.title} delay={i * 60}>
-            <GlowCard className="h-full p-5">
-              <span className="icon-chip mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-reflux-accent/25 bg-reflux-accent/10">
-                <Icon name={item.icon} size={20} glow />
+            <GlowCard className="h-full border-reflux-accent/15 p-5 transition-all hover:border-reflux-accent/35 hover:shadow-[0_0_40px_-12px_rgba(255,107,91,0.45)]">
+              <span className="mb-2 inline-block rounded-full border border-reflux-accent/30 bg-reflux-accent/10 px-2.5 py-0.5 text-[10px] font-bold tracking-wide text-reflux-accent uppercase">
+                {item.objection}
+              </span>
+              <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-reflux-accent/25 bg-reflux-accent/10">
+                <AppIcon name={advantageIcons[item.icon] ?? "bolt"} size={20} />
               </span>
               <h3 className="mb-2 text-base font-bold text-white">{item.title}</h3>
               <p className="text-sm leading-relaxed text-reflux-muted">{item.body}</p>

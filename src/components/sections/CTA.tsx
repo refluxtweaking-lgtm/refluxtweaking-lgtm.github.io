@@ -11,14 +11,13 @@ export function CTA() {
       <GlowCard className="relative mx-auto max-w-3xl text-center" hover={false}>
         <span className="section-eyebrow mb-5 inline-flex">
           <Icon name="rocket" size={14} />
-          Ready when you are
+          One action left
         </span>
         <h2 className="section-title mb-3">
-          Your best games are <span className="gradient-text-static">one download away</span>
+          Still on the fence? <span className="gradient-text-static">Try it free.</span>
         </h2>
         <p className="mx-auto mb-8 max-w-md text-base leading-relaxed text-reflux-muted">
-          Free gets you {PRODUCT_LIMITS.freeTweaks} tweaks. Pro unlocks {PRODUCT_LIMITS.totalTweaksLabel} when you
-          want the full setup.
+          {PRODUCT_LIMITS.freeTweaks} real tweaks, full desktop app, no card. If it doesn&apos;t feel faster, delete it — restore points mean you&apos;re never stuck.
         </p>
 
         <div className="mb-8 flex flex-wrap justify-center gap-2">

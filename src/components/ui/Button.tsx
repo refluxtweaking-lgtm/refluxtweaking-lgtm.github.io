@@ -18,11 +18,11 @@ interface ButtonProps {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-reflux-accent text-white border-reflux-accent/80 hover:bg-[#ff7a6c] hover:border-[#ff7a6c]",
+    "btn-shimmer btn-glow-primary bg-gradient-to-r from-[#ff6b5b] to-[#e85548] text-white border-[rgba(255,107,91,0.5)] hover:brightness-110",
   discord:
-    "bg-reflux-discord text-white border-reflux-discord hover:bg-[#6570f5] hover:border-[#6570f5]",
+    "bg-gradient-to-r from-[#5865f2] to-[#4752c4] text-white border-[#5865f2] shadow-[0_4px_20px_rgba(88,101,242,0.35)] hover:brightness-110",
   secondary:
-    "bg-transparent border border-white/12 text-reflux-text hover:border-white/20 hover:bg-white/[0.04]",
+    "bg-white/[0.04] border border-white/12 text-reflux-text hover:border-white/20 hover:bg-white/[0.07]",
   ghost:
     "bg-transparent border border-reflux-border text-reflux-muted hover:border-white/15 hover:text-white hover:bg-white/[0.03]",
 };

@@ -37,13 +37,13 @@ export function RealResults() {
     <section id="results" ref={sectionRef} className="section-flow section-glow-wrap">
       <div className="section-flow-divider" aria-hidden="true" />
       <SectionHeader
-        eyebrow="Real Results"
+        eyebrow="Does it actually work?"
         title={
           <>
             Measured gains. <span className="gradient-text">Not simulated.</span>
           </>
         }
-        subtitle="Watch a real 5-second capture for each game — lines move like an FPS graph while REFLUX runs."
+        subtitle="Watch real before/after lines move like an FPS graph — same hardware, same session, REFLUX on vs off."
       />
 
       <GlowCard className="mx-auto max-w-4xl overflow-hidden" hover={false}>

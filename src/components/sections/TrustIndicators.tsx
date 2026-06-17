@@ -1,32 +1,42 @@
 "use client";
 
-import { Icon, type IconName } from "@/components/ui/Icon";
 import { FlowIn } from "@/components/ui/FlowIn";
-import { PRODUCT_LIMITS } from "@/data/tweaks";
-
-const indicators: { icon: IconName; text: string; sub: string }[] = [
-  { icon: "bolt", text: `${PRODUCT_LIMITS.freeTweaks} free tweaks`, sub: "No card needed — start in minutes" },
-  { icon: "chat", text: "Discord community", sub: "Help when you need it" },
-  { icon: "disk", text: "Restore points", sub: "Before every change" },
-  { icon: "undo", text: "Fully reversible", sub: "Undo any tweak" },
-  { icon: "shield", text: "No malware", sub: "Clean & transparent" },
-  { icon: "sparkle", text: "Zero bloat", sub: "Runs only when you open it" },
-];
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { AppIcon } from "@/components/ui/AppIcon";
+import { trustObjections } from "@/data/reflux-highlights";
 
 export function TrustIndicators() {
   return (
-    <section className="section-flow">
+    <section className="section-flow section-band">
       <div className="section-flow-divider" aria-hidden="true" />
+      <SectionHeader
+        eyebrow="Your doubts, answered"
+        title={
+          <>
+            Every worry has a <span className="gradient-text">real answer.</span>
+          </>
+        }
+        subtitle="Skeptical? Good. Here's the proof behind each thing people ask before they download."
+      />
+
       <div className="mx-auto grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {indicators.map((item, index) => (
-          <FlowIn key={item.text} delay={index * 50}>
-            <div className="trust-card flex h-full items-center gap-4 rounded-2xl border border-white/[0.08] bg-[#12151c] p-5 transition-colors hover:border-white/[0.14] hover:bg-[#151922] sm:p-6">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.04]">
-                <Icon name={item.icon} size={20} className="text-reflux-accent" />
-              </span>
-              <div className="min-w-0 flex-1">
-                <div className="font-semibold text-white">{item.text}</div>
-                <div className="mt-0.5 text-sm leading-snug text-reflux-muted">{item.sub}</div>
+        {trustObjections.map((item, index) => (
+          <FlowIn key={item.objection} delay={index * 50}>
+            <div className="trust-bento-card group flex h-full flex-col rounded-2xl border border-white/12 bg-gradient-to-br from-[#141820] to-[#0e1118] p-5">
+              <div className="mb-3 flex items-start gap-3">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-reflux-accent/35 bg-reflux-accent/15 shadow-[0_0_20px_-4px_rgba(255,107,91,0.5)] transition-transform group-hover:scale-105">
+                  <AppIcon name={item.icon} size={20} />
+                </span>
+                <div className="min-w-0 pt-0.5">
+                  <div className="text-[10px] font-bold tracking-wider text-reflux-accent uppercase">
+                    You might think…
+                  </div>
+                  <div className="font-semibold text-white">&ldquo;{item.objection}&rdquo;</div>
+                </div>
+              </div>
+              <div className="mt-auto rounded-xl border border-reflux-green/25 bg-reflux-green/8 px-3 py-2.5">
+                <div className="text-[10px] font-bold tracking-wider text-reflux-green uppercase">Proof</div>
+                <div className="text-sm font-semibold text-[#dce8df]">{item.proof}</div>
               </div>
             </div>
           </FlowIn>

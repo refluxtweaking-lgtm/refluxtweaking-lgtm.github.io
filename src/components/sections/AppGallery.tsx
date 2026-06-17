@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AppScreenshotFrame } from "@/components/app/AppScreenshotFrames";
+import { AppIcon } from "@/components/ui/AppIcon";
 import { FlowIn } from "@/components/ui/FlowIn";
 import { Icon } from "@/components/ui/Icon";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -19,13 +20,13 @@ export function AppGallery() {
     <section id="app-gallery" className="section-flow">
       <div className="section-flow-divider" aria-hidden="true" />
       <SectionHeader
-        eyebrow="Inside the App"
+        eyebrow="Show me the app"
         title={
           <>
             See <span className="gradient-text">REFLUX</span> in action
           </>
         }
-        subtitle="Real desktop app screens — live detection, vendor-matched tweaks, game scanner, and one-click optimizers."
+        subtitle="Real desktop screens — live detection, vendor-matched tweaks, game scanner, and one-click optimizers. This is what you download."
       />
 
       <div className="mx-auto max-w-6xl">
@@ -36,12 +37,13 @@ export function AppGallery() {
                 key={item.id}
                 type="button"
                 onClick={() => setActive(item.id)}
-                className={`app-gallery-tab shrink-0 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-all ${
+                className={`app-gallery-tab inline-flex shrink-0 items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-all ${
                   active === item.id
                     ? "border-reflux-accent/50 bg-reflux-accent/12 text-white shadow-[0_0_24px_rgba(241,91,80,0.2)]"
                     : "border-white/10 bg-white/[0.03] text-reflux-muted hover:border-reflux-accent/25 hover:text-white"
                 }`}
               >
+                <AppIcon name={item.icon} size={16} glow={active === item.id} />
                 {item.label}
               </button>
             ))}
@@ -108,12 +110,13 @@ export function AppGallery() {
                     key={item.id}
                     type="button"
                     onClick={() => setActive(item.id)}
-                    className={`rounded-xl border px-2 py-2 text-center text-[10px] font-bold transition-all sm:text-[11px] ${
+                    className={`inline-flex flex-col items-center gap-1 rounded-xl border px-2 py-2 text-center text-[10px] font-bold transition-all sm:text-[11px] ${
                       active === item.id
                         ? "border-reflux-accent/40 bg-reflux-accent/10 text-reflux-accent"
                         : "border-white/8 bg-white/[0.02] text-reflux-muted hover:text-white"
                     }`}
                   >
+                    <AppIcon name={item.icon} size={14} glow={active === item.id} />
                     {item.label}
                   </button>
                 ))}

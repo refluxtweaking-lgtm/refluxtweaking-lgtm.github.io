@@ -1,11 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { GameImage } from "@/components/games/GameImage";
+import { AppIcon, AppIconChip } from "@/components/ui/AppIcon";
+import { LiveEqualizer, LiveMetricBar } from "@/components/ui/LiveMetricBar";
 import { useInViewport } from "@/hooks/useInViewport";
 import { PRODUCT_LIMITS } from "@/data/tweaks";
+import type { AppIconName } from "@/data/app-icons";
 
 const tabs = ["Tweaks", "Games", "Network", "Cleanup", "Benchmarks"] as const;
+type Tab = (typeof tabs)[number];
 
 const STEAM_HEADER = (appId: number) =>
   `https://cdn.cloudflare.steamstatic.com/steam/apps/${appId}/header.jpg`;
@@ -35,48 +40,66 @@ const PREVIEW_GAMES = [
 ] as const;
 
 const BENCH_STATS = [
-  { label: "GPU FPS", value: "144", color: "text-reflux-accent", stroke: "#F15B50", width: "78%" },
-  { label: "CPU", value: "94%", color: "text-reflux-green", stroke: "#5DDE86", width: "94%" },
-  { label: "RAM Free", value: "31 GB", color: "text-reflux-purple", stroke: "#B392F0", width: "68%" },
+  { label: "GPU FPS", value: "144", color: "linear-gradient(90deg, #ff6b5b, #ff9588)", glow: "rgba(255,107,91,0.55)", fill: 78 },
+  { label: "CPU", value: "94%", color: "linear-gradient(90deg, #5dde86, #3ecf70)", glow: "rgba(93,222,134,0.5)", fill: 94 },
+  { label: "RAM Free", value: "31 GB", color: "linear-gradient(90deg, #b392f0, #9b7de8)", glow: "rgba(179,146,240,0.5)", fill: 68 },
 ] as const;
 
 function PreviewBenchmarks() {
   return (
-    <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
-      {BENCH_STATS.map((stat) => (
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+      {BENCH_STATS.map((stat, i) => (
         <div
           key={stat.label}
-          className="flex flex-col rounded-xl border border-reflux-border/40 bg-[#0f1217]/90 p-2.5 sm:p-3"
+          className="flex flex-col rounded-xl border border-reflux-border/40 bg-[#0f1217]/90 p-3 sm:p-3.5"
         >
-          <div className="text-xl font-extrabold tabular-nums sm:text-2xl">
-            <span className={stat.color}>{stat.value}</span>
+          <div className="mb-2 text-xl font-extrabold tabular-nums sm:text-2xl">
+            <span className="gradient-text">{stat.value}</span>
           </div>
-          <div className="text-[9px] font-semibold uppercase tracking-wider text-reflux-muted">{stat.label}</div>
-          <div className="mt-2 h-1 overflow-hidden rounded-full bg-reflux-border/80">
-            <div
-              className="h-full rounded-full"
-              style={{ width: stat.width, backgroundColor: stat.stroke, opacity: 0.85 }}
-            />
-          </div>
+          <LiveMetricBar
+            label={stat.label}
+            value=""
+            fill={stat.fill}
+            color={stat.color}
+            glow={stat.glow}
+            delay={i * 0.4}
+          />
         </div>
       ))}
     </div>
   );
 }
 
-const navItems = [
-  { id: "Tweaks", label: "Home", short: "Tw" },
-  { id: "Games", label: "Games", short: "Gm" },
-  { id: "Network", label: "Net", short: "Nw" },
-  { id: "Cleanup", label: "Clean", short: "Cl" },
-  { id: "Benchmarks", label: "Bench", short: "Bn" },
-] as const;
+const sidebarNav: { icon: AppIconName; label: string; tab: Tab }[] = [
+  { icon: "optimizer", label: "Opt", tab: "Tweaks" },
+  { icon: "games", label: "Games", tab: "Games" },
+  { icon: "internet", label: "Net", tab: "Network" },
+  { icon: "cleanup", label: "Clean", tab: "Cleanup" },
+  { icon: "benchmark", label: "Bench", tab: "Benchmarks" },
+];
+
+const sidebarExtra: { icon: AppIconName; label: string }[] = [
+  { icon: "home", label: "Home" },
+  { icon: "cpu", label: "CPU" },
+  { icon: "gpu", label: "GPU" },
+  { icon: "ram", label: "RAM" },
+  { icon: "debloat", label: "Debloat" },
+  { icon: "system", label: "Sys" },
+];
+
+type SidebarItem = { icon: AppIconName; label: string; tab?: Tab };
+
+const heroSidebarItems: SidebarItem[] = [
+  sidebarExtra[0],
+  ...sidebarNav,
+  ...sidebarExtra.slice(1),
+];
 
 const sampleTweaks = [
-  { name: "Disable Nagle's Algorithm", on: true, tag: "Network" },
-  { name: "High Performance Power Plan", on: true, tag: "CPU" },
-  { name: "Disable Core Parking", on: true, tag: "CPU" },
-  { name: "QoS Packet Prioritization", on: false, tag: "Network" },
+  { name: "Disable Nagle's Algorithm", on: true, tag: "Network", icon: "internet" as AppIconName },
+  { name: "High Performance Power Plan", on: true, tag: "CPU", icon: "cpu" as AppIconName },
+  { name: "Disable Core Parking", on: true, tag: "CPU", icon: "cpu" as AppIconName },
+  { name: "QoS Packet Prioritization", on: false, tag: "Network", icon: "internet" as AppIconName },
 ];
 
 interface AppPreviewMockProps {
@@ -85,7 +108,7 @@ interface AppPreviewMockProps {
 }
 
 export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMockProps) {
-  const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Tweaks");
+  const [activeTab, setActiveTab] = useState<Tab>("Tweaks");
   const { ref, visible } = useInViewport<HTMLDivElement>("120px");
 
   useEffect(() => {
@@ -114,40 +137,44 @@ export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMoc
         </div>
       )}
 
-      <div className={`flex items-center justify-between border-b border-reflux-border/60 bg-gradient-to-r from-[#0c0e12] to-[#0a0b0e] ${hero ? "px-4 py-3" : "px-5 py-4"}`}>
+      <div
+        className={`flex items-center justify-between border-b border-reflux-border/60 bg-gradient-to-r from-[#0c0e12] to-[#0a0b0e] ${hero ? "px-4 py-3" : "px-5 py-4"}`}
+      >
         <div className="flex items-center gap-2.5 sm:gap-3">
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-reflux-accent to-[#c43d35] text-[10px] font-black text-white sm:h-8 sm:w-8 sm:text-xs">
-            R
-          </span>
+          <Image src="/favicon.ico" alt="" width={32} height={32} className="rounded-lg shadow-[0_0_12px_rgba(255,107,91,0.5)]" />
           <span className="text-base font-extrabold gradient-text sm:text-lg">REFLUX PRO</span>
           <span className="badge-pill badge-live text-[9px] sm:text-[10px]">
-            <span className="h-1.5 w-1.5 rounded-full bg-reflux-green" />
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-reflux-green" />
             Ready
           </span>
         </div>
         <span className="hidden text-[10px] text-reflux-muted sm:inline">Administrator</span>
       </div>
 
-      <div className="flex min-h-[300px] sm:min-h-[320px]">
+      <div className="flex min-h-[300px] sm:min-h-[340px]">
         {hero && (
-          <aside className="hidden w-[72px] shrink-0 border-r border-reflux-border/40 bg-[#080a0d] py-3 sm:flex sm:flex-col sm:gap-1">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => setActiveTab(item.id)}
-                className={`mx-2 flex flex-col items-center gap-1 rounded-xl px-2 py-2.5 text-[9px] font-bold transition-all ${
-                  activeTab === item.id
-                    ? "bg-reflux-accent/15 text-reflux-accent shadow-[inset_0_0_0_1px_rgba(241,91,80,0.35)]"
-                    : "text-reflux-muted hover:bg-white/5 hover:text-white"
-                }`}
-              >
-                <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/6 bg-black/30 text-[10px]">
-                  {item.short}
-                </span>
-                {item.label}
-              </button>
-            ))}
+          <aside className="hidden w-[76px] shrink-0 flex-col gap-0.5 overflow-y-auto border-r border-reflux-border/40 bg-[#080a0d] py-2 sm:flex">
+            {heroSidebarItems.map((item) => {
+              const tab = item.tab;
+              const isActive = tab ? activeTab === tab : item.icon === "home";
+              return (
+                <button
+                  key={`${item.icon}-${item.label}`}
+                  type="button"
+                  onClick={() => {
+                    if (tab) setActiveTab(tab);
+                  }}
+                  className={`mx-1.5 flex flex-col items-center gap-1 rounded-xl px-1 py-2 text-[8px] font-bold transition-all ${
+                    isActive
+                      ? "bg-reflux-accent/15 text-reflux-accent"
+                      : "text-reflux-muted hover:bg-white/5 hover:text-white"
+                  }`}
+                >
+                  <AppIconChip name={item.icon} size={16} chipSize={30} active={isActive} />
+                  {item.label}
+                </button>
+              );
+            })}
           </aside>
         )}
 
@@ -173,10 +200,13 @@ export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMoc
             {activeTab === "Tweaks" && (
               <div className="space-y-2">
                 <div className="mb-3 flex items-center justify-between gap-3">
-                  <div>
-                    <div className="text-sm font-bold text-white">Optimizer</div>
-                    <div className="text-[11px] text-reflux-muted">
-                      {PRODUCT_LIMITS.freeTweaks} free · {PRODUCT_LIMITS.totalTweaksLabel} pro
+                  <div className="flex items-center gap-2">
+                    <AppIcon name="optimizer" size={20} />
+                    <div>
+                      <div className="text-sm font-bold text-white">Optimizer</div>
+                      <div className="text-[11px] text-reflux-muted">
+                        {PRODUCT_LIMITS.freeTweaks} free · {PRODUCT_LIMITS.totalTweaksLabel} pro
+                      </div>
                     </div>
                   </div>
                   <button
@@ -191,9 +221,12 @@ export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMoc
                     key={tweak.name}
                     className="flex items-center justify-between gap-3 rounded-xl border border-reflux-border/50 bg-[#0f1217]/90 px-3 py-2.5 sm:px-4 sm:py-3"
                   >
-                    <div className="min-w-0">
-                      <div className="truncate text-xs font-semibold sm:text-sm">{tweak.name}</div>
-                      <div className="mt-0.5 text-[10px] text-reflux-muted">{tweak.tag}</div>
+                    <div className="flex min-w-0 items-center gap-2.5">
+                      <AppIcon name={tweak.icon} size={16} glow={false} className="shrink-0 opacity-80" />
+                      <div className="min-w-0">
+                        <div className="truncate text-xs font-semibold sm:text-sm">{tweak.name}</div>
+                        <div className="mt-0.5 text-[10px] text-reflux-muted">{tweak.tag}</div>
+                      </div>
                     </div>
                     <div
                       className={`relative h-5 w-9 shrink-0 rounded-full sm:h-6 sm:w-11 ${tweak.on ? "bg-reflux-accent shadow-[0_0_10px_rgba(241,91,80,0.45)]" : "bg-reflux-border"}`}
@@ -217,12 +250,13 @@ export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMoc
                     <div className="aspect-[460/215] overflow-hidden">
                       <GameImage {...game} sources={[...game.sources]} />
                     </div>
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-90 transition-opacity group-hover:opacity-100" />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-90" />
                     <div className="absolute inset-x-0 bottom-0 p-2">
                       <button
                         type="button"
-                        className="w-full rounded-lg border border-reflux-accent/50 bg-black/45 py-1.5 text-[9px] font-bold text-reflux-accent backdrop-blur-sm transition-colors group-hover:border-reflux-accent group-hover:bg-reflux-accent/15 sm:text-[10px]"
+                        className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-reflux-accent/50 bg-black/45 py-1.5 text-[9px] font-bold text-reflux-accent backdrop-blur-sm sm:text-[10px]"
                       >
+                        <AppIcon name="games" size={12} glow={false} />
                         Optimize
                       </button>
                     </div>
@@ -233,6 +267,10 @@ export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMoc
 
             {activeTab === "Network" && (
               <div className="py-2 sm:py-4">
+                <div className="mb-3 flex items-center gap-2">
+                  <AppIcon name="internet" size={18} />
+                  <span className="text-sm font-bold text-white">Network Tools</span>
+                </div>
                 <div className="mb-4 grid grid-cols-2 gap-2 sm:gap-3">
                   <div className="rounded-xl border border-reflux-border/50 bg-[#0f1217]/80 p-3 text-center">
                     <div className="text-[10px] font-bold tracking-wider text-reflux-muted uppercase">Before</div>
@@ -246,37 +284,37 @@ export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMoc
                   </div>
                 </div>
                 <div className="h-16 overflow-hidden rounded-xl border border-reflux-border/40 bg-[#0a0c10] px-3 py-2">
-                  <svg viewBox="0 0 200 48" className="h-full w-full" aria-hidden="true">
-                    <polyline
-                      fill="none"
-                      stroke="rgba(241,91,80,0.85)"
-                      strokeWidth="2"
-                      points="0,38 24,34 48,30 72,24 96,18 120,14 144,12 168,10 200,8"
-                    />
-                    <linearGradient id="pingFill" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="rgba(241,91,80,0.25)" />
-                      <stop offset="100%" stopColor="rgba(241,91,80,0)" />
-                    </linearGradient>
-                    <polygon
-                      fill="url(#pingFill)"
-                      points="0,48 0,38 24,34 48,30 72,24 96,18 120,14 144,12 168,10 200,8 200,48"
-                    />
-                  </svg>
+                  <LiveEqualizer bars={16} color="#ff6b5b" className="h-full" />
                 </div>
               </div>
             )}
 
             {activeTab === "Cleanup" && (
               <div className="py-4 text-center sm:py-6">
+                <AppIcon name="cleanup" size={28} className="mx-auto mb-2" />
                 <div className="text-4xl font-extrabold text-reflux-green sm:text-5xl">12.4 GB</div>
                 <div className="mt-2 text-xs text-reflux-muted sm:text-sm">Ready to recover</div>
-                <div className="mx-auto mt-4 h-2 max-w-xs overflow-hidden rounded-full bg-reflux-border">
-                  <div className="h-full w-[68%] rounded-full bg-gradient-to-r from-reflux-accent to-reflux-green" />
+                <div className="mx-auto mt-4 max-w-xs">
+                  <LiveMetricBar
+                    label="Disk recoverable"
+                    value="12.4 GB"
+                    fill={68}
+                    color="linear-gradient(90deg, #ff6b5b, #5dde86)"
+                    glow="rgba(93,222,134,0.45)"
+                  />
                 </div>
               </div>
             )}
 
-            {activeTab === "Benchmarks" && <PreviewBenchmarks />}
+            {activeTab === "Benchmarks" && (
+              <div>
+                <div className="mb-3 flex items-center gap-2">
+                  <AppIcon name="benchmark" size={18} />
+                  <span className="text-sm font-bold text-white">Live Benchmarks</span>
+                </div>
+                <PreviewBenchmarks />
+              </div>
+            )}
           </div>
         </div>
       </div>
