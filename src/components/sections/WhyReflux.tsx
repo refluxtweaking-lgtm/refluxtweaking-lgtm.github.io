@@ -9,7 +9,7 @@ import { PRODUCT_LIMITS } from "@/data/tweaks";
 
 export function WhyReflux() {
   return (
-    <section id="why-reflux" className="section-flow section-band section-band-alt">
+    <section id="why-reflux" className="section-flow">
       <div className="section-flow-divider" aria-hidden="true" />
       <SectionHeader
         eyebrow="Why REFLUX"

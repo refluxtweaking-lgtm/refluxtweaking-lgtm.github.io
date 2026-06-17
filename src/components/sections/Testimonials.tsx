@@ -99,7 +99,7 @@ function StarRating({ rating, size = 16 }: { rating: number; size?: number }) {
 
 export function Testimonials() {
   return (
-    <section className="section-flow section-band">
+    <section className="section-flow">
       <div className="section-flow-divider" aria-hidden="true" />
       <SectionHeader
         eyebrow="Social Proof"

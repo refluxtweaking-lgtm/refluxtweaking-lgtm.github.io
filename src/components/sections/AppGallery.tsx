@@ -16,7 +16,7 @@ export function AppGallery() {
   const current = appGalleryItems.find((item) => item.id === active) ?? appGalleryItems[0];
 
   return (
-    <section id="app-gallery" className="section-flow section-glow-wrap section-band section-band-alt">
+    <section id="app-gallery" className="section-flow">
       <div className="section-flow-divider" aria-hidden="true" />
       <SectionHeader
         eyebrow="Inside the App"
@@ -87,7 +87,7 @@ export function AppGallery() {
           <FlowIn delay={120}>
             <div className="app-gallery-stage relative">
               <div className="app-gallery-glow pointer-events-none absolute inset-0 scale-105 rounded-[28px] blur-3xl" aria-hidden="true" />
-              <div className="app-gallery-device relative overflow-hidden rounded-[24px] border border-white/12 bg-[#050810] shadow-[0_32px_100px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.05)_inset,0_0_80px_-30px_rgba(255,107,91,0.25)]">
+              <div className="app-gallery-device relative overflow-hidden rounded-2xl border border-white/[0.1] bg-[#0c0e12] shadow-[0_20px_56px_rgba(0,0,0,0.35)]">
                 <div className="flex items-center justify-between border-b border-white/8 bg-[#0b0e15] px-4 py-2.5">
                   <div className="flex items-center gap-2">
                     <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />

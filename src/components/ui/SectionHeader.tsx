@@ -18,7 +18,7 @@ export function SectionHeader({
   className = "",
 }: SectionHeaderProps) {
   return (
-    <FlowIn className={`section-header-glow mb-14 md:mb-16 ${centered ? "text-center" : ""} ${className}`}>
+    <FlowIn className={`mb-12 md:mb-14 ${centered ? "text-center" : ""} ${className}`}>
       {eyebrow && (
         <span className={`section-eyebrow mb-5 ${centered ? "mx-auto" : ""} inline-flex`}>
           {eyebrow}

@@ -16,9 +16,9 @@ export function PricingCards({ compact = false }: PricingCardsProps) {
           hover={!plan.popular}
           className={`pricing-card relative text-center ${
             plan.popular
-              ? "z-10 !border-reflux-accent shadow-[0_0_48px_rgba(241,91,80,0.35)] xl:-translate-y-4"
+              ? "z-10 !border-reflux-accent/40 xl:-translate-y-1"
               : plan.highlighted
-                ? "z-10 !border-reflux-discord/50 shadow-[0_0_32px_rgba(88,101,242,0.2)] xl:-translate-y-2"
+                ? "z-10 !border-reflux-discord/40 xl:-translate-y-0.5"
                 : ""
           }`}
         >

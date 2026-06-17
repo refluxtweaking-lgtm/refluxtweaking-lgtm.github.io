@@ -1,26 +1,19 @@
 const items = [
-  { name: "Fortnite", color: "#5ec4ef" },
-  { name: "Valorant", color: "#ff6b5b" },
-  { name: "Apex", color: "#ff4655" },
-  { name: "CS2", color: "#f1c40f" },
-  { name: "Warzone", color: "#4ee88a" },
-  { name: "Rocket League", color: "#5865f2" },
-  { name: "Cyberpunk", color: "#fcee09" },
-  { name: "Minecraft", color: "#4ee88a" },
-  { name: "Overwatch 2", color: "#ff9f43" },
-  { name: "Rainbow Six", color: "#b794f6" },
+  "Fortnite",
+  "Valorant",
+  "Apex",
+  "CS2",
+  "Warzone",
+  "Rocket League",
+  "Cyberpunk",
+  "Minecraft",
+  "Overwatch 2",
+  "Rainbow Six",
 ];
 
-function MarqueePill({ name, color }: { name: string; color: string }) {
+function MarqueePill({ name }: { name: string }) {
   return (
-    <span
-      className="marquee-pill inline-flex shrink-0 items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.07] px-5 py-3 text-sm font-bold text-white backdrop-blur-md"
-      style={{ boxShadow: `0 0 20px -6px ${color}55` }}
-    >
-      <span
-        className="h-2.5 w-2.5 rounded-full shadow-[0_0_12px_currentColor]"
-        style={{ backgroundColor: color, color }}
-      />
+    <span className="marquee-pill inline-flex shrink-0 items-center rounded-full border border-white/[0.08] bg-[#12151c] px-4 py-2 text-sm font-medium text-white/90">
       {name}
     </span>
   );
@@ -30,14 +23,14 @@ export function MarqueeStrip() {
   const track = [...items, ...items];
 
   return (
-    <div className="marquee-strip hero-marquee px-0">
-      <p className="mb-6 text-center text-xs font-bold tracking-[0.3em] text-reflux-muted uppercase">
-        Works with the games you <span className="gradient-text-static">actually play</span>
+    <div className="marquee-strip border-y border-white/[0.06] bg-[#0c0e12]/80 py-5">
+      <p className="mb-4 text-center text-xs font-medium tracking-widest text-reflux-muted uppercase">
+        Works with the games you actually play
       </p>
       <div className="marquee-viewport">
-        <div className="marquee-track flex w-max gap-4 px-6">
-          {track.map((item, i) => (
-            <MarqueePill key={`${item.name}-${i}`} name={item.name} color={item.color} />
+        <div className="marquee-track flex w-max gap-3 px-4">
+          {track.map((name, i) => (
+            <MarqueePill key={`${name}-${i}`} name={name} />
           ))}
         </div>
       </div>

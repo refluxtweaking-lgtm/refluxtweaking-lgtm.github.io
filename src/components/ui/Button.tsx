@@ -9,7 +9,6 @@ interface ButtonProps {
   variant?: ButtonVariant;
   children: React.ReactNode;
   external?: boolean;
-  /** Triggers a browser file download (same-origin paths only). */
   download?: string | boolean;
   large?: boolean;
   showIcon?: boolean;
@@ -19,13 +18,13 @@ interface ButtonProps {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "btn-shimmer btn-glow-primary bg-gradient-to-r from-[#ff6b5b] via-[#ff7a6a] to-[#e85548] text-white border-[rgba(255,107,91,0.5)] hover:brightness-110 hover:border-[rgba(255,255,255,0.2)]",
+    "bg-reflux-accent text-white border-reflux-accent/80 hover:bg-[#ff7a6c] hover:border-[#ff7a6c]",
   discord:
-    "bg-gradient-to-r from-[#5865f2] to-[#4752c4] text-white border-[#5865f2] shadow-[0_4px_24px_rgba(88,101,242,0.35)] hover:brightness-110 hover:shadow-[0_8px_32px_rgba(88,101,242,0.45)]",
+    "bg-reflux-discord text-white border-reflux-discord hover:bg-[#6570f5] hover:border-[#6570f5]",
   secondary:
-    "bg-white/[0.04] border border-white/12 text-reflux-text backdrop-blur-sm hover:border-white/22 hover:bg-white/[0.08] hover:text-white hover:shadow-[0_8px_32px_rgba(0,0,0,0.25)]",
+    "bg-transparent border border-white/12 text-reflux-text hover:border-white/20 hover:bg-white/[0.04]",
   ghost:
-    "bg-transparent border border-reflux-border/60 text-reflux-muted hover:border-white/18 hover:text-white hover:bg-white/[0.04]",
+    "bg-transparent border border-reflux-border text-reflux-muted hover:border-white/15 hover:text-white hover:bg-white/[0.03]",
 };
 
 export function Button({
@@ -40,18 +39,18 @@ export function Button({
   onClick,
 }: ButtonProps) {
   const baseStyles =
-    "inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-300 border cursor-pointer hover:-translate-y-0.5 active:translate-y-0";
-  const sizeStyles = large ? "text-base px-8 py-4 min-h-[52px]" : "text-sm px-5 py-2.5";
+    "inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-colors duration-200 border cursor-pointer";
+  const sizeStyles = large ? "text-[15px] px-7 py-3.5 min-h-[48px]" : "text-sm px-5 py-2.5";
 
   const content = (
     <>
-      {variant === "discord" && <DiscordIcon size={large ? 24 : 20} />}
+      {variant === "discord" && <DiscordIcon size={large ? 22 : 18} />}
       {showIcon && variant === "primary" && (
         <Image
           src="/favicon.ico"
           alt=""
-          width={large ? 24 : 20}
-          height={large ? 24 : 20}
+          width={large ? 22 : 18}
+          height={large ? 22 : 18}
           className="shrink-0 rounded-md"
         />
       )}
@@ -83,13 +82,7 @@ export function Button({
 
   if (external) {
     return (
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={classes}
-        onClick={onClick}
-      >
+      <a href={href} target="_blank" rel="noopener noreferrer" className={classes} onClick={onClick}>
         {content}
       </a>
     );
