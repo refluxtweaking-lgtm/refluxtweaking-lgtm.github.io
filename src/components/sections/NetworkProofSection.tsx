@@ -18,7 +18,7 @@ export function NetworkProofSection() {
         </FlowIn>
 
         <FlowIn delay={80} className="mb-12 md:mb-14">
-          <AmbientFpsGraph active className="min-h-[160px] md:min-h-[240px] lg:min-h-[280px]" />
+          <AmbientFpsGraph className="min-h-[160px] md:min-h-[240px] lg:min-h-[280px]" />
         </FlowIn>
 
         <FlowIn delay={120} className="border-t border-white/8 pt-12 md:pt-14">
@@ -26,7 +26,7 @@ export function NetworkProofSection() {
             Reduce input lag & latency
           </h3>
           <div className="mx-auto max-w-3xl">
-            <LatencyMiniChart active />
+            <LatencyMiniChart />
           </div>
         </FlowIn>
       </div>

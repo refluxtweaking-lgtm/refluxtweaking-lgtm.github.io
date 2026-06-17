@@ -1214,6 +1214,11 @@ h3,
     width: var(--result-gain, 80%);
   }
 }
+html.reduce-effects .proof-chart-scan,
+html.reduce-effects .proof-line-after {
+  animation: none !important;
+}
+
 html.reduce-effects .marquee-track,
 html.reduce-effects .hero-glow,
 html.reduce-effects .ambient-orb,
@@ -1296,7 +1301,7 @@ html.reduce-effects .particles-canvas {
 }
 
 .ambient-chart-area {
-  /* path updates on tick, not every frame */
+  /* static paths */
 }
 
 .ambient-line-before,
@@ -1304,8 +1309,55 @@ html.reduce-effects .particles-canvas {
   vector-effect: non-scaling-stroke;
 }
 
-.ambient-chart-scroll {
-  will-change: transform;
+/* Static proof charts — CSS-only motion, no JS path updates */
+.proof-chart-stage {
+  border-radius: inherit;
+}
+
+.proof-chart-scan {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 42%,
+    rgba(255, 255, 255, 0.04) 48%,
+    rgba(94, 196, 239, 0.14) 50%,
+    rgba(255, 255, 255, 0.04) 52%,
+    transparent 58%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: proofChartScan 6s linear infinite;
+}
+
+.proof-chart-scan-mini {
+  animation-duration: 5s;
+}
+
+.proof-line-after {
+  animation: proofLineGlow 3.5s ease-in-out infinite;
+}
+
+@keyframes proofChartScan {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@keyframes proofLineGlow {
+  0%,
+  100% {
+    opacity: 0.88;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .ambient-line-before {

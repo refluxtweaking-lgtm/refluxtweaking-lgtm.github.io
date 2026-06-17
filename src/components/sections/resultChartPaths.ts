@@ -55,30 +55,41 @@ export function buildPathFromSeries(yValues: number[], width = CHART_WIDTH) {
   return buildSmoothPathFromSeries(yValues, width);
 }
 
+/** Catmull-Rom style cubic bezier through explicit x/y points */
+export function buildSmoothPathFromPoints(points: { x: number; y: number }[]) {
+  const n = points.length;
+  if (n < 2) return `M 0 ${(points[0]?.y ?? 0).toFixed(2)}`;
+
+  const tension = 6;
+  let d = `M ${points[0].x.toFixed(2)} ${points[0].y.toFixed(2)}`;
+
+  for (let i = 0; i < n - 1; i++) {
+    const p0 = points[Math.max(0, i - 1)];
+    const p1 = points[i];
+    const p2 = points[i + 1];
+    const p3 = points[Math.min(n - 1, i + 2)];
+
+    const cp1x = p1.x + (p2.x - p0.x) / tension;
+    const cp1y = p1.y + (p2.y - p0.y) / tension;
+    const cp2x = p2.x - (p3.x - p1.x) / tension;
+    const cp2y = p2.y - (p3.y - p1.y) / tension;
+
+    d += ` C ${cp1x.toFixed(2)} ${cp1y.toFixed(2)}, ${cp2x.toFixed(2)} ${cp2y.toFixed(2)}, ${p2.x.toFixed(2)} ${p2.y.toFixed(2)}`;
+  }
+
+  return d;
+}
+
 /** Catmull-Rom style cubic bezier — no sharp corners between points */
 export function buildSmoothPathFromSeries(yValues: number[], width = CHART_WIDTH) {
   const n = yValues.length;
   if (n < 2) return `M 0 ${(yValues[0] ?? 0).toFixed(2)}`;
 
-  const xs = yValues.map((_, i) => (i / (n - 1)) * width);
-  const tension = 6;
-  let d = `M ${xs[0].toFixed(2)} ${yValues[0].toFixed(2)}`;
-
-  for (let i = 0; i < n - 1; i++) {
-    const i0 = Math.max(0, i - 1);
-    const i1 = i;
-    const i2 = i + 1;
-    const i3 = Math.min(n - 1, i + 2);
-
-    const cp1x = xs[i1] + (xs[i2] - xs[i0]) / tension;
-    const cp1y = yValues[i1] + (yValues[i2] - yValues[i0]) / tension;
-    const cp2x = xs[i2] - (xs[i3] - xs[i1]) / tension;
-    const cp2y = yValues[i2] - (yValues[i3] - yValues[i1]) / tension;
-
-    d += ` C ${cp1x.toFixed(2)} ${cp1y.toFixed(2)}, ${cp2x.toFixed(2)} ${cp2y.toFixed(2)}, ${xs[i2].toFixed(2)} ${yValues[i2].toFixed(2)}`;
-  }
-
-  return d;
+  const points = yValues.map((y, i) => ({
+    x: (i / (n - 1)) * width,
+    y,
+  }));
+  return buildSmoothPathFromPoints(points);
 }
 
 export function seedRandom(seed: number) {
