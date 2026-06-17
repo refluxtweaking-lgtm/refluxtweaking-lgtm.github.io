@@ -628,9 +628,9 @@ h3,
 
 .hero-spotlight {
   background:
-    radial-gradient(ellipse 100% 65% at 50% -8%, rgba(255, 107, 91, 0.28), transparent 55%),
-    radial-gradient(ellipse 60% 50% at 88% 20%, rgba(94, 196, 239, 0.16), transparent 55%),
-    radial-gradient(ellipse 50% 40% at 8% 55%, rgba(88, 101, 242, 0.1), transparent 50%);
+    radial-gradient(ellipse 110% 75% at 50% -10%, rgba(255, 107, 91, 0.38), transparent 52%),
+    radial-gradient(ellipse 70% 55% at 92% 15%, rgba(94, 196, 239, 0.22), transparent 52%),
+    radial-gradient(ellipse 55% 45% at 5% 50%, rgba(88, 101, 242, 0.14), transparent 48%);
 }
 
 .hero-grid-fade {
@@ -651,19 +651,19 @@ h3,
 .hero-gradient-shimmer {
   background: linear-gradient(
     120deg,
-    #ffb4a8 0%,
-    #ff6b5b 25%,
-    #ff8a7a 45%,
-    #6eb8e0 65%,
-    #ff6b5b 85%,
-    #ffb4a8 100%
+    #ffd4cc 0%,
+    #ff6b5b 20%,
+    #ff9588 40%,
+    #5ec4ef 60%,
+    #ff6b5b 80%,
+    #ffd4cc 100%
   );
   background-size: 220% auto;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: heroTextShimmer 5s ease-in-out infinite;
-  filter: drop-shadow(0 0 28px rgba(255, 107, 91, 0.35));
+  animation: heroTextShimmer 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 32px rgba(255, 107, 91, 0.5));
 }
 
 .hero-game-ticker {
@@ -704,9 +704,9 @@ h3,
 }
 
 .hero-proof-card:hover {
-  border-color: rgba(255, 107, 91, 0.28);
-  transform: translateY(-2px);
-  box-shadow: 0 14px 36px -18px rgba(255, 107, 91, 0.35);
+  border-color: rgba(255, 107, 91, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px -16px rgba(255, 107, 91, 0.45);
 }
 
 .hero-ring {
@@ -720,6 +720,7 @@ h3,
 
 .hero-showcase-wrap {
   perspective: 1200px;
+  overflow: visible;
 }
 
 .hero-device-stage {
@@ -738,30 +739,30 @@ h3,
 }
 
 .hero-float-badge-a {
-  top: 8%;
-  left: -4%;
+  top: 0;
+  left: 0;
   animation: heroFloatA 5s ease-in-out infinite;
 }
 
 .hero-float-badge-b {
-  top: 42%;
-  right: -6%;
+  top: 36%;
+  right: 0;
   animation: heroFloatB 6s ease-in-out infinite;
 }
 
 .hero-float-badge-c {
-  bottom: 14%;
-  left: 6%;
+  bottom: 28%;
+  left: 2%;
   animation: heroFloatC 4.5s ease-in-out infinite;
 }
 
 .hero-marquee {
-  border-top: 1px solid rgba(255, 107, 91, 0.2);
-  border-bottom: 1px solid rgba(255, 107, 91, 0.12);
+  border-top: 1px solid rgba(255, 107, 91, 0.3);
+  border-bottom: 1px solid rgba(255, 107, 91, 0.18);
   background:
-    linear-gradient(180deg, rgba(255, 107, 91, 0.06), rgba(255, 255, 255, 0.02)),
-    linear-gradient(90deg, rgba(94, 196, 239, 0.03), transparent 50%, rgba(255, 107, 91, 0.03));
-  padding: 24px 0 26px;
+    linear-gradient(180deg, rgba(255, 107, 91, 0.1), rgba(255, 255, 255, 0.03)),
+    linear-gradient(90deg, rgba(94, 196, 239, 0.06), transparent 50%, rgba(255, 107, 91, 0.06));
+  padding: 28px 0 30px;
 }
 
 .marquee-strip {
@@ -861,6 +862,15 @@ h3,
 
 .trust-bento-featured::before {
   opacity: 0.6;
+}
+
+.trust-card-pop {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.trust-card-pop:hover {
+  transform: translateY(-4px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .section-glow-wrap {

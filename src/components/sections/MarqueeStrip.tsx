@@ -13,9 +13,12 @@ const items = [
 
 function MarqueePill({ name, color }: { name: string; color: string }) {
   return (
-    <span className="marquee-pill inline-flex shrink-0 items-center gap-2.5 rounded-full border border-white/12 bg-white/[0.05] px-5 py-2.5 text-sm font-semibold text-white backdrop-blur-md">
+    <span
+      className="marquee-pill inline-flex shrink-0 items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.07] px-5 py-3 text-sm font-bold text-white backdrop-blur-md"
+      style={{ boxShadow: `0 0 20px -6px ${color}55` }}
+    >
       <span
-        className="h-2.5 w-2.5 rounded-full shadow-[0_0_10px_currentColor]"
+        className="h-2.5 w-2.5 rounded-full shadow-[0_0_12px_currentColor]"
         style={{ backgroundColor: color, color }}
       />
       {name}
@@ -32,7 +35,7 @@ export function MarqueeStrip() {
         Works with the games you <span className="gradient-text-static">actually play</span>
       </p>
       <div className="marquee-viewport">
-        <div className="marquee-track flex w-max gap-3.5 px-4">
+        <div className="marquee-track flex w-max gap-4 px-6">
           {track.map((item, i) => (
             <MarqueePill key={`${item.name}-${i}`} name={item.name} color={item.color} />
           ))}

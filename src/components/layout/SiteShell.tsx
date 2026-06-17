@@ -17,7 +17,7 @@ export function SiteShell({ children, mainClassName = "" }: SiteShellProps) {
       <AmbientBackground />
       <NoiseTexture />
       <Header />
-      <main className={`relative z-1 mx-auto max-w-7xl px-5 pb-8 md:px-8 md:pb-12 ${mainClassName}`}>
+      <main className={`relative z-1 mx-auto w-full max-w-[1600px] px-5 pb-8 sm:px-8 md:px-10 lg:px-12 md:pb-12 ${mainClassName}`}>
         {children}
       </main>
       <Footer />
