@@ -6,8 +6,7 @@ import {
   initAfterSeries,
   initBeforeSeries,
   LIVE_CHART_CONFIG,
-  LIVE_POINTS,
-  LIVE_TICK_MS,
+  type LiveChartConfig,
   nextAfterPoint,
   nextBeforePoint,
   seedRandom,
@@ -15,6 +14,60 @@ import {
 
 const W = 900;
 const H = 220;
+const POINT_INTERVAL_MS = 140;
+const LERP = 0.18;
+
+function useSmoothLiveSeries(config: LiveChartConfig, seed: number, active: boolean) {
+  const [beforeSeries, setBeforeSeries] = useState(() => initBeforeSeries(config, seed));
+  const [afterSeries, setAfterSeries] = useState(() => initAfterSeries(config, seed + 17));
+  const targetBefore = useRef(beforeSeries);
+  const targetAfter = useRef(afterSeries);
+  const randRef = useRef(seedRandom(seed * 31 + 7));
+
+  useEffect(() => {
+    targetBefore.current = initBeforeSeries(config, seed);
+    targetAfter.current = initAfterSeries(config, seed + 17);
+    setBeforeSeries(targetBefore.current);
+    setAfterSeries(targetAfter.current);
+    randRef.current = seedRandom(seed * 31 + 7);
+  }, [config, seed]);
+
+  useEffect(() => {
+    if (!active) return;
+
+    let raf = 0;
+    let lastPoint = performance.now();
+
+    const frame = (now: number) => {
+      if (now - lastPoint >= POINT_INTERVAL_MS) {
+        lastPoint = now;
+        const rand = randRef.current;
+        targetBefore.current = [
+          ...targetBefore.current.slice(1),
+          nextBeforePoint(targetBefore.current[targetBefore.current.length - 1], config, rand),
+        ];
+        targetAfter.current = [
+          ...targetAfter.current.slice(1),
+          nextAfterPoint(targetAfter.current[targetAfter.current.length - 1], config, rand),
+        ];
+      }
+
+      setBeforeSeries((prev) =>
+        prev.map((v, i) => v + (targetBefore.current[i] - v) * LERP),
+      );
+      setAfterSeries((prev) =>
+        prev.map((v, i) => v + (targetAfter.current[i] - v) * LERP),
+      );
+
+      raf = requestAnimationFrame(frame);
+    };
+
+    raf = requestAnimationFrame(frame);
+    return () => cancelAnimationFrame(raf);
+  }, [active, config]);
+
+  return { beforeSeries, afterSeries };
+}
 
 interface AmbientFpsGraphProps {
   active?: boolean;
@@ -23,27 +76,7 @@ interface AmbientFpsGraphProps {
 
 export function AmbientFpsGraph({ active = true, className = "" }: AmbientFpsGraphProps) {
   const config = LIVE_CHART_CONFIG.fps;
-  const [liveKey] = useState(42);
-  const [beforeSeries, setBeforeSeries] = useState(() => initBeforeSeries(config, liveKey));
-  const [afterSeries, setAfterSeries] = useState(() => initAfterSeries(config, liveKey + 17));
-  const randRef = useRef(seedRandom(liveKey * 31 + 7));
-
-  useEffect(() => {
-    if (!active) return;
-    randRef.current = seedRandom(liveKey * 31 + 7);
-    const id = window.setInterval(() => {
-      const rand = randRef.current;
-      setBeforeSeries((prev) => {
-        const next = [...prev.slice(1), nextBeforePoint(prev[prev.length - 1], config, rand)];
-        return next;
-      });
-      setAfterSeries((prev) => {
-        const next = [...prev.slice(1), nextAfterPoint(prev[prev.length - 1], config, rand)];
-        return next;
-      });
-    }, LIVE_TICK_MS);
-    return () => clearInterval(id);
-  }, [active, config, liveKey]);
+  const { beforeSeries, afterSeries } = useSmoothLiveSeries(config, 42, active);
 
   const scaleY = (y: number) => (y / 128) * H;
   const beforePath = useMemo(
@@ -93,13 +126,15 @@ export function AmbientFpsGraph({ active = true, className = "" }: AmbientFpsGra
             </feMerge>
           </filter>
         </defs>
-        <path d={beforeArea} fill="url(#ambientBeforeFill)" />
-        <path d={afterArea} fill="url(#ambientAfterFill)" />
+        <path d={beforeArea} fill="url(#ambientBeforeFill)" className="ambient-chart-area" />
+        <path d={afterArea} fill="url(#ambientAfterFill)" className="ambient-chart-area" />
         <path
           d={beforePath}
           fill="none"
           stroke="#e85548"
           strokeWidth="2.5"
+          strokeLinejoin="round"
+          strokeLinecap="round"
           filter="url(#lineGlow)"
           className="ambient-line-before"
         />
@@ -108,53 +143,13 @@ export function AmbientFpsGraph({ active = true, className = "" }: AmbientFpsGra
           fill="none"
           stroke="#5ec4ef"
           strokeWidth="3"
+          strokeLinejoin="round"
+          strokeLinecap="round"
           filter="url(#lineGlow)"
           className="ambient-line-after"
         />
       </svg>
       <div className="ambient-graph-fade pointer-events-none absolute inset-x-0 bottom-0 h-24" aria-hidden="true" />
-    </div>
-  );
-}
-
-interface PingTrailProps {
-  variant: "before" | "after";
-  ms: number;
-}
-
-export function PingTrail({ variant, ms }: PingTrailProps) {
-  const isAfter = variant === "after";
-  const dotCount = isAfter ? 28 : 8;
-  const color = isAfter ? "#5ec4ef" : "#e85548";
-
-  return (
-    <div className="ping-trail-wrap">
-      <div className="mb-2 flex items-center justify-between text-xs font-semibold">
-        <span className={isAfter ? "text-reflux-calm" : "text-[#c47068]"}>
-          {isAfter ? "With REFLUX" : "Without REFLUX"}
-        </span>
-        <span
-          className={`tabular-nums text-lg font-extrabold ${isAfter ? "text-reflux-calm" : "text-[#8b95a8]"}`}
-        >
-          {ms} ms
-        </span>
-      </div>
-      <div className="ping-trail-track relative h-10 overflow-hidden rounded-lg border border-white/6 bg-[#080a0f]/80">
-        <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-white/8" />
-        <div className={`ping-trail-dots flex h-full items-center ${isAfter ? "ping-trail-dense" : "ping-trail-sparse"}`}>
-          {Array.from({ length: dotCount }, (_, i) => (
-            <span
-              key={i}
-              className="ping-trail-dot shrink-0 rounded-full"
-              style={{
-                background: color,
-                boxShadow: `0 0 8px ${color}`,
-                animationDelay: `${i * (isAfter ? 0.08 : 0.35)}s`,
-              }}
-            />
-          ))}
-        </div>
-      </div>
     </div>
   );
 }
@@ -165,28 +160,24 @@ interface LatencyMiniChartProps {
 
 export function LatencyMiniChart({ active = true }: LatencyMiniChartProps) {
   const config = LIVE_CHART_CONFIG.latency;
-  const [liveKey] = useState(88);
-  const [beforeSeries, setBeforeSeries] = useState(() => initBeforeSeries(config, liveKey));
-  const [afterSeries, setAfterSeries] = useState(() => initAfterSeries(config, liveKey + 11));
-  const randRef = useRef(seedRandom(liveKey));
-
-  useEffect(() => {
-    if (!active) return;
-    const id = window.setInterval(() => {
-      const rand = randRef.current;
-      setBeforeSeries((p) => [...p.slice(1), nextBeforePoint(p[p.length - 1], config, rand)]);
-      setAfterSeries((p) => [...p.slice(1), nextAfterPoint(p[p.length - 1], config, rand)]);
-    }, LIVE_TICK_MS);
-    return () => clearInterval(id);
-  }, [active, config]);
+  const { beforeSeries, afterSeries } = useSmoothLiveSeries(config, 88, active);
 
   const w = 400;
   const h = 100;
   const scaleY = (y: number) => (y / 128) * h;
 
+  const beforePath = useMemo(
+    () => buildPathFromSeries(beforeSeries.map(scaleY), w),
+    [beforeSeries, w],
+  );
+  const afterPath = useMemo(
+    () => buildPathFromSeries(afterSeries.map(scaleY), w),
+    [afterSeries, w],
+  );
+
   return (
-    <div className="latency-mini-chart rounded-xl border border-white/8 bg-[#080a0f]/90 p-3">
-      <div className="mb-2 flex gap-4 text-[10px] font-bold uppercase">
+    <div className="latency-mini-chart rounded-xl border border-white/8 bg-[#080a0f]/90 p-4">
+      <div className="mb-3 flex gap-4 text-[10px] font-bold uppercase tracking-wide">
         <span className="flex items-center gap-1.5 text-[#e85548]">
           <span className="h-2 w-2 rounded-sm bg-[#e85548]" />
           Before 11 ms
@@ -196,19 +187,23 @@ export function LatencyMiniChart({ active = true }: LatencyMiniChartProps) {
           After 2 ms
         </span>
       </div>
-      <svg viewBox={`0 0 ${w} ${h}`} className="w-full" preserveAspectRatio="none" aria-hidden="true">
+      <svg viewBox={`0 0 ${w} ${h}`} className="ambient-graph-svg w-full" preserveAspectRatio="none" aria-hidden="true">
         <path
-          d={buildPathFromSeries(beforeSeries.map(scaleY), w)}
+          d={beforePath}
           fill="none"
           stroke="#e85548"
           strokeWidth="2"
+          strokeLinejoin="round"
+          strokeLinecap="round"
           className="ambient-line-before"
         />
         <path
-          d={buildPathFromSeries(afterSeries.map(scaleY), w)}
+          d={afterPath}
           fill="none"
           stroke="#5ec4ef"
           strokeWidth="2.5"
+          strokeLinejoin="round"
+          strokeLinecap="round"
           className="ambient-line-after"
         />
       </svg>

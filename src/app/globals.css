@@ -1286,6 +1286,21 @@ html.reduce-effects .particles-canvas {
   background: linear-gradient(180deg, transparent 0%, var(--color-reflux-bg) 100%);
 }
 
+.ambient-graph-svg {
+  will-change: contents;
+  transform: translateZ(0);
+}
+
+.ambient-chart-area {
+  will-change: d;
+}
+
+.ambient-line-before,
+.ambient-line-after {
+  will-change: d;
+  vector-effect: non-scaling-stroke;
+}
+
 .ambient-line-before {
   filter: drop-shadow(0 0 6px rgba(232, 85, 72, 0.6));
 }
