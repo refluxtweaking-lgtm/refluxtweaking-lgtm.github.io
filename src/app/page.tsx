@@ -3,7 +3,6 @@ import { AppShowcaseStrip } from "@/components/sections/AppShowcaseStrip";
 import { ProSpotlight } from "@/components/sections/ProSpotlight";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { Hero } from "@/components/sections/Hero";
-import { AppModules } from "@/components/sections/AppModules";
 import { AppGallery } from "@/components/sections/AppGallery";
 import { TrustIndicators } from "@/components/sections/TrustIndicators";
 import { WhyReflux } from "@/components/sections/WhyReflux";
@@ -21,7 +20,6 @@ export default function Home() {
       <NetworkProofSection />
       <AppShowcaseStrip />
       <ProSpotlight />
-      <AppModules />
       <AppGallery />
       <TrustIndicators />
       <WhyReflux />

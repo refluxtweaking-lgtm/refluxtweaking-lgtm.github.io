@@ -10,7 +10,7 @@ const footerLinks = [
   { href: "/app-preview", label: "The App" },
   { href: "/#faq", label: "FAQ" },
   { href: "https://discord.gg/xGpHKY8AAC", label: "Discord", external: true },
-  { href: "mailto:refluxtweaking@gmail.com", label: "Contact", external: true },
+  { href: "mailto:refluxtweaking@gmail.com?subject=REFLUX%20Support", label: "Contact", external: true },
 ];
 
 export function Footer() {

@@ -2,7 +2,6 @@
 
 import { AppPreviewMock } from "@/components/app/AppPreviewMock";
 import { AppIcon } from "@/components/ui/AppIcon";
-import { FpsCompareBar } from "@/components/ui/LiveMetricBar";
 
 const floatBadges = [
   { id: "fps", label: "+52 FPS", sub: "Avg gain", icon: "bolt" as const, className: "hero-float-badge-a" },
@@ -34,25 +33,6 @@ export function HeroShowcase() {
           <div className="hero-device-inner overflow-hidden rounded-[23px] bg-[#070a10]">
             <AppPreviewMock hero autoPlay />
           </div>
-        </div>
-      </div>
-
-      <div className="mt-5 rounded-2xl border border-white/15 bg-gradient-to-br from-[#12151c]/95 to-[#0a0c12]/95 p-4 backdrop-blur-sm">
-        <div className="mb-3 text-center text-[10px] font-bold tracking-[0.2em] text-reflux-muted uppercase">
-          Fortnite · same session · RTX 4070
-        </div>
-        <FpsCompareBar before={187} after={239} max={280} />
-        <div className="mt-3 grid grid-cols-3 gap-2 border-t border-white/8 pt-3">
-          {[
-            { label: "Before", value: "187 FPS", tone: "text-reflux-muted" },
-            { label: "After", value: "239 FPS", tone: "text-reflux-green" },
-            { label: "Gain", value: "+52", tone: "gradient-text font-extrabold" },
-          ].map((row) => (
-            <div key={row.label} className="text-center">
-              <div className="text-[9px] font-bold tracking-wider text-reflux-muted uppercase">{row.label}</div>
-              <div className={`mt-0.5 text-sm font-extrabold tabular-nums sm:text-base ${row.tone}`}>{row.value}</div>
-            </div>
-          ))}
         </div>
       </div>
     </div>
