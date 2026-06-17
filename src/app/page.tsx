@@ -3,7 +3,7 @@ import { Hero } from "@/components/sections/Hero";
 import { TrustIndicators } from "@/components/sections/TrustIndicators";
 import { AppGallery } from "@/components/sections/AppGallery";
 import { Features } from "@/components/sections/Features";
-import { VsExmTweaks } from "@/components/sections/VsExmTweaks";
+import { WhyReflux } from "@/components/sections/WhyReflux";
 import { RealResults } from "@/components/sections/RealResults";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { Testimonials } from "@/components/sections/Testimonials";
@@ -18,7 +18,7 @@ export default function Home() {
       <TrustIndicators />
       <AppGallery />
       <Features />
-      <VsExmTweaks />
+      <WhyReflux />
       <RealResults />
       <HowItWorks />
       <Testimonials />

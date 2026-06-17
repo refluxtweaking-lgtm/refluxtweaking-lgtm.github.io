@@ -6,8 +6,8 @@ import { PRODUCT_LIMITS } from "@/data/tweaks";
 
 const faqs = [
   {
-    q: "How is REFLUX different from EXM Tweaks?",
-    a: "REFLUX detects your exact CPU and GPU (Intel, AMD, NVIDIA) and surfaces vendor-matched tweak pages automatically. You get 30 free tweaks with no card, built-in restore points, zero background processes, and a lifetime Pro option — while EXM Tweaks leans on subscriptions and generic lists.",
+    q: "What makes REFLUX different from other optimizers?",
+    a: "REFLUX detects your exact CPU and GPU (Intel, AMD, NVIDIA) and surfaces vendor-matched tweak pages automatically. You get 30 free tweaks with no card, built-in restore points, zero background processes, and a lifetime Pro option — all in one clean desktop app.",
   },
   {
     q: "Is REFLUX safe to use?",
@@ -59,11 +59,7 @@ export function FAQ() {
         {faqs.map((faq, i) => (
           <div
             key={faq.q}
-            className={`overflow-hidden rounded-2xl border transition-all duration-300 ease-out ${
-              open === i
-                ? "border-reflux-accent/40 bg-gradient-to-br from-reflux-accent/8 to-transparent shadow-[0_0_30px_rgba(241,91,80,0.12)]"
-                : "border-reflux-border/60 bg-[#0a0c10]/80 hover:border-reflux-accent/25 hover:-translate-y-0.5"
-            }`}
+            className={`faq-item ${open === i ? "faq-item-open" : "hover:border-reflux-accent/25 hover:-translate-y-0.5"}`}
           >
             <button
               type="button"

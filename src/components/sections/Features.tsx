@@ -3,7 +3,7 @@ import { FeatureSlideshow } from "@/components/features/FeatureSlideshow";
 
 export function Features() {
   return (
-    <section id="features" className="section-flow section-glow-wrap">
+    <section id="features" className="section-flow section-glow-wrap section-band">
       <div className="section-flow-divider" aria-hidden="true" />
       <SectionHeader
         eyebrow="What You Get"

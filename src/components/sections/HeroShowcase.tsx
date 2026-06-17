@@ -49,18 +49,21 @@ export function HeroShowcase() {
         </div>
       </div>
 
-      <div className="hero-metrics-bar mt-4 grid grid-cols-3 gap-2.5">
+      <div className="hero-metrics-bar mt-5 grid grid-cols-3 gap-3">
         {[
-          { label: "Before", value: "187 FPS", tone: "text-reflux-muted" },
-          { label: "After REFLUX", value: "239 FPS", tone: "text-reflux-green" },
-          { label: "Gain", value: "+28%", tone: "gradient-text font-extrabold" },
+          { label: "Before", value: "187", unit: "FPS", tone: "text-reflux-muted" },
+          { label: "After REFLUX", value: "239", unit: "FPS", tone: "text-reflux-green" },
+          { label: "Gain", value: "+28", unit: "%", tone: "gradient-text-static font-extrabold" },
         ].map((row) => (
           <div
             key={row.label}
-            className="rounded-xl border border-white/10 bg-white/[0.04] px-2 py-2.5 text-center sm:px-3 sm:py-3"
+            className="rounded-xl border border-white/12 bg-white/[0.05] px-2 py-3 text-center backdrop-blur-sm sm:px-3 sm:py-3.5"
           >
             <div className="text-[9px] font-bold tracking-wider text-reflux-muted uppercase">{row.label}</div>
-            <div className={`mt-1 text-sm font-bold tabular-nums sm:text-base ${row.tone}`}>{row.value}</div>
+            <div className={`stat-number mt-1 text-base font-extrabold tabular-nums sm:text-lg ${row.tone}`}>
+              {row.value}
+              <span className="ml-0.5 text-xs font-bold opacity-80">{row.unit}</span>
+            </div>
           </div>
         ))}
       </div>

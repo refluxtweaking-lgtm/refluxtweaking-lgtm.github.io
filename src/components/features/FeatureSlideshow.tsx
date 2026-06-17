@@ -28,7 +28,7 @@ export function FeatureSlideshow() {
   const goToNext = () => goTo((currentSlide + 1) % slides.length);
 
   return (
-    <div className="glass-card-static overflow-hidden rounded-3xl p-3 sm:p-5 md:p-8">
+    <div className="feature-slideshow-shell overflow-hidden rounded-3xl p-3 sm:p-5 md:p-8">
       <div className="mb-4 flex items-center justify-between gap-3 border-b border-white/6 pb-4 sm:mb-6">
         <div className="text-sm font-semibold text-reflux-muted">
           Feature <span className="text-white">{currentSlide + 1}</span>

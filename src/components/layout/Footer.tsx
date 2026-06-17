@@ -1,11 +1,13 @@
 import Link from "next/link";
+import Image from "next/image";
 import { PRODUCT_LIMITS } from "@/data/tweaks";
+import { Button } from "@/components/ui/Button";
+import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
 
 const footerLinks = [
   { href: "/pricing", label: "Pricing" },
   { href: "/compare", label: "Compare Tweaks" },
   { href: "/app-preview", label: "The App" },
-  { href: "/banner", label: "Banner" },
   { href: "/#faq", label: "FAQ" },
   { href: "https://discord.gg/xGpHKY8AAC", label: "Discord", external: true },
   { href: "mailto:refluxtweaking@gmail.com", label: "Contact", external: true },
@@ -13,20 +15,33 @@ const footerLinks = [
 
 export function Footer() {
   return (
-    <footer className="relative mt-20 border-t border-[rgba(241,91,80,0.15)]">
+    <footer className="footer-shell relative mt-24 border-t border-[rgba(255,107,91,0.18)]">
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-reflux-accent/50 to-transparent"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-reflux-accent/60 to-transparent"
         aria-hidden="true"
       />
-      <div className="mx-auto max-w-[1200px] px-5 py-14">
-        <div className="mb-10 flex flex-col items-center gap-6 md:flex-row md:justify-between">
-          <div className="text-center md:text-left">
-            <div className="mb-2 text-2xl font-extrabold gradient-text">REFLUX TWEAKS</div>
-            <p className="max-w-sm text-sm text-reflux-muted">
-              {PRODUCT_LIMITS.freeTweaks} free tweaks · {PRODUCT_LIMITS.totalTweaksLabel} with Pro. Lower ping, higher FPS, cleaner PC.
+      <div className="mx-auto max-w-[1200px] px-5 py-16 md:py-20">
+        <div className="mb-12 grid gap-10 md:grid-cols-[1.2fr_1fr] md:items-start">
+          <div>
+            <div className="mb-4 flex items-center gap-2">
+              <Image src="/favicon.ico" alt="" width={36} height={36} className="rounded-lg" />
+              <span className="text-2xl font-extrabold gradient-text-static">REFLUX TWEAKS</span>
+            </div>
+            <p className="max-w-md text-base leading-relaxed text-reflux-muted">
+              {PRODUCT_LIMITS.freeTweaks} free tweaks · {PRODUCT_LIMITS.totalTweaksLabel} with Pro. Lower ping, higher FPS, cleaner PC — one desktop app.
             </p>
+            <div className="mt-6">
+              <Button
+                href={REFLUX_FREE_DOWNLOAD.href}
+                download={REFLUX_FREE_DOWNLOAD.filename}
+                variant="primary"
+                showIcon
+              >
+                Download Free
+              </Button>
+            </div>
           </div>
-          <div className="flex flex-wrap justify-center gap-2">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
             {footerLinks.map((link) =>
               link.external ? (
                 <a
@@ -34,7 +49,7 @@ export function Footer() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-lg border border-reflux-border/60 bg-reflux-card/40 px-4 py-2 text-sm font-medium text-reflux-muted transition-all hover:border-reflux-accent/40 hover:text-reflux-accent"
+                  className="rounded-xl border border-white/8 bg-white/[0.03] px-4 py-3 text-sm font-medium text-reflux-muted transition-all hover:border-reflux-accent/35 hover:bg-reflux-accent/8 hover:text-white"
                 >
                   {link.label}
                 </a>
@@ -42,7 +57,7 @@ export function Footer() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="rounded-lg border border-reflux-border/60 bg-reflux-card/40 px-4 py-2 text-sm font-medium text-reflux-muted transition-all hover:border-reflux-accent/40 hover:text-reflux-accent"
+                  className="rounded-xl border border-white/8 bg-white/[0.03] px-4 py-3 text-sm font-medium text-reflux-muted transition-all hover:border-reflux-accent/35 hover:bg-reflux-accent/8 hover:text-white"
                 >
                   {link.label}
                 </Link>
@@ -50,7 +65,7 @@ export function Footer() {
             )}
           </div>
         </div>
-        <p className="text-center text-xs text-[#5F6A7A]">
+        <p className="border-t border-white/6 pt-8 text-center text-xs text-[#5a6478]">
           © 2026 REFLUX TWEAKS. All rights reserved. Safe · Reversible · No background processes.
         </p>
       </div>

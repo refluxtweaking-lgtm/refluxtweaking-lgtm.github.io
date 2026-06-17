@@ -3,40 +3,22 @@ import { GlowCard } from "@/components/ui/GlowCard";
 import { Icon } from "@/components/ui/Icon";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
-import {
-  EXM_COMPETITOR,
-  comparisonRows,
-  refluxAdvantages,
-} from "@/data/competitor-comparison";
+import { refluxAdvantages, refluxFeatures } from "@/data/reflux-highlights";
 import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
+import { PRODUCT_LIMITS } from "@/data/tweaks";
 
-function WinnerBadge({ winner }: { winner?: "reflux" | "exm" | "tie" }) {
-  if (winner === "reflux") {
-    return (
-      <span className="inline-flex items-center gap-1 rounded-full bg-reflux-green/10 px-2 py-0.5 text-[10px] font-bold text-reflux-green">
-        <Icon name="check" size={10} />
-        REFLUX
-      </span>
-    );
-  }
-  if (winner === "tie") {
-    return <span className="text-[10px] font-semibold text-reflux-muted">Both</span>;
-  }
-  return null;
-}
-
-export function VsExmTweaks() {
+export function WhyReflux() {
   return (
-    <section id="why-reflux" className="section-flow">
+    <section id="why-reflux" className="section-flow section-band section-band-alt">
       <div className="section-flow-divider" aria-hidden="true" />
       <SectionHeader
         eyebrow="Why REFLUX"
         title={
           <>
-            Better than <span className="gradient-text">{EXM_COMPETITOR.name}</span>?
+            Built different. <span className="gradient-text">Built for gamers.</span>
           </>
         }
-        subtitle="More tweaks, smarter hardware matching, zero background bloat — and a free tier you can actually use."
+        subtitle="Live hardware detection, a real free tier, and a desktop app that stays out of your way."
       />
 
       <div className="mx-auto mb-12 grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -54,29 +36,30 @@ export function VsExmTweaks() {
       </div>
 
       <FlowIn delay={100}>
-        <div className="mx-auto max-w-5xl overflow-hidden rounded-2xl border border-reflux-accent/20 bg-[#0a0c10]/90 shadow-[0_0_50px_rgba(241,91,80,0.08)]">
+        <div className="mx-auto max-w-4xl overflow-hidden rounded-2xl border border-reflux-accent/25 bg-[#060810]/95 shadow-[0_0_80px_rgba(255,107,91,0.12)] backdrop-blur-sm">
           <div className="border-b border-reflux-border/60 bg-gradient-to-r from-reflux-accent/10 to-transparent px-5 py-4 sm:px-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <div className="text-xs font-bold tracking-wider text-reflux-accent uppercase">Head-to-head</div>
-                <h3 className="text-lg font-extrabold text-white sm:text-xl">REFLUX vs {EXM_COMPETITOR.name}</h3>
+                <div className="text-xs font-bold tracking-wider text-reflux-accent uppercase">What you get</div>
+                <h3 className="text-lg font-extrabold text-white sm:text-xl">Everything in REFLUX</h3>
               </div>
-              <WinnerBadge winner="reflux" />
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-reflux-green/10 px-3 py-1 text-[11px] font-bold text-reflux-green">
+                <Icon name="check" size={12} />
+                {PRODUCT_LIMITS.totalTweaksLabel} pro tweaks
+              </span>
             </div>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="vs-exm-table w-full min-w-[640px] text-left text-sm">
+            <table className="reflux-features-table w-full min-w-[480px] text-left text-sm">
               <thead>
                 <tr className="border-b border-reflux-border/50 text-[11px] font-bold tracking-wider text-reflux-muted uppercase">
                   <th className="px-5 py-3.5 sm:px-6">Feature</th>
                   <th className="px-5 py-3.5 text-reflux-accent sm:px-6">REFLUX</th>
-                  <th className="px-5 py-3.5 sm:px-6">{EXM_COMPETITOR.name}</th>
-                  <th className="hidden px-5 py-3.5 sm:table-cell sm:px-6">Edge</th>
                 </tr>
               </thead>
               <tbody>
-                {comparisonRows.map((row) => (
+                {refluxFeatures.map((row) => (
                   <tr
                     key={row.feature}
                     className={`border-b border-reflux-border/30 transition-colors hover:bg-white/[0.02] ${
@@ -84,11 +67,7 @@ export function VsExmTweaks() {
                     }`}
                   >
                     <td className="px-5 py-4 font-semibold text-white sm:px-6">{row.feature}</td>
-                    <td className="px-5 py-4 text-[#dce3ee] sm:px-6">{row.reflux}</td>
-                    <td className="px-5 py-4 text-reflux-muted sm:px-6">{row.exm}</td>
-                    <td className="hidden px-5 py-4 sm:table-cell sm:px-6">
-                      <WinnerBadge winner={row.winner} />
-                    </td>
+                    <td className="px-5 py-4 text-[#dce3ee] sm:px-6">{row.detail}</td>
                   </tr>
                 ))}
               </tbody>
@@ -99,7 +78,7 @@ export function VsExmTweaks() {
 
       <FlowIn delay={140} className="mt-10 text-center">
         <p className="mx-auto mb-5 max-w-xl text-sm text-reflux-muted">
-          Stop paying for generic tweak lists. Download REFLUX free, see your hardware detected live, and upgrade only when you want the full {comparisonRows[1]?.reflux?.split(" ")[0] ?? "129"}-tweak arsenal.
+          Download REFLUX free, see your hardware detected live, and upgrade only when you want the full {PRODUCT_LIMITS.totalTweaksLabel}-tweak arsenal.
         </p>
         <div className="flex flex-wrap justify-center gap-3">
           <Button
@@ -112,7 +91,7 @@ export function VsExmTweaks() {
             Download Free
           </Button>
           <Button href="#pricing" variant="secondary" large>
-            Compare plans
+            View pricing
           </Button>
         </div>
       </FlowIn>

@@ -18,15 +18,15 @@ export function SectionHeader({
   className = "",
 }: SectionHeaderProps) {
   return (
-    <FlowIn className={`mb-12 md:mb-14 ${centered ? "text-center" : ""} ${className}`}>
+    <FlowIn className={`section-header-glow mb-14 md:mb-16 ${centered ? "text-center" : ""} ${className}`}>
       {eyebrow && (
-        <span className={`section-eyebrow mb-4 ${centered ? "mx-auto" : ""} inline-flex`}>
+        <span className={`section-eyebrow mb-5 ${centered ? "mx-auto" : ""} inline-flex`}>
           {eyebrow}
         </span>
       )}
-      <h2 className={`section-title ${centered ? "mx-auto" : ""} max-w-3xl`}>{title}</h2>
+      <h2 className={`section-title ${centered ? "mx-auto" : ""} max-w-4xl`}>{title}</h2>
       {subtitle && (
-        <p className={`section-subtitle mt-4 ${centered ? "mx-auto" : ""}`}>{subtitle}</p>
+        <p className={`section-subtitle mt-5 ${centered ? "mx-auto" : ""}`}>{subtitle}</p>
       )}
     </FlowIn>
   );

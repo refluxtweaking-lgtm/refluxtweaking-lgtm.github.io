@@ -3,7 +3,7 @@
 import { GameImage } from "@/components/games/GameImage";
 import { Icon } from "@/components/ui/Icon";
 import { PRODUCT_LIMITS } from "@/data/tweaks";
-import { appGalleryItems } from "@/data/competitor-comparison";
+import { appGalleryItems } from "@/data/reflux-highlights";
 
 type GalleryId = (typeof appGalleryItems)[number]["id"];
 

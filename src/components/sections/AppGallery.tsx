@@ -5,7 +5,7 @@ import { AppScreenshotFrame } from "@/components/app/AppScreenshotFrames";
 import { FlowIn } from "@/components/ui/FlowIn";
 import { Icon } from "@/components/ui/Icon";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { appGalleryItems } from "@/data/competitor-comparison";
+import { appGalleryItems } from "@/data/reflux-highlights";
 import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
 import { Button } from "@/components/ui/Button";
 
@@ -16,7 +16,7 @@ export function AppGallery() {
   const current = appGalleryItems.find((item) => item.id === active) ?? appGalleryItems[0];
 
   return (
-    <section id="app-gallery" className="section-flow section-glow-wrap">
+    <section id="app-gallery" className="section-flow section-glow-wrap section-band section-band-alt">
       <div className="section-flow-divider" aria-hidden="true" />
       <SectionHeader
         eyebrow="Inside the App"
@@ -87,7 +87,7 @@ export function AppGallery() {
           <FlowIn delay={120}>
             <div className="app-gallery-stage relative">
               <div className="app-gallery-glow pointer-events-none absolute inset-0 scale-105 rounded-[28px] blur-3xl" aria-hidden="true" />
-              <div className="app-gallery-device relative overflow-hidden rounded-[24px] border border-white/10 bg-[#070a10] shadow-[0_24px_80px_rgba(0,0,0,0.55),0_0_0_1px_rgba(255,255,255,0.04)_inset]">
+              <div className="app-gallery-device relative overflow-hidden rounded-[24px] border border-white/12 bg-[#050810] shadow-[0_32px_100px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.05)_inset,0_0_80px_-30px_rgba(255,107,91,0.25)]">
                 <div className="flex items-center justify-between border-b border-white/8 bg-[#0b0e15] px-4 py-2.5">
                   <div className="flex items-center gap-2">
                     <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />

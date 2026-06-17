@@ -50,7 +50,7 @@ export function Header() {
     <header className="sticky top-0 z-100 px-4 py-4 md:px-6 md:py-5">
       <div className="relative mx-auto max-w-[1280px]">
         <div
-          className={`header-shell flex min-h-[72px] items-center justify-between gap-5 rounded-2xl border border-white/8 bg-[rgba(12,15,22,0.88)] px-5 py-4 md:min-h-[80px] md:gap-6 md:px-7 md:py-5 ${
+          className={`header-shell flex min-h-[72px] items-center justify-between gap-5 rounded-2xl border border-white/10 px-5 py-4 backdrop-blur-xl md:min-h-[80px] md:gap-6 md:px-7 md:py-5 ${
             scrolled ? "header-shell-scrolled" : ""
           }`}
         >
