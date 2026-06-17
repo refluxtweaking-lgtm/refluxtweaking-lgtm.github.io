@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+
 interface LiveMetricBarProps {
   label: string;
   value: string;
@@ -20,7 +22,41 @@ export function LiveMetricBar({
   delay = 0,
   className = "",
 }: LiveMetricBarProps) {
-  const clamped = Math.min(100, Math.max(4, fill));
+  const target = Math.min(100, Math.max(4, fill));
+  const [width, setWidth] = useState(4);
+  const [shineX, setShineX] = useState(-1.2);
+  const [glowAlpha, setGlowAlpha] = useState(0.88);
+  const widthRef = useRef(4);
+  const readyAt = useRef(performance.now() + delay * 1000);
+
+  useEffect(() => {
+    widthRef.current = 4;
+    setWidth(4);
+    readyAt.current = performance.now() + delay * 1000;
+  }, [target, delay]);
+
+  useEffect(() => {
+    let raf = 0;
+
+    const frame = (now: number) => {
+      if (now >= readyAt.current) {
+        widthRef.current += (target - widthRef.current) * 0.16;
+        const t = now / 1000;
+        const breathe = 1 + Math.sin(t * 4.8) * 0.012;
+        setWidth(Math.min(100, widthRef.current * breathe));
+        setGlowAlpha(0.84 + Math.sin(t * 3.6) * 0.1);
+
+        const elapsed = now - readyAt.current;
+        const shinePhase = (elapsed % 2000) / 2000;
+        setShineX(shinePhase * 3.2 - 1.2);
+      }
+
+      raf = requestAnimationFrame(frame);
+    };
+
+    raf = requestAnimationFrame(frame);
+    return () => cancelAnimationFrame(raf);
+  }, [target, delay]);
 
   return (
     <div className={`live-metric-bar ${className}`}>
@@ -40,17 +76,22 @@ export function LiveMetricBar({
       )}
       <div className="live-bar-track relative h-2.5 overflow-hidden rounded-full sm:h-3">
         <div
-          className="live-bar-fill absolute inset-y-0 left-0 rounded-full"
+          className="live-bar-fill-smooth absolute inset-y-0 left-0 rounded-full"
           style={{
-            width: `${clamped}%`,
+            width: `${width}%`,
             background: color,
             boxShadow: `0 0 14px ${glow}`,
-            animationDelay: `${delay}s`,
+            opacity: glowAlpha,
+            willChange: "width, opacity",
           }}
         />
         <div
-          className="live-bar-shine pointer-events-none absolute inset-y-0 w-1/3 rounded-full"
-          style={{ animationDelay: `${delay + 0.4}s` }}
+          className="live-bar-shine-smooth pointer-events-none absolute inset-y-0 w-1/3 rounded-full"
+          style={{
+            background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.42), transparent)",
+            transform: `translateX(${shineX * 100}%)`,
+            willChange: "transform",
+          }}
         />
       </div>
     </div>

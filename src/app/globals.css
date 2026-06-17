@@ -981,6 +981,11 @@ h3,
   animation: barShine 2.8s ease-in-out infinite;
 }
 
+.live-bar-fill-smooth,
+.live-bar-shine-smooth {
+  transform: translateZ(0);
+}
+
 .fps-bar-before {
   transform-origin: left center;
   animation: fpsBarGrow 1s cubic-bezier(0.4, 0, 0.2, 1) both;
@@ -1369,18 +1374,6 @@ html.reduce-effects .particles-canvas {
 
 .showcase-card {
   scroll-snap-align: start;
-}
-
-.showcase-scroll-fade-left {
-  background: linear-gradient(90deg, var(--color-reflux-bg), transparent);
-}
-
-.showcase-scroll-fade-right {
-  background: linear-gradient(270deg, var(--color-reflux-bg), transparent);
-}
-
-.showcase-ui-panel {
-  animation: floatSoft 5s ease-in-out infinite;
 }
 
 /* Pro spotlight / optimizer ring */

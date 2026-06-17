@@ -37,7 +37,7 @@ const showcaseCards = [
 function ShowcaseUi({ type }: { type: (typeof showcaseCards)[number]["ui"] }) {
   if (type === "tweak") {
     return (
-      <div className="showcase-ui-panel mx-auto w-[88%] rounded-xl border border-white/10 bg-[#0d1018]/95 p-3 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+      <div className="showcase-ui-panel mx-auto w-[88%] rounded-xl border border-white/[0.08] bg-[#11151c] p-3">
         <div className="mb-2 flex items-center gap-2">
           <AppIcon name="optimizer" size={14} />
           <span className="text-[11px] font-bold text-white">Disable Core Parking</span>
@@ -49,8 +49,8 @@ function ShowcaseUi({ type }: { type: (typeof showcaseCards)[number]["ui"] }) {
           <span className="rounded-md border border-reflux-accent/30 bg-reflux-accent/10 px-2 py-0.5 text-[8px] font-bold text-reflux-accent">
             1 Warning
           </span>
-          <div className="relative h-5 w-9 rounded-full bg-reflux-accent shadow-[0_0_12px_rgba(255,107,91,0.5)]">
-            <div className="absolute top-0.5 right-0.5 h-4 w-4 rounded-full bg-white shadow-md" />
+          <div className="relative h-5 w-9 rounded-full bg-reflux-accent">
+            <div className="absolute top-0.5 right-0.5 h-4 w-4 rounded-full bg-white" />
           </div>
         </div>
       </div>
@@ -162,28 +162,20 @@ export function AppShowcaseStrip() {
         </FlowIn>
       </div>
 
-      <div className="showcase-scroll-wrap relative">
-        <div className="showcase-scroll-fade-left pointer-events-none absolute inset-y-0 left-0 z-10 w-12 md:w-20" aria-hidden="true" />
-        <div className="showcase-scroll-fade-right pointer-events-none absolute inset-y-0 right-0 z-10 w-12 md:w-20" aria-hidden="true" />
-        <div className="showcase-scroll-track flex gap-4 overflow-x-auto px-4 pb-4 md:gap-5 md:px-8">
-          {showcaseCards.map((card, i) => (
-            <FlowIn
-              key={card.id}
-              delay={i * 80}
-              className="showcase-card group w-[min(82vw,300px)] shrink-0 md:w-[280px]"
-            >
-              <div className="showcase-card-inner flex h-[380px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-[#141820] to-[#0a0c12] transition-all duration-300 group-hover:border-reflux-accent/35 group-hover:shadow-[0_0_48px_-12px_rgba(255,107,91,0.45)]">
-                <div className="showcase-card-ui relative flex flex-1 items-center justify-center overflow-hidden bg-[radial-gradient(ellipse_at_50%_80%,rgba(255,107,91,0.08),transparent_70%)] p-4 pt-6">
-                  <ShowcaseUi type={card.ui} />
-                </div>
-                <div className="border-t border-white/8 p-4">
-                  <div className="font-bold text-white">{card.title}</div>
-                  <p className="mt-1 text-xs leading-relaxed text-reflux-muted">{card.desc}</p>
-                </div>
+      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-4 px-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-4">
+        {showcaseCards.map((card, i) => (
+          <FlowIn key={card.id} delay={i * 60} className="showcase-card group">
+            <div className="showcase-card-inner flex h-full min-h-[360px] flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0e1118] transition-colors duration-200 group-hover:border-white/14">
+              <div className="showcase-card-ui relative flex flex-1 items-center justify-center p-5">
+                <ShowcaseUi type={card.ui} />
               </div>
-            </FlowIn>
-          ))}
-        </div>
+              <div className="border-t border-white/[0.06] p-4">
+                <div className="font-bold text-white">{card.title}</div>
+                <p className="mt-1 text-xs leading-relaxed text-reflux-muted">{card.desc}</p>
+              </div>
+            </div>
+          </FlowIn>
+        ))}
       </div>
     </section>
   );
