@@ -76,7 +76,7 @@ export const appGalleryItems = [
   {
     id: "tweaks",
     label: "Tweaks",
-    title: "129 optimizations, one toggle away",
+    title: "100+ optimizations, one toggle away",
     caption: "Network, CPU, GPU, RAM, system, cleanup & debloat — each tweak explains what it does before you apply.",
   },
   {

@@ -27,7 +27,7 @@ export function CTA() {
             Your best games are <span className="gradient-text">one download away</span>
           </h2>
           <p className="mx-auto mb-10 max-w-lg text-base leading-relaxed text-reflux-muted md:text-lg">
-            Free gets you {PRODUCT_LIMITS.freeTweaks} tweaks. Pro unlocks all {PRODUCT_LIMITS.proTweaks} when you want the full setup.
+            Free gets you {PRODUCT_LIMITS.freeTweaks} tweaks. Pro unlocks {PRODUCT_LIMITS.totalTweaksLabel} when you want the full setup.
           </p>
 
           <div className="mb-9 flex flex-wrap justify-center gap-3">

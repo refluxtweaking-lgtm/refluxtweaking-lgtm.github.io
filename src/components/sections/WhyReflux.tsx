@@ -78,7 +78,7 @@ export function WhyReflux() {
 
       <FlowIn delay={140} className="mt-10 text-center">
         <p className="mx-auto mb-5 max-w-xl text-sm text-reflux-muted">
-          Download REFLUX free, see your hardware detected live, and upgrade only when you want the full {PRODUCT_LIMITS.totalTweaksLabel}-tweak arsenal.
+          Download REFLUX free, see your hardware detected live, and upgrade only when you want the full {PRODUCT_LIMITS.totalTweaksLabel} tweak arsenal.
         </p>
         <div className="flex flex-wrap justify-center gap-3">
           <Button

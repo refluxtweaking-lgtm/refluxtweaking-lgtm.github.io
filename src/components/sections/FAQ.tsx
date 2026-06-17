@@ -15,11 +15,11 @@ const faqs = [
   },
   {
     q: "Will this actually improve my FPS and ping?",
-    a: `For most gaming PCs, yes. We focus on ${PRODUCT_LIMITS.proTweaks} proven tweaks — network stack tuning, power plans, GPU scheduling, and bloat removal.`,
+    a: `For most gaming PCs, yes. We focus on ${PRODUCT_LIMITS.totalTweaksLabel} proven tweaks — network stack tuning, power plans, GPU scheduling, and bloat removal.`,
   },
   {
     q: "What's the difference between Free and paid plans?",
-    a: `Free gives you ${PRODUCT_LIMITS.freeTweaks} core tweaks and 2 power plans. Paid unlocks ${PRODUCT_LIMITS.proTweaksExclusive} more tweaks, automatic game scanner, advanced network tools, and priority support.`,
+    a: `Free gives you ${PRODUCT_LIMITS.freeTweaks} core tweaks and 2 power plans. Paid unlocks ${PRODUCT_LIMITS.totalTweaksLabel} pro optimizations, automatic game scanner, advanced network tools, and priority support.`,
   },
   {
     q: "Can I cancel Monthly anytime?",

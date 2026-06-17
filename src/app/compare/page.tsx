@@ -20,7 +20,7 @@ export default function ComparePage() {
               Every tweak. <span className="gradient-text">Every plan.</span>
             </>
           }
-          subtitle={`No guesswork — all ${PRODUCT_LIMITS.proTweaks} optimizations in REFLUX PRO, with highlights searchable below.`}
+          subtitle={`No guesswork — ${PRODUCT_LIMITS.totalTweaksLabel} optimizations in REFLUX PRO, with highlights searchable below.`}
         />
       </section>
 

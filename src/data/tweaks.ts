@@ -38,8 +38,8 @@ export const PRODUCT_LIMITS = {
   freeTweaks: 30,
   proTweaks: 129,
   proTweaksExclusive: 99,
-  proTweaksLabel: "99",
-  totalTweaksLabel: "129",
+  proTweaksLabel: "100+",
+  totalTweaksLabel: "100+",
   freePowerPlans: 2,
 } as const;
 

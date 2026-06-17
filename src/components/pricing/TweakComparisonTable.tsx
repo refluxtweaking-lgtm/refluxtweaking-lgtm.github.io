@@ -107,7 +107,7 @@ export function TweakComparisonTable() {
       )}
 
       <p className="mt-6 text-center text-sm text-reflux-muted">
-        REFLUX PRO includes {PRODUCT_LIMITS.proTweaks} total optimizations. This table highlights the
+        REFLUX PRO includes {PRODUCT_LIMITS.totalTweaksLabel} total optimizations. This table highlights the
         most popular ones — the full library lives in the desktop app.
       </p>
     </div>

@@ -16,7 +16,7 @@ const features: { icon: IconName; title: string; desc: string }[] = [
   {
     icon: "bolt",
     title: "One-click tweak batches",
-    desc: `Toggle individual optimizations or apply all ${PRODUCT_LIMITS.proTweaks} at once. Restore points created automatically.`,
+    desc: `Toggle individual optimizations or apply all ${PRODUCT_LIMITS.totalTweaksLabel} at once. Restore points created automatically.`,
   },
   {
     icon: "gamepad",

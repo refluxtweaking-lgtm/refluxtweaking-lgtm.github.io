@@ -20,7 +20,7 @@ const steps: {
     icon: "sliders",
     step: "02",
     title: "Pick your tweaks",
-    description: `Toggle what you want, or apply all ${PRODUCT_LIMITS.proTweaks} with one click.`,
+    description: `Toggle what you want, or apply all ${PRODUCT_LIMITS.totalTweaksLabel} with one click.`,
   },
   {
     icon: "gamepad",
