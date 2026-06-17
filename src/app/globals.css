@@ -1292,18 +1292,20 @@ html.reduce-effects .particles-canvas {
 }
 
 .ambient-graph-svg {
-  will-change: contents;
   transform: translateZ(0);
 }
 
 .ambient-chart-area {
-  will-change: d;
+  /* path updates on tick, not every frame */
 }
 
 .ambient-line-before,
 .ambient-line-after {
-  will-change: d;
   vector-effect: non-scaling-stroke;
+}
+
+.ambient-chart-scroll {
+  will-change: transform;
 }
 
 .ambient-line-before {

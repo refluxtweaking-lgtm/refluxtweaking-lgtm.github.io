@@ -21,20 +21,20 @@ export const LIVE_CHART_CONFIG: Record<ResultChartId, LiveChartConfig> = {
   fps: {
     beforeBand: [10, 46],
     afterBand: [74, 84],
-    beforeSpikeChance: 0.14,
-    beforeSpikeSize: 22,
-    beforeDrift: 11,
-    afterDrift: 2.2,
-    afterNoise: 1.1,
+    beforeSpikeChance: 0.05,
+    beforeSpikeSize: 10,
+    beforeDrift: 5,
+    afterDrift: 1.6,
+    afterNoise: 0.7,
   },
   latency: {
     beforeBand: [12, 44],
     afterBand: [70, 80],
-    beforeSpikeChance: 0.16,
-    beforeSpikeSize: 18,
-    beforeDrift: 9,
-    afterDrift: 1.8,
-    afterNoise: 0.9,
+    beforeSpikeChance: 0.06,
+    beforeSpikeSize: 8,
+    beforeDrift: 4,
+    afterDrift: 1.2,
+    afterNoise: 0.5,
   },
   lows: {
     beforeBand: [8, 50],
@@ -52,12 +52,33 @@ export function clamp(value: number, min: number, max: number) {
 }
 
 export function buildPathFromSeries(yValues: number[], width = CHART_WIDTH) {
-  return yValues
-    .map((y, i) => {
-      const x = (i / (yValues.length - 1)) * width;
-      return `${i === 0 ? "M" : "L"} ${x.toFixed(1)} ${y.toFixed(1)}`;
-    })
-    .join(" ");
+  return buildSmoothPathFromSeries(yValues, width);
+}
+
+/** Catmull-Rom style cubic bezier — no sharp corners between points */
+export function buildSmoothPathFromSeries(yValues: number[], width = CHART_WIDTH) {
+  const n = yValues.length;
+  if (n < 2) return `M 0 ${(yValues[0] ?? 0).toFixed(2)}`;
+
+  const xs = yValues.map((_, i) => (i / (n - 1)) * width);
+  const tension = 6;
+  let d = `M ${xs[0].toFixed(2)} ${yValues[0].toFixed(2)}`;
+
+  for (let i = 0; i < n - 1; i++) {
+    const i0 = Math.max(0, i - 1);
+    const i1 = i;
+    const i2 = i + 1;
+    const i3 = Math.min(n - 1, i + 2);
+
+    const cp1x = xs[i1] + (xs[i2] - xs[i0]) / tension;
+    const cp1y = yValues[i1] + (yValues[i2] - yValues[i0]) / tension;
+    const cp2x = xs[i2] - (xs[i3] - xs[i1]) / tension;
+    const cp2y = yValues[i2] - (yValues[i3] - yValues[i1]) / tension;
+
+    d += ` C ${cp1x.toFixed(2)} ${cp1y.toFixed(2)}, ${cp2x.toFixed(2)} ${cp2y.toFixed(2)}, ${xs[i2].toFixed(2)} ${yValues[i2].toFixed(2)}`;
+  }
+
+  return d;
 }
 
 export function seedRandom(seed: number) {

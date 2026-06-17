@@ -2,10 +2,11 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  buildPathFromSeries,
+  buildSmoothPathFromSeries,
   initAfterSeries,
   initBeforeSeries,
   LIVE_CHART_CONFIG,
+  LIVE_POINTS,
   type LiveChartConfig,
   nextAfterPoint,
   nextBeforePoint,
@@ -14,59 +15,64 @@ import {
 
 const W = 900;
 const H = 220;
-const POINT_INTERVAL_MS = 140;
-const LERP = 0.18;
+const POINT_INTERVAL_MS = 160;
 
-function useSmoothLiveSeries(config: LiveChartConfig, seed: number, active: boolean) {
+function useScrollingChartPair(config: LiveChartConfig, seed: number, active: boolean, width: number) {
   const [beforeSeries, setBeforeSeries] = useState(() => initBeforeSeries(config, seed));
   const [afterSeries, setAfterSeries] = useState(() => initAfterSeries(config, seed + 17));
-  const targetBefore = useRef(beforeSeries);
-  const targetAfter = useRef(afterSeries);
-  const randRef = useRef(seedRandom(seed * 31 + 7));
+  const beforeRef = useRef(beforeSeries);
+  const afterRef = useRef(afterSeries);
+  const beforeGroupRef = useRef<SVGGElement>(null);
+  const afterGroupRef = useRef<SVGGElement>(null);
+  const randBefore = useRef(seedRandom(seed * 31 + 7));
+  const randAfter = useRef(seedRandom(seed * 31 + 29));
+  const scrollRef = useRef(0);
+  const pointStep = width / (LIVE_POINTS - 1);
 
   useEffect(() => {
-    targetBefore.current = initBeforeSeries(config, seed);
-    targetAfter.current = initAfterSeries(config, seed + 17);
-    setBeforeSeries(targetBefore.current);
-    setAfterSeries(targetAfter.current);
-    randRef.current = seedRandom(seed * 31 + 7);
+    beforeRef.current = initBeforeSeries(config, seed);
+    afterRef.current = initAfterSeries(config, seed + 17);
+    setBeforeSeries(beforeRef.current);
+    setAfterSeries(afterRef.current);
+    randBefore.current = seedRandom(seed * 31 + 7);
+    randAfter.current = seedRandom(seed * 31 + 29);
+    scrollRef.current = 0;
+    beforeGroupRef.current?.setAttribute("transform", "translate(0, 0)");
+    afterGroupRef.current?.setAttribute("transform", "translate(0, 0)");
   }, [config, seed]);
 
   useEffect(() => {
     if (!active) return;
 
     let raf = 0;
-    let lastPoint = performance.now();
+    let last = performance.now();
 
     const frame = (now: number) => {
-      if (now - lastPoint >= POINT_INTERVAL_MS) {
-        lastPoint = now;
-        const rand = randRef.current;
-        targetBefore.current = [
-          ...targetBefore.current.slice(1),
-          nextBeforePoint(targetBefore.current[targetBefore.current.length - 1], config, rand),
-        ];
-        targetAfter.current = [
-          ...targetAfter.current.slice(1),
-          nextAfterPoint(targetAfter.current[targetAfter.current.length - 1], config, rand),
-        ];
+      const dt = Math.min(now - last, 32);
+      last = now;
+      scrollRef.current += (pointStep / POINT_INTERVAL_MS) * dt;
+
+      if (scrollRef.current >= pointStep) {
+        scrollRef.current -= pointStep;
+        const lastBefore = beforeRef.current[beforeRef.current.length - 1];
+        const lastAfter = afterRef.current[afterRef.current.length - 1];
+        beforeRef.current = [...beforeRef.current.slice(1), nextBeforePoint(lastBefore, config, randBefore.current)];
+        afterRef.current = [...afterRef.current.slice(1), nextAfterPoint(lastAfter, config, randAfter.current)];
+        setBeforeSeries([...beforeRef.current]);
+        setAfterSeries([...afterRef.current]);
       }
 
-      setBeforeSeries((prev) =>
-        prev.map((v, i) => v + (targetBefore.current[i] - v) * LERP),
-      );
-      setAfterSeries((prev) =>
-        prev.map((v, i) => v + (targetAfter.current[i] - v) * LERP),
-      );
-
+      const offset = -scrollRef.current.toFixed(2);
+      beforeGroupRef.current?.setAttribute("transform", `translate(${offset}, 0)`);
+      afterGroupRef.current?.setAttribute("transform", `translate(${offset}, 0)`);
       raf = requestAnimationFrame(frame);
     };
 
     raf = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(raf);
-  }, [active, config]);
+  }, [active, config, pointStep, seed]);
 
-  return { beforeSeries, afterSeries };
+  return { beforeSeries, afterSeries, beforeGroupRef, afterGroupRef };
 }
 
 interface AmbientFpsGraphProps {
@@ -76,15 +82,15 @@ interface AmbientFpsGraphProps {
 
 export function AmbientFpsGraph({ active = true, className = "" }: AmbientFpsGraphProps) {
   const config = LIVE_CHART_CONFIG.fps;
-  const { beforeSeries, afterSeries } = useSmoothLiveSeries(config, 42, active);
+  const { beforeSeries, afterSeries, beforeGroupRef, afterGroupRef } = useScrollingChartPair(config, 42, active, W);
 
   const scaleY = (y: number) => (y / 128) * H;
   const beforePath = useMemo(
-    () => buildPathFromSeries(beforeSeries.map((y) => scaleY(y)), W),
+    () => buildSmoothPathFromSeries(beforeSeries.map((y) => scaleY(y)), W),
     [beforeSeries],
   );
   const afterPath = useMemo(
-    () => buildPathFromSeries(afterSeries.map((y) => scaleY(y)), W),
+    () => buildSmoothPathFromSeries(afterSeries.map((y) => scaleY(y)), W),
     [afterSeries],
   );
 
@@ -110,6 +116,9 @@ export function AmbientFpsGraph({ active = true, className = "" }: AmbientFpsGra
         aria-hidden="true"
       >
         <defs>
+          <clipPath id="ambientFpsClip">
+            <rect x="0" y="0" width={W} height={H} />
+          </clipPath>
           <linearGradient id="ambientBeforeFill" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="rgba(232,85,72,0.18)" />
             <stop offset="100%" stopColor="rgba(232,85,72,0)" />
@@ -126,28 +135,34 @@ export function AmbientFpsGraph({ active = true, className = "" }: AmbientFpsGra
             </feMerge>
           </filter>
         </defs>
-        <path d={beforeArea} fill="url(#ambientBeforeFill)" className="ambient-chart-area" />
-        <path d={afterArea} fill="url(#ambientAfterFill)" className="ambient-chart-area" />
-        <path
-          d={beforePath}
-          fill="none"
-          stroke="#e85548"
-          strokeWidth="2.5"
-          strokeLinejoin="round"
-          strokeLinecap="round"
-          filter="url(#lineGlow)"
-          className="ambient-line-before"
-        />
-        <path
-          d={afterPath}
-          fill="none"
-          stroke="#5ec4ef"
-          strokeWidth="3"
-          strokeLinejoin="round"
-          strokeLinecap="round"
-          filter="url(#lineGlow)"
-          className="ambient-line-after"
-        />
+        <g clipPath="url(#ambientFpsClip)">
+          <g ref={beforeGroupRef} className="ambient-chart-scroll">
+            <path d={beforeArea} fill="url(#ambientBeforeFill)" />
+            <path
+              d={beforePath}
+              fill="none"
+              stroke="#e85548"
+              strokeWidth="2.5"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              filter="url(#lineGlow)"
+              className="ambient-line-before"
+            />
+          </g>
+          <g ref={afterGroupRef} className="ambient-chart-scroll">
+            <path d={afterArea} fill="url(#ambientAfterFill)" />
+            <path
+              d={afterPath}
+              fill="none"
+              stroke="#5ec4ef"
+              strokeWidth="3"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              filter="url(#lineGlow)"
+              className="ambient-line-after"
+            />
+          </g>
+        </g>
       </svg>
       <div className="ambient-graph-fade pointer-events-none absolute inset-x-0 bottom-0 h-24" aria-hidden="true" />
     </div>
@@ -160,18 +175,17 @@ interface LatencyMiniChartProps {
 
 export function LatencyMiniChart({ active = true }: LatencyMiniChartProps) {
   const config = LIVE_CHART_CONFIG.latency;
-  const { beforeSeries, afterSeries } = useSmoothLiveSeries(config, 88, active);
-
   const w = 400;
   const h = 100;
-  const scaleY = (y: number) => (y / 128) * h;
+  const { beforeSeries, afterSeries, beforeGroupRef, afterGroupRef } = useScrollingChartPair(config, 88, active, w);
 
+  const scaleY = (y: number) => (y / 128) * h;
   const beforePath = useMemo(
-    () => buildPathFromSeries(beforeSeries.map(scaleY), w),
+    () => buildSmoothPathFromSeries(beforeSeries.map(scaleY), w),
     [beforeSeries, w],
   );
   const afterPath = useMemo(
-    () => buildPathFromSeries(afterSeries.map(scaleY), w),
+    () => buildSmoothPathFromSeries(afterSeries.map(scaleY), w),
     [afterSeries, w],
   );
 
@@ -188,24 +202,35 @@ export function LatencyMiniChart({ active = true }: LatencyMiniChartProps) {
         </span>
       </div>
       <svg viewBox={`0 0 ${w} ${h}`} className="ambient-graph-svg w-full" preserveAspectRatio="none" aria-hidden="true">
-        <path
-          d={beforePath}
-          fill="none"
-          stroke="#e85548"
-          strokeWidth="2"
-          strokeLinejoin="round"
-          strokeLinecap="round"
-          className="ambient-line-before"
-        />
-        <path
-          d={afterPath}
-          fill="none"
-          stroke="#5ec4ef"
-          strokeWidth="2.5"
-          strokeLinejoin="round"
-          strokeLinecap="round"
-          className="ambient-line-after"
-        />
+        <defs>
+          <clipPath id="ambientLatencyClip">
+            <rect x="0" y="0" width={w} height={h} />
+          </clipPath>
+        </defs>
+        <g clipPath="url(#ambientLatencyClip)">
+          <g ref={beforeGroupRef} className="ambient-chart-scroll">
+            <path
+              d={beforePath}
+              fill="none"
+              stroke="#e85548"
+              strokeWidth="2"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              className="ambient-line-before"
+            />
+          </g>
+          <g ref={afterGroupRef} className="ambient-chart-scroll">
+            <path
+              d={afterPath}
+              fill="none"
+              stroke="#5ec4ef"
+              strokeWidth="2.5"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              className="ambient-line-after"
+            />
+          </g>
+        </g>
       </svg>
     </div>
   );
