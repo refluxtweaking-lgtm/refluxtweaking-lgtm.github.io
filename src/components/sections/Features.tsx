@@ -12,7 +12,7 @@ export function Features() {
             Everything in <span className="gradient-text">REFLUX PRO</span>
           </>
         }
-        subtitle="Tweaks, game scanner, network tools, cleanup, and benchmarks — same app, same power."
+        subtitle="Tweaks, game scanner, network tools, cleanup, and benchmarks — explore every screen below."
       />
       <FeatureSlideshow />
     </section>

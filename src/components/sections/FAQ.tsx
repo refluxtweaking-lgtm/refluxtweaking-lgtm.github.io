@@ -6,6 +6,10 @@ import { PRODUCT_LIMITS } from "@/data/tweaks";
 
 const faqs = [
   {
+    q: "How is REFLUX different from EXM Tweaks?",
+    a: "REFLUX detects your exact CPU and GPU (Intel, AMD, NVIDIA) and surfaces vendor-matched tweak pages automatically. You get 30 free tweaks with no card, built-in restore points, zero background processes, and a lifetime Pro option — while EXM Tweaks leans on subscriptions and generic lists.",
+  },
+  {
     q: "Is REFLUX safe to use?",
     a: "Yes. Every tweak batch creates a Windows restore point first. You can revert everything with one click. No malware, no hidden background processes.",
   },

@@ -47,7 +47,7 @@ export function Hero() {
             >
               REFLUX tunes your PC for{" "}
               <HeroGameTicker />
-              {" "}and every game you grind — more frames, snappier inputs, cleaner Windows.
+              {" "}and every game you grind — with live Intel / AMD / NVIDIA detection, {PRODUCT_LIMITS.totalTweaksLabel} pro tweaks, and zero background bloat.
             </p>
 
             <div

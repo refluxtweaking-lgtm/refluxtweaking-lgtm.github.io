@@ -947,3 +947,29 @@ html.reduce-effects .flow-in {
 html.reduce-effects .particles-canvas {
   display: none;
 }
+
+/* App gallery */
+.app-gallery-glow {
+  background: radial-gradient(ellipse at 50% 40%, rgba(241, 91, 80, 0.22), transparent 65%);
+}
+
+.app-gallery-device {
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.app-gallery-stage:hover .app-gallery-device {
+  transform: translateY(-4px);
+  box-shadow: 0 32px 90px rgba(0, 0, 0, 0.55), 0 0 50px -12px rgba(241, 91, 80, 0.35);
+}
+
+.app-gallery-tab {
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.app-gallery-tab:hover {
+  transform: translateY(-1px);
+}
+
+.vs-exm-table tbody tr:last-child {
+  border-bottom: none;
+}
