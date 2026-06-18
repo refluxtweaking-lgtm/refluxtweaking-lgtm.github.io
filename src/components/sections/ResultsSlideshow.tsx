@@ -16,13 +16,17 @@ const results: ResultMetric[] = [
     before: 280,
     after: 332,
     unit: "FPS",
-    delta: "+52 FPS",
-    color: "text-reflux-accent",
-    stroke: "#ff6b5b",
+    delta: "+52",
+    color: "text-[#38bdf8]",
+    stroke: "#38bdf8",
     fill: "from-reflux-accent to-reflux-accent-light",
     gain: "0.82",
-    beforeLabel: "Without REFLUX",
+    beforeLabel: "Stock Windows",
     afterLabel: "With REFLUX Pro",
+    beforeStroke: "#f97316",
+    afterStroke: "#38bdf8",
+    beforeGlow: "rgba(249,115,22,0.55)",
+    afterGlow: "rgba(56,189,248,0.55)",
   },
   {
     id: "latency",
@@ -32,13 +36,17 @@ const results: ResultMetric[] = [
     before: 21,
     after: 15,
     unit: "ms",
-    delta: "-6 ms",
-    color: "text-reflux-green",
-    stroke: "#5dde86",
+    delta: "-6",
+    color: "text-[#34d399]",
+    stroke: "#34d399",
     fill: "from-reflux-green/80 to-reflux-green",
     gain: "0.71",
     beforeLabel: "Before tweaks",
     afterLabel: "After tweaks",
+    beforeStroke: "#c084fc",
+    afterStroke: "#34d399",
+    beforeGlow: "rgba(192,132,252,0.5)",
+    afterGlow: "rgba(52,211,153,0.55)",
   },
   {
     id: "lows",
@@ -48,13 +56,17 @@ const results: ResultMetric[] = [
     before: 170,
     after: 220,
     unit: "FPS",
-    delta: "+50 FPS",
-    color: "text-reflux-purple",
+    delta: "+50",
+    color: "text-[#a78bfa]",
     stroke: "#a78bfa",
     fill: "from-reflux-purple/80 to-reflux-purple",
     gain: "0.78",
     beforeLabel: "Stutters & drops",
     afterLabel: "Smoother floor",
+    beforeStroke: "#fb7185",
+    afterStroke: "#a78bfa",
+    beforeGlow: "rgba(251,113,133,0.5)",
+    afterGlow: "rgba(167,139,250,0.55)",
   },
 ];
 
@@ -94,6 +106,14 @@ export function ResultsSlideshow({ animate }: ResultsSlideshowProps) {
               className={`reflux-glow-interactive rounded-full px-3 py-2 text-xs font-semibold sm:px-4 sm:text-sm ${
                 i === index ? "reflux-glow-interactive-active" : "text-reflux-muted hover:text-white"
               }`}
+              style={
+                i === index
+                  ? {
+                      borderColor: `color-mix(in srgb, ${item.afterStroke} 45%, transparent)`,
+                      boxShadow: `0 0 32px -10px ${item.afterGlow}`,
+                    }
+                  : undefined
+              }
             >
               {item.label}
             </button>
@@ -107,21 +127,22 @@ export function ResultsSlideshow({ animate }: ResultsSlideshowProps) {
               aria-label={`Show ${item.label}`}
               onClick={() => goTo(i)}
               className={`h-2 rounded-full transition-all ${
-                i === index ? "w-6 bg-reflux-accent" : "w-2 bg-reflux-border hover:bg-white/25"
+                i === index ? "w-6 shadow-[0_0_10px_rgba(255,77,61,0.6)]" : "w-2 bg-white/15 hover:bg-white/30"
               }`}
+              style={i === index ? { background: item.afterStroke } : undefined}
             />
           ))}
         </div>
       </div>
 
-      <div className="reflux-glow-box overflow-hidden p-5 sm:p-7">
+      <div className="reflux-glow-box overflow-hidden rounded-2xl p-5 sm:p-7">
         <div key={`${metric.id}-${liveKey}`} className="result-slide-enter">
           <ResultMetricChart metric={metric} isLive={animate} liveKey={liveKey} large />
         </div>
       </div>
 
       <p className="reflux-glow-readable mt-4 rounded-xl px-4 py-3 text-center text-[11px] text-reflux-text-soft">
-        Each test records live for 5 seconds — top line is real frame variance before REFLUX, bottom line is after
+        Top panel = before REFLUX. Bottom panel = after. Each test records live for 5 seconds on the same hardware.
       </p>
     </div>
   );

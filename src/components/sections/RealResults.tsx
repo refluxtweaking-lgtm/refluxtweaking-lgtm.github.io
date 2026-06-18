@@ -3,7 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import { GlowCard } from "@/components/ui/GlowCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { VendorLogo } from "@/components/ui/VendorLogo";
 import { ResultsSlideshow } from "./ResultsSlideshow";
+
+const testSpecs = [
+  { label: "RTX 4070", vendor: "nvidia" as const },
+  { label: "Ryzen 7 7800X3D", vendor: "amd" as const },
+  { label: "32GB DDR5", vendor: "ram" as const },
+];
 
 export function RealResults() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -43,22 +50,23 @@ export function RealResults() {
             Measured gains. <span className="gradient-text">Not simulated.</span>
           </>
         }
-        subtitle="Watch real before/after lines move like an FPS graph — same hardware, same session, REFLUX on vs off."
+        subtitle="Live 5-second captures on the same rig — before on top, after on bottom."
       />
 
       <GlowCard className="mx-auto max-w-4xl overflow-hidden" hover={false}>
-        <div className="mb-6 reflux-glow-readable flex flex-col gap-4 rounded-xl p-5 md:flex-row md:items-center md:justify-between">
+        <div className="reflux-glow-box mb-6 flex flex-col gap-4 rounded-xl p-5 md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="mb-1 text-xs font-bold tracking-[0.2em] text-reflux-muted uppercase">Test System</p>
-            <p className="text-sm text-reflux-muted">Same hardware, before & after REFLUX Pro</p>
+            <p className="mb-1 text-xs font-bold tracking-[0.2em] text-reflux-accent uppercase">Test System</p>
+            <p className="text-sm text-reflux-text-soft">Same hardware, before &amp; after REFLUX Pro</p>
           </div>
           <div className="flex flex-wrap gap-2">
-            {["RTX 4070", "Ryzen 7 7800X3D", "32GB DDR5"].map((spec) => (
+            {testSpecs.map((spec) => (
               <span
-                key={spec}
-                className="reflux-glow-readable rounded-full px-3 py-1.5 text-sm font-medium text-white/90"
+                key={spec.label}
+                className="reflux-glow-interactive inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium text-white"
               >
-                {spec}
+                <VendorLogo vendor={spec.vendor} size={22} />
+                {spec.label}
               </span>
             ))}
           </div>
@@ -66,7 +74,7 @@ export function RealResults() {
 
         <ResultsSlideshow animate={animate} />
 
-        <p className="mt-6 text-center text-xs text-reflux-muted">
+        <p className="reflux-glow-readable mt-6 rounded-xl px-4 py-3 text-center text-xs text-reflux-text-soft">
           Results vary by hardware. REFLUX creates a restore point before every change.
         </p>
       </GlowCard>

@@ -34,6 +34,10 @@ export interface ResultMetric {
   gain: string;
   beforeLabel: string;
   afterLabel: string;
+  beforeStroke: string;
+  afterStroke: string;
+  beforeGlow: string;
+  afterGlow: string;
 }
 
 interface ResultMetricChartProps {
@@ -104,135 +108,208 @@ export function ResultMetricChart({ metric, isLive, liveKey, large = false }: Re
   const afterPath = useMemo(() => buildPathFromSeries(afterSeries), [afterSeries]);
   const scanX = progress * CHART_WIDTH;
   const isRecording = phase === "live";
+  const chartHeight = large ? 200 : 168;
 
   return (
     <div className="result-metric-card">
-      <div className="mb-3 flex flex-wrap items-start justify-between gap-3">
+      <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <p className="text-sm font-bold text-white">{metric.label}</p>
+            <p className="font-display text-base font-bold text-white">{metric.label}</p>
             {isRecording && (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-reflux-green/30 bg-reflux-green/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-reflux-green">
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-reflux-green" />
+              <span className="reflux-glow-readable inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-reflux-green">
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-reflux-green shadow-[0_0_8px_#5dde86]" />
                 Recording
               </span>
             )}
             {phase === "done" && (
-              <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-reflux-muted">
+              <span className="reflux-glow-readable rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-reflux-text-soft">
                 Captured
               </span>
             )}
           </div>
-          <p className="mt-1 text-xs text-reflux-muted">{metric.session}</p>
+          <p className="mt-1 text-xs text-reflux-text-soft">{metric.session}</p>
         </div>
-        <p className="max-w-[200px] text-right text-[11px] leading-snug text-reflux-muted">{metric.scenario}</p>
+        <p className="reflux-glow-readable max-w-[220px] rounded-lg px-3 py-2 text-right text-[11px] leading-snug text-reflux-text-soft">
+          {metric.scenario}
+        </p>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-white/8 bg-[#070a10]">
-        <div className="flex items-center justify-between border-b border-white/6 px-4 py-2 text-[10px] font-medium text-reflux-muted">
-          <span>{metric.beforeLabel}</span>
-          <span className="tabular-nums">{isRecording ? "Live · 5s capture" : "Session avg"}</span>
-          <span className={metric.color}>{metric.afterLabel}</span>
-        </div>
-
-        <div className="relative px-3 py-4 sm:px-5 sm:py-5">
-          <div className="absolute top-4 bottom-4 left-3 z-10 flex w-14 flex-col justify-between text-[10px] font-bold sm:left-5">
-            <span className="text-[#8b95a8] tabular-nums">
-              {beforeReadout}
-              <span className="ml-0.5 text-[8px] font-medium">{metric.unit}</span>
+      <div className="result-chart-split flex flex-col gap-2.5">
+        <div
+          className="result-chart-panel result-chart-panel-before reflux-glow-box overflow-hidden rounded-xl p-3"
+          style={{
+            borderColor: `color-mix(in srgb, ${metric.beforeStroke} 35%, transparent)`,
+            boxShadow: `0 0 32px -14px ${metric.beforeGlow}`,
+          }}
+        >
+          <div className="mb-2 flex items-center justify-between gap-2">
+            <span
+              className="text-[10px] font-bold uppercase tracking-wider"
+              style={{ color: metric.beforeStroke }}
+            >
+              Before — {metric.beforeLabel}
             </span>
-            <span className={`tabular-nums ${metric.color}`}>
-              {afterReadout}
-              <span className="ml-0.5 text-[8px] font-medium text-reflux-muted">{metric.unit}</span>
+            <span className="reflux-metric text-sm font-bold tabular-nums" style={{ color: metric.beforeStroke }}>
+              {beforeReadout}
+              <span className="ml-0.5 text-[10px] font-medium text-reflux-muted">{metric.unit}</span>
             </span>
           </div>
+          <svg
+            viewBox={`0 0 ${CHART_WIDTH} ${CHART_MIDLINE}`}
+            className="w-full"
+            style={{ height: chartHeight * 0.42 }}
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <defs>
+              <clipPath id={`before-clip-${metric.id}-${liveKey}`}>
+                <rect x="0" y="0" width={CHART_WIDTH} height={CHART_MIDLINE} />
+              </clipPath>
+            </defs>
+            <g clipPath={`url(#before-clip-${metric.id}-${liveKey})`}>
+              <path
+                d={beforePath}
+                fill="none"
+                stroke={metric.beforeStroke}
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ filter: `drop-shadow(0 0 5px ${metric.beforeGlow})` }}
+              />
+              {isRecording && (
+                <line
+                  x1={scanX}
+                  y1="0"
+                  x2={scanX}
+                  y2={CHART_MIDLINE}
+                  stroke="rgba(255,255,255,0.4)"
+                  strokeWidth="1"
+                  strokeDasharray="3 3"
+                />
+              )}
+            </g>
+          </svg>
+        </div>
 
+        <div
+          className="result-chart-panel result-chart-panel-after reflux-glow-box overflow-hidden rounded-xl p-3"
+          style={{
+            borderColor: `color-mix(in srgb, ${metric.afterStroke} 35%, transparent)`,
+            boxShadow: `0 0 32px -14px ${metric.afterGlow}`,
+          }}
+        >
+          <div className="mb-2 flex items-center justify-between gap-2">
+            <span
+              className="text-[10px] font-bold uppercase tracking-wider"
+              style={{ color: metric.afterStroke }}
+            >
+              After — {metric.afterLabel}
+            </span>
+            <span className="reflux-metric text-sm font-bold tabular-nums" style={{ color: metric.afterStroke }}>
+              {afterReadout}
+              <span className="ml-0.5 text-[10px] font-medium text-reflux-muted">{metric.unit}</span>
+            </span>
+          </div>
           <svg
             viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
-            className={`ml-16 w-full sm:ml-[4.5rem] ${large ? "h-[168px] sm:h-[188px]" : "h-[140px]"}`}
-            role="img"
-            aria-label={`${metric.label} live capture`}
+            className="w-full"
+            style={{ height: chartHeight * 0.42 }}
             preserveAspectRatio="none"
+            aria-hidden="true"
           >
-            <rect x="0" y="0" width={CHART_WIDTH} height={CHART_MIDLINE - 2} fill="rgba(95,106,122,0.06)" rx="4" />
-            <rect
-              x="0"
-              y={CHART_MIDLINE + 2}
-              width={CHART_WIDTH}
-              height={CHART_HEIGHT - CHART_MIDLINE - 2}
-              fill="rgba(255,255,255,0.02)"
-              rx="4"
-            />
-            <line
-              x1="0"
-              y1={CHART_MIDLINE}
-              x2={CHART_WIDTH}
-              y2={CHART_MIDLINE}
-              stroke="rgba(255,255,255,0.08)"
-              strokeWidth="1"
-              strokeDasharray="5 4"
-            />
-
-            {[0.25, 0.5, 0.75].map((ratio) => (
-              <line
-                key={ratio}
-                x1="0"
-                y1={CHART_HEIGHT * ratio}
-                x2={CHART_WIDTH}
-                y2={CHART_HEIGHT * ratio}
-                stroke="rgba(255,255,255,0.04)"
-                strokeWidth="1"
+            <defs>
+              <clipPath id={`after-clip-${metric.id}-${liveKey}`}>
+                <rect x="0" y={CHART_MIDLINE} width={CHART_WIDTH} height={CHART_HEIGHT - CHART_MIDLINE} />
+              </clipPath>
+            </defs>
+            <g clipPath={`url(#after-clip-${metric.id}-${liveKey})`}>
+              <path
+                d={`${afterPath} L ${CHART_WIDTH} ${CHART_HEIGHT} L 0 ${CHART_HEIGHT} Z`}
+                fill={metric.afterStroke}
+                opacity="0.1"
               />
-            ))}
-
-            <path d={`${afterPath} L ${CHART_WIDTH} ${CHART_HEIGHT} L 0 ${CHART_HEIGHT} Z`} fill={metric.stroke} opacity="0.07" />
-
-            <path d={beforePath} className="result-line result-line-before result-line-done" />
-            <path d={afterPath} className="result-line result-line-after result-line-done" style={{ stroke: metric.stroke }} />
-
-            {isRecording && (
-              <line
-                x1={scanX}
-                y1="0"
-                x2={scanX}
-                y2={CHART_HEIGHT}
-                stroke="rgba(255,255,255,0.35)"
-                strokeWidth="1"
-                strokeDasharray="3 3"
+              <path
+                d={afterPath}
+                fill="none"
+                stroke={metric.afterStroke}
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ filter: `drop-shadow(0 0 6px ${metric.afterGlow})` }}
               />
-            )}
+              {isRecording && (
+                <line
+                  x1={scanX}
+                  y1={CHART_MIDLINE}
+                  x2={scanX}
+                  y2={CHART_HEIGHT}
+                  stroke="rgba(255,255,255,0.4)"
+                  strokeWidth="1"
+                  strokeDasharray="3 3"
+                />
+              )}
+            </g>
           </svg>
-
-          <div className="mt-2 flex justify-between px-1 text-[9px] tabular-nums text-reflux-muted/70">
-            <span>-5s</span>
-            <span>now</span>
-          </div>
         </div>
       </div>
 
-      <div className="mt-5 grid grid-cols-3 items-end gap-3 text-center">
-        <div>
+      <div className="mt-5 grid grid-cols-3 gap-3">
+        <div className="reflux-glow-box reflux-glow-box-sm rounded-xl p-3 text-center">
           <div className="text-[10px] font-bold tracking-wider text-reflux-muted uppercase">Without REFLUX</div>
-          <div className="mt-1 text-lg font-bold text-[#5a6578] line-through tabular-nums sm:text-xl">
+          <div
+            className="reflux-metric mt-1 text-xl font-bold line-through tabular-nums sm:text-2xl"
+            style={{ color: metric.beforeStroke }}
+          >
             {metric.before}
-            <span className="ml-0.5 text-xs font-medium">{metric.unit}</span>
+            <span className="ml-0.5 text-xs font-medium text-reflux-muted">{metric.unit}</span>
           </div>
         </div>
-        <div className={`text-xl font-extrabold sm:text-2xl ${metric.color}`}>{metric.delta}</div>
-        <div>
-          <div className="text-[10px] font-bold tracking-wider text-reflux-accent uppercase">With REFLUX Pro</div>
-          <div className={`mt-1 text-lg font-extrabold tabular-nums sm:text-xl ${metric.color}`}>
+        <div
+          className="reflux-glow-box rounded-xl p-3 text-center"
+          style={{
+            borderColor: `color-mix(in srgb, ${metric.afterStroke} 40%, transparent)`,
+            boxShadow: `0 0 36px -12px ${metric.afterGlow}`,
+          }}
+        >
+          <div className="text-[10px] font-bold tracking-wider text-reflux-muted uppercase">Gain</div>
+          <div className="reflux-metric mt-1 text-2xl font-extrabold sm:text-3xl" style={{ color: metric.afterStroke }}>
+            {metric.delta}
+            <span className="ml-1 text-sm font-bold text-reflux-muted">{metric.unit}</span>
+          </div>
+        </div>
+        <div
+          className="reflux-glow-box rounded-xl p-3 text-center"
+          style={{
+            borderColor: `color-mix(in srgb, ${metric.afterStroke} 35%, transparent)`,
+            boxShadow: `0 0 28px -14px ${metric.afterGlow}`,
+          }}
+        >
+          <div className="text-[10px] font-bold tracking-wider uppercase" style={{ color: metric.afterStroke }}>
+            With REFLUX Pro
+          </div>
+          <div className="reflux-metric mt-1 text-xl font-extrabold tabular-nums sm:text-2xl" style={{ color: metric.afterStroke }}>
             {metric.after}
             <span className="ml-0.5 text-xs font-medium text-reflux-muted">{metric.unit}</span>
           </div>
         </div>
       </div>
 
-      <div className="relative mt-4 h-1.5 overflow-hidden rounded-full bg-reflux-border">
+      <div className="result-gain-bar relative mt-4 h-2 overflow-hidden rounded-full reflux-glow-readable">
         <div
-          className={`h-full rounded-full bg-gradient-to-r ${metric.fill} transition-[width] duration-150 ease-linear`}
-          style={{ width: phase === "idle" ? "0%" : `${progress * parseFloat(metric.gain) * 100}%` }}
+          className="h-full rounded-full transition-[width] duration-150 ease-linear"
+          style={{
+            width: phase === "idle" ? "0%" : `${progress * parseFloat(metric.gain) * 100}%`,
+            background: `linear-gradient(90deg, ${metric.beforeStroke}, ${metric.afterStroke})`,
+            boxShadow: `0 0 12px ${metric.afterGlow}`,
+          }}
         />
+      </div>
+
+      <div className="mt-2 flex justify-between text-[9px] tabular-nums text-reflux-muted">
+        <span>0s</span>
+        <span>{isRecording ? "Live 5s capture" : "Session complete"}</span>
+        <span>5s</span>
       </div>
     </div>
   );
