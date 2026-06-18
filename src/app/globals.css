@@ -447,6 +447,8 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.04em;
+  border: 1px solid rgba(255, 77, 61, 0.18);
+  box-shadow: 0 0 20px -14px rgba(255, 77, 61, 0.35);
 }
 
 .badge-live {
@@ -922,14 +924,11 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
   position: relative;
   overflow: hidden;
   border-radius: 1.25rem;
-  border: none;
-  background: transparent;
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .faq-item-open {
-  background: transparent;
-  box-shadow: 0 0 32px -12px rgba(255, 107, 91, 0.4);
+  box-shadow: 0 0 40px -10px rgba(255, 77, 61, 0.5) !important;
 }
 
 .feature-slideshow-shell {
@@ -1659,6 +1658,47 @@ html.reduce-effects .particles-canvas {
   background: rgba(56, 189, 248, 0.06);
   border-color: rgba(56, 189, 248, 0.25);
   box-shadow: 0 0 36px -12px rgba(56, 189, 248, 0.4);
+}
+
+/* Clickable / hard-to-see — glow outline only where it helps */
+.reflux-glow-interactive {
+  border: 1px solid rgba(255, 77, 61, 0.22);
+  background: rgba(255, 77, 61, 0.04);
+  box-shadow:
+    0 0 30px -16px rgba(255, 77, 61, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.reflux-glow-interactive:hover {
+  border-color: rgba(255, 77, 61, 0.38);
+  box-shadow: 0 0 36px -12px rgba(255, 77, 61, 0.55);
+}
+
+.reflux-glow-interactive:focus-visible {
+  outline: none;
+  border-color: rgba(255, 77, 61, 0.5);
+  box-shadow: 0 0 40px -10px rgba(255, 77, 61, 0.6);
+}
+
+.reflux-glow-interactive-active {
+  border-color: rgba(255, 77, 61, 0.45) !important;
+  background: rgba(255, 77, 61, 0.1) !important;
+  box-shadow: 0 0 40px -10px rgba(255, 77, 61, 0.58) !important;
+  color: white !important;
+}
+
+.reflux-glow-readable {
+  border: 1px solid rgba(255, 77, 61, 0.16);
+  background: rgba(255, 77, 61, 0.03);
+  box-shadow: 0 0 24px -18px rgba(255, 77, 61, 0.35);
+  backdrop-filter: blur(8px);
 }
 
 /* ── Stacked proof charts ── */

@@ -22,9 +22,9 @@ const variantStyles: Record<ButtonVariant, string> = {
   discord:
     "bg-gradient-to-r from-[#5865f2] to-[#4752c4] text-white border-[#5865f2] shadow-[0_4px_20px_rgba(88,101,242,0.35)] hover:brightness-110",
   secondary:
-    "bg-white/[0.04] border border-white/12 text-reflux-text hover:border-white/20 hover:bg-white/[0.07]",
+    "reflux-glow-interactive bg-white/[0.04] text-reflux-text hover:bg-white/[0.07]",
   ghost:
-    "bg-transparent border border-reflux-border text-reflux-muted hover:border-white/15 hover:text-white hover:bg-white/[0.03]",
+    "reflux-glow-interactive bg-transparent text-reflux-muted hover:text-white hover:bg-white/[0.03]",
 };
 
 export function Button({

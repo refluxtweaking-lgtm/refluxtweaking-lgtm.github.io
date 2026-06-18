@@ -49,7 +49,7 @@ export function Footer() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-xl px-4 py-3 text-sm font-medium text-reflux-muted transition-all hover:bg-reflux-accent/8 hover:text-white"
+                  className="reflux-glow-interactive rounded-xl px-4 py-3 text-sm font-medium text-reflux-muted transition-all hover:text-white"
                 >
                   {link.label}
                 </a>
@@ -57,7 +57,7 @@ export function Footer() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="rounded-xl px-4 py-3 text-sm font-medium text-reflux-muted transition-all hover:bg-reflux-accent/8 hover:text-white"
+                  className="reflux-glow-interactive rounded-xl px-4 py-3 text-sm font-medium text-reflux-muted transition-all hover:text-white"
                 >
                   {link.label}
                 </Link>

@@ -37,10 +37,8 @@ export function AppGallery() {
                 key={item.id}
                 type="button"
                 onClick={() => setActive(item.id)}
-                className={`app-gallery-tab inline-flex shrink-0 items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-all ${
-                  active === item.id
-                    ? "border-reflux-accent/50 bg-reflux-accent/12 text-white shadow-[0_0_24px_rgba(241,91,80,0.2)]"
-                    : "border-white/10 bg-white/[0.03] text-reflux-muted hover:border-reflux-accent/25 hover:text-white"
+                className={`app-gallery-tab reflux-glow-interactive inline-flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold ${
+                  active === item.id ? "reflux-glow-interactive-active" : "text-reflux-muted hover:text-white"
                 }`}
               >
                 <AppIcon name={item.icon} size={16} glow={active === item.id} />
@@ -53,7 +51,7 @@ export function AppGallery() {
         <div className="grid items-start gap-8 lg:grid-cols-[1fr_1.05fr] lg:gap-10">
           <FlowIn delay={80}>
             <div className="app-gallery-copy sticky top-28">
-              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-reflux-green/25 bg-reflux-green/10 px-3 py-1 text-[11px] font-bold text-reflux-green uppercase">
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full reflux-glow-readable px-3 py-1 text-[11px] font-bold text-reflux-green uppercase">
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-reflux-green" />
                 Desktop app preview
               </div>
@@ -85,7 +83,7 @@ export function AppGallery() {
           <FlowIn delay={120}>
             <div className="app-gallery-stage relative">
               <div className="app-gallery-glow pointer-events-none absolute inset-0 scale-105 rounded-[28px] blur-3xl" aria-hidden="true" />
-              <div className="app-gallery-device relative overflow-hidden rounded-2xl border border-white/[0.1] bg-[#0c0e12] shadow-[0_20px_56px_rgba(0,0,0,0.35)]">
+              <div className="app-gallery-device reflux-glow-box relative overflow-hidden rounded-2xl">
                 <div className="flex items-center justify-between border-b border-white/8 bg-[#0b0e15] px-4 py-2.5">
                   <div className="flex items-center gap-2">
                     <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
@@ -106,10 +104,10 @@ export function AppGallery() {
                     key={item.id}
                     type="button"
                     onClick={() => setActive(item.id)}
-                    className={`inline-flex flex-col items-center gap-1 rounded-xl border px-2 py-2 text-center text-[10px] font-bold transition-all sm:text-[11px] ${
+                    className={`reflux-glow-interactive inline-flex flex-col items-center gap-1 rounded-xl px-2 py-2 text-center text-[10px] font-bold sm:text-[11px] ${
                       active === item.id
-                        ? "border-reflux-accent/40 bg-reflux-accent/10 text-reflux-accent"
-                        : "border-white/8 bg-white/[0.02] text-reflux-muted hover:text-white"
+                        ? "reflux-glow-interactive-active text-reflux-accent"
+                        : "text-reflux-muted hover:text-white"
                     }`}
                   >
                     <AppIcon name={item.icon} size={14} glow={active === item.id} />

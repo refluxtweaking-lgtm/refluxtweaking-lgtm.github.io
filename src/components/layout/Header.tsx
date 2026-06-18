@@ -131,7 +131,7 @@ export function Header() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="rounded-xl px-4 py-3.5 text-[15px] font-medium text-[#c0c8d2] transition-colors hover:bg-reflux-accent/10 hover:text-reflux-accent"
+                    className="rounded-xl px-4 py-3.5 text-[15px] font-medium text-reflux-text-soft transition-colors hover:bg-reflux-accent/10 hover:text-reflux-accent reflux-glow-interactive"
                     onClick={closeMenu}
                   >
                     {link.label}

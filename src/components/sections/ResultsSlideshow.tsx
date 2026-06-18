@@ -91,10 +91,8 @@ export function ResultsSlideshow({ animate }: ResultsSlideshowProps) {
               key={item.id}
               type="button"
               onClick={() => goTo(i)}
-              className={`rounded-full border px-3 py-2 text-xs font-semibold transition-colors sm:px-4 sm:text-sm ${
-                i === index
-                  ? "border-reflux-accent/40 bg-reflux-accent/12 text-white"
-                  : "border-white/8 bg-white/[0.02] text-reflux-muted hover:border-white/14 hover:text-white"
+              className={`reflux-glow-interactive rounded-full px-3 py-2 text-xs font-semibold sm:px-4 sm:text-sm ${
+                i === index ? "reflux-glow-interactive-active" : "text-reflux-muted hover:text-white"
               }`}
             >
               {item.label}
@@ -116,13 +114,13 @@ export function ResultsSlideshow({ animate }: ResultsSlideshowProps) {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-white/8 bg-[#080b12] p-5 sm:p-7">
+      <div className="reflux-glow-box overflow-hidden p-5 sm:p-7">
         <div key={`${metric.id}-${liveKey}`} className="result-slide-enter">
           <ResultMetricChart metric={metric} isLive={animate} liveKey={liveKey} large />
         </div>
       </div>
 
-      <p className="mt-4 text-center text-[11px] text-reflux-muted">
+      <p className="reflux-glow-readable mt-4 rounded-xl px-4 py-3 text-center text-[11px] text-reflux-text-soft">
         Each test records live for 5 seconds — top line is real frame variance before REFLUX, bottom line is after
       </p>
     </div>

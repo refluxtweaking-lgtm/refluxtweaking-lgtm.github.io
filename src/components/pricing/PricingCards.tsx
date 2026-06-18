@@ -51,7 +51,7 @@ export function PricingCards({ compact = false }: PricingCardsProps) {
             )}
           </div>
 
-          <div className="mb-5 inline-flex rounded-full border border-reflux-accent/25 bg-reflux-accent/10 px-4 py-1.5 text-sm font-bold text-reflux-accent">
+          <div className="mb-5 inline-flex rounded-full reflux-glow-readable px-4 py-1.5 text-sm font-bold text-reflux-accent">
             {displayTweakCountForPlan(plan.id)} tweaks
           </div>
 

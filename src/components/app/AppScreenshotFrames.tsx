@@ -159,7 +159,7 @@ export function AppScreenshotFrame({ id }: { id: GalleryId }) {
               {PRODUCT_LIMITS.freeTweaks} free · {PRODUCT_LIMITS.totalTweaksLabel} pro
             </div>
           </div>
-          <span className="rounded-lg bg-gradient-to-r from-reflux-accent to-[#c43d35] px-2.5 py-1 text-[10px] font-bold text-white">
+          <span className="rounded-lg reflux-glow-interactive border border-reflux-accent/30 bg-reflux-accent/10 px-2.5 py-1.5 text-[10px] font-bold text-reflux-accent">
             Apply All Free
           </span>
         </div>
@@ -201,7 +201,7 @@ export function AppScreenshotFrame({ id }: { id: GalleryId }) {
     return (
       <div className="grid grid-cols-3 gap-2 p-1">
         {games.map((game) => (
-          <div key={game.alt} className="relative overflow-hidden rounded-xl border border-white/10 bg-[#0f1217]">
+          <div key={game.alt} className="reflux-glow-interactive relative overflow-hidden rounded-xl">
             <div className="aspect-[460/215]">
               <GameImage
                 sources={game.sources}
@@ -246,7 +246,7 @@ export function AppScreenshotFrame({ id }: { id: GalleryId }) {
         {tweaks.map((tweak) => (
           <div
             key={tweak.name}
-            className="flex items-center justify-between gap-3 rounded-xl border border-white/8 bg-[#0f1217] px-3 py-2.5"
+            className="reflux-glow-interactive flex items-center justify-between gap-3 rounded-xl px-3 py-2.5"
           >
             <div className="min-w-0">
               <div className="text-[11px] font-semibold text-white">{tweak.name}</div>
@@ -287,7 +287,7 @@ export function AppScreenshotFrame({ id }: { id: GalleryId }) {
             <span className="rounded-md border border-white/10 px-2 py-1 text-[9px] font-semibold text-reflux-muted">
               Copy
             </span>
-            <span className="rounded-md bg-reflux-accent/15 px-2 py-1 text-[9px] font-bold text-reflux-accent">
+          <span className="rounded-md reflux-glow-interactive px-2 py-1 text-[9px] font-bold text-reflux-accent">
               Run
             </span>
           </div>

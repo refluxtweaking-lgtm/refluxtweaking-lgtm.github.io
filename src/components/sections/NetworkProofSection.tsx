@@ -10,7 +10,7 @@ export function NetworkProofSection() {
 
       <div className="relative mx-auto max-w-6xl px-4">
         <FlowIn className="mb-4 md:mb-6">
-          <p className="mb-3 text-xs font-bold tracking-[0.2em] text-reflux-accent uppercase">
+          <p className="mb-3 text-xs font-bold tracking-[0.2em] text-reflux-accent uppercase reflux-glow-readable inline-block rounded-full px-3 py-1">
             Measured on real hardware
           </p>
           <h2 className="font-display text-3xl font-extrabold tracking-tight text-white md:text-4xl lg:text-[2.85rem] lg:leading-[1.05]">

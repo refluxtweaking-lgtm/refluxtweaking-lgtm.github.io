@@ -71,7 +71,7 @@ function ShowcaseUi({ type }: { type: (typeof showcaseCards)[number]["ui"] }) {
               <span className="text-reflux-green">✓</span>
               {item.label}
             </div>
-            <div className="flex items-center gap-1.5 rounded-md border border-white/6 bg-black/30 px-2 py-1.5">
+            <div className="flex items-center gap-1.5 rounded-md reflux-glow-readable bg-black/30 px-2 py-1.5">
               <AppIcon name={item.icon} size={12} glow={false} />
               <span className="truncate text-[10px] font-medium text-white">{item.value}</span>
             </div>

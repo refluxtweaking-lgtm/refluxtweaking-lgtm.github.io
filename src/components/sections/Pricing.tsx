@@ -22,7 +22,7 @@ export function Pricing() {
       <p className="mt-10 text-center">
         <Link
           href="/compare"
-          className="inline-flex items-center gap-2 rounded-full border border-reflux-accent/30 bg-reflux-accent/10 px-6 py-3 text-sm font-semibold text-reflux-accent transition-all hover:bg-reflux-accent/20 hover:shadow-[0_0_24px_rgba(241,91,80,0.2)]"
+          className="reflux-glow-interactive inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-reflux-accent hover:text-white"
         >
           Compare all {PRODUCT_LIMITS.totalTweaksLabel} tweaks across plans
           <Icon name="arrowRight" size={16} strokeWidth={2.2} glow={false} />

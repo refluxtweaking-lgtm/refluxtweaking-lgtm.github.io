@@ -59,7 +59,7 @@ export function FAQ() {
         {faqs.map((faq, i) => (
           <div
             key={faq.q}
-            className={`faq-item ${open === i ? "faq-item-open" : "hover:border-reflux-accent/25 hover:-translate-y-0.5"}`}
+            className={`faq-item reflux-glow-interactive ${open === i ? "faq-item-open reflux-glow-interactive-active" : "hover:-translate-y-0.5"}`}
           >
             <button
               type="button"
@@ -68,8 +68,8 @@ export function FAQ() {
             >
               {faq.q}
               <span
-                className={`ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-reflux-border bg-reflux-card text-reflux-accent transition-all duration-300 ${
-                  open === i ? "rotate-45 border-reflux-accent/50 bg-reflux-accent/15" : ""
+                className={`ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg reflux-glow-interactive text-reflux-accent transition-all duration-300 ${
+                  open === i ? "rotate-45 reflux-glow-interactive-active" : ""
                 }`}
               >
                 +

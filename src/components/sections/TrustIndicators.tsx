@@ -24,7 +24,7 @@ export function TrustIndicators() {
           <FlowIn key={item.objection} delay={index * 50}>
             <div className="trust-bento-card reflux-glow-box group flex h-full flex-col p-5">
               <div className="mb-3 flex items-start gap-3">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-reflux-accent/35 bg-reflux-accent/15 shadow-[0_0_20px_-4px_rgba(255,107,91,0.5)] transition-transform group-hover:scale-105">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl reflux-glow-readable border border-reflux-accent/35 bg-reflux-accent/15 shadow-[0_0_20px_-4px_rgba(255,107,91,0.5)] transition-transform group-hover:scale-105">
                   <AppIcon name={item.icon} size={20} />
                 </span>
                 <div className="min-w-0 pt-0.5">

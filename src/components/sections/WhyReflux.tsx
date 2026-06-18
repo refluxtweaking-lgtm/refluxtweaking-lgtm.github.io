@@ -34,7 +34,7 @@ export function WhyReflux() {
         {refluxAdvantages.map((item, i) => (
           <FlowIn key={item.title} delay={i * 60}>
             <GlowCard className="h-full p-5 transition-transform hover:-translate-y-0.5">
-              <span className="mb-2 inline-block rounded-full border border-reflux-accent/30 bg-reflux-accent/10 px-2.5 py-0.5 text-[10px] font-bold tracking-wide text-reflux-accent uppercase">
+              <span className="mb-2 inline-block rounded-full reflux-glow-readable px-2.5 py-0.5 text-[10px] font-bold tracking-wide text-reflux-accent uppercase">
                 {item.objection}
               </span>
               <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-reflux-accent/25 bg-reflux-accent/10">
@@ -48,14 +48,14 @@ export function WhyReflux() {
       </div>
 
       <FlowIn delay={100}>
-        <div className="mx-auto max-w-4xl overflow-hidden">
+        <div className="reflux-glow-box mx-auto max-w-4xl overflow-hidden rounded-2xl">
           <div className="px-5 py-4 sm:px-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <div className="text-xs font-bold tracking-wider text-reflux-accent uppercase">What you get</div>
                 <h3 className="text-lg font-extrabold text-white sm:text-xl">Everything in REFLUX</h3>
               </div>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-reflux-green/10 px-3 py-1 text-[11px] font-bold text-reflux-green">
+              <span className="reflux-glow-readable inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold text-reflux-green">
                 <Icon name="check" size={12} />
                 {PRODUCT_LIMITS.totalTweaksLabel} pro tweaks
               </span>

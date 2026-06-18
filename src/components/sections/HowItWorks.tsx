@@ -53,7 +53,7 @@ export function HowItWorks() {
 
             <AppIconChip name={step.icon} size={24} chipSize={64} className="relative mx-auto mb-4" />
 
-            <div className="relative mb-2 inline-flex rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[10px] font-bold tracking-widest text-reflux-muted uppercase">
+            <div className="relative mb-2 inline-flex rounded-full reflux-glow-readable px-3 py-1 text-[10px] font-bold tracking-widest text-reflux-muted uppercase">
               Step {step.step}
             </div>
             <h3 className="relative mb-2 text-lg font-bold">{step.title}</h3>

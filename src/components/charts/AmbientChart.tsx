@@ -219,7 +219,7 @@ export function AmbientFpsGraph({ className = "" }: AmbientFpsGraphProps) {
           </div>
         )}
       </ProofChartStage>
-      <p className="proof-chart-caption mt-4 text-sm text-reflux-text-soft">
+      <p className="proof-chart-caption reflux-glow-readable mt-4 rounded-xl px-4 py-3 text-sm text-reflux-text-soft">
         RTX 4070 · Ryzen 7 7800X3D · Fortnite creative. Top = before, bottom = after. 10s scan then freeze.
       </p>
     </div>
@@ -274,7 +274,7 @@ export function LatencyMiniChart() {
           </div>
         )}
       </ProofChartStage>
-      <p className="proof-chart-caption mt-4 text-sm text-reflux-text-soft">
+      <p className="proof-chart-caption reflux-glow-readable mt-4 rounded-xl px-4 py-3 text-sm text-reflux-text-soft">
         Lower line = faster clicks. Purple = before, green = after.
       </p>
     </div>
