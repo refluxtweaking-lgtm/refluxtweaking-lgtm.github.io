@@ -294,23 +294,6 @@ export function ResultMetricChart({ metric, isLive, liveKey, large = false }: Re
           </div>
         </div>
       </div>
-
-      <div className="result-gain-bar relative mt-4 h-2 overflow-hidden rounded-full reflux-glow-readable">
-        <div
-          className="h-full rounded-full transition-[width] duration-150 ease-linear"
-          style={{
-            width: phase === "idle" ? "0%" : `${progress * parseFloat(metric.gain) * 100}%`,
-            background: `linear-gradient(90deg, ${metric.beforeStroke}, ${metric.afterStroke})`,
-            boxShadow: `0 0 12px ${metric.afterGlow}`,
-          }}
-        />
-      </div>
-
-      <div className="mt-2 flex justify-between text-[9px] tabular-nums text-reflux-muted">
-        <span>0s</span>
-        <span>{isRecording ? "Live 5s capture" : "Session complete"}</span>
-        <span>5s</span>
-      </div>
     </div>
   );
 }
