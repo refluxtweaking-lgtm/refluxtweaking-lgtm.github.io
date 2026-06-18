@@ -4,6 +4,7 @@ import { NoiseTexture } from "./NoiseTexture";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { PurchasePopups } from "@/components/ui/PurchasePopups";
+import { ScrollRevealBoot } from "@/components/ui/ScrollRevealBoot";
 
 interface SiteShellProps {
   children: React.ReactNode;
@@ -13,6 +14,7 @@ interface SiteShellProps {
 export function SiteShell({ children, mainClassName = "" }: SiteShellProps) {
   return (
     <>
+      <ScrollRevealBoot />
       <BackgroundImage />
       <AmbientBackground />
       <NoiseTexture />

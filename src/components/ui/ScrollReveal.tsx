@@ -1,5 +1,3 @@
-"use client";
-
 import { FlowIn } from "@/components/ui/FlowIn";
 import type { ReactNode } from "react";
 
