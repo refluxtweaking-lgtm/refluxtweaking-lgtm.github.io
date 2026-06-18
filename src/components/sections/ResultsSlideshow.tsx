@@ -140,10 +140,6 @@ export function ResultsSlideshow({ animate }: ResultsSlideshowProps) {
           <ResultMetricChart metric={metric} isLive={animate} liveKey={liveKey} large />
         </div>
       </div>
-
-      <p className="reflux-glow-readable mt-4 rounded-xl px-4 py-3 text-center text-[11px] text-reflux-text-soft">
-        Top panel = before REFLUX. Bottom panel = after. Each test records live for 5 seconds on the same hardware.
-      </p>
     </div>
   );
 }

@@ -74,9 +74,26 @@ export function RealResults() {
 
         <ResultsSlideshow animate={animate} />
 
-        <p className="reflux-glow-readable mt-6 rounded-xl px-4 py-3 text-center text-xs text-reflux-text-soft">
-          Results vary by hardware. REFLUX creates a restore point before every change.
-        </p>
+        <div className="reflux-warning mt-6 flex items-start gap-3 rounded-xl px-4 py-3.5 sm:px-5" role="alert">
+          <svg
+            viewBox="0 0 24 24"
+            width={22}
+            height={22}
+            className="reflux-warning-icon mt-0.5 shrink-0"
+            aria-hidden="true"
+          >
+            <path
+              fill="currentColor"
+              d="M12 2 1.5 21h21L12 2zm0 4.2 7.35 12.8H4.65L12 6.2zM11 10v5h2v-5h-2zm0 7v2h2v-2h-2z"
+            />
+          </svg>
+          <div className="min-w-0">
+            <p className="text-[10px] font-bold tracking-[0.18em] text-amber-400 uppercase">Warning</p>
+            <p className="mt-1 text-xs leading-relaxed text-amber-100/90">
+              Results vary by hardware. REFLUX creates a restore point before every change.
+            </p>
+          </div>
+        </div>
       </GlowCard>
     </section>
   );
