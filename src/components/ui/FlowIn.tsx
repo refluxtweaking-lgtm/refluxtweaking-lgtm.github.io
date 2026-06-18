@@ -5,6 +5,7 @@ interface FlowInProps {
   className?: string;
   delay?: number;
   as?: "div" | "section" | "article";
+  sectionLabel?: string;
 }
 
 export function FlowIn({
@@ -12,10 +13,12 @@ export function FlowIn({
   className = "",
   delay = 0,
   as: Tag = "div",
+  sectionLabel,
 }: FlowInProps) {
   return (
     <Tag
       data-scroll-reveal
+      data-section-label={sectionLabel}
       className={`scroll-reveal ${className}`}
       style={{ "--reveal-delay": `${delay}ms` } as CSSProperties}
     >

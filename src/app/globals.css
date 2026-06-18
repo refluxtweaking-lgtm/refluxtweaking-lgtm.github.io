@@ -1240,6 +1240,12 @@ html.reduce-effects .cta-flow-card::before {
   animation: none;
 }
 
+html.reduce-effects .scroll-sweep-layer,
+html.reduce-effects .scroll-sweep-line,
+html.reduce-effects .scroll-sweep-label {
+  display: none;
+}
+
 html.reduce-effects .particles-canvas {
   display: none;
 }
@@ -1330,7 +1336,7 @@ html.reduce-effects .particles-canvas {
   vector-effect: non-scaling-stroke;
 }
 
-/* Proof charts — 5s scan intro, full paths always visible */
+/* Proof charts — 10s scan intro, full paths always visible */
 .proof-chart-stage {
   border-radius: inherit;
   overflow: visible;
@@ -1352,7 +1358,7 @@ html.reduce-effects .particles-canvas {
     transparent 100%
   );
   background-size: 200% 100%;
-  animation: proofChartScan 5s linear 1 forwards;
+  animation: proofChartScan 10s linear 1 forwards;
 }
 
 @keyframes proofChartScan {
@@ -1460,4 +1466,153 @@ html.reduce-effects .particles-canvas {
 
 .pro-spotlight-center {
   box-shadow: 0 0 60px -20px rgba(255, 107, 91, 0.35);
+}
+
+/* ── Scroll sweep lines ── */
+.scroll-sweep-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.scroll-sweep-line {
+  position: absolute;
+  left: -30%;
+  width: 160%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 107, 91, 0.15) 20%,
+    rgba(255, 107, 91, 0.95) 50%,
+    rgba(255, 60, 50, 0.5) 80%,
+    transparent 100%
+  );
+  box-shadow:
+    0 0 10px rgba(255, 107, 91, 0.7),
+    0 0 22px rgba(255, 107, 91, 0.35);
+  transform: translateX(-100%);
+  animation: scrollSweepShoot var(--sweep-speed, 0.75s) ease-out forwards;
+}
+
+.scroll-sweep-line-strong {
+  height: 2px;
+  box-shadow:
+    0 0 14px rgba(255, 107, 91, 0.95),
+    0 0 36px rgba(255, 107, 91, 0.5),
+    0 0 60px rgba(255, 60, 50, 0.25);
+}
+
+.scroll-sweep-label {
+  position: absolute;
+  left: max(20px, 4vw);
+  transform: translateY(-50%);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  color: rgba(255, 149, 136, 0.95);
+  text-shadow: 0 0 18px rgba(255, 107, 91, 0.9);
+  animation: scrollSweepLabel 1.3s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes scrollSweepShoot {
+  0% {
+    transform: translateX(-100%) scaleX(0.4);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(65%) scaleX(1);
+    opacity: 0;
+  }
+}
+
+@keyframes scrollSweepLabel {
+  0% {
+    opacity: 0;
+    transform: translateY(-50%) translateX(-12px);
+  }
+  18% {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-50%) translateX(8px);
+  }
+}
+
+/* ── Proof chart readouts ── */
+.proof-stat-compare {
+  border-bottom: 1px solid rgba(255, 107, 91, 0.12);
+  padding-bottom: 1rem;
+}
+
+.proof-stat-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.proof-stat-value {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: white;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.proof-stat-unit {
+  margin-left: 0.15rem;
+  font-size: 0.45em;
+  font-weight: 700;
+  color: var(--color-reflux-muted);
+}
+
+.proof-stat-note {
+  margin-top: 0.35rem;
+  font-size: 12px;
+  color: var(--color-reflux-muted);
+}
+
+.proof-chart-frame {
+  display: flex;
+  gap: 0.75rem;
+  align-items: stretch;
+}
+
+.proof-chart-frame-sm .proof-chart-axis {
+  font-size: 9px;
+}
+
+.proof-chart-axis {
+  position: relative;
+  width: 2.5rem;
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.28);
+  font-variant-numeric: tabular-nums;
+}
+
+.proof-chart-axis-tick {
+  position: absolute;
+  right: 0;
+  transform: translateY(-50%);
+  white-space: nowrap;
+}
+
+.proof-chart-canvas {
+  min-width: 0;
+}
+
+.proof-chart-caption {
+  line-height: 1.5;
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { SECTION_EVENT } from "@/components/ui/ScrollSweepLines";
 
 export function ScrollRevealBoot() {
   useEffect(() => {
@@ -23,8 +24,20 @@ export function ScrollRevealBoot() {
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
-          entry.target.classList.add("scroll-reveal-visible");
-          observer.unobserve(entry.target);
+          const el = entry.target as HTMLElement;
+          el.classList.add("scroll-reveal-visible");
+          observer.unobserve(el);
+
+          const rect = el.getBoundingClientRect();
+          window.dispatchEvent(
+            new CustomEvent(SECTION_EVENT, {
+              detail: {
+                label: el.dataset.sectionLabel,
+                top: rect.top,
+                height: rect.height,
+              },
+            }),
+          );
         });
       },
       { threshold: 0.12, rootMargin: "0px 0px -10% 0px" },

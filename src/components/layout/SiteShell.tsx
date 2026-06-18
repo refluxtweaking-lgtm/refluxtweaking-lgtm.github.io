@@ -5,6 +5,7 @@ import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { PurchasePopups } from "@/components/ui/PurchasePopups";
 import { ScrollRevealBoot } from "@/components/ui/ScrollRevealBoot";
+import { ScrollSweepLines } from "@/components/ui/ScrollSweepLines";
 
 interface SiteShellProps {
   children: React.ReactNode;
@@ -15,6 +16,7 @@ export function SiteShell({ children, mainClassName = "" }: SiteShellProps) {
   return (
     <>
       <ScrollRevealBoot />
+      <ScrollSweepLines />
       <BackgroundImage />
       <AmbientBackground />
       <NoiseTexture />

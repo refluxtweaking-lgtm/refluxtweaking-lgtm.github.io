@@ -18,40 +18,40 @@ export default function Home() {
   return (
     <SiteShell>
       <Hero />
-      <ScrollReveal>
+      <ScrollReveal sectionLabel="FPS PROOF">
         <NetworkProofSection />
       </ScrollReveal>
-      <ScrollReveal>
+      <ScrollReveal sectionLabel="FREE APP">
         <AppShowcaseStrip />
       </ScrollReveal>
-      <ScrollReveal>
+      <ScrollReveal sectionLabel="PRO">
         <ProSpotlight />
       </ScrollReveal>
-      <ScrollReveal>
+      <ScrollReveal sectionLabel="GALLERY">
         <AppGallery />
       </ScrollReveal>
-      <ScrollReveal>
+      <ScrollReveal sectionLabel="TRUST">
         <TrustIndicators />
       </ScrollReveal>
-      <ScrollReveal>
+      <ScrollReveal sectionLabel="WHY REFLUX">
         <WhyReflux />
       </ScrollReveal>
-      <ScrollReveal>
+      <ScrollReveal sectionLabel="RESULTS">
         <RealResults />
       </ScrollReveal>
-      <ScrollReveal>
+      <ScrollReveal sectionLabel="SETUP">
         <HowItWorks />
       </ScrollReveal>
-      <ScrollReveal>
+      <ScrollReveal sectionLabel="REVIEWS">
         <Testimonials />
       </ScrollReveal>
-      <ScrollReveal>
+      <ScrollReveal sectionLabel="PRICING">
         <Pricing />
       </ScrollReveal>
-      <ScrollReveal>
+      <ScrollReveal sectionLabel="FAQ">
         <FAQ />
       </ScrollReveal>
-      <ScrollReveal>
+      <ScrollReveal sectionLabel="DOWNLOAD">
         <CTA />
       </ScrollReveal>
     </SiteShell>
