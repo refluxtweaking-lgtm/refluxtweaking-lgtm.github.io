@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { GameImage } from "@/components/games/GameImage";
 import { AppIcon, AppIconChip } from "@/components/ui/AppIcon";
@@ -11,6 +11,7 @@ import type { AppIconName } from "@/data/app-icons";
 
 const tabs = ["Tweaks", "Games", "Network", "Cleanup", "Benchmarks"] as const;
 type Tab = (typeof tabs)[number];
+type AppView = "home" | Tab;
 
 const STEAM_HEADER = (appId: number) =>
   `https://cdn.cloudflare.steamstatic.com/steam/apps/${appId}/header.jpg`;
@@ -45,7 +46,60 @@ const BENCH_STATS = [
   { label: "RAM Free", value: "31 GB", color: "linear-gradient(90deg, #b392f0, #9b7de8)", glow: "rgba(179,146,240,0.5)", fill: 68 },
 ] as const;
 
-function PreviewBenchmarks() {
+function PreviewHome({ visible }: { visible: boolean }) {
+  const demoExpires = useMemo(() => Date.now() + 29 * 86400 * 1000 + 5 * 3600 * 1000, []);
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    if (!visible) return;
+    const id = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, [visible]);
+
+  const remaining = Math.max(0, demoExpires - now);
+  const days = Math.floor(remaining / 86400000);
+  const hours = Math.floor((remaining % 86400000) / 3600000);
+  const minutes = Math.floor((remaining % 3600000) / 60000);
+  const seconds = Math.floor((remaining % 60000) / 1000);
+
+  return (
+    <div className="space-y-3">
+      <div className="reflux-glow-box rounded-xl p-3">
+        <div className="mb-1 text-[10px] font-bold tracking-wider text-reflux-accent uppercase">PRO access</div>
+        <div className="reflux-metric text-2xl font-extrabold text-white sm:text-3xl">
+          {days}d {hours}h {minutes}m {seconds}s
+        </div>
+        <p className="mt-1 text-[10px] text-reflux-muted">Countdown starts when you activate your license key.</p>
+      </div>
+      <div className="grid grid-cols-3 gap-2">
+        {[
+          { label: "CPU", val: "24%", color: "#5DDE86" },
+          { label: "GPU", val: "31%", color: "#F15B50" },
+          { label: "RAM", val: "56%", color: "#B392F0" },
+        ].map((stat) => (
+          <div key={stat.label} className="rounded-xl border border-reflux-border/50 bg-[#0f1217]/90 p-2.5">
+            <div className="text-[9px] font-bold tracking-wider text-reflux-muted uppercase">{stat.label}</div>
+            <div className="mt-1 text-lg font-extrabold tabular-nums" style={{ color: stat.color }}>
+              {stat.val}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {["Clean RAM", "Optimize Network", "Apply Tweaks"].map((action) => (
+          <span
+            key={action}
+            className="rounded-lg border border-reflux-accent/30 bg-reflux-accent/10 px-2.5 py-1.5 text-[10px] font-bold text-reflux-accent"
+          >
+            {action}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PreviewBenchmarks({ active }: { active: boolean }) {
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
       {BENCH_STATS.map((stat, i) => (
@@ -63,6 +117,7 @@ function PreviewBenchmarks() {
             color={stat.color}
             glow={stat.glow}
             delay={i * 0.4}
+            active={active}
           />
         </div>
       ))}
@@ -116,18 +171,24 @@ interface AppPreviewMockProps {
 
 export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMockProps) {
   const [activeTab, setActiveTab] = useState<Tab>("Tweaks");
+  const [view, setView] = useState<AppView>("home");
   const { ref, visible } = useInViewport<HTMLDivElement>("120px");
 
   useEffect(() => {
     if (!autoPlay || !visible) return;
     const interval = setInterval(() => {
-      setActiveTab((current) => {
-        const idx = tabs.indexOf(current);
+      setView((current) => {
+        if (current === "home") return "Tweaks";
+        const idx = tabs.indexOf(current as Tab);
         return tabs[(idx + 1) % tabs.length];
       });
     }, 3600);
     return () => clearInterval(interval);
   }, [autoPlay, visible]);
+
+  useEffect(() => {
+    if (view !== "home") setActiveTab(view);
+  }, [view]);
 
   const shellClass = hero
     ? "rounded-none border-0 bg-transparent shadow-none"
@@ -163,13 +224,21 @@ export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMoc
           <aside className="hidden w-[76px] shrink-0 flex-col gap-0.5 overflow-y-auto border-r border-reflux-border/40 bg-[#080a0d] py-2 sm:flex">
             {heroSidebarItems.map((item) => {
               const tab = item.tab;
-              const isActive = tab ? activeTab === tab : item.icon === "home";
+              const isHome = item.icon === "home";
+              const isActive = isHome ? view === "home" : view === tab;
               return (
                 <button
                   key={`${item.icon}-${item.label}`}
                   type="button"
                   onClick={() => {
-                    if (tab) setActiveTab(tab);
+                    if (isHome) {
+                      setView("home");
+                      return;
+                    }
+                    if (tab) {
+                      setActiveTab(tab);
+                      setView(tab);
+                    }
                   }}
                   className={`mx-1.5 flex flex-col items-center gap-1 rounded-xl px-1 py-2 text-[8px] font-bold transition-all ${
                     isActive
@@ -187,13 +256,27 @@ export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMoc
 
         <div className="min-w-0 flex-1">
           <div className="flex gap-0.5 overflow-x-auto border-b border-reflux-border/40 bg-[#0a0c10] px-2 sm:px-3">
+            <button
+              type="button"
+              onClick={() => setView("home")}
+              className={`shrink-0 border-b-2 px-3 py-2.5 text-xs font-semibold transition-all sm:px-4 sm:py-3 sm:text-sm ${
+                view === "home"
+                  ? "border-reflux-accent text-reflux-accent"
+                  : "border-transparent text-reflux-muted hover:text-white"
+              }`}
+            >
+              Home
+            </button>
             {tabs.map((tab) => (
               <button
                 key={tab}
                 type="button"
-                onClick={() => setActiveTab(tab)}
+                onClick={() => {
+                  setActiveTab(tab);
+                  setView(tab);
+                }}
                 className={`shrink-0 border-b-2 px-3 py-2.5 text-xs font-semibold transition-all sm:px-4 sm:py-3 sm:text-sm ${
-                  activeTab === tab
+                  view === tab
                     ? "border-reflux-accent text-reflux-accent"
                     : "border-transparent text-reflux-muted hover:text-white"
                 }`}
@@ -204,7 +287,9 @@ export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMoc
           </div>
 
           <div className={`bg-gradient-to-b from-[#0c0e12] to-[#080a0d] ${hero ? "p-4 sm:p-5" : "p-6"}`}>
-            {activeTab === "Tweaks" && (
+            {view === "home" && <PreviewHome visible={visible} />}
+
+            {view === "Tweaks" && (
               <div className="space-y-2">
                 <div className="mb-3 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
@@ -247,7 +332,7 @@ export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMoc
               </div>
             )}
 
-            {activeTab === "Games" && (
+            {view === "Games" && (
               <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
                 {PREVIEW_GAMES.map((game) => (
                   <div
@@ -272,7 +357,7 @@ export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMoc
               </div>
             )}
 
-            {activeTab === "Network" && (
+            {view === "Network" && (
               <div className="space-y-2">
                 <div className="mb-3 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
@@ -310,7 +395,7 @@ export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMoc
               </div>
             )}
 
-            {activeTab === "Cleanup" && (
+            {view === "Cleanup" && (
               <div className="py-4 text-center sm:py-6">
                 <AppIcon name="cleanup" size={28} className="mx-auto mb-2" />
                 <div className="text-4xl font-extrabold text-reflux-green sm:text-5xl">12.4 GB</div>
@@ -322,18 +407,19 @@ export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMoc
                     fill={68}
                     color="linear-gradient(90deg, #ff6b5b, #5dde86)"
                     glow="rgba(93,222,134,0.45)"
+                    active={visible}
                   />
                 </div>
               </div>
             )}
 
-            {activeTab === "Benchmarks" && (
+            {view === "Benchmarks" && (
               <div>
                 <div className="mb-3 flex items-center gap-2">
                   <AppIcon name="benchmark" size={18} />
                   <span className="text-sm font-bold text-white">Live Benchmarks</span>
                 </div>
-                <PreviewBenchmarks />
+                <PreviewBenchmarks active={visible} />
               </div>
             )}
           </div>

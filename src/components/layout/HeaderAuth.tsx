@@ -42,7 +42,15 @@ export function HeaderAuth({ className = "", onNavigate }: HeaderAuthProps) {
     };
   }, [configured]);
 
-  if (!configured || loggedIn === null) return null;
+  if (!configured) return null;
+
+  if (loggedIn === null) {
+    return (
+      <span className={`${linkClass} ${className} pointer-events-none opacity-60`} aria-hidden="true">
+        Log In
+      </span>
+    );
+  }
 
   return (
     <Link

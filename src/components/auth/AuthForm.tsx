@@ -9,6 +9,7 @@ import { signIn, signUp, type AuthActionState } from "@/app/auth/actions";
 interface AuthFormProps {
   mode: "login" | "signup";
   notice?: string | null;
+  next?: string | null;
 }
 
 function SubmitButton({ mode }: { mode: "login" | "signup" }) {
@@ -30,7 +31,7 @@ function SubmitButton({ mode }: { mode: "login" | "signup" }) {
   );
 }
 
-export function AuthForm({ mode, notice }: AuthFormProps) {
+export function AuthForm({ mode, notice, next }: AuthFormProps) {
   const action = mode === "login" ? signIn : signUp;
   const [state, formAction] = useActionState<AuthActionState, FormData>(action, null);
 
@@ -65,6 +66,7 @@ export function AuthForm({ mode, notice }: AuthFormProps) {
         )}
 
         <form action={formAction} className="flex flex-col gap-4">
+          {isLogin && next ? <input type="hidden" name="next" value={next} /> : null}
           <div className="flex flex-col gap-1.5">
             <label htmlFor="email" className="text-xs font-medium uppercase tracking-wider text-reflux-muted">
               Email

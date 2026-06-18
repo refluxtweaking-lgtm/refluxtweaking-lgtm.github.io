@@ -58,6 +58,12 @@ export async function signUp(
   redirect("/login?checkEmail=1");
 }
 
+function safeRedirectPath(next: string | null | undefined) {
+  const value = next?.trim();
+  if (!value || !value.startsWith("/") || value.startsWith("//")) return "/account";
+  return value;
+}
+
 export async function signIn(
   _prevState: AuthActionState,
   formData: FormData,
@@ -81,7 +87,7 @@ export async function signIn(
     return { error: error.message };
   }
 
-  redirect("/account");
+  redirect(safeRedirectPath(String(formData.get("next") ?? "")));
 }
 
 export async function requestPasswordReset(

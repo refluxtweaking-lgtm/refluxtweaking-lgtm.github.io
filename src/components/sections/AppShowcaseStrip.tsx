@@ -4,6 +4,7 @@ import { FlowIn } from "@/components/ui/FlowIn";
 import { AppIcon } from "@/components/ui/AppIcon";
 import { Button } from "@/components/ui/Button";
 import { LiveMetricBar } from "@/components/ui/LiveMetricBar";
+import { useInViewport } from "@/hooks/useInViewport";
 import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
 import { PRODUCT_LIMITS } from "@/data/tweaks";
 
@@ -34,7 +35,13 @@ const showcaseCards = [
   },
 ] as const;
 
-function ShowcaseUi({ type }: { type: (typeof showcaseCards)[number]["ui"] }) {
+function ShowcaseUi({
+  type,
+  animate,
+}: {
+  type: (typeof showcaseCards)[number]["ui"];
+  animate: boolean;
+}) {
   if (type === "tweak") {
     return (
       <div className="showcase-ui-panel reflux-glow-box mx-auto w-[88%] p-3">
@@ -129,14 +136,17 @@ function ShowcaseUi({ type }: { type: (typeof showcaseCards)[number]["ui"] }) {
         fill={72}
         color="linear-gradient(90deg, #ff6b5b, #b392f0)"
         glow="rgba(179,146,240,0.5)"
+        active={animate}
       />
     </div>
   );
 }
 
 export function AppShowcaseStrip() {
+  const { ref, visible } = useInViewport<HTMLElement>("120px");
+
   return (
-    <section id="app-showcase" className="app-showcase-section section-flow overflow-hidden">
+    <section id="app-showcase" ref={ref} className="app-showcase-section section-flow overflow-hidden">
       <div className="section-flow-divider" aria-hidden="true" />
 
       <div className="mx-auto mb-10 flex max-w-6xl flex-col items-start justify-between gap-4 px-4 sm:flex-row sm:items-end">
@@ -167,7 +177,7 @@ export function AppShowcaseStrip() {
           <FlowIn key={card.id} delay={i * 60} className="showcase-card group">
             <div className="showcase-card-inner reflux-glow-box flex h-full min-h-[360px] flex-col overflow-hidden">
               <div className="showcase-card-ui relative flex flex-1 items-center justify-center p-5">
-                <ShowcaseUi type={card.ui} />
+                <ShowcaseUi type={card.ui} animate={visible} />
               </div>
               <div className="showcase-card-footer p-4">
                 <div className="font-bold text-white">{card.title}</div>

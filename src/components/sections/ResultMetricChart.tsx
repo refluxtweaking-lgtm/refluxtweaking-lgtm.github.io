@@ -71,11 +71,14 @@ export function ResultMetricChart({ metric, isLive, liveKey, large = false }: Re
     if (!isLive || phase !== "live") return;
 
     const start = performance.now();
-    const id = window.setInterval(() => {
+    let intervalId = 0;
+
+    intervalId = window.setInterval(() => {
       const elapsed = performance.now() - start;
       const rand = randRef.current;
 
       if (elapsed >= LIVE_DURATION_MS) {
+        window.clearInterval(intervalId);
         setBeforeReadout(metric.before);
         setAfterReadout(metric.after);
         setProgress(1);
@@ -101,7 +104,7 @@ export function ResultMetricChart({ metric, isLive, liveKey, large = false }: Re
       setAfterReadout(jitterReadout(metric.after, spread * 0.35, rand, decimals));
     }, LIVE_TICK_MS);
 
-    return () => clearInterval(id);
+    return () => window.clearInterval(intervalId);
   }, [config, isLive, metric.after, metric.before, metric.id, phase, liveKey]);
 
   const beforePath = useMemo(() => buildPathFromSeries(beforeSeries), [beforeSeries]);

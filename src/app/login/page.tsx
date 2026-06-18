@@ -12,9 +12,9 @@ export const metadata: Metadata = {
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ checkEmail?: string; passwordUpdated?: string; error?: string }>;
+  searchParams: Promise<{ checkEmail?: string; passwordUpdated?: string; error?: string; next?: string }>;
 }) {
-  const { checkEmail, passwordUpdated, error } = await searchParams;
+  const { checkEmail, passwordUpdated, error, next } = await searchParams;
 
   let notice: string | null = null;
   if (checkEmail) {
@@ -31,6 +31,7 @@ export default async function LoginPage({
         <AuthForm
           mode="login"
           notice={notice}
+          next={next}
         />
       ) : (
         <AccountsDisabledNotice />

@@ -2,10 +2,11 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { LicenseKeyBox } from "@/components/auth/LicenseKeyBox";
+import { LicenseAccessStatus } from "@/components/auth/LicenseAccessStatus";
+import { ProDownloadButton } from "@/components/auth/ProDownloadButton";
 import { signOut } from "@/app/auth/actions";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
-import { REFLUX_PRO_DOWNLOAD } from "@/data/downloads";
 import { normalizeBuyerEmail } from "@/lib/normalize-email";
 import type { Metadata } from "next";
 
@@ -21,6 +22,8 @@ type LicenseRow = {
   license_key: string;
   status: string;
   created_at: string;
+  activated_at: string | null;
+  access_expires_at: string | null;
 };
 
 function planLabel(plan: string) {
@@ -56,7 +59,7 @@ export default async function AccountPage() {
     const accountEmail = normalizeBuyerEmail(user.email);
     const { data } = await supabase
       .from("licenses")
-      .select("id, email, plan, license_key, status, created_at")
+      .select("id, email, plan, license_key, status, created_at, activated_at, access_expires_at")
       .ilike("email", accountEmail)
       .order("created_at", { ascending: false });
     licenses = (data as LicenseRow[] | null) ?? [];
@@ -85,6 +88,15 @@ export default async function AccountPage() {
               Log out
             </button>
           </form>
+        </div>
+
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="reflux-glow-interactive inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold text-reflux-muted hover:text-white"
+          >
+            ← Back to home
+          </Link>
         </div>
 
         <h2 className="reflux-glow-readable mb-4 inline-block rounded-full px-3 py-1 text-sm font-bold uppercase tracking-[0.2em] text-reflux-muted">
@@ -126,29 +138,23 @@ export default async function AccountPage() {
             <div className="reflux-glow-box rounded-2xl p-6">
               <h3 className="text-lg font-bold text-white">Download REFLUX PRO</h3>
               <p className="mt-2 text-sm text-reflux-text-soft">
-                Install the desktop app, then paste your active license key below when prompted.
+                Install the desktop app, then paste your active license key when prompted.
               </p>
-              <a
-                href={REFLUX_PRO_DOWNLOAD.href}
-                className="reflux-glow-interactive mt-4 inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-[rgba(255,77,61,0.28)] to-[rgba(255,77,61,0.12)] px-5 py-2.5 text-sm font-semibold text-white hover:text-white"
-              >
-                Download {REFLUX_PRO_DOWNLOAD.label}
-              </a>
+              <ProDownloadButton />
             </div>
-            {licenses.map((license) => (
+            {activeLicenses.map((license) => (
               <div key={license.id} className="reflux-glow-box rounded-2xl p-6">
                 <div className="mb-3 flex items-center justify-between gap-3">
                   <h3 className="text-lg font-bold text-white">{planLabel(license.plan)}</h3>
-                  <span
-                    className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest ${
-                      license.status.toLowerCase() === "active"
-                        ? "reflux-glow-interactive-active text-reflux-accent"
-                        : "reflux-glow-readable text-reflux-muted"
-                    }`}
-                  >
+                  <span className="reflux-glow-interactive-active rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-reflux-accent">
                     {license.status}
                   </span>
                 </div>
+                <LicenseAccessStatus
+                  plan={license.plan}
+                  activatedAt={license.activated_at}
+                  accessExpiresAt={license.access_expires_at}
+                />
                 <LicenseKeyBox licenseKey={license.license_key} />
                 <p className="mt-3 text-xs text-reflux-muted">
                   Purchased {formatDate(license.created_at)}

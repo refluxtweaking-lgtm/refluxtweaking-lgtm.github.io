@@ -11,6 +11,8 @@ interface LiveMetricBarProps {
   glow?: string;
   delay?: number;
   className?: string;
+  /** Pause RAF animation when off-screen */
+  active?: boolean;
 }
 
 export function LiveMetricBar({
@@ -21,6 +23,7 @@ export function LiveMetricBar({
   glow = "rgba(255, 107, 91, 0.45)",
   delay = 0,
   className = "",
+  active = true,
 }: LiveMetricBarProps) {
   const target = Math.min(100, Math.max(4, fill));
   const [width, setWidth] = useState(4);
@@ -36,6 +39,8 @@ export function LiveMetricBar({
   }, [target, delay]);
 
   useEffect(() => {
+    if (!active) return;
+
     let raf = 0;
 
     const frame = (now: number) => {
@@ -56,7 +61,7 @@ export function LiveMetricBar({
 
     raf = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(raf);
-  }, [target, delay]);
+  }, [target, delay, active]);
 
   return (
     <div className={`live-metric-bar ${className}`}>

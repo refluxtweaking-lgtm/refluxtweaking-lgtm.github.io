@@ -177,7 +177,22 @@ export function PurchasePopups() {
   }, [pickNextFake, reveal, startRotation]);
 
   useEffect(() => {
+    const onVisibility = () => {
+      if (document.hidden) {
+        if (rotateTimerRef.current) clearInterval(rotateTimerRef.current);
+        rotateTimerRef.current = null;
+      } else {
+        startRotation();
+      }
+    };
+
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, [startRotation]);
+
+  useEffect(() => {
     const poll = async () => {
+      if (document.hidden) return;
       try {
         const response = await fetch(`/api/purchases/recent?since=${pollSinceRef.current}`, {
           cache: "no-store",
