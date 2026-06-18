@@ -1,18 +1,27 @@
 import type { Metadata } from "next";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { JetBrains_Mono, Outfit } from "next/font/google";
 import "./globals.css";
 import { PRODUCT_LIMITS } from "@/data/tweaks";
 
-const inter = Inter({
+const refluxBody = Outfit({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-inter",
+  variable: "--font-reflux-body",
+  display: "swap",
 });
 
-const display = Plus_Jakarta_Sans({
+const refluxDisplay = Outfit({
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
-  variable: "--font-display",
+  weight: ["700", "800", "900"],
+  variable: "--font-reflux-display",
+  display: "swap",
+});
+
+const refluxMetric = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-reflux-metric",
+  display: "swap",
 });
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.refluxtweaks.com";
@@ -66,8 +75,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} ${display.variable} antialiased`}>{children}</body>
+    <html lang="en" className="bg-black">
+      <body
+        className={`${refluxBody.variable} ${refluxDisplay.variable} ${refluxMetric.variable} bg-black antialiased`}
+      >
+        {children}
+      </body>
     </html>
   );
 }

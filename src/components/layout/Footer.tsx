@@ -15,7 +15,7 @@ const footerLinks = [
 
 export function Footer() {
   return (
-    <footer className="footer-shell relative mt-24 border-t border-[rgba(255,107,91,0.18)]">
+    <footer className="footer-shell relative mt-24 border-t border-reflux-accent/15">
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-reflux-accent/60 to-transparent"
         aria-hidden="true"
@@ -49,7 +49,7 @@ export function Footer() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-xl border border-white/8 bg-white/[0.03] px-4 py-3 text-sm font-medium text-reflux-muted transition-all hover:border-reflux-accent/35 hover:bg-reflux-accent/8 hover:text-white"
+                  className="rounded-xl px-4 py-3 text-sm font-medium text-reflux-muted transition-all hover:bg-reflux-accent/8 hover:text-white"
                 >
                   {link.label}
                 </a>
@@ -57,7 +57,7 @@ export function Footer() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="rounded-xl border border-white/8 bg-white/[0.03] px-4 py-3 text-sm font-medium text-reflux-muted transition-all hover:border-reflux-accent/35 hover:bg-reflux-accent/8 hover:text-white"
+                  className="rounded-xl px-4 py-3 text-sm font-medium text-reflux-muted transition-all hover:bg-reflux-accent/8 hover:text-white"
                 >
                   {link.label}
                 </Link>
@@ -65,7 +65,7 @@ export function Footer() {
             )}
           </div>
         </div>
-        <p className="border-t border-white/6 pt-8 text-center text-xs text-[#5a6478]">
+        <p className="border-t border-white/5 pt-8 text-center text-xs text-reflux-muted">
           © 2026 REFLUX TWEAKS. All rights reserved. Safe · Reversible · No background processes.
         </p>
       </div>

@@ -48,13 +48,13 @@ export function Header() {
     <header className="sticky top-0 z-100 px-4 py-4 md:px-6 md:py-5">
       <div className="relative mx-auto max-w-[1280px]">
         <div
-          className={`header-shell flex min-h-[72px] items-center justify-between gap-5 rounded-2xl border border-white/10 px-5 py-4 backdrop-blur-xl md:min-h-[80px] md:gap-6 md:px-7 md:py-5 ${
+          className={`header-shell flex min-h-[72px] items-center justify-between gap-5 rounded-2xl border px-5 py-4 backdrop-blur-xl md:min-h-[76px] md:gap-6 md:px-7 md:py-4 ${
             scrolled ? "header-shell-scrolled" : ""
           }`}
         >
           <Link
             href="/"
-            className="header-brand group flex shrink-0 items-center gap-1 sm:gap-1.5"
+            className="header-brand group flex shrink-0 items-center gap-2.5 sm:gap-3"
             onClick={closeMenu}
             aria-label="REFLUX TWEAKS home"
           >
@@ -63,11 +63,12 @@ export function Header() {
               alt=""
               width={40}
               height={40}
-              className="header-brand-icon h-9 w-9 shrink-0 rounded-lg sm:h-10 sm:w-10 md:h-11 md:w-11"
+              className="header-brand-icon h-9 w-9 shrink-0 rounded-lg sm:h-10 sm:w-10"
               priority
             />
-            <span className="whitespace-nowrap text-xl font-extrabold tracking-tight gradient-text sm:text-2xl md:text-[1.75rem] md:leading-none">
-              EFLUX TWEAKS
+            <span className="font-display whitespace-nowrap text-lg font-extrabold tracking-tight sm:text-xl md:text-2xl">
+              <span className="gradient-text">REFLUX</span>
+              <span className="text-white/85"> TWEAKS</span>
             </span>
           </Link>
 
@@ -116,14 +117,14 @@ export function Header() {
           <>
             <button
               type="button"
-              className="fixed inset-0 z-[90] bg-black/50 backdrop-blur-sm md:hidden"
+              className="fixed inset-0 z-[90] bg-black/70 backdrop-blur-sm md:hidden"
               onClick={closeMenu}
               aria-label="Close menu"
             />
 
             <div
               id="mobile-nav"
-              className="animate-fade-in-up absolute top-[calc(100%+8px)] right-0 left-0 z-[95] overflow-hidden rounded-2xl border border-[rgba(241,91,80,0.25)] bg-[rgba(8,10,14,0.95)] shadow-[0_16px_48px_rgba(0,0,0,0.5),0_0_32px_rgba(241,91,80,0.12)] backdrop-blur-2xl md:hidden"
+              className="animate-fade-in-up absolute top-[calc(100%+8px)] right-0 left-0 z-[95] overflow-hidden rounded-2xl border border-reflux-accent/20 bg-black/95 shadow-[0_16px_48px_rgba(0,0,0,0.7),0_0_32px_rgba(255,77,61,0.12)] backdrop-blur-2xl md:hidden"
             >
               <nav className="flex flex-col p-2">
                 {navLinks.map((link) => (

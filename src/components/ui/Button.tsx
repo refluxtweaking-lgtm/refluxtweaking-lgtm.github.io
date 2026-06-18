@@ -39,7 +39,7 @@ export function Button({
   onClick,
 }: ButtonProps) {
   const baseStyles =
-    "inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-colors duration-200 border cursor-pointer";
+    "font-display inline-flex items-center justify-center gap-2 rounded-xl font-bold transition-colors duration-200 border cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-reflux-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
   const sizeStyles = large ? "text-[15px] px-7 py-3.5 min-h-[48px]" : "text-sm px-5 py-2.5";
 
   const content = (

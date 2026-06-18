@@ -33,7 +33,7 @@ export function Hero() {
             </h1>
 
             <p
-              className="animate-fade-in-up mx-auto mb-8 max-w-lg text-base leading-relaxed text-[#b0bccf] md:text-lg lg:mx-0"
+              className="animate-fade-in-up mx-auto mb-8 max-w-lg text-base leading-relaxed text-reflux-text-soft md:text-lg lg:mx-0"
               style={{ animationDelay: "0.1s" }}
             >
               REFLUX tunes your PC for <HeroGameTicker /> and every game you grind — live Intel / AMD /
@@ -72,7 +72,7 @@ export function Hero() {
                 >
                   <AppIcon name={point.icon} size={18} />
                   <div className="min-w-0">
-                    <div className="text-base font-bold tabular-nums text-white">
+                    <div className="hero-metric-value text-lg font-bold text-white md:text-xl">
                       {point.label}
                       <span className="ml-1 text-xs font-semibold text-reflux-accent">{point.unit}</span>
                     </div>

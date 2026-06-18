@@ -13,12 +13,12 @@ export function NetworkProofSection() {
           <p className="mb-3 text-xs font-bold tracking-[0.2em] text-reflux-accent uppercase">
             Measured on real hardware
           </p>
-          <h2 className="text-3xl font-extrabold tracking-tight text-white md:text-4xl lg:text-[2.75rem] lg:leading-[1.08]">
+          <h2 className="font-display text-3xl font-extrabold tracking-tight text-white md:text-4xl lg:text-[2.85rem] lg:leading-[1.05]">
             Boost your FPS.
             <br />
             <span className="gradient-text">Eliminate stutters.</span>
           </h2>
-          <p className="mt-4 max-w-2xl text-base leading-relaxed text-reflux-muted">
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-reflux-text-soft">
             Red line = your PC before REFLUX. Coral line = same game, same session, tweaks applied.
             No fake numbers — the graph shows what actually happened over 10 seconds.
           </p>

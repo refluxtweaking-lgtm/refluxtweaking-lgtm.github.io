@@ -1,0 +1,37 @@
+/**
+ * REFLUX design tokens — edit here to retheme the whole site.
+ * Fonts are wired in src/app/layout.tsx via next/font variables.
+ */
+:root {
+  /* Surfaces */
+  --reflux-bg: #000000;
+  --reflux-surface: #000000;
+  --reflux-elevated: #050505;
+
+  /* Type */
+  --reflux-font-body: var(--font-reflux-body), system-ui, sans-serif;
+  --reflux-font-display: var(--font-reflux-display), var(--font-reflux-body), system-ui, sans-serif;
+  --reflux-font-metric: var(--font-reflux-metric), ui-monospace, monospace;
+
+  --reflux-text: #f6f8fc;
+  --reflux-text-soft: #b8c0cc;
+  --reflux-muted: #6e7684;
+
+  /* Brand */
+  --reflux-accent: #ff4d3d;
+  --reflux-accent-mid: #ff6b5b;
+  --reflux-accent-soft: #ff9588;
+  --reflux-accent-glow: rgba(255, 77, 61, 0.45);
+
+  /* Type scale */
+  --reflux-display-xl: clamp(2.75rem, 7.5vw, 4.75rem);
+  --reflux-display-lg: clamp(2rem, 4.8vw, 3rem);
+  --reflux-display-md: clamp(1.5rem, 3vw, 2rem);
+  --reflux-body-lg: clamp(1rem, 1.4vw, 1.125rem);
+  --reflux-body: 0.9375rem;
+  --reflux-caption: 0.75rem;
+
+  /* Layout */
+  --reflux-section-y: clamp(4.5rem, 10vw, 7rem);
+  --reflux-content-max: 72rem;
+}

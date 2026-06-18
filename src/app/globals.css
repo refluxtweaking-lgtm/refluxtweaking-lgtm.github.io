@@ -1,30 +1,35 @@
 @import "tailwindcss";
+@import "../styles/reflux-tokens.css";
 
 @theme {
   --color-reflux-bg: #000000;
-  --color-reflux-surface: #050505;
-  --color-reflux-text: #f4f7fb;
-  --color-reflux-muted: #8a919c;
-  --color-reflux-accent: #ff6b5b;
+  --color-reflux-surface: #000000;
+  --color-reflux-text: #f6f8fc;
+  --color-reflux-muted: #6e7684;
+  --color-reflux-text-soft: #b8c0cc;
+  --color-reflux-accent: #ff4d3d;
   --color-reflux-accent-light: #ff9588;
   --color-reflux-calm: #5ec4ef;
   --color-reflux-discord: #5865f2;
   --color-reflux-green: #5dde86;
   --color-reflux-purple: #b392f0;
-  --color-reflux-card: #050505;
-  --color-reflux-border: rgba(255, 107, 91, 0.12);
+  --color-reflux-card: #000000;
+  --color-reflux-border: rgba(255, 77, 61, 0.14);
 }
 
 html {
   scroll-behavior: smooth;
+  background: #000000;
 }
 
 body {
-  font-family: var(--font-inter), "Inter", sans-serif;
-  background: var(--color-reflux-bg);
-  color: var(--color-reflux-text);
+  font-family: var(--reflux-font-body);
+  background: var(--reflux-bg);
+  color: var(--reflux-text);
   overflow-x: hidden;
   position: relative;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 body::before {
@@ -34,13 +39,13 @@ body::before {
   z-index: -25;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 90% 55% at 50% -12%, rgba(255, 107, 91, 0.32), transparent 58%),
-    radial-gradient(ellipse 50% 40% at 100% 30%, rgba(255, 60, 50, 0.14), transparent 55%),
-    radial-gradient(ellipse 45% 35% at 0% 65%, rgba(255, 107, 91, 0.1), transparent 55%);
+    radial-gradient(ellipse 85% 50% at 50% -8%, rgba(255, 77, 61, 0.22), transparent 62%),
+    radial-gradient(ellipse 40% 35% at 100% 40%, rgba(255, 60, 50, 0.08), transparent 55%),
+    radial-gradient(ellipse 35% 30% at 0% 70%, rgba(255, 77, 61, 0.06), transparent 55%);
 }
 
 .noise-texture {
-  opacity: 0.025;
+  opacity: 0.018;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 180px 180px;
@@ -59,8 +64,19 @@ h1,
 h2,
 h3,
 .section-title {
-  font-family: var(--font-display), var(--font-inter), sans-serif;
-  letter-spacing: -0.02em;
+  font-family: var(--reflux-font-display);
+  letter-spacing: -0.03em;
+}
+
+.reflux-metric,
+.stat-number,
+.proof-stat-value,
+.hero-metric-value,
+.tabular-nums {
+  font-family: var(--reflux-font-metric);
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  letter-spacing: -0.04em;
 }
 
 ::-webkit-scrollbar {
@@ -262,15 +278,8 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 
 .section-flow {
   position: relative;
-  padding-top: 4rem;
-  padding-bottom: 4rem;
-}
-
-@media (min-width: 768px) {
-  .section-flow {
-    padding-top: 6rem;
-    padding-bottom: 6rem;
-  }
+  padding-top: var(--reflux-section-y);
+  padding-bottom: var(--reflux-section-y);
 }
 
 .section-band {
@@ -355,29 +364,30 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
   gap: 8px;
   padding: 6px 14px;
   border-radius: 999px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-size: 10px;
+  font-weight: 800;
+  font-family: var(--reflux-font-metric);
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #ffc4bb;
-  background: rgba(255, 107, 91, 0.14);
-  border: 1px solid rgba(255, 107, 91, 0.35);
-  box-shadow: 0 0 24px -8px rgba(255, 107, 91, 0.45);
+  color: var(--reflux-accent-soft);
+  background: rgba(255, 77, 61, 0.1);
+  border: 1px solid rgba(255, 77, 61, 0.28);
+  box-shadow: 0 0 28px -10px var(--reflux-accent-glow);
 }
 
 .section-title {
-  font-size: clamp(2rem, 4.5vw, 2.75rem);
-  font-weight: 700;
-  line-height: 1.12;
-  letter-spacing: -0.025em;
+  font-size: var(--reflux-display-lg);
+  font-weight: 800;
+  line-height: 1.06;
+  letter-spacing: -0.035em;
   text-wrap: balance;
 }
 
 .section-subtitle {
-  font-size: 1.125rem;
-  color: var(--color-reflux-muted);
-  max-width: 38rem;
-  line-height: 1.65;
+  font-size: var(--reflux-body-lg);
+  color: var(--reflux-text-soft);
+  max-width: 40rem;
+  line-height: 1.7;
   text-wrap: balance;
 }
 
@@ -490,11 +500,11 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 
 .grid-overlay {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 72px 72px;
-  mask-image: radial-gradient(ellipse 70% 50% at 50% 0%, black 15%, transparent 72%);
-  opacity: 0.5;
+    linear-gradient(rgba(255, 77, 61, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 77, 61, 0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 70% 50% at 50% 0%, black 10%, transparent 75%);
+  opacity: 0.35;
 }
 
 .icon-glow {
@@ -622,9 +632,10 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 }
 
 .hero-headline {
-  font-size: clamp(2.75rem, 7vw, 4.5rem);
-  line-height: 1.02;
-  letter-spacing: -0.035em;
+  font-size: var(--reflux-display-xl);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  font-weight: 900;
 }
 
 .hero-gradient-shimmer {
@@ -723,15 +734,16 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 }
 
 .header-shell {
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.55);
+  border-color: rgba(255, 255, 255, 0.06) !important;
   transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .header-shell-scrolled {
-  background: rgba(0, 0, 0, 0.92) !important;
-  border-color: rgba(255, 107, 91, 0.2) !important;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 32px -12px rgba(255, 107, 91, 0.2);
-  backdrop-filter: blur(16px);
+  background: rgba(0, 0, 0, 0.88) !important;
+  border-color: rgba(255, 77, 61, 0.18) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 40px -16px var(--reflux-accent-glow);
+  backdrop-filter: blur(20px);
 }
 
 .hero-marquee {
@@ -893,8 +905,8 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 
 .footer-shell {
   background:
-    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(255, 107, 91, 0.08), transparent 60%),
-    linear-gradient(180deg, transparent, rgba(4, 5, 8, 0.95));
+    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(255, 77, 61, 0.1), transparent 65%),
+    #000000;
 }
 
 .aurora-band {
@@ -1562,11 +1574,10 @@ html.reduce-effects .particles-canvas {
 }
 
 .proof-stat-value {
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
-  font-weight: 800;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
   color: white;
   line-height: 1;
-  font-variant-numeric: tabular-nums;
 }
 
 .proof-stat-unit {
