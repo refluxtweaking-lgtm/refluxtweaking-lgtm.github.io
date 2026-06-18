@@ -37,7 +37,7 @@ const showcaseCards = [
 function ShowcaseUi({ type }: { type: (typeof showcaseCards)[number]["ui"] }) {
   if (type === "tweak") {
     return (
-      <div className="showcase-ui-panel mx-auto w-[88%] rounded-xl border border-white/[0.08] bg-[#11151c] p-3">
+      <div className="showcase-ui-panel reflux-glow-box mx-auto w-[88%] p-3">
         <div className="mb-2 flex items-center gap-2">
           <AppIcon name="optimizer" size={14} />
           <span className="text-[11px] font-bold text-white">Disable Core Parking</span>
@@ -66,7 +66,7 @@ function ShowcaseUi({ type }: { type: (typeof showcaseCards)[number]["ui"] }) {
     return (
       <div className="showcase-ui-panel mx-auto w-[90%] space-y-2">
         {items.map((item) => (
-          <div key={item.label} className="rounded-lg border border-white/8 bg-[#0d1018]/90 px-2.5 py-2">
+          <div key={item.label} className="reflux-glow-box reflux-glow-box-sm rounded-lg px-2.5 py-2">
             <div className="mb-1 flex items-center gap-1.5 text-[9px] font-semibold text-reflux-green">
               <span className="text-reflux-green">✓</span>
               {item.label}
@@ -92,7 +92,7 @@ function ShowcaseUi({ type }: { type: (typeof showcaseCards)[number]["ui"] }) {
         {games.map((g) => (
           <div
             key={g.name}
-            className="flex items-center justify-between rounded-lg border border-white/8 bg-[#0d1018]/90 px-2.5 py-2"
+            className="reflux-glow-box reflux-glow-box-sm flex items-center justify-between rounded-lg px-2.5 py-2"
           >
             <div className="flex items-center gap-2">
               <AppIcon name="games" size={14} glow={false} />
@@ -118,7 +118,7 @@ function ShowcaseUi({ type }: { type: (typeof showcaseCards)[number]["ui"] }) {
   return (
     <div className="showcase-ui-panel mx-auto w-[90%] space-y-2">
       {["Clear Temp Files", "Clear Game Cache", "Clear Installer Cache"].map((task) => (
-        <div key={task} className="flex items-center gap-2 rounded-lg border border-white/6 bg-[#0d1018]/80 px-2.5 py-2">
+        <div key={task} className="reflux-glow-box reflux-glow-box-sm flex items-center gap-2 rounded-lg px-2.5 py-2">
           <AppIcon name="cleanup" size={12} glow={false} />
           <span className="text-[10px] font-medium text-white/90">{task}</span>
         </div>
@@ -165,7 +165,7 @@ export function AppShowcaseStrip() {
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-4 px-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-4">
         {showcaseCards.map((card, i) => (
           <FlowIn key={card.id} delay={i * 60} className="showcase-card group">
-            <div className="showcase-card-inner flex h-full min-h-[360px] flex-col overflow-hidden">
+            <div className="showcase-card-inner reflux-glow-box flex h-full min-h-[360px] flex-col overflow-hidden">
               <div className="showcase-card-ui relative flex flex-1 items-center justify-center p-5">
                 <ShowcaseUi type={card.ui} />
               </div>

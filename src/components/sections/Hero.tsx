@@ -68,7 +68,7 @@ export function Hero() {
               {proofPoints.map((point) => (
                 <div
                   key={point.label}
-                  className="hero-proof-card flex items-center gap-3 px-4 py-3.5"
+                  className="hero-proof-card reflux-glow-box flex items-center gap-3 px-4 py-3.5"
                 >
                   <AppIcon name={point.icon} size={18} />
                   <div className="min-w-0">

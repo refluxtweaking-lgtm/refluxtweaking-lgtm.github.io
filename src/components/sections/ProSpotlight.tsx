@@ -32,9 +32,9 @@ export function ProSpotlight() {
         </FlowIn>
 
         <FlowIn delay={80}>
-          <div className="pro-features-grid overflow-hidden">
+          <div className="pro-features-grid gap-3 overflow-visible">
             {premiumFeatures.map((f) => (
-              <div key={f.title} className="pro-feature-cell flex gap-3 p-5">
+              <div key={f.title} className="pro-feature-cell reflux-glow-box flex gap-3 p-5">
                 <AppIcon name={f.icon} size={20} className="mt-0.5 shrink-0" />
                 <div>
                   <div className="font-bold text-white">{f.title}</div>

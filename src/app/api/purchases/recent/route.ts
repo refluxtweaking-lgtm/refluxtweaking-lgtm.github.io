@@ -9,10 +9,11 @@ export async function GET(request: Request) {
   const purchases = await getRecentPurchases(Number.isFinite(since) ? since : Date.now() - 24 * 60 * 60 * 1000);
 
   return NextResponse.json({
-    purchases: purchases.map(({ id, user, plan, at }) => ({
+    purchases: purchases.map(({ id, user, plan, location, at }) => ({
       id,
       user,
       plan,
+      location,
       at,
     })),
   });

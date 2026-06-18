@@ -13,7 +13,7 @@ export function GlowCard({
 }: GlowCardProps) {
   return (
     <div
-      className={`flex w-full flex-col rounded-2xl p-4 sm:rounded-2xl sm:p-6 md:px-8 ${
+      className={`reflux-glow-box flex w-full flex-col rounded-2xl p-4 sm:rounded-2xl sm:p-6 md:px-8 ${
         hover ? "glass-card" : "glass-card-static"
       } ${centered ? "items-center" : ""} ${className}`}
     >

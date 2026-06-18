@@ -2,6 +2,7 @@
 
 import { GameImage } from "@/components/games/GameImage";
 import { Icon } from "@/components/ui/Icon";
+import { VendorLogo } from "@/components/ui/VendorLogo";
 import { PRODUCT_LIMITS } from "@/data/tweaks";
 import { appGalleryItems } from "@/data/reflux-highlights";
 
@@ -13,10 +14,10 @@ const STEAM = (id: number) =>
 function BrandPill({ label, color }: { label: string; color: string }) {
   return (
     <span
-      className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold text-white"
+      className="reflux-glow-box reflux-glow-box-sm inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold text-white"
       style={{
-        background: `color-mix(in srgb, ${color} 18%, #000)`,
-        border: `1px solid color-mix(in srgb, ${color} 40%, transparent)`,
+        borderColor: `color-mix(in srgb, ${color} 45%, transparent)`,
+        boxShadow: `0 0 20px -6px ${color}`,
       }}
     >
       <span className="h-1.5 w-1.5 rounded-full" style={{ background: color, boxShadow: `0 0 6px ${color}` }} />
@@ -30,25 +31,23 @@ function HwChip({
   kind,
   name,
   sub,
-  logo,
+  vendor,
 }: {
   accent: string;
   kind: string;
   name: string;
   sub: string;
-  logo: React.ReactNode;
+  vendor: "intel" | "nvidia" | "amd" | "ram";
 }) {
   return (
     <div
-      className="flex min-w-[140px] flex-1 items-center gap-3 rounded-xl border border-white/8 bg-[#0a0c10] p-3"
-      style={{ boxShadow: `inset 3px 0 0 ${accent}` }}
+      className="reflux-glow-box flex min-w-[140px] flex-1 items-center gap-3 p-3"
+      style={{
+        borderColor: `color-mix(in srgb, ${accent} 35%, transparent)`,
+        boxShadow: `0 0 28px -10px ${accent}, inset 3px 0 0 ${accent}`,
+      }}
     >
-      <div
-        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-xs font-black"
-        style={{ background: `color-mix(in srgb, ${accent} 14%, #000)`, color: accent }}
-      >
-        {logo}
-      </div>
+      <VendorLogo vendor={vendor} size={36} className="shrink-0" />
       <div className="min-w-0">
         <div className="text-[9px] font-bold tracking-wider uppercase" style={{ color: accent }}>
           {kind}
@@ -75,17 +74,17 @@ export function AppScreenshotFrame({ id }: { id: GalleryId }) {
           REFLUX scanned your PC and matched tweaks to your exact build.
         </p>
         <div className="flex flex-wrap gap-2">
-          <HwChip accent="#0099FF" kind="Processor" name="Intel Core i7-13700K" sub="5200 MHz · 16 Cores" logo="Intel" />
-          <HwChip accent="#76B900" kind="Graphics" name="NVIDIA RTX 4070" sub="12 GB VRAM · 551.86" logo="NV" />
-          <HwChip accent="#B392F0" kind="Memory" name="32 GB RAM" sub="18 GB used · 32 GB total" logo="RAM" />
+          <HwChip accent="#0071C5" kind="Processor" name="Intel Core i7-13700K" sub="5200 MHz · 16 Cores" vendor="intel" />
+          <HwChip accent="#76B900" kind="Graphics" name="NVIDIA RTX 4070" sub="12 GB VRAM · 551.86" vendor="nvidia" />
+          <HwChip accent="#7c3aed" kind="Memory" name="32 GB RAM" sub="18 GB used · 32 GB total" vendor="ram" />
         </div>
-        <div className="rounded-xl border border-reflux-accent/20 bg-reflux-accent/5 p-3">
+        <div className="reflux-glow-box p-3">
           <div className="mb-2 text-[10px] font-bold tracking-wide text-reflux-accent uppercase">Your custom profile</div>
           <div className="grid gap-1.5 sm:grid-cols-2">
             {["Intel CPU profile", "NVIDIA GPU profile", "Network stack", "Memory tuning"].map((item) => (
               <div
                 key={item}
-                className="flex items-center justify-between rounded-lg border border-white/6 bg-black/30 px-2.5 py-2 text-[10px] font-semibold text-white"
+                className="reflux-glow-box reflux-glow-box-sm flex items-center justify-between px-2.5 py-2 text-[10px] font-semibold text-white"
               >
                 {item}
                 <Icon name="arrowRight" size={12} className="text-reflux-accent" />
@@ -106,7 +105,7 @@ export function AppScreenshotFrame({ id }: { id: GalleryId }) {
             { label: "GPU", val: "31%", color: "#F15B50", name: "RTX 4070" },
             { label: "RAM", val: "56%", color: "#B392F0", name: "32 GB Total" },
           ].map((s) => (
-            <div key={s.label} className="rounded-xl border border-white/8 bg-[#0f1217] p-2.5">
+            <div key={s.label} className="reflux-glow-box reflux-glow-box-sm p-2.5">
               <div className="text-[9px] font-bold tracking-wider text-reflux-muted uppercase">{s.label}</div>
               <div className="mt-1 text-xl font-extrabold tabular-nums" style={{ color: s.color }}>
                 {s.val}
@@ -115,7 +114,7 @@ export function AppScreenshotFrame({ id }: { id: GalleryId }) {
             </div>
           ))}
         </div>
-        <div className="rounded-xl border border-reflux-accent/20 bg-[#0a0c10] p-3">
+        <div className="reflux-glow-box p-3">
           <div className="mb-2 text-[10px] font-bold text-white">Performance Monitor</div>
           <svg viewBox="0 0 240 56" className="h-14 w-full" aria-hidden="true">
             <polyline
@@ -167,7 +166,7 @@ export function AppScreenshotFrame({ id }: { id: GalleryId }) {
         {rows.map((row) => (
           <div
             key={row.name}
-            className="flex items-center justify-between gap-2 rounded-xl border border-white/8 bg-[#0f1217]/90 px-3 py-2.5"
+            className="reflux-glow-box reflux-glow-box-sm flex items-center justify-between gap-2 px-3 py-2.5"
           >
             <div className="min-w-0">
               <div className="flex items-center gap-2">
@@ -269,15 +268,15 @@ export function AppScreenshotFrame({ id }: { id: GalleryId }) {
   return (
     <div className="space-y-2 p-1">
       <div className="flex flex-wrap gap-2">
-        <HwChip accent="#0099FF" kind="Processor" name="Intel Core i7" sub="Matched profile" logo="Intel" />
-        <HwChip accent="#76B900" kind="Graphics" name="NVIDIA RTX" sub="Matched profile" logo="NV" />
+        <HwChip accent="#0071C5" kind="Processor" name="Intel Core i7" sub="Matched profile" vendor="intel" />
+        <HwChip accent="#76B900" kind="Graphics" name="NVIDIA RTX 4070" sub="Matched profile" vendor="nvidia" />
       </div>
       {[
         "Max Gaming Performance Suite",
         "Full Network Stack Reset",
         "Aggressive RAM Cleanup",
       ].map((cmd, i) => (
-        <div key={cmd} className="rounded-xl border border-white/8 bg-[#0f1217] p-3">
+        <div key={cmd} className="reflux-glow-box p-3">
           <div className="mb-1 flex items-center gap-2">
             <span className="flex h-5 w-5 items-center justify-center rounded-md bg-reflux-accent/15 text-[10px] font-bold text-reflux-accent">
               {i + 1}

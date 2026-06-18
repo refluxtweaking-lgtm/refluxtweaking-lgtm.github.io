@@ -19,8 +19,7 @@ export function NetworkProofSection() {
             <span className="gradient-text">Eliminate stutters.</span>
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-reflux-text-soft">
-            Red line = your PC before REFLUX. Coral line = same game, same session, tweaks applied.
-            No fake numbers — the graph shows what actually happened over 10 seconds.
+            Orange panel = stock Windows. Blue panel = same session with REFLUX. Stacked top → bottom so you can actually read it.
           </p>
         </FlowIn>
 
@@ -32,8 +31,8 @@ export function NetworkProofSection() {
           <h3 className="mb-2 text-2xl font-extrabold tracking-tight text-white md:text-3xl">
             Cut input lag
           </h3>
-          <p className="mb-6 max-w-xl text-sm text-reflux-muted md:text-base">
-            Lower is better here — the coral line hugging the bottom means your clicks register faster.
+          <p className="mb-6 max-w-xl text-sm text-reflux-text-soft md:text-base">
+            Purple = before, green = after. Lower on the chart means faster clicks.
           </p>
           <div className="mx-auto max-w-3xl">
             <LatencyMiniChart />

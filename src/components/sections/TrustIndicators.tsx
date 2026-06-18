@@ -22,7 +22,7 @@ export function TrustIndicators() {
       <div className="mx-auto grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {trustObjections.map((item, index) => (
           <FlowIn key={item.objection} delay={index * 50}>
-            <div className="trust-bento-card group flex h-full flex-col p-5">
+            <div className="trust-bento-card reflux-glow-box group flex h-full flex-col p-5">
               <div className="mb-3 flex items-start gap-3">
                 <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-reflux-accent/35 bg-reflux-accent/15 shadow-[0_0_20px_-4px_rgba(255,107,91,0.5)] transition-transform group-hover:scale-105">
                   <AppIcon name={item.icon} size={20} />
@@ -34,7 +34,7 @@ export function TrustIndicators() {
                   <div className="font-semibold text-white">&ldquo;{item.objection}&rdquo;</div>
                 </div>
               </div>
-              <div className="mt-auto px-1 py-1">
+              <div className="mt-auto reflux-glow-box reflux-glow-box-sm px-3 py-2.5">
                 <div className="text-[10px] font-bold tracking-wider text-reflux-accent uppercase">Proof</div>
                 <div className="text-sm font-semibold text-white/90">{item.proof}</div>
               </div>
