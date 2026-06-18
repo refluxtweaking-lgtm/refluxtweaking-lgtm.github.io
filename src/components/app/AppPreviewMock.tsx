@@ -1,17 +1,21 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { GameImage } from "@/components/games/GameImage";
 import { AppIcon, AppIconChip } from "@/components/ui/AppIcon";
 import { LiveMetricBar } from "@/components/ui/LiveMetricBar";
 import { useInViewport } from "@/hooks/useInViewport";
-import { PRODUCT_LIMITS } from "@/data/tweaks";
+import {
+  AppPreviewHomePanel,
+  AppPreviewOptimizerPanel,
+  AppPreviewTweaksPanel,
+  networkTweaks,
+} from "./AppPreviewPanels";
 import type { AppIconName } from "@/data/app-icons";
 
-const tabs = ["Tweaks", "Games", "Network", "Cleanup", "Benchmarks"] as const;
-type Tab = (typeof tabs)[number];
-type AppView = "home" | Tab;
+const VIEWS = ["home", "optimizer", "tweaks", "games", "network", "cleanup", "benchmarks"] as const;
+type AppView = (typeof VIEWS)[number];
 
 const STEAM_HEADER = (appId: number) =>
   `https://cdn.cloudflare.steamstatic.com/steam/apps/${appId}/header.jpg`;
@@ -43,60 +47,38 @@ const PREVIEW_GAMES = [
 const BENCH_STATS = [
   { label: "GPU FPS", value: "144", color: "linear-gradient(90deg, #ff6b5b, #ff9588)", glow: "rgba(255,107,91,0.55)", fill: 78 },
   { label: "CPU", value: "94%", color: "linear-gradient(90deg, #5dde86, #3ecf70)", glow: "rgba(93,222,134,0.5)", fill: 94 },
-  { label: "RAM Free", value: "31 GB", color: "linear-gradient(90deg, #b392f0, #9b7de8)", glow: "rgba(179,146,240,0.5)", fill: 68 },
+  { label: "RAM Free", value: "31 GB", color: "linear-gradient(90deg, #b392f0, #9b7de8)", glow: "rgba(167,139,250,0.5)", fill: 68 },
 ] as const;
 
-function PreviewHome({ visible }: { visible: boolean }) {
-  const demoExpires = useMemo(() => Date.now() + 29 * 86400 * 1000 + 5 * 3600 * 1000, []);
-  const [now, setNow] = useState(() => Date.now());
+const TAB_LABELS: Record<AppView, string> = {
+  home: "Home",
+  optimizer: "Optimizer",
+  tweaks: "Tweaks",
+  games: "Games",
+  network: "Network",
+  cleanup: "Cleanup",
+  benchmarks: "Benchmarks",
+};
 
-  useEffect(() => {
-    if (!visible) return;
-    const id = window.setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(id);
-  }, [visible]);
+const sidebarNav: { icon: AppIconName; label: string; view: AppView }[] = [
+  { icon: "home", label: "Home", view: "home" },
+  { icon: "optimizer", label: "Opt", view: "optimizer" },
+  { icon: "games", label: "Games", view: "games" },
+  { icon: "internet", label: "Net", view: "network" },
+  { icon: "cleanup", label: "Clean", view: "cleanup" },
+  { icon: "benchmark", label: "Bench", view: "benchmarks" },
+];
 
-  const remaining = Math.max(0, demoExpires - now);
-  const days = Math.floor(remaining / 86400000);
-  const hours = Math.floor((remaining % 86400000) / 3600000);
-  const minutes = Math.floor((remaining % 3600000) / 60000);
-  const seconds = Math.floor((remaining % 60000) / 1000);
+const sidebarExtra: { icon: AppIconName; label: string; view: AppView }[] = [
+  { icon: "cpu", label: "CPU", view: "tweaks" },
+  { icon: "gpu", label: "GPU", view: "optimizer" },
+  { icon: "ram", label: "RAM", view: "home" },
+  { icon: "debloat", label: "Debloat", view: "cleanup" },
+  { icon: "system", label: "Sys", view: "tweaks" },
+];
 
-  return (
-    <div className="space-y-3">
-      <div className="reflux-glow-box rounded-xl p-3">
-        <div className="mb-1 text-[10px] font-bold tracking-wider text-reflux-accent uppercase">PRO access</div>
-        <div className="reflux-metric text-2xl font-extrabold text-white sm:text-3xl">
-          {days}d {hours}h {minutes}m {seconds}s
-        </div>
-        <p className="mt-1 text-[10px] text-reflux-muted">Countdown starts when you activate your license key.</p>
-      </div>
-      <div className="grid grid-cols-3 gap-2">
-        {[
-          { label: "CPU", val: "24%", color: "#5DDE86" },
-          { label: "GPU", val: "31%", color: "#F15B50" },
-          { label: "RAM", val: "56%", color: "#B392F0" },
-        ].map((stat) => (
-          <div key={stat.label} className="rounded-xl border border-reflux-border/50 bg-[#0f1217]/90 p-2.5">
-            <div className="text-[9px] font-bold tracking-wider text-reflux-muted uppercase">{stat.label}</div>
-            <div className="mt-1 text-lg font-extrabold tabular-nums" style={{ color: stat.color }}>
-              {stat.val}
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="flex flex-wrap gap-2">
-        {["Clean RAM", "Optimize Network", "Apply Tweaks"].map((action) => (
-          <span
-            key={action}
-            className="rounded-lg border border-reflux-accent/30 bg-reflux-accent/10 px-2.5 py-1.5 text-[10px] font-bold text-reflux-accent"
-          >
-            {action}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
+interface AppPreviewMockProps {
+  hero?: boolean;
 }
 
 function PreviewBenchmarks({ active }: { active: boolean }) {
@@ -125,77 +107,18 @@ function PreviewBenchmarks({ active }: { active: boolean }) {
   );
 }
 
-const sidebarNav: { icon: AppIconName; label: string; tab: Tab }[] = [
-  { icon: "optimizer", label: "Opt", tab: "Tweaks" },
-  { icon: "games", label: "Games", tab: "Games" },
-  { icon: "internet", label: "Net", tab: "Network" },
-  { icon: "cleanup", label: "Clean", tab: "Cleanup" },
-  { icon: "benchmark", label: "Bench", tab: "Benchmarks" },
-];
-
-const sidebarExtra: { icon: AppIconName; label: string }[] = [
-  { icon: "home", label: "Home" },
-  { icon: "cpu", label: "CPU" },
-  { icon: "gpu", label: "GPU" },
-  { icon: "ram", label: "RAM" },
-  { icon: "debloat", label: "Debloat" },
-  { icon: "system", label: "Sys" },
-];
-
-type SidebarItem = { icon: AppIconName; label: string; tab?: Tab };
-
-const heroSidebarItems: SidebarItem[] = [
-  sidebarExtra[0],
-  ...sidebarNav,
-  ...sidebarExtra.slice(1),
-];
-
-const sampleTweaks = [
-  { name: "Disable Nagle's Algorithm", on: true, tag: "Network", icon: "internet" as AppIconName },
-  { name: "High Performance Power Plan", on: true, tag: "CPU", icon: "cpu" as AppIconName },
-  { name: "Disable Core Parking", on: true, tag: "CPU", icon: "cpu" as AppIconName },
-  { name: "QoS Packet Prioritization", on: false, tag: "Network", icon: "internet" as AppIconName },
-];
-
-const networkTweaks = [
-  { name: "Disable Nagle's Algorithm", on: true, desc: "Cuts micro-delays on small game packets" },
-  { name: "Flush DNS Cache", on: true, desc: "Clears stale resolver entries" },
-  { name: "Optimize TCP/IP Stack", on: true, desc: "Tunes Windows network defaults" },
-  { name: "Reset Winsock Catalog", on: false, desc: "Repairs broken socket bindings" },
-];
-
-interface AppPreviewMockProps {
-  hero?: boolean;
-  autoPlay?: boolean;
-}
-
-export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMockProps) {
-  const [activeTab, setActiveTab] = useState<Tab>("Tweaks");
+export function AppPreviewMock({ hero = false }: AppPreviewMockProps) {
   const [view, setView] = useState<AppView>("home");
   const { ref, visible } = useInViewport<HTMLDivElement>("120px");
-
-  useEffect(() => {
-    if (!autoPlay || !visible) return;
-    const interval = setInterval(() => {
-      setView((current) => {
-        if (current === "home") return "Tweaks";
-        const idx = tabs.indexOf(current as Tab);
-        return tabs[(idx + 1) % tabs.length];
-      });
-    }, 3600);
-    return () => clearInterval(interval);
-  }, [autoPlay, visible]);
-
-  useEffect(() => {
-    if (view !== "home") setActiveTab(view);
-  }, [view]);
 
   const shellClass = hero
     ? "rounded-none border-0 bg-transparent shadow-none"
     : "max-w-4xl rounded-2xl border border-[rgba(241,91,80,0.35)] bg-[#080a0d] shadow-[0_0_60px_rgba(241,91,80,0.12),0_0_0_1px_rgba(255,255,255,0.04)_inset]";
 
-  const content = (
-    <>
+  const selectView = (next: AppView) => setView(next);
+
+  return (
+    <div ref={ref} className={`mx-auto w-full overflow-hidden ${shellClass}`}>
       {!hero && (
         <div className="flex items-center gap-2 border-b border-reflux-border/80 bg-[#0a0b0e] px-4 py-3">
           <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
@@ -219,27 +142,16 @@ export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMoc
         <span className="hidden text-[10px] text-reflux-muted sm:inline">Administrator</span>
       </div>
 
-      <div className="flex min-h-[300px] sm:min-h-[340px]">
+      <div className="flex min-h-[320px] sm:min-h-[360px]">
         {hero && (
           <aside className="hidden w-[76px] shrink-0 flex-col gap-0.5 overflow-y-auto border-r border-reflux-border/40 bg-[#080a0d] py-2 sm:flex">
-            {heroSidebarItems.map((item) => {
-              const tab = item.tab;
-              const isHome = item.icon === "home";
-              const isActive = isHome ? view === "home" : view === tab;
+            {[...sidebarNav, ...sidebarExtra].map((item) => {
+              const isActive = view === item.view;
               return (
                 <button
                   key={`${item.icon}-${item.label}`}
                   type="button"
-                  onClick={() => {
-                    if (isHome) {
-                      setView("home");
-                      return;
-                    }
-                    if (tab) {
-                      setActiveTab(tab);
-                      setView(tab);
-                    }
-                  }}
+                  onClick={() => selectView(item.view)}
                   className={`mx-1.5 flex flex-col items-center gap-1 rounded-xl px-1 py-2 text-[8px] font-bold transition-all ${
                     isActive
                       ? "bg-reflux-accent/15 text-reflux-accent"
@@ -256,83 +168,28 @@ export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMoc
 
         <div className="min-w-0 flex-1">
           <div className="flex gap-0.5 overflow-x-auto border-b border-reflux-border/40 bg-[#0a0c10] px-2 sm:px-3">
-            <button
-              type="button"
-              onClick={() => setView("home")}
-              className={`shrink-0 border-b-2 px-3 py-2.5 text-xs font-semibold transition-all sm:px-4 sm:py-3 sm:text-sm ${
-                view === "home"
-                  ? "border-reflux-accent text-reflux-accent"
-                  : "border-transparent text-reflux-muted hover:text-white"
-              }`}
-            >
-              Home
-            </button>
-            {tabs.map((tab) => (
+            {VIEWS.map((id) => (
               <button
-                key={tab}
+                key={id}
                 type="button"
-                onClick={() => {
-                  setActiveTab(tab);
-                  setView(tab);
-                }}
+                onClick={() => selectView(id)}
                 className={`shrink-0 border-b-2 px-3 py-2.5 text-xs font-semibold transition-all sm:px-4 sm:py-3 sm:text-sm ${
-                  view === tab
+                  view === id
                     ? "border-reflux-accent text-reflux-accent"
                     : "border-transparent text-reflux-muted hover:text-white"
                 }`}
               >
-                {tab}
+                {TAB_LABELS[id]}
               </button>
             ))}
           </div>
 
-          <div className={`bg-gradient-to-b from-[#0c0e12] to-[#080a0d] ${hero ? "p-4 sm:p-5" : "p-6"}`}>
-            {view === "home" && <PreviewHome visible={visible} />}
+          <div className={`min-h-[260px] bg-gradient-to-b from-[#0c0e12] to-[#080a0d] ${hero ? "p-4 sm:p-5" : "p-6"}`}>
+            {view === "home" && <AppPreviewHomePanel />}
+            {view === "optimizer" && <AppPreviewOptimizerPanel />}
+            {view === "tweaks" && <AppPreviewTweaksPanel />}
 
-            {view === "Tweaks" && (
-              <div className="space-y-2">
-                <div className="mb-3 flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-2">
-                    <AppIcon name="optimizer" size={20} />
-                    <div>
-                      <div className="text-sm font-bold text-white">Optimizer</div>
-                      <div className="text-[11px] text-reflux-muted">
-                        {PRODUCT_LIMITS.freeTweaks} free · {PRODUCT_LIMITS.totalTweaksLabel} pro
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    className="shrink-0 rounded-lg bg-gradient-to-r from-reflux-accent to-[#c43d35] px-3 py-1.5 text-[10px] font-bold text-white shadow-[0_0_16px_rgba(241,91,80,0.35)] sm:px-4 sm:py-2 sm:text-xs"
-                  >
-                    Apply All
-                  </button>
-                </div>
-                {sampleTweaks.map((tweak) => (
-                  <div
-                    key={tweak.name}
-                    className="flex items-center justify-between gap-3 rounded-xl border border-reflux-border/50 bg-[#0f1217]/90 px-3 py-2.5 sm:px-4 sm:py-3"
-                  >
-                    <div className="flex min-w-0 items-center gap-2.5">
-                      <AppIcon name={tweak.icon} size={16} glow={false} className="shrink-0 opacity-80" />
-                      <div className="min-w-0">
-                        <div className="truncate text-xs font-semibold sm:text-sm">{tweak.name}</div>
-                        <div className="mt-0.5 text-[10px] text-reflux-muted">{tweak.tag}</div>
-                      </div>
-                    </div>
-                    <div
-                      className={`relative h-5 w-9 shrink-0 rounded-full sm:h-6 sm:w-11 ${tweak.on ? "bg-reflux-accent shadow-[0_0_10px_rgba(241,91,80,0.45)]" : "bg-reflux-border"}`}
-                    >
-                      <div
-                        className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-md transition-transform sm:h-5 sm:w-5 ${tweak.on ? "translate-x-4 sm:translate-x-5" : "translate-x-0.5"}`}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {view === "Games" && (
+            {view === "games" && (
               <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
                 {PREVIEW_GAMES.map((game) => (
                   <div
@@ -357,7 +214,7 @@ export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMoc
               </div>
             )}
 
-            {view === "Network" && (
+            {view === "network" && (
               <div className="space-y-2">
                 <div className="mb-3 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
@@ -395,7 +252,7 @@ export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMoc
               </div>
             )}
 
-            {view === "Cleanup" && (
+            {view === "cleanup" && (
               <div className="py-4 text-center sm:py-6">
                 <AppIcon name="cleanup" size={28} className="mx-auto mb-2" />
                 <div className="text-4xl font-extrabold text-reflux-green sm:text-5xl">12.4 GB</div>
@@ -413,7 +270,7 @@ export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMoc
               </div>
             )}
 
-            {view === "Benchmarks" && (
+            {view === "benchmarks" && (
               <div>
                 <div className="mb-3 flex items-center gap-2">
                   <AppIcon name="benchmark" size={18} />
@@ -425,12 +282,6 @@ export function AppPreviewMock({ hero = false, autoPlay = false }: AppPreviewMoc
           </div>
         </div>
       </div>
-    </>
-  );
-
-  return (
-    <div ref={ref} className={`mx-auto w-full overflow-hidden ${shellClass}`}>
-      {content}
     </div>
   );
 }

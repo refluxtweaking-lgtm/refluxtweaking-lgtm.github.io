@@ -3,6 +3,7 @@
 import { GameImage } from "@/components/games/GameImage";
 import { Icon } from "@/components/ui/Icon";
 import { VendorLogo } from "@/components/ui/VendorLogo";
+import { AppPreviewHomePanel, AppPreviewOptimizerPanel } from "@/components/app/AppPreviewPanels";
 import { PRODUCT_LIMITS } from "@/data/tweaks";
 import { appGalleryItems } from "@/data/reflux-highlights";
 
@@ -98,47 +99,8 @@ export function AppScreenshotFrame({ id }: { id: GalleryId }) {
 
   if (id === "dashboard") {
     return (
-      <div className="space-y-3 p-1">
-        <div className="grid grid-cols-3 gap-2">
-          {[
-            { label: "CPU", val: "24%", color: "#5DDE86", name: "Intel i7-13700K" },
-            { label: "GPU", val: "31%", color: "#F15B50", name: "RTX 4070" },
-            { label: "RAM", val: "56%", color: "#B392F0", name: "32 GB Total" },
-          ].map((s) => (
-            <div key={s.label} className="reflux-glow-box reflux-glow-box-sm p-2.5">
-              <div className="text-[9px] font-bold tracking-wider text-reflux-muted uppercase">{s.label}</div>
-              <div className="mt-1 text-xl font-extrabold tabular-nums" style={{ color: s.color }}>
-                {s.val}
-              </div>
-              <div className="mt-1 truncate text-[9px] text-reflux-muted">{s.name}</div>
-            </div>
-          ))}
-        </div>
-        <div className="reflux-glow-box p-3">
-          <div className="mb-2 text-[10px] font-bold text-white">Performance Monitor</div>
-          <svg viewBox="0 0 240 56" className="h-14 w-full" aria-hidden="true">
-            <polyline
-              fill="none"
-              stroke="#F15B50"
-              strokeWidth="2"
-              points="0,42 20,38 40,35 60,28 80,32 100,22 120,18 140,24 160,14 180,16 200,10 220,12 240,8"
-            />
-            <polygon
-              fill="rgba(241,91,80,0.15)"
-              points="0,56 0,42 20,38 40,35 60,28 80,32 100,22 120,18 140,24 160,14 180,16 200,10 220,12 240,8 240,56"
-            />
-          </svg>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {["Clean RAM", "Optimize Network", "Optimize Graphics"].map((a) => (
-            <span
-              key={a}
-              className="rounded-lg border border-reflux-accent/30 bg-reflux-accent/10 px-2.5 py-1.5 text-[10px] font-bold text-reflux-accent"
-            >
-              {a}
-            </span>
-          ))}
-        </div>
+      <div className="p-1">
+        <AppPreviewHomePanel />
       </div>
     );
   }
@@ -265,34 +227,17 @@ export function AppScreenshotFrame({ id }: { id: GalleryId }) {
     );
   }
 
-  return (
-    <div className="space-y-2 p-1">
-      <div className="flex flex-wrap gap-2">
-        <HwChip accent="#0071C5" kind="Processor" name="Intel Core i7" sub="Matched profile" vendor="intel" />
-        <HwChip accent="#76B900" kind="Graphics" name="NVIDIA RTX 4070" sub="Matched profile" vendor="nvidia" />
+  if (id === "optimizer") {
+    return (
+      <div className="p-1">
+        <AppPreviewOptimizerPanel />
       </div>
-      {[
-        "Max Gaming Performance Suite",
-        "Full Network Stack Reset",
-        "Aggressive RAM Cleanup",
-      ].map((cmd, i) => (
-        <div key={cmd} className="reflux-glow-box p-3">
-          <div className="mb-1 flex items-center gap-2">
-            <span className="flex h-5 w-5 items-center justify-center rounded-md bg-reflux-accent/15 text-[10px] font-bold text-reflux-accent">
-              {i + 1}
-            </span>
-            <span className="text-xs font-bold text-white">{cmd}</span>
-          </div>
-          <div className="flex gap-2">
-            <span className="rounded-md border border-white/10 px-2 py-1 text-[9px] font-semibold text-reflux-muted">
-              Copy
-            </span>
-          <span className="rounded-md reflux-glow-interactive px-2 py-1 text-[9px] font-bold text-reflux-accent">
-              Run
-            </span>
-          </div>
-        </div>
-      ))}
+    );
+  }
+
+  return (
+    <div className="p-1">
+      <AppPreviewOptimizerPanel />
     </div>
   );
 }
