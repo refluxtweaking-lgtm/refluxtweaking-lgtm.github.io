@@ -29,7 +29,7 @@ export function FlowIn({
           observer.disconnect();
         }
       },
-      { threshold: 0.1, rootMargin: "0px 0px -6% 0px" },
+      { threshold: 0.08, rootMargin: "80px 0px -6% 0px" },
     );
 
     observer.observe(node);
