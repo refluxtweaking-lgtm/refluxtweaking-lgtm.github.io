@@ -47,7 +47,7 @@ export function RealResults() {
       />
 
       <GlowCard className="mx-auto max-w-4xl overflow-hidden" hover={false}>
-        <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-white/8 bg-white/[0.02] p-5 md:flex-row md:items-center md:justify-between">
+        <div className="mb-6 flex flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="mb-1 text-xs font-bold tracking-[0.2em] text-reflux-muted uppercase">Test System</p>
             <p className="text-sm text-reflux-muted">Same hardware, before & after REFLUX Pro</p>
@@ -56,7 +56,7 @@ export function RealResults() {
             {["RTX 4070", "Ryzen 7 7800X3D", "32GB DDR5"].map((spec) => (
               <span
                 key={spec}
-                className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-sm font-medium text-white"
+                className="rounded-full px-3 py-1.5 text-sm font-medium text-white/90"
               >
                 {spec}
               </span>

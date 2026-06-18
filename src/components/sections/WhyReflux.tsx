@@ -33,7 +33,7 @@ export function WhyReflux() {
       <div className="mx-auto mb-12 grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {refluxAdvantages.map((item, i) => (
           <FlowIn key={item.title} delay={i * 60}>
-            <GlowCard className="h-full border-reflux-accent/15 p-5 transition-all hover:border-reflux-accent/35 hover:shadow-[0_0_40px_-12px_rgba(255,107,91,0.45)]">
+            <GlowCard className="h-full p-5 transition-transform hover:-translate-y-0.5">
               <span className="mb-2 inline-block rounded-full border border-reflux-accent/30 bg-reflux-accent/10 px-2.5 py-0.5 text-[10px] font-bold tracking-wide text-reflux-accent uppercase">
                 {item.objection}
               </span>
@@ -48,8 +48,8 @@ export function WhyReflux() {
       </div>
 
       <FlowIn delay={100}>
-        <div className="mx-auto max-w-4xl overflow-hidden rounded-2xl border border-reflux-accent/25 bg-[#060810]/95 shadow-[0_0_80px_rgba(255,107,91,0.12)] backdrop-blur-sm">
-          <div className="border-b border-reflux-border/60 bg-gradient-to-r from-reflux-accent/10 to-transparent px-5 py-4 sm:px-6">
+        <div className="mx-auto max-w-4xl overflow-hidden">
+          <div className="px-5 py-4 sm:px-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <div className="text-xs font-bold tracking-wider text-reflux-accent uppercase">What you get</div>

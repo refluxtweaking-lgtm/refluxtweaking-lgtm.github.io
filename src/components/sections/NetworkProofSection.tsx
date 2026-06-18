@@ -21,7 +21,7 @@ export function NetworkProofSection() {
           <AmbientFpsGraph className="min-h-[160px] md:min-h-[240px] lg:min-h-[280px]" />
         </FlowIn>
 
-        <FlowIn delay={120} className="border-t border-white/8 pt-12 md:pt-14">
+        <FlowIn delay={120} className="pt-12 md:pt-14">
           <h3 className="mb-6 text-2xl font-extrabold tracking-tight text-white md:text-3xl">
             Reduce input lag & latency
           </h3>

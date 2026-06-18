@@ -32,12 +32,9 @@ export function ProSpotlight() {
         </FlowIn>
 
         <FlowIn delay={80}>
-          <div className="pro-features-grid overflow-hidden rounded-2xl border border-white/10">
-            {premiumFeatures.map((f, i) => (
-              <div
-                key={f.title}
-                className={`pro-feature-cell flex gap-3 border-white/8 p-5 ${i < premiumFeatures.length - 1 ? "border-b md:border-b-0" : ""} ${i % 2 === 0 ? "md:border-r" : ""} ${i < 4 ? "md:border-b" : ""}`}
-              >
+          <div className="pro-features-grid overflow-hidden">
+            {premiumFeatures.map((f) => (
+              <div key={f.title} className="pro-feature-cell flex gap-3 p-5">
                 <AppIcon name={f.icon} size={20} className="mt-0.5 shrink-0" />
                 <div>
                   <div className="font-bold text-white">{f.title}</div>

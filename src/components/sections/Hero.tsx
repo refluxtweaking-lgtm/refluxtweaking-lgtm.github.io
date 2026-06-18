@@ -21,8 +21,8 @@ export function Hero() {
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-14">
           <div className="text-center lg:text-left">
             <div className="animate-fade-in-up mb-6 flex flex-wrap items-center justify-center gap-2.5 lg:justify-start">
-              <span className="hero-live-badge inline-flex items-center gap-2 rounded-full border border-reflux-green/40 bg-reflux-green/12 px-4 py-2 text-[11px] font-bold tracking-wide text-reflux-green uppercase">
-                <span className="hero-live-dot h-2 w-2 rounded-full bg-reflux-green" />
+              <span className="hero-live-badge inline-flex items-center gap-2 rounded-full border border-reflux-accent/40 bg-reflux-accent/12 px-4 py-2 text-[11px] font-bold tracking-wide text-reflux-accent uppercase">
+                <span className="hero-live-dot h-2 w-2 rounded-full bg-reflux-accent shadow-[0_0_8px_rgba(255,107,91,0.8)]" />
                 Free to download
               </span>
             </div>
@@ -68,7 +68,7 @@ export function Hero() {
               {proofPoints.map((point) => (
                 <div
                   key={point.label}
-                  className="hero-proof-card flex items-center gap-3 rounded-xl border border-white/12 bg-white/[0.05] px-4 py-3.5 backdrop-blur-sm"
+                  className="hero-proof-card flex items-center gap-3 px-4 py-3.5"
                 >
                   <AppIcon name={point.icon} size={18} />
                   <div className="min-w-0">

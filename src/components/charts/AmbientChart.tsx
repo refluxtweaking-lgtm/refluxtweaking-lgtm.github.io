@@ -83,8 +83,8 @@ export function AmbientFpsGraph({ className = "" }: AmbientFpsGraphProps) {
   return (
     <div className={`ambient-graph-wrap proof-chart relative ${className}`}>
       <div className="ambient-graph-legend absolute right-0 top-0 z-10 flex gap-4 text-[11px] font-semibold sm:text-xs">
-        <span className="flex items-center gap-2 text-reflux-calm">
-          <span className="h-0.5 w-5 rounded-full bg-reflux-calm shadow-[0_0_8px_rgba(94,196,239,0.8)]" />
+        <span className="flex items-center gap-2 text-[#ff9588]">
+          <span className="h-0.5 w-5 rounded-full bg-[#ff9588] shadow-[0_0_10px_rgba(255,149,136,0.9)]" />
           After REFLUX
         </span>
         <span className="flex items-center gap-2 text-[#e85548]">
@@ -106,8 +106,8 @@ export function AmbientFpsGraph({ className = "" }: AmbientFpsGraphProps) {
                 <stop offset="100%" stopColor="rgba(232,85,72,0)" />
               </linearGradient>
               <linearGradient id="ambientAfterFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="rgba(94,196,239,0.18)" />
-                <stop offset="100%" stopColor="rgba(94,196,239,0)" />
+                <stop offset="0%" stopColor="rgba(255,107,91,0.2)" />
+                <stop offset="100%" stopColor="rgba(255,107,91,0)" />
               </linearGradient>
             </defs>
             {!intro ? (
@@ -128,7 +128,7 @@ export function AmbientFpsGraph({ className = "" }: AmbientFpsGraphProps) {
             <path
               d={FPS_AFTER_PATH}
               fill="none"
-              stroke="#5ec4ef"
+              stroke="#ff9588"
               strokeWidth="3"
               strokeLinejoin="round"
               strokeLinecap="round"
@@ -144,14 +144,14 @@ export function AmbientFpsGraph({ className = "" }: AmbientFpsGraphProps) {
 
 export function LatencyMiniChart() {
   return (
-    <div className="latency-mini-chart proof-chart rounded-xl border border-white/8 bg-[#080a0f]/90 p-4">
+    <div className="latency-mini-chart proof-chart p-4">
       <div className="mb-3 flex gap-4 text-[10px] font-bold uppercase tracking-wide">
         <span className="flex items-center gap-1.5 text-[#e85548]">
           <span className="h-2 w-2 rounded-sm bg-[#e85548]" />
           Before 11 ms
         </span>
-        <span className="flex items-center gap-1.5 text-reflux-calm">
-          <span className="h-2 w-2 rounded-sm bg-reflux-calm" />
+        <span className="flex items-center gap-1.5 text-[#ff9588]">
+          <span className="h-2 w-2 rounded-sm bg-[#ff9588] shadow-[0_0_6px_rgba(255,149,136,0.8)]" />
           After 2 ms
         </span>
       </div>
@@ -175,7 +175,7 @@ export function LatencyMiniChart() {
             <path
               d={LATENCY_AFTER_PATH}
               fill="none"
-              stroke="#5ec4ef"
+              stroke="#ff9588"
               strokeWidth="2.5"
               strokeLinejoin="round"
               strokeLinecap="round"

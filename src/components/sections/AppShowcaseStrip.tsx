@@ -165,11 +165,11 @@ export function AppShowcaseStrip() {
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-4 px-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-4">
         {showcaseCards.map((card, i) => (
           <FlowIn key={card.id} delay={i * 60} className="showcase-card group">
-            <div className="showcase-card-inner flex h-full min-h-[360px] flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0e1118] transition-colors duration-200 group-hover:border-white/14">
+            <div className="showcase-card-inner flex h-full min-h-[360px] flex-col overflow-hidden">
               <div className="showcase-card-ui relative flex flex-1 items-center justify-center p-5">
                 <ShowcaseUi type={card.ui} />
               </div>
-              <div className="border-t border-white/[0.06] p-4">
+              <div className="showcase-card-footer p-4">
                 <div className="font-bold text-white">{card.title}</div>
                 <p className="mt-1 text-xs leading-relaxed text-reflux-muted">{card.desc}</p>
               </div>
