@@ -69,36 +69,39 @@ export default async function AccountPage() {
       <div className="mx-auto w-full max-w-2xl">
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-white">Your account</h1>
-            <p className="mt-1 text-sm text-reflux-muted">
-              Signed in as <span className="font-medium text-white">{user.email}</span>
+            <h1 className="font-display text-3xl font-bold tracking-tight text-white">Your account</h1>
+            <p className="mt-2 text-sm text-reflux-text-soft">
+              Signed in as{" "}
+              <span className="reflux-glow-readable inline-block rounded-lg px-2 py-0.5 font-medium text-white">
+                {user.email}
+              </span>
             </p>
           </div>
           <form action={signOut}>
             <button
               type="submit"
-              className="inline-flex items-center justify-center rounded-xl border border-reflux-border/60 bg-transparent px-4 py-2 text-sm font-semibold text-reflux-muted transition-all hover:border-reflux-accent/40 hover:text-white"
+              className="reflux-glow-interactive inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold text-reflux-muted hover:text-white"
             >
               Log out
             </button>
           </form>
         </div>
 
-        <h2 className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-reflux-muted">
+        <h2 className="reflux-glow-readable mb-4 inline-block rounded-full px-3 py-1 text-sm font-bold uppercase tracking-[0.2em] text-reflux-muted">
           Your license keys
         </h2>
 
         {activeLicenses.length === 0 ? (
-          <div className="glass-card-static rounded-2xl border border-reflux-border/60 bg-[rgba(10,12,17,0.85)] p-8 text-center shadow-[0_0_60px_rgba(241,91,80,0.08)]">
+          <div className="reflux-glow-box rounded-2xl p-8 text-center">
             {licenses.length === 0 ? (
               <>
                 <p className="text-sm text-reflux-text">No licenses yet.</p>
-                <p className="mt-2 text-sm text-reflux-muted">
+                <p className="mt-2 text-sm text-reflux-text-soft">
                   Grab a plan to unlock REFLUX PRO — your key shows up here automatically after purchase.
                 </p>
                 <Link
                   href="/pricing"
-                  className="mt-6 inline-flex items-center justify-center rounded-xl border border-[rgba(241,91,80,0.5)] bg-gradient-to-r from-[rgba(241,91,80,0.25)] to-[rgba(241,91,80,0.12)] px-5 py-2.5 text-sm font-semibold text-white transition-all hover:border-reflux-accent hover:shadow-[0_0_24px_rgba(241,91,80,0.4)]"
+                  className="reflux-glow-interactive mt-6 inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-[rgba(255,77,61,0.28)] to-[rgba(255,77,61,0.12)] px-5 py-2.5 text-sm font-semibold text-white hover:text-white"
                 >
                   View plans
                 </Link>
@@ -106,12 +109,12 @@ export default async function AccountPage() {
             ) : (
               <>
                 <p className="text-sm text-reflux-text">No active license.</p>
-                <p className="mt-2 text-sm text-reflux-muted">
+                <p className="mt-2 text-sm text-reflux-text-soft">
                   Purchase a new plan or check your email for the latest update key.
                 </p>
                 <Link
                   href="/pricing"
-                  className="mt-6 inline-flex items-center justify-center rounded-xl border border-[rgba(241,91,80,0.5)] bg-gradient-to-r from-[rgba(241,91,80,0.25)] to-[rgba(241,91,80,0.12)] px-5 py-2.5 text-sm font-semibold text-white transition-all hover:border-reflux-accent hover:shadow-[0_0_24px_rgba(241,91,80,0.4)]"
+                  className="reflux-glow-interactive mt-6 inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-[rgba(255,77,61,0.28)] to-[rgba(255,77,61,0.12)] px-5 py-2.5 text-sm font-semibold text-white hover:text-white"
                 >
                   View plans
                 </Link>
@@ -120,30 +123,27 @@ export default async function AccountPage() {
           </div>
         ) : (
           <div className="flex flex-col gap-4">
-            <div className="glass-card-static rounded-2xl border border-reflux-border/60 bg-[rgba(10,12,17,0.85)] p-6 shadow-[0_0_60px_rgba(241,91,80,0.08)]">
+            <div className="reflux-glow-box rounded-2xl p-6">
               <h3 className="text-lg font-bold text-white">Download REFLUX PRO</h3>
-              <p className="mt-2 text-sm text-reflux-muted">
+              <p className="mt-2 text-sm text-reflux-text-soft">
                 Install the desktop app, then paste your active license key below when prompted.
               </p>
               <a
                 href={REFLUX_PRO_DOWNLOAD.href}
-                className="mt-4 inline-flex items-center justify-center rounded-xl border border-[rgba(241,91,80,0.5)] bg-gradient-to-r from-[rgba(241,91,80,0.25)] to-[rgba(241,91,80,0.12)] px-5 py-2.5 text-sm font-semibold text-white transition-all hover:border-reflux-accent hover:shadow-[0_0_24px_rgba(241,91,80,0.4)]"
+                className="reflux-glow-interactive mt-4 inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-[rgba(255,77,61,0.28)] to-[rgba(255,77,61,0.12)] px-5 py-2.5 text-sm font-semibold text-white hover:text-white"
               >
                 Download {REFLUX_PRO_DOWNLOAD.label}
               </a>
             </div>
             {licenses.map((license) => (
-              <div
-                key={license.id}
-                className="glass-card-static rounded-2xl border border-reflux-border/60 bg-[rgba(10,12,17,0.85)] p-6 shadow-[0_0_60px_rgba(241,91,80,0.08)]"
-              >
+              <div key={license.id} className="reflux-glow-box rounded-2xl p-6">
                 <div className="mb-3 flex items-center justify-between gap-3">
                   <h3 className="text-lg font-bold text-white">{planLabel(license.plan)}</h3>
                   <span
-                    className={`rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest ${
+                    className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest ${
                       license.status.toLowerCase() === "active"
-                        ? "border-reflux-accent/40 bg-[rgba(241,91,80,0.12)] text-reflux-accent"
-                        : "border-reflux-border/60 bg-white/5 text-reflux-muted"
+                        ? "reflux-glow-interactive-active text-reflux-accent"
+                        : "reflux-glow-readable text-reflux-muted"
                     }`}
                   >
                     {license.status}
@@ -158,7 +158,7 @@ export default async function AccountPage() {
           </div>
         )}
 
-        <p className="mt-8 text-center text-xs text-reflux-muted">
+        <p className="reflux-glow-readable mt-8 rounded-xl px-4 py-3 text-center text-xs text-reflux-text-soft">
           {activeLicenses.length > 0
             ? "Install REFLUX PRO, paste your key when prompted, and your access countdown starts on activation day."
             : "Purchase a plan to unlock REFLUX PRO and get your license key here."}

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 
 const linkClass =
-  "inline-flex items-center justify-center gap-2 rounded-xl border border-reflux-border/60 bg-transparent px-5 py-2.5 text-sm font-semibold text-reflux-muted transition-all duration-300 hover:border-reflux-accent/40 hover:bg-white/5 hover:text-white";
+  "reflux-glow-interactive inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold text-reflux-muted duration-300 hover:text-white";
 
 interface HeaderAuthProps {
   className?: string;
