@@ -39,11 +39,11 @@ body::before {
   z-index: -25;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 240% 95% at 50% -15%, rgba(255, 77, 61, 0.28) 0%, rgba(255, 77, 61, 0.1) 38%, transparent 72%),
-    radial-gradient(ellipse 110% 75% at 0% 0%, rgba(255, 77, 61, 0.14) 0%, transparent 65%),
-    radial-gradient(ellipse 110% 75% at 100% 0%, rgba(255, 77, 61, 0.14) 0%, transparent 65%),
-    radial-gradient(ellipse 40% 35% at 100% 40%, rgba(255, 60, 50, 0.08), transparent 55%),
-    radial-gradient(ellipse 35% 30% at 0% 70%, rgba(255, 77, 61, 0.06), transparent 55%);
+    radial-gradient(ellipse 72% 48% at 0% -8%, rgba(255, 77, 61, 0.13) 0%, transparent 68%),
+    radial-gradient(ellipse 72% 48% at 100% -8%, rgba(255, 77, 61, 0.13) 0%, transparent 68%),
+    radial-gradient(ellipse 90% 40% at 50% -12%, rgba(255, 77, 61, 0.06) 0%, transparent 72%),
+    radial-gradient(ellipse 40% 35% at 100% 40%, rgba(255, 60, 50, 0.07), transparent 55%),
+    radial-gradient(ellipse 35% 30% at 0% 70%, rgba(255, 77, 61, 0.05), transparent 55%);
 }
 
 .noise-texture {
@@ -492,50 +492,27 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
   pointer-events: none;
 }
 
-.top-glow-wash {
+.top-glow-sides {
   position: absolute;
-  left: -15vw;
-  right: -15vw;
-  top: -32vh;
-  height: 88vh;
+  left: 0;
+  right: 0;
+  top: -20vh;
+  height: 65vh;
   background:
-    radial-gradient(ellipse 220% 95% at 50% 0%, rgba(255, 107, 91, 0.34) 0%, rgba(255, 77, 61, 0.14) 34%, rgba(255, 77, 61, 0.05) 52%, transparent 78%),
-    radial-gradient(ellipse 100% 80% at 0% 6%, rgba(255, 77, 61, 0.18) 0%, transparent 68%),
-    radial-gradient(ellipse 100% 80% at 100% 6%, rgba(255, 77, 61, 0.18) 0%, transparent 68%);
-  animation: beamPulse 11s ease-in-out infinite;
+    radial-gradient(ellipse 85% 70% at 0% 0%, rgba(255, 107, 91, 0.16) 0%, rgba(255, 77, 61, 0.04) 42%, transparent 72%),
+    radial-gradient(ellipse 85% 70% at 100% 0%, rgba(255, 107, 91, 0.16) 0%, rgba(255, 77, 61, 0.04) 42%, transparent 72%);
+  animation: beamPulse 12s ease-in-out infinite;
 }
 
-.top-glow-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(150px);
-  pointer-events: none;
-}
-
-.top-glow-orb-left {
-  top: -34vh;
-  left: -32vw;
-  width: 95vw;
-  height: 75vh;
-  background: rgba(255, 77, 61, 0.38);
-}
-
-.top-glow-orb-right {
-  top: -34vh;
-  right: -32vw;
-  width: 95vw;
-  height: 75vh;
-  background: rgba(255, 77, 61, 0.38);
-}
-
+.top-glow-wash,
+.top-glow-orb-left,
+.top-glow-orb-right,
 .top-glow-orb-center {
-  top: -22vh;
-  left: 50%;
-  width: min(120vw, 1600px);
-  height: 58vh;
-  transform: translateX(-50%);
-  background: rgba(255, 107, 91, 0.28);
-  filter: blur(120px);
+  display: none;
+}
+
+.hero-beam {
+  display: none;
 }
 
 .ambient-orb {
@@ -549,10 +526,10 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 
 .grid-overlay {
   background-image:
-    linear-gradient(rgba(255, 77, 61, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 77, 61, 0.025) 1px, transparent 1px);
+    linear-gradient(rgba(255, 77, 61, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 77, 61, 0.03) 1px, transparent 1px);
   background-size: 80px 80px;
-  mask-image: radial-gradient(ellipse 160% 80% at 50% 0%, black 0%, transparent 88%);
+  mask-image: radial-gradient(ellipse 100% 55% at 50% 0%, black 8%, transparent 78%);
   opacity: 0.35;
 }
 
@@ -652,16 +629,7 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 }
 
 .hero-beam {
-  position: absolute;
-  left: -20vw;
-  right: -20vw;
-  top: -18vh;
-  height: 70vh;
-  background:
-    radial-gradient(ellipse 210% 92% at 50% 0%, rgba(255, 107, 91, 0.32) 0%, rgba(255, 77, 61, 0.12) 40%, transparent 76%),
-    radial-gradient(ellipse 85% 72% at 0% 4%, rgba(255, 77, 61, 0.16) 0%, transparent 70%),
-    radial-gradient(ellipse 85% 72% at 100% 4%, rgba(255, 77, 61, 0.16) 0%, transparent 70%);
-  animation: beamPulse 9s ease-in-out infinite;
+  display: none;
 }
 
 /* ── Epic hero (above the fold) ── */
@@ -676,12 +644,11 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 .hero-spotlight {
   position: absolute;
   inset: 0;
-  top: -25%;
+  top: -15%;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 190% 85% at 50% 0%, rgba(255, 107, 91, 0.32) 0%, rgba(255, 77, 61, 0.1) 42%, transparent 74%),
-    radial-gradient(ellipse 65% 55% at 0% 12%, rgba(255, 77, 61, 0.16) 0%, transparent 68%),
-    radial-gradient(ellipse 65% 55% at 100% 12%, rgba(255, 77, 61, 0.16) 0%, transparent 68%);
+    radial-gradient(ellipse 68% 58% at 0% 0%, rgba(255, 107, 91, 0.12) 0%, transparent 72%),
+    radial-gradient(ellipse 68% 58% at 100% 0%, rgba(255, 107, 91, 0.12) 0%, transparent 72%);
 }
 
 .hero-grid-fade {
@@ -808,9 +775,7 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 .header-shell {
   background: rgba(6, 8, 12, 0.48);
   border-color: rgba(255, 255, 255, 0.06) !important;
-  box-shadow:
-    0 10px 36px rgba(0, 0, 0, 0.28),
-    0 0 72px -8px rgba(255, 77, 61, 0.42);
+  box-shadow: 0 10px 36px rgba(0, 0, 0, 0.28);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
