@@ -14,6 +14,8 @@ const proofPoints = [
 export function Hero() {
   return (
     <section className="hero-stage relative w-full overflow-visible pb-6 pt-2 md:pt-8">
+      <div className="hero-spotlight pointer-events-none absolute inset-0" aria-hidden="true" />
+
       <div className="relative w-full">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-14">
           <div className="overflow-visible text-center lg:text-left">
