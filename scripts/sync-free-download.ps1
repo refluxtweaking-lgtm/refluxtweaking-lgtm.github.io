@@ -1,7 +1,7 @@
 # Copies the latest REFLUX FREE installer into the website public folder.
 $ErrorActionPreference = "Stop"
 
-$freeProject = "C:\Users\nothi\Desktop\! REFLUX FREE TWEAKING UTILITY"
+$freeProject = "D:\! REFLUX FREE TWEAKING UTILITY"
 $distDir = Join-Path $freeProject "dist-free"
 $destDir = Join-Path $PSScriptRoot "..\public\downloads"
 $destFile = Join-Path $destDir "REFLUX-FREE-Setup.exe"

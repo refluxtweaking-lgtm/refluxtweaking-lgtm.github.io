@@ -1,7 +1,7 @@
 # Copies the latest REFLUX PRO installer into the gated private downloads folder.
 $ErrorActionPreference = "Stop"
 
-$proProject = "C:\Users\nothi\Desktop\! REFLUX PRO TWEAKING UTILITY"
+$proProject = "C:\! REFLUX PRO TWEAKING UTILITY"
 $distDir = Join-Path $proProject "dist"
 $destDir = Join-Path $PSScriptRoot "..\private\downloads"
 $destFile = Join-Path $destDir "REFLUX-PRO-Setup.exe"
