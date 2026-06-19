@@ -14,12 +14,9 @@ const proofPoints = [
 export function Hero() {
   return (
     <section className="hero-stage relative w-full overflow-visible pb-6 pt-2 md:pt-8">
-      <div className="hero-spotlight pointer-events-none absolute inset-0" aria-hidden="true" />
-      <div className="hero-grid-fade pointer-events-none absolute inset-0" aria-hidden="true" />
-
       <div className="relative w-full">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-14">
-          <div className="text-center lg:text-left">
+          <div className="overflow-visible text-center lg:text-left">
             <div className="animate-fade-in-up mb-6 flex flex-wrap items-center justify-center gap-2.5 lg:justify-start">
               <span className="hero-live-badge reflux-glow-interactive inline-flex items-center gap-2 rounded-full px-4 py-2 text-[11px] font-bold tracking-wide text-reflux-accent uppercase">
                 <span className="hero-live-dot h-2 w-2 rounded-full bg-reflux-accent shadow-[0_0_8px_rgba(255,107,91,0.8)]" />
@@ -28,8 +25,10 @@ export function Hero() {
             </div>
 
             <h1 className="hero-headline animate-fade-in-up mb-5 font-extrabold tracking-tight" style={{ animationDelay: "0.05s" }}>
-              <span className="block text-white">Stop losing to lag.</span>
-              <span className="hero-gradient-shimmer mt-2 block">Start winning fights.</span>
+              <span className="hero-headline-line block text-white">Stop losing to lag.</span>
+              <span className="hero-gradient-shimmer-wrap mt-2 block">
+                <span className="hero-gradient-shimmer">Start winning fights.</span>
+              </span>
             </h1>
 
             <p

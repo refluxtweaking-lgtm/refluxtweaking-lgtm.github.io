@@ -39,11 +39,11 @@ body::before {
   z-index: -25;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 140% 62% at 50% -12%, rgba(255, 77, 61, 0.2), transparent 68%),
-    radial-gradient(ellipse 48% 42% at 0% 0%, rgba(255, 77, 61, 0.11), transparent 62%),
-    radial-gradient(ellipse 48% 42% at 100% 0%, rgba(255, 77, 61, 0.11), transparent 62%),
-    radial-gradient(ellipse 40% 35% at 100% 40%, rgba(255, 60, 50, 0.08), transparent 55%),
-    radial-gradient(ellipse 35% 30% at 0% 70%, rgba(255, 77, 61, 0.06), transparent 55%);
+    radial-gradient(ellipse 220% 90% at 50% -18%, rgba(255, 77, 61, 0.14) 0%, rgba(255, 77, 61, 0.05) 42%, transparent 72%),
+    radial-gradient(ellipse 100% 70% at 0% 0%, rgba(255, 77, 61, 0.08) 0%, transparent 62%),
+    radial-gradient(ellipse 100% 70% at 100% 0%, rgba(255, 77, 61, 0.08) 0%, transparent 62%),
+    radial-gradient(ellipse 40% 35% at 100% 40%, rgba(255, 60, 50, 0.06), transparent 55%),
+    radial-gradient(ellipse 35% 30% at 0% 70%, rgba(255, 77, 61, 0.05), transparent 55%);
 }
 
 .noise-texture {
@@ -154,8 +154,8 @@ h3,
 }
 
 @keyframes beamPulse {
-  0%, 100% { opacity: 0.75; transform: translateX(-50%) scale(1); }
-  50% { opacity: 1; transform: translateX(-50%) scale(1.06); }
+  0%, 100% { opacity: 0.88; }
+  50% { opacity: 1; }
 }
 
 @keyframes marqueeFlow {
@@ -489,8 +489,53 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 .hero-glow {
   position: absolute;
   border-radius: 50%;
-  filter: blur(100px);
   pointer-events: none;
+}
+
+.top-glow-wash {
+  position: absolute;
+  left: -10vw;
+  right: -10vw;
+  top: -28vh;
+  height: 82vh;
+  background:
+    radial-gradient(ellipse 210% 92% at 50% 0%, rgba(255, 77, 61, 0.15) 0%, rgba(255, 77, 61, 0.06) 36%, rgba(255, 77, 61, 0.02) 56%, transparent 76%),
+    radial-gradient(ellipse 95% 75% at 0% 8%, rgba(255, 77, 61, 0.09) 0%, transparent 66%),
+    radial-gradient(ellipse 95% 75% at 100% 8%, rgba(255, 77, 61, 0.09) 0%, transparent 66%);
+  animation: beamPulse 11s ease-in-out infinite;
+}
+
+.top-glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(150px);
+  pointer-events: none;
+}
+
+.top-glow-orb-left {
+  top: -32vh;
+  left: -28vw;
+  width: 92vw;
+  height: 72vh;
+  background: rgba(255, 77, 61, 0.2);
+}
+
+.top-glow-orb-right {
+  top: -32vh;
+  right: -28vw;
+  width: 92vw;
+  height: 72vh;
+  background: rgba(255, 77, 61, 0.2);
+}
+
+.top-glow-orb-center {
+  top: -18vh;
+  left: 50%;
+  width: min(110vw, 1400px);
+  height: 55vh;
+  transform: translateX(-50%);
+  background: rgba(255, 107, 91, 0.12);
+  filter: blur(130px);
 }
 
 .ambient-orb {
@@ -504,10 +549,10 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 
 .grid-overlay {
   background-image:
-    linear-gradient(rgba(255, 77, 61, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 77, 61, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(255, 77, 61, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 77, 61, 0.025) 1px, transparent 1px);
   background-size: 80px 80px;
-  mask-image: radial-gradient(ellipse 120% 55% at 50% 0%, black 5%, transparent 82%);
+  mask-image: radial-gradient(ellipse 160% 80% at 50% 0%, black 0%, transparent 88%);
   opacity: 0.35;
 }
 
@@ -607,12 +652,7 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 }
 
 .hero-beam {
-  background:
-    radial-gradient(ellipse 150% 75% at 50% 0%, rgba(255, 107, 91, 0.24) 0%, transparent 70%),
-    radial-gradient(ellipse 55% 65% at 0% 0%, rgba(255, 77, 61, 0.14) 0%, transparent 72%),
-    radial-gradient(ellipse 55% 65% at 100% 0%, rgba(255, 77, 61, 0.14) 0%, transparent 72%);
-  filter: blur(44px);
-  animation: beamPulse 9s ease-in-out infinite;
+  display: none;
 }
 
 /* ── Epic hero (above the fold) ── */
@@ -621,48 +661,47 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  overflow: visible;
 }
 
 .hero-spotlight {
-  background:
-    radial-gradient(ellipse 130% 75% at 50% -12%, rgba(255, 107, 91, 0.32), transparent 58%),
-    radial-gradient(ellipse 55% 55% at 0% 8%, rgba(255, 77, 61, 0.12), transparent 62%),
-    radial-gradient(ellipse 55% 55% at 100% 8%, rgba(255, 77, 61, 0.12), transparent 62%),
-    radial-gradient(ellipse 60% 50% at 90% 20%, rgba(255, 60, 50, 0.1), transparent 55%);
+  display: none;
 }
 
 .hero-grid-fade {
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: radial-gradient(ellipse 120% 75% at 50% 25%, black 6%, transparent 82%);
-  opacity: 0.5;
+  display: none;
 }
 
 .hero-headline {
   font-size: var(--reflux-display-xl);
-  line-height: 1.12;
+  line-height: 1.2;
   letter-spacing: -0.04em;
   font-weight: 900;
   overflow: visible;
-  padding-bottom: 0.06em;
+}
+
+.hero-headline-line {
+  line-height: 1.15;
+}
+
+.hero-gradient-shimmer-wrap {
+  display: block;
+  overflow: visible;
+  padding-bottom: 0.35em;
+  filter: drop-shadow(0 0 32px rgba(255, 107, 91, 0.48));
 }
 
 .hero-gradient-shimmer {
-  display: block;
-  line-height: 1.12;
-  padding-bottom: 0.14em;
-  overflow: visible;
+  display: inline-block;
+  line-height: 1.28;
+  padding-bottom: 0.2em;
   background: linear-gradient(120deg, #ffd4cc, #ff6b5b, #ff3d2e, #ff9588, #ff6b5b, #ffd4cc);
   background-size: 220% auto;
   -webkit-background-clip: text;
   background-clip: text;
+  color: #ff6b5b;
   -webkit-text-fill-color: transparent;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
   animation: heroTextShimmer 5s ease-in-out infinite;
-  filter: drop-shadow(0 0 28px rgba(255, 107, 91, 0.55));
 }
 
 .hero-game-ticker {
@@ -751,51 +790,20 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 }
 
 .header-shell {
-  background: linear-gradient(
-    180deg,
-    rgba(12, 14, 18, 0.78) 0%,
-    rgba(8, 9, 12, 0.62) 100%
-  );
-  border-color: rgba(255, 255, 255, 0.07) !important;
-  box-shadow:
-    0 0 0 1px rgba(255, 77, 61, 0.05),
-    0 12px 40px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
+  background: rgba(6, 8, 12, 0.42);
+  border-color: rgba(255, 255, 255, 0.05) !important;
+  box-shadow: 0 10px 36px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .header-shell-scrolled {
-  background: linear-gradient(
-    180deg,
-    rgba(10, 11, 14, 0.94) 0%,
-    rgba(6, 7, 9, 0.88) 100%
-  ) !important;
-  border-color: rgba(255, 77, 61, 0.16) !important;
-  box-shadow:
-    0 0 0 1px rgba(255, 77, 61, 0.08),
-    0 8px 32px rgba(0, 0, 0, 0.6),
-    0 0 48px -12px rgba(255, 77, 61, 0.22);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-}
-
-.header-glow-bridge {
-  position: absolute;
-  left: 50%;
-  top: calc(100% - 8px);
-  z-index: -1;
-  width: min(100vw, 1600px);
-  height: 140px;
-  transform: translateX(-50%);
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse 100% 100% at 50% 0%, rgba(255, 107, 91, 0.26), transparent 72%),
-    radial-gradient(ellipse 40% 80% at 0% 20%, rgba(255, 77, 61, 0.12), transparent 70%),
-    radial-gradient(ellipse 40% 80% at 100% 20%, rgba(255, 77, 61, 0.12), transparent 70%);
-  filter: blur(36px);
-  opacity: 0.95;
+  background: rgba(6, 8, 12, 0.82) !important;
+  border-color: rgba(255, 77, 61, 0.12) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .hero-marquee {
