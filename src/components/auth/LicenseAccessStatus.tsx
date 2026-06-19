@@ -59,7 +59,7 @@ export function LicenseAccessStatus({ plan, activatedAt, accessExpiresAt }: Lice
       <div className="reflux-warning mt-3 rounded-xl px-3 py-2.5 text-xs">
         <p className="font-bold text-amber-400">Not activated yet</p>
         <p className="mt-1 text-amber-100/90">
-          Install REFLUX PRO and paste your key. Your access countdown starts on activation day.
+          Sign in to REFLUX PRO with this account and paste your key once. Your countdown starts on activation day and stays synced with the website.
         </p>
       </div>
     );

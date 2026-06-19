@@ -23,6 +23,7 @@ type LicenseRow = {
   status: string;
   created_at: string;
   activated_at: string | null;
+  activated_hwid: string | null;
   access_expires_at: string | null;
 };
 
@@ -59,7 +60,7 @@ export default async function AccountPage() {
     const accountEmail = normalizeBuyerEmail(user.email);
     const { data } = await supabase
       .from("licenses")
-      .select("id, email, plan, license_key, status, created_at, activated_at, access_expires_at")
+      .select("id, email, plan, license_key, status, created_at, activated_at, activated_hwid, access_expires_at")
       .ilike("email", accountEmail)
       .order("created_at", { ascending: false });
     licenses = (data as LicenseRow[] | null) ?? [];
@@ -138,7 +139,7 @@ export default async function AccountPage() {
             <div className="reflux-glow-box rounded-2xl p-6">
               <h3 className="text-lg font-bold text-white">Download REFLUX PRO</h3>
               <p className="mt-2 text-sm text-reflux-text-soft">
-                Install the desktop app, then paste your active license key when prompted.
+                Install the desktop app and sign in with this account. Enter your license key once — it binds to your PC and unlocks automatically after that.
               </p>
               <ProDownloadButton />
             </div>
@@ -157,6 +158,11 @@ export default async function AccountPage() {
                 />
                 <LicenseKeyBox licenseKey={license.license_key} />
                 <p className="mt-3 text-xs text-reflux-muted">
+                  {license.activated_hwid
+                    ? "Activated on your PC — this key cannot be reused on another device."
+                    : "Not activated yet — paste this key in REFLUX PRO on the PC you want to use."}
+                </p>
+                <p className="mt-1 text-xs text-reflux-muted">
                   Purchased {formatDate(license.created_at)}
                 </p>
               </div>
@@ -166,7 +172,7 @@ export default async function AccountPage() {
 
         <p className="reflux-glow-readable mt-8 rounded-xl px-4 py-3 text-center text-xs text-reflux-text-soft">
           {activeLicenses.length > 0
-            ? "Install REFLUX PRO, paste your key when prompted, and your access countdown starts on activation day."
+            ? "Each license works on one PC only (hardware ID). Sign in to REFLUX PRO with this account — after the first activation, just open the app."
             : "Purchase a plan to unlock REFLUX PRO and get your license key here."}
         </p>
       </div>

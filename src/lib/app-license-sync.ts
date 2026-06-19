@@ -150,6 +150,31 @@ export async function markLicenseActivated(
   const admin = createAdminClient();
   if (!admin) return null;
 
+  const { data: existing, error: lookupError } = await admin
+    .from("licenses")
+    .select(
+      "id, email, plan, license_key, status, created_at, activated_at, activated_hwid, access_expires_at",
+    )
+    .eq("license_key", licenseKey.trim())
+    .ilike("email", email.trim())
+    .eq("status", "active")
+    .maybeSingle();
+
+  if (lookupError) {
+    console.error("[app-sync] Activation lookup failed:", lookupError.message);
+    return null;
+  }
+
+  if (!existing) return null;
+
+  if (existing.activated_hwid && existing.activated_hwid !== hwid) {
+    return buildSyncResponse(existing as LicenseRow, hwid);
+  }
+
+  if (existing.activated_hwid === hwid && (existing.plan === "lifetime" || existing.access_expires_at)) {
+    return buildSyncResponse(existing as LicenseRow, hwid);
+  }
+
   const now = new Date();
   const duration = PLAN_DURATION_MS[plan] ?? PLAN_DURATION_MS.monthly;
   const accessExpiresAt =
@@ -162,9 +187,7 @@ export async function markLicenseActivated(
       activated_hwid: hwid,
       access_expires_at: accessExpiresAt?.toISOString() ?? null,
     })
-    .eq("license_key", licenseKey.trim())
-    .ilike("email", email.trim())
-    .eq("status", "active")
+    .eq("id", existing.id)
     .select(
       "id, email, plan, license_key, status, created_at, activated_at, activated_hwid, access_expires_at",
     )
