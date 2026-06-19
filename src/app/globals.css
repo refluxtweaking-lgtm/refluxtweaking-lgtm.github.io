@@ -39,7 +39,9 @@ body::before {
   z-index: -25;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 85% 50% at 50% -8%, rgba(255, 77, 61, 0.22), transparent 62%),
+    radial-gradient(ellipse 140% 62% at 50% -12%, rgba(255, 77, 61, 0.2), transparent 68%),
+    radial-gradient(ellipse 48% 42% at 0% 0%, rgba(255, 77, 61, 0.11), transparent 62%),
+    radial-gradient(ellipse 48% 42% at 100% 0%, rgba(255, 77, 61, 0.11), transparent 62%),
     radial-gradient(ellipse 40% 35% at 100% 40%, rgba(255, 60, 50, 0.08), transparent 55%),
     radial-gradient(ellipse 35% 30% at 0% 70%, rgba(255, 77, 61, 0.06), transparent 55%);
 }
@@ -505,7 +507,7 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
     linear-gradient(rgba(255, 77, 61, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 77, 61, 0.03) 1px, transparent 1px);
   background-size: 80px 80px;
-  mask-image: radial-gradient(ellipse 70% 50% at 50% 0%, black 10%, transparent 75%);
+  mask-image: radial-gradient(ellipse 120% 55% at 50% 0%, black 5%, transparent 82%);
   opacity: 0.35;
 }
 
@@ -605,8 +607,11 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 }
 
 .hero-beam {
-  background: radial-gradient(ellipse 70% 55% at 50% 0%, rgba(255, 107, 91, 0.22) 0%, transparent 72%);
-  filter: blur(28px);
+  background:
+    radial-gradient(ellipse 150% 75% at 50% 0%, rgba(255, 107, 91, 0.24) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 65% at 0% 0%, rgba(255, 77, 61, 0.14) 0%, transparent 72%),
+    radial-gradient(ellipse 55% 65% at 100% 0%, rgba(255, 77, 61, 0.14) 0%, transparent 72%);
+  filter: blur(44px);
   animation: beamPulse 9s ease-in-out infinite;
 }
 
@@ -620,8 +625,10 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 
 .hero-spotlight {
   background:
-    radial-gradient(ellipse 100% 70% at 50% -10%, rgba(255, 107, 91, 0.35), transparent 55%),
-    radial-gradient(ellipse 60% 50% at 90% 20%, rgba(255, 60, 50, 0.12), transparent 55%);
+    radial-gradient(ellipse 130% 75% at 50% -12%, rgba(255, 107, 91, 0.32), transparent 58%),
+    radial-gradient(ellipse 55% 55% at 0% 8%, rgba(255, 77, 61, 0.12), transparent 62%),
+    radial-gradient(ellipse 55% 55% at 100% 8%, rgba(255, 77, 61, 0.12), transparent 62%),
+    radial-gradient(ellipse 60% 50% at 90% 20%, rgba(255, 60, 50, 0.1), transparent 55%);
 }
 
 .hero-grid-fade {
@@ -629,23 +636,31 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
     linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
   background-size: 56px 56px;
-  mask-image: radial-gradient(ellipse 85% 70% at 50% 30%, black 8%, transparent 78%);
+  mask-image: radial-gradient(ellipse 120% 75% at 50% 25%, black 6%, transparent 82%);
   opacity: 0.5;
 }
 
 .hero-headline {
   font-size: var(--reflux-display-xl);
-  line-height: 0.98;
+  line-height: 1.12;
   letter-spacing: -0.04em;
   font-weight: 900;
+  overflow: visible;
+  padding-bottom: 0.06em;
 }
 
 .hero-gradient-shimmer {
+  display: block;
+  line-height: 1.12;
+  padding-bottom: 0.14em;
+  overflow: visible;
   background: linear-gradient(120deg, #ffd4cc, #ff6b5b, #ff3d2e, #ff9588, #ff6b5b, #ffd4cc);
   background-size: 220% auto;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
   animation: heroTextShimmer 5s ease-in-out infinite;
   filter: drop-shadow(0 0 28px rgba(255, 107, 91, 0.55));
 }
@@ -736,16 +751,51 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 }
 
 .header-shell {
-  background: rgba(0, 0, 0, 0.55);
-  border-color: rgba(255, 255, 255, 0.06) !important;
+  background: linear-gradient(
+    180deg,
+    rgba(12, 14, 18, 0.78) 0%,
+    rgba(8, 9, 12, 0.62) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.07) !important;
+  box-shadow:
+    0 0 0 1px rgba(255, 77, 61, 0.05),
+    0 12px 40px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
   transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .header-shell-scrolled {
-  background: rgba(0, 0, 0, 0.88) !important;
-  border-color: rgba(255, 77, 61, 0.18) !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 40px -16px var(--reflux-accent-glow);
-  backdrop-filter: blur(20px);
+  background: linear-gradient(
+    180deg,
+    rgba(10, 11, 14, 0.94) 0%,
+    rgba(6, 7, 9, 0.88) 100%
+  ) !important;
+  border-color: rgba(255, 77, 61, 0.16) !important;
+  box-shadow:
+    0 0 0 1px rgba(255, 77, 61, 0.08),
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    0 0 48px -12px rgba(255, 77, 61, 0.22);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.header-glow-bridge {
+  position: absolute;
+  left: 50%;
+  top: calc(100% - 8px);
+  z-index: -1;
+  width: min(100vw, 1600px);
+  height: 140px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 100% 100% at 50% 0%, rgba(255, 107, 91, 0.26), transparent 72%),
+    radial-gradient(ellipse 40% 80% at 0% 20%, rgba(255, 77, 61, 0.12), transparent 70%),
+    radial-gradient(ellipse 40% 80% at 100% 20%, rgba(255, 77, 61, 0.12), transparent 70%);
+  filter: blur(36px);
+  opacity: 0.95;
 }
 
 .hero-marquee {
@@ -959,18 +1009,6 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 .header-auth-btn {
   padding: 0.7rem 1.35rem !important;
   font-size: 15px !important;
-}
-
-.header-shell {
-  background: rgba(14, 16, 20, 0.85);
-  transition: background-color 0.25s ease, border-color 0.25s ease;
-}
-
-.header-shell-scrolled {
-  background: rgba(14, 16, 20, 0.95) !important;
-  border-color: rgba(255, 255, 255, 0.1) !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(12px);
 }
 
 .hero-ring {
