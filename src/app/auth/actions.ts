@@ -7,7 +7,7 @@ import { isSupabaseConfigured } from "@/lib/supabase/config";
 export type AuthActionState = { error: string } | null;
 
 function readEmail(formData: FormData) {
-  return String(formData.get("email") ?? "").trim();
+  return String(formData.get("email") ?? "").trim().toLowerCase();
 }
 
 function siteUrl() {
@@ -44,17 +44,40 @@ export async function signUp(
   });
 
   if (error) {
+    const alreadyExists =
+      error.message.toLowerCase().includes("already") ||
+      error.message.toLowerCase().includes("registered");
+    if (alreadyExists) {
+      const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+      if (!signInError) {
+        redirect("/account");
+      }
+      return { error: "An account with this email already exists. Log in instead." };
+    }
     return { error: error.message };
   }
 
   // When email confirmation is disabled in Supabase, signUp returns an active
   // session and the user is logged in immediately — send them to their account.
-  // When confirmation is enabled, there's no session yet, so tell them to check
-  // their inbox.
   if (data.session) {
     redirect("/account");
   }
 
+  // Supabase returns an empty identities array when the email is already registered.
+  const isExistingUser =
+    !!data.user &&
+    Array.isArray(data.user.identities) &&
+    data.user.identities.length === 0;
+
+  if (isExistingUser) {
+    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+    if (!signInError) {
+      redirect("/account");
+    }
+    return { error: "An account with this email already exists. Log in instead." };
+  }
+
+  // New user — email confirmation required before they can sign in.
   redirect("/login?checkEmail=1");
 }
 

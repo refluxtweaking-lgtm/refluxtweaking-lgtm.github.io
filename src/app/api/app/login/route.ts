@@ -33,10 +33,16 @@ export async function POST(request: Request) {
 
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error || !data.user?.email) {
-    return NextResponse.json(
-      { success: false, message: "Invalid email or password." },
-      { status: 401 },
-    );
+    const raw = error?.message?.toLowerCase() ?? "";
+    let message = "Invalid email or password.";
+    if (raw.includes("confirm") || raw.includes("verified") || raw.includes("verification")) {
+      message = "Confirm your email at refluxtweaks.com first, then try again.";
+    } else if (raw.includes("invalid") || raw.includes("credentials")) {
+      message = "Invalid email or password.";
+    } else if (error?.message) {
+      message = error.message;
+    }
+    return NextResponse.json({ success: false, message }, { status: 401 });
   }
 
   const token = createAppSyncToken(data.user.email);
