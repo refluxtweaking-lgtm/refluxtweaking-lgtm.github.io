@@ -1814,3 +1814,31 @@ html.reduce-effects .particles-canvas {
 .proof-chart-axis-tick-inline {
   line-height: 1;
 }
+
+.legal-prose h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.legal-prose p,
+.legal-prose li {
+  color: var(--reflux-text-soft);
+}
+
+.legal-prose ul {
+  margin: 0.5rem 0 0.75rem 1.25rem;
+  list-style: disc;
+}
+
+.legal-prose a {
+  color: var(--reflux-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.legal-prose section + section {
+  padding-top: 0.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}

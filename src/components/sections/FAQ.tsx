@@ -23,7 +23,7 @@ const faqs = [
   },
   {
     q: "Can I cancel Monthly anytime?",
-    a: "Absolutely. Monthly has no contract. Cancel from your account and keep access until the billing period ends.",
+    a: "Absolutely. Monthly has no contract. Email refluxtweaking@gmail.com to cancel before your next billing date — you keep access until the current period ends.",
   },
   {
     q: "Does REFLUX work with my games?",

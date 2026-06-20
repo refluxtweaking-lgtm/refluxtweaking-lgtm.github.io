@@ -10,42 +10,11 @@ type Purchase = {
   plan: PlanName;
   location: string;
   ago: string;
-  isReal?: boolean;
 };
-
-type PoolEntry = {
-  id: string;
-  user: string;
-  plan: PlanName;
-  location: string;
-};
-
-const PURCHASE_POOL: PoolEntry[] = [
-  { id: "anon-1", user: "Anonymous", plan: "Lifetime", location: "Texas, US" },
-  { id: "anon-2", user: "Anonymous", plan: "Monthly", location: "London, UK" },
-  { id: "anon-3", user: "Anonymous", plan: "Yearly", location: "Toronto, CA" },
-  { id: "anon-4", user: "Anonymous", plan: "Lifetime", location: "Sydney, AU" },
-  { id: "anon-5", user: "Anonymous", plan: "Monthly", location: "Berlin, DE" },
-  { id: "anon-6", user: "Anonymous", plan: "Yearly", location: "Florida, US" },
-  { id: "anon-7", user: "Anonymous", plan: "Lifetime", location: "Chicago, US" },
-  { id: "anon-8", user: "Anonymous", plan: "Monthly", location: "Paris, FR" },
-  { id: "anon-9", user: "Anonymous", plan: "Yearly", location: "Seoul, KR" },
-  { id: "anon-10", user: "Anonymous", plan: "Lifetime", location: "Dallas, US" },
-];
 
 const POLL_MS = 10_000;
-const ROTATE_MS = 5000;
 const REAL_DISPLAY_MS = 12_000;
 const SEEN_REAL_KEY = "reflux-seen-real-purchases";
-
-function shuffle<T>(items: T[]): T[] {
-  const arr = [...items];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
 
 function formatAgo(at: number): string {
   const diff = Math.max(0, Date.now() - at);
@@ -60,20 +29,6 @@ function formatAgo(at: number): string {
   if (days < 7) return `${days} days ago`;
   const weeks = Math.floor(days / 7);
   return weeks === 1 ? "1 week ago" : `${weeks} weeks ago`;
-}
-
-function randomAgo(): string {
-  const roll = Math.random();
-  if (roll < 0.25) {
-    const mins = 3 + Math.floor(Math.random() * 55);
-    return `${mins} mins ago`;
-  }
-  if (roll < 0.5) {
-    const hours = 1 + Math.floor(Math.random() * 8);
-    return hours === 1 ? "1 hour ago" : `${hours} hours ago`;
-  }
-  const days = 1 + Math.floor(Math.random() * 5);
-  return days === 1 ? "1 day ago" : `${days} days ago`;
 }
 
 function readSeenRealIds(): Set<string> {
@@ -96,35 +51,9 @@ export function PurchasePopups() {
   const [visible, setVisible] = useState<Purchase | null>(null);
   const [show, setShow] = useState(false);
 
-  const queueRef = useRef<PoolEntry[]>([]);
-  const usedIdsRef = useRef<Set<string>>(new Set());
   const seenRealRef = useRef<Set<string>>(readSeenRealIds());
   const pollSinceRef = useRef(Date.now() - 24 * 60 * 60 * 1000);
-  const rotateTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const realTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const pickNextFake = useCallback((): Purchase => {
-    if (queueRef.current.length === 0) {
-      const remaining = PURCHASE_POOL.filter((p) => !usedIdsRef.current.has(p.id));
-      if (remaining.length === 0) {
-        usedIdsRef.current.clear();
-        queueRef.current = shuffle(PURCHASE_POOL);
-      } else {
-        queueRef.current = shuffle(remaining);
-      }
-    }
-
-    const next = queueRef.current.shift()!;
-    usedIdsRef.current.add(next.id);
-
-    return {
-      user: next.user,
-      plan: next.plan,
-      location: next.location,
-      ago: randomAgo(),
-      isReal: false,
-    };
-  }, []);
 
   const reveal = useCallback((purchase: Purchase) => {
     setShow(false);
@@ -134,17 +63,8 @@ export function PurchasePopups() {
     }, 280);
   }, []);
 
-  const startRotation = useCallback(
-    (delayMs = ROTATE_MS) => {
-      if (rotateTimerRef.current) clearInterval(rotateTimerRef.current);
-      rotateTimerRef.current = setInterval(() => reveal(pickNextFake()), delayMs);
-    },
-    [pickNextFake, reveal],
-  );
-
   const showRealPurchase = useCallback(
     (purchase: { id: string; user: string; plan: PlanName; location: string; at: number }) => {
-      if (rotateTimerRef.current) clearInterval(rotateTimerRef.current);
       if (realTimerRef.current) clearTimeout(realTimerRef.current);
 
       seenRealRef.current.add(purchase.id);
@@ -156,39 +76,22 @@ export function PurchasePopups() {
         plan: purchase.plan,
         location: purchase.location || "Unknown",
         ago: formatAgo(purchase.at),
-        isReal: true,
       });
 
-      realTimerRef.current = setTimeout(() => startRotation(), REAL_DISPLAY_MS);
+      realTimerRef.current = setTimeout(() => {
+        setShow(false);
+        window.setTimeout(() => setVisible(null), 300);
+      }, REAL_DISPLAY_MS);
     },
-    [reveal, startRotation],
+    [reveal],
   );
 
   useEffect(() => {
     setMounted(true);
-    queueRef.current = shuffle(PURCHASE_POOL);
-    reveal(pickNextFake());
-    startRotation();
-
     return () => {
-      if (rotateTimerRef.current) clearInterval(rotateTimerRef.current);
       if (realTimerRef.current) clearTimeout(realTimerRef.current);
     };
-  }, [pickNextFake, reveal, startRotation]);
-
-  useEffect(() => {
-    const onVisibility = () => {
-      if (document.hidden) {
-        if (rotateTimerRef.current) clearInterval(rotateTimerRef.current);
-        rotateTimerRef.current = null;
-      } else {
-        startRotation();
-      }
-    };
-
-    document.addEventListener("visibilitychange", onVisibility);
-    return () => document.removeEventListener("visibilitychange", onVisibility);
-  }, [startRotation]);
+  }, []);
 
   useEffect(() => {
     const poll = async () => {
@@ -216,7 +119,7 @@ export function PurchasePopups() {
         if (fresh.length === 0) return;
         showRealPurchase(fresh[fresh.length - 1]);
       } catch {
-        // Fake rotation continues if API unavailable.
+        // No popup when purchase feed is unavailable.
       }
     };
 
@@ -235,33 +138,21 @@ export function PurchasePopups() {
       role="status"
       aria-live="polite"
     >
-      <div
-        className={`reflux-glow-box flex items-start gap-3 p-4 ${
-          visible.isReal ? "reflux-glow-box-verified" : ""
-        }`}
-      >
+      <div className="reflux-glow-box reflux-glow-box-verified flex items-start gap-3 p-4">
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-reflux-accent/35 bg-reflux-accent/15 shadow-[0_0_16px_rgba(255,77,61,0.4)]">
           <Icon name="gamepad" size={20} />
         </div>
         <div className="min-w-0">
           <p className="text-sm font-semibold text-white">
-            <span className={visible.user === "Anonymous" ? "text-reflux-muted" : "text-reflux-accent"}>
-              {visible.user}
-            </span>{" "}
-            bought <span className="text-reflux-green">{visible.plan}</span>
+            <span className="text-reflux-accent">{visible.user}</span> bought{" "}
+            <span className="text-reflux-green">{visible.plan}</span>
           </p>
           <p className="mt-0.5 text-xs text-reflux-text-soft">
             {visible.location} · <span className="reflux-metric">{visible.ago}</span>
           </p>
         </div>
-        <span
-          className={`ml-auto shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
-            visible.isReal
-              ? "bg-reflux-accent/25 text-reflux-accent shadow-[0_0_12px_rgba(255,77,61,0.45)]"
-              : "bg-white/8 text-reflux-muted"
-          }`}
-        >
-          {visible.isReal ? "Verified" : "Recent"}
+        <span className="ml-auto shrink-0 rounded-full bg-reflux-accent/25 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-reflux-accent shadow-[0_0_12px_rgba(255,77,61,0.45)]">
+          Verified
         </span>
       </div>
     </div>,

@@ -7,6 +7,7 @@ import { ProDownloadButton } from "@/components/auth/ProDownloadButton";
 import { signOut } from "@/app/auth/actions";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
+import { isProLicenseCurrentlyValid } from "@/lib/pro-download-access";
 import { normalizeBuyerEmail } from "@/lib/normalize-email";
 import type { Metadata } from "next";
 
@@ -66,7 +67,25 @@ export default async function AccountPage() {
     licenses = (data as LicenseRow[] | null) ?? [];
   }
 
-  const activeLicenses = licenses.filter((license) => license.status.toLowerCase() === "active");
+  const activeLicenses = licenses.filter(
+    (license) =>
+      license.status.toLowerCase() === "active" &&
+      isProLicenseCurrentlyValid({
+        id: license.id,
+        plan: license.plan,
+        status: license.status,
+        access_expires_at: license.access_expires_at,
+        activated_at: license.activated_at,
+      }),
+  );
+  const expiredLicenses = licenses.filter(
+    (license) =>
+      license.status.toLowerCase() === "active" &&
+      license.activated_at &&
+      license.access_expires_at &&
+      license.plan.trim().toLowerCase() !== "lifetime" &&
+      new Date(license.access_expires_at).getTime() <= Date.now(),
+  );
 
   return (
     <SiteShell mainClassName="py-16">
@@ -165,6 +184,27 @@ export default async function AccountPage() {
                 <p className="mt-1 text-xs text-reflux-muted">
                   Purchased {formatDate(license.created_at)}
                 </p>
+              </div>
+            ))}
+            {expiredLicenses.map((license) => (
+              <div key={`expired-${license.id}`} className="reflux-glow-box rounded-2xl border border-red-500/20 p-6 opacity-90">
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <h3 className="text-lg font-bold text-white">{planLabel(license.plan)}</h3>
+                  <span className="rounded-full border border-red-500/40 bg-red-500/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-red-300">
+                    Expired
+                  </span>
+                </div>
+                <LicenseAccessStatus
+                  plan={license.plan}
+                  activatedAt={license.activated_at}
+                  accessExpiresAt={license.access_expires_at}
+                />
+                <Link
+                  href="/pricing"
+                  className="reflux-glow-interactive mt-4 inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-[rgba(255,77,61,0.28)] to-[rgba(255,77,61,0.12)] px-5 py-2.5 text-sm font-semibold text-white"
+                >
+                  Renew plan
+                </Link>
               </div>
             ))}
           </div>

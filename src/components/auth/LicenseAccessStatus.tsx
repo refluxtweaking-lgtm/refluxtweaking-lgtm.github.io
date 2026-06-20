@@ -68,12 +68,23 @@ export function LicenseAccessStatus({ plan, activatedAt, accessExpiresAt }: Lice
   if (remaining === null || remaining === 0) {
     return (
       <div className="mt-3 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2.5 text-xs text-red-300">
-        Access expired. Renew your plan to keep using REFLUX PRO.
+        <p className="font-bold">Access expired</p>
+        <p className="mt-1">
+          Renew your plan at refluxtweaks.com to keep using REFLUX PRO.
+        </p>
       </div>
     );
   }
 
   const isLastDay = remaining <= 86400 * 1000;
+  const expiryLabel = new Date(expiresMs).toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
 
   return (
     <div
@@ -88,6 +99,9 @@ export function LicenseAccessStatus({ plan, activatedAt, accessExpiresAt }: Lice
         {formatCountdown(remaining)}
       </p>
       <p className="mt-1 text-reflux-text-soft">
+        Expires {expiryLabel}
+      </p>
+      <p className="mt-1 text-reflux-muted">
         Activated {new Date(activatedMs).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
       </p>
     </div>

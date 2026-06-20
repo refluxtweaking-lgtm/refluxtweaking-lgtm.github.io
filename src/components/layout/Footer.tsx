@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { PRODUCT_LIMITS } from "@/data/tweaks";
+import { legalNav } from "@/data/legal";
 import { Button } from "@/components/ui/Button";
 import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
 
@@ -65,7 +66,14 @@ export function Footer() {
             )}
           </div>
         </div>
-        <p className="border-t border-white/5 pt-8 text-center text-xs text-reflux-muted">
+        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-white/5 pt-8 text-center text-xs text-reflux-muted">
+          {legalNav.map((item) => (
+            <Link key={item.href} href={item.href} className="hover:text-reflux-accent">
+              {item.label}
+            </Link>
+          ))}
+        </div>
+        <p className="mt-4 text-center text-xs text-reflux-muted">
           © 2026 REFLUX TWEAKS. All rights reserved. Safe · Reversible · No background processes.
         </p>
       </div>
