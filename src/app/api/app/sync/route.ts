@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { verifyAppSyncToken } from "@/lib/app-sync-token";
 import { markLicenseActivated, resyncLicenseAccess } from "@/lib/app-license-sync";
 
+export const runtime = "nodejs";
+
 export async function POST(request: Request) {
   let body: {
     token?: string;

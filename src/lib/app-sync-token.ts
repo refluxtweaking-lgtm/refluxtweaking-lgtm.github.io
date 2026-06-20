@@ -1,14 +1,11 @@
 import { createHmac, timingSafeEqual } from "crypto";
+import { getLicenseSigningSecret } from "@/lib/license-signing-secret";
 
 type AppTokenPayload = {
   typ: "app";
   email: string;
   exp: number;
 };
-
-function signingSecret(): string | null {
-  return process.env.LICENSE_DOWNLOAD_SECRET?.trim() || null;
-}
 
 function encodePayload(payload: AppTokenPayload): string {
   return Buffer.from(JSON.stringify(payload)).toString("base64url");
@@ -26,7 +23,7 @@ function decodePayload(encoded: string): AppTokenPayload | null {
 
 /** Short-lived token for REFLUX PRO desktop app ↔ website sync. */
 export function createAppSyncToken(email: string, ttlMs = 7 * 24 * 60 * 60 * 1000): string | null {
-  const secret = signingSecret();
+  const secret = getLicenseSigningSecret();
   if (!secret) return null;
 
   const payload = encodePayload({
@@ -39,7 +36,7 @@ export function createAppSyncToken(email: string, ttlMs = 7 * 24 * 60 * 60 * 100
 }
 
 export function verifyAppSyncToken(token: string): { email: string } | null {
-  const secret = signingSecret();
+  const secret = getLicenseSigningSecret();
   if (!secret) return null;
 
   const [payload, signature] = token.split(".");

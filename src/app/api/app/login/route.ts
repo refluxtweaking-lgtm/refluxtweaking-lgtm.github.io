@@ -4,6 +4,8 @@ import { createAppSyncToken } from "@/lib/app-sync-token";
 import { resyncLicenseAccess } from "@/lib/app-license-sync";
 import { getSupabaseAnonKey, getSupabaseUrl, isSupabaseConfigured } from "@/lib/supabase/config";
 
+export const runtime = "nodejs";
+
 export async function POST(request: Request) {
   if (!isSupabaseConfigured()) {
     return NextResponse.json({ success: false, message: "Accounts are not configured." }, { status: 503 });

@@ -1,13 +1,10 @@
 import { createHmac, timingSafeEqual } from "crypto";
+import { getLicenseSigningSecret } from "@/lib/license-signing-secret";
 
 type TokenPayload = {
   email: string;
   exp: number;
 };
-
-function signingSecret(): string | null {
-  return process.env.LICENSE_DOWNLOAD_SECRET?.trim() || null;
-}
 
 function encodePayload(payload: TokenPayload): string {
   return Buffer.from(JSON.stringify(payload)).toString("base64url");
@@ -25,7 +22,7 @@ function decodePayload(encoded: string): TokenPayload | null {
 
 /** Signed link for purchase emails — only valid for the buyer's email. */
 export function createProDownloadToken(email: string, ttlMs = 90 * 24 * 60 * 60 * 1000): string | null {
-  const secret = signingSecret();
+  const secret = getLicenseSigningSecret();
   if (!secret) return null;
 
   const payload = encodePayload({
@@ -37,7 +34,7 @@ export function createProDownloadToken(email: string, ttlMs = 90 * 24 * 60 * 60 
 }
 
 export function verifyProDownloadToken(token: string): { email: string } | null {
-  const secret = signingSecret();
+  const secret = getLicenseSigningSecret();
   if (!secret) return null;
 
   const [payload, signature] = token.split(".");
