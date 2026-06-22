@@ -22,7 +22,7 @@ function decodePayload(encoded: string): AppTokenPayload | null {
 }
 
 /** Short-lived token for REFLUX PRO desktop app ↔ website sync. */
-export function createAppSyncToken(email: string, ttlMs = 7 * 24 * 60 * 60 * 1000): string | null {
+export function createAppSyncToken(email: string, ttlMs = 30 * 24 * 60 * 60 * 1000): string | null {
   const secret = getLicenseSigningSecret();
   if (!secret) return null;
 
