@@ -121,23 +121,6 @@ export async function resyncLicenseAccess(
   const license = await fetchActiveLicense(email);
   if (!license) return { allowed: false, noLicense: true };
 
-  if (localKey && localKey.trim() !== license.license_key) {
-    const admin = createAdminClient();
-    if (admin && license.activated_hwid === hwid) {
-      await admin
-        .from("licenses")
-        .update({
-          activated_at: null,
-          activated_hwid: null,
-          access_expires_at: null,
-        })
-        .eq("id", license.id);
-      license.activated_at = null;
-      license.activated_hwid = null;
-      license.access_expires_at = null;
-    }
-  }
-
   return buildSyncResponse(license, hwid);
 }
 
