@@ -184,3 +184,55 @@ export async function markLicenseActivated(
   if (!data) return null;
   return buildSyncResponse(data as LicenseRow, hwid);
 }
+
+/** Move an active license to the current PC (one device at a time). Keeps remaining countdown. */
+export async function transferLicenseToDevice(
+  email: string,
+  hwid: string,
+): Promise<AppSyncPayload | null> {
+  const admin = createAdminClient();
+  if (!admin) return null;
+
+  const license = await fetchActiveLicense(email);
+  if (!license) return { allowed: false, noLicense: true };
+
+  const plan = license.plan.trim().toLowerCase();
+  const now = new Date();
+
+  if (plan !== "lifetime" && license.access_expires_at) {
+    const expiresMs = new Date(license.access_expires_at).getTime();
+    if (expiresMs <= Date.now()) {
+      return buildSyncResponse(license, hwid);
+    }
+  }
+
+  const duration = PLAN_DURATION_MS[plan] ?? PLAN_DURATION_MS.monthly;
+  const activatedAt = license.activated_at ? new Date(license.activated_at) : now;
+  const accessExpiresAt =
+    plan === "lifetime"
+      ? null
+      : license.access_expires_at
+        ? new Date(license.access_expires_at)
+        : new Date(activatedAt.getTime() + duration);
+
+  const { data, error } = await admin
+    .from("licenses")
+    .update({
+      activated_at: activatedAt.toISOString(),
+      activated_hwid: hwid,
+      access_expires_at: accessExpiresAt?.toISOString() ?? null,
+    })
+    .eq("id", license.id)
+    .select(
+      "id, email, plan, license_key, status, created_at, activated_at, activated_hwid, access_expires_at",
+    )
+    .maybeSingle();
+
+  if (error) {
+    console.error("[app-sync] Device transfer failed:", error.message);
+    return null;
+  }
+
+  if (!data) return null;
+  return buildSyncResponse(data as LicenseRow, hwid);
+}
