@@ -18,7 +18,7 @@ const BLOCKED_PATTERNS = [
   /\.aspx$/i,
 ];
 
-const BLOCKED_PATHS = new Set(["/downloads/REFLUX-PRO-Setup.exe"]);
+const BLOCKED_PATHS = new Set(["/downloads/REFLUX-PRO-Setup.exe", "/downloads/REFLUX-PRO-v1.0-Setup.exe"]);
 
 const CONTENT_SECURITY_POLICY = [
   "default-src 'self'",

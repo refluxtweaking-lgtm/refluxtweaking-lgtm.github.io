@@ -21,8 +21,8 @@ export const REFLUX_PRO_APP_URL = "https://app.refluxtweaks.com";
 /** Gated download — served only via /api/download/pro after purchase verification. */
 export const REFLUX_PRO_DOWNLOAD = {
   href: "/api/download/pro",
-  filename: "REFLUX-PRO-Setup.exe",
-  label: "REFLUX PRO",
+  filename: "REFLUX-PRO-v1.0-Setup.exe",
+  label: "REFLUX PRO v1.0",
 } as const;
 
 export function proDownloadUrl(

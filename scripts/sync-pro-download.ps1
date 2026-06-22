@@ -4,8 +4,8 @@ $ErrorActionPreference = "Stop"
 $proProject = "C:\! REFLUX PRO TWEAKING UTILITY"
 $distDir = Join-Path $proProject "dist"
 $destDir = Join-Path $PSScriptRoot "..\private\downloads"
-$destFile = Join-Path $destDir "REFLUX-PRO-Setup.exe"
-$legacyPublicFile = Join-Path $PSScriptRoot "..\public\downloads\REFLUX-PRO-Setup.exe"
+$destFile = Join-Path $destDir "REFLUX-PRO-v1.0-Setup.exe"
+$legacyPublicFile = Join-Path $PSScriptRoot "..\public\downloads\REFLUX-PRO-v1.0-Setup.exe"
 
 Push-Location $proProject
 try {
@@ -14,9 +14,15 @@ try {
   Pop-Location
 }
 
-$installer = Get-ChildItem -Path $distDir -Filter "REFLUX-PRO-Setup.exe" -ErrorAction SilentlyContinue |
+$installer = Get-ChildItem -Path $distDir -Filter "REFLUX-PRO-v1.0-Setup.exe" -ErrorAction SilentlyContinue |
   Sort-Object LastWriteTime -Descending |
   Select-Object -First 1
+
+if (-not $installer) {
+  $installer = Get-ChildItem -Path $distDir -Filter "REFLUX-PRO-Setup.exe" -ErrorAction SilentlyContinue |
+    Sort-Object LastWriteTime -Descending |
+    Select-Object -First 1
+}
 
 if (-not $installer) {
   $installer = Get-ChildItem -Path $distDir -Filter "REFLUX PRO Setup *.exe" -ErrorAction SilentlyContinue |
