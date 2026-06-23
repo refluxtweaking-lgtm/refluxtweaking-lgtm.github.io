@@ -1,3 +1,5 @@
+import { maskPurchaseIdentity } from "@/lib/mask-purchase-identity";
+
 export type PlanName = "Lifetime" | "Yearly" | "Monthly";
 
 export type StoredPurchase = {
@@ -48,7 +50,7 @@ export async function addPurchase(input: {
 
   const purchase: StoredPurchase = {
     id: crypto.randomUUID(),
-    user: input.user.trim().slice(0, 32),
+    user: maskPurchaseIdentity(input.user).slice(0, 48),
     plan: input.plan,
     location: input.location.trim().slice(0, 64) || "Unknown",
     at: Date.now(),

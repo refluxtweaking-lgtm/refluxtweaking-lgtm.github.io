@@ -8,6 +8,7 @@ import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
 const footerLinks = [
   { href: "/pricing", label: "Pricing" },
   { href: "/compare", label: "Compare Tweaks" },
+  { href: "/reviews", label: "Reviews" },
   { href: "/app-preview", label: "The App" },
   { href: "/#faq", label: "FAQ" },
   { href: "https://discord.gg/xGpHKY8AAC", label: "Discord", external: true },

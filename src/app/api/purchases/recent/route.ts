@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getRecentPurchases } from "@/lib/purchase-store";
+import { maskPurchaseIdentity } from "@/lib/mask-purchase-identity";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -11,7 +12,7 @@ export async function GET(request: Request) {
   return NextResponse.json({
     purchases: purchases.map(({ id, user, plan, location, at }) => ({
       id,
-      user,
+      user: maskPurchaseIdentity(user),
       plan,
       location,
       at,

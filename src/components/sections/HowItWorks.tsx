@@ -26,7 +26,7 @@ const steps: {
   {
     icon: "games",
     step: "03",
-    title: "Queue up & play",
+    title: "Load in and play",
     description: "Jump into your game and feel smoother frames and snappier inputs.",
   },
 ];
@@ -42,7 +42,7 @@ export function HowItWorks() {
             Three steps. <span className="gradient-text">Better games.</span>
           </>
         }
-        subtitle="No registry rabbit holes. Download, toggle, queue up — the app handles the scary parts."
+        subtitle="No registry rabbit holes. Download, toggle, launch your game — the app handles the scary parts."
       />
 
       <div className="flow-steps grid gap-5 md:grid-cols-3">

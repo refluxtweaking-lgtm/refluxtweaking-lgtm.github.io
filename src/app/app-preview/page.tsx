@@ -41,7 +41,7 @@ const features: { icon: IconName; title: string; desc: string }[] = [
   {
     icon: "blackhole",
     title: "Process killer",
-    desc: "Black hole mode — crush background resource hogs before you queue.",
+    desc: "Black hole mode — close background resource hogs before you launch.",
   },
 ];
 

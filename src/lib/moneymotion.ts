@@ -1,6 +1,7 @@
 import { createHash, createHmac, timingSafeEqual } from "crypto";
 import type { PlanName } from "@/lib/purchase-store";
 import type { ProPlanId } from "@/data/downloads";
+import { maskPurchaseIdentity } from "@/lib/mask-purchase-identity";
 
 export const MONEYMOTION_PLAN_PRICES_CENTS = {
   monthly: 699,
@@ -313,12 +314,12 @@ export function planFromMoneyMotionPayload(payload: MoneyMotionWebhookPayload): 
 
 export function customerLabel(payload: MoneyMotionWebhookPayload): string {
   const email = payload.customer?.email?.trim();
-  if (email) return email.split("@")[0] || "Customer";
+  if (email) return maskPurchaseIdentity(email);
 
   const first = payload.customer?.firstName?.trim();
   const last = payload.customer?.lastName?.trim();
   const name = [first, last].filter(Boolean).join(" ");
-  return name || "Customer";
+  return name ? maskPurchaseIdentity(name) : "Customer";
 }
 
 export function customerLocation(payload: MoneyMotionWebhookPayload): string {

@@ -11,6 +11,7 @@ import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
 const navLinks = [
   { href: "/#why-reflux", label: "Why REFLUX" },
   { href: "/#how-it-works", label: "How It Works" },
+  { href: "/reviews", label: "Reviews" },
   { href: "/#faq", label: "FAQ" },
   { href: "/pricing", label: "Pricing" },
   { href: "/compare", label: "Compare" },
