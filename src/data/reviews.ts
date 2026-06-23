@@ -40,7 +40,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r4",
-    quote: "frames go brrr now lol",
+    quote: "way more fps now",
     author: "***",
     game: "Warzone",
     rating: 5,
@@ -57,7 +57,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r6",
-    quote: "no cap this actually works",
+    quote: "actually works lol",
     author: "j***",
     game: "Rocket League",
     rating: 4.9,

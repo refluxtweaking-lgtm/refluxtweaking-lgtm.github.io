@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { FlowIn } from "@/components/ui/FlowIn";
 import { Icon } from "@/components/ui/Icon";
 import { ReviewCard } from "@/components/reviews/ReviewCard";
 import { REVIEWS_PAGE_SIZE, reviews, type Review } from "@/data/reviews";
@@ -26,10 +25,8 @@ export function ReviewsPager({ items = reviews, pageSize = REVIEWS_PAGE_SIZE }: 
   return (
     <div>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {visible.map((review, index) => (
-          <FlowIn key={review.id} delay={index * 60}>
-            <ReviewCard review={review} />
-          </FlowIn>
+        {visible.map((review) => (
+          <ReviewCard key={review.id} review={review} />
         ))}
       </div>
 
