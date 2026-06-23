@@ -35,3 +35,11 @@ function maskEmail(email: string): string {
 
   return `${localMasked}@${domainMasked}`;
 }
+
+/** Safe for display — skips values that are already masked. */
+export function maskPurchaseIdentityIfNeeded(value: string): string {
+  const trimmed = value.trim();
+  if (!trimmed) return "Anonymous";
+  if (trimmed.includes("*")) return trimmed;
+  return maskPurchaseIdentity(trimmed);
+}

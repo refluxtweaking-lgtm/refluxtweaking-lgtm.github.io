@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Icon } from "@/components/ui/Icon";
+import { maskPurchaseIdentityIfNeeded } from "@/lib/mask-purchase-identity";
 import type { PlanName } from "@/lib/purchase-store";
 
 type Purchase = {
@@ -72,7 +73,7 @@ export function PurchasePopups() {
       pollSinceRef.current = Math.max(pollSinceRef.current, purchase.at);
 
       reveal({
-        user: purchase.user?.trim() || "Anonymous",
+        user: maskPurchaseIdentityIfNeeded(purchase.user || ""),
         plan: purchase.plan,
         location: purchase.location || "Unknown",
         ago: formatAgo(purchase.at),
@@ -144,7 +145,7 @@ export function PurchasePopups() {
         </div>
         <div className="min-w-0">
           <p className="text-sm font-semibold text-white">
-            <span className="text-reflux-accent">{visible.user}</span> bought{" "}
+            <span className="text-reflux-accent">{visible.user}</span> bought REFLUX PRO{" "}
             <span className="text-reflux-green">{visible.plan}</span>
           </p>
           <p className="mt-0.5 text-xs text-reflux-text-soft">
