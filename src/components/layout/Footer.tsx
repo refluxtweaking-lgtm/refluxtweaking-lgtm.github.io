@@ -30,7 +30,7 @@ export function Footer() {
               <span className="text-2xl font-extrabold gradient-text-static">REFLUX TWEAKS</span>
             </div>
             <p className="max-w-md text-base leading-relaxed text-reflux-muted">
-              {PRODUCT_LIMITS.freeTweaks} free tweaks · {PRODUCT_LIMITS.totalTweaksLabel} with Pro. Lower ping, higher FPS, cleaner PC — one desktop app.
+              {PRODUCT_LIMITS.freeTweaks} free tweaks · {PRODUCT_LIMITS.totalTweaksLabel} with Pro. Windows gaming optimization in one desktop app.
             </p>
             <div className="mt-6">
               <Button

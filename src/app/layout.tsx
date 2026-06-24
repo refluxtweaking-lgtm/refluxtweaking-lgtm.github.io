@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Outfit } from "next/font/google";
 import "./globals.css";
-import { PRODUCT_LIMITS } from "@/data/tweaks";
 
 const refluxBody = Outfit({
   subsets: ["latin"],
@@ -27,7 +26,7 @@ const refluxMetric = JetBrains_Mono({
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.refluxtweaks.com";
 const SITE_TITLE = "REFLUX TWEAKS – Windows Gaming Optimizer";
 const SITE_DESCRIPTION =
-  `${PRODUCT_LIMITS.freeTweaks} free tweaks · ${PRODUCT_LIMITS.totalTweaksLabel} with Pro — lower latency, higher frames, and a cleaner rig with one click.`;
+  "Windows gaming optimizer built for your specs. Detects your CPU and GPU, applies proven tweaks, and keeps every change reversible — free desktop app.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

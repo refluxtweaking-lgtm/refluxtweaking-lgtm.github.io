@@ -135,7 +135,7 @@ export const appGalleryItems: {
     id: "tweaks",
     label: "Tweaks",
     icon: "optimizer",
-    title: "100+ optimizations, one toggle away",
+    title: `${PRODUCT_LIMITS.totalTweaksLabel} optimizations, one toggle away`,
     caption: "Network, CPU, GPU, RAM, system, cleanup & debloat — each tweak explains what it does before you apply.",
     bullets: [
       "Flip tweaks on or off — nothing hidden",

@@ -1,14 +1,20 @@
 # Copies the latest REFLUX FREE installer into the website public folder.
 $ErrorActionPreference = "Stop"
 
-$freeProject = "D:\! REFLUX FREE TWEAKING UTILITY"
+$freeProject = "C:\! REFLUX FREE TWEAKING UTILITY"
 $distDir = Join-Path $freeProject "dist-free"
 $destDir = Join-Path $PSScriptRoot "..\public\downloads"
 $destFile = Join-Path $destDir "REFLUX-FREE-Setup.exe"
 
 Push-Location $freeProject
 try {
+  $env:CSC_IDENTITY_AUTO_DISCOVERY = "false"
   npm run build
+  if ($LASTEXITCODE -ne 0) {
+    Write-Host "Full build failed; trying NSIS from prepackaged win-unpacked..."
+    npx electron-builder --win nsis --prepackaged dist-free/win-unpacked
+    if ($LASTEXITCODE -ne 0) { throw "electron-builder failed" }
+  }
 } finally {
   Pop-Location
 }

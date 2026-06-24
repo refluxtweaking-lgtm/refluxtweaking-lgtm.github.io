@@ -7,7 +7,7 @@ import { PRODUCT_LIMITS } from "@/data/tweaks";
 const faqs = [
   {
     q: "What makes REFLUX different from other optimizers?",
-    a: "REFLUX detects your exact CPU and GPU (Intel, AMD, NVIDIA) and surfaces vendor-matched tweak pages automatically. You get 30 free tweaks with no card, built-in restore points, zero background processes, and a lifetime Pro option — all in one clean desktop app.",
+    a: `REFLUX detects your exact CPU and GPU (Intel, AMD, NVIDIA) and surfaces vendor-matched tweak pages automatically. You get ${PRODUCT_LIMITS.freeTweaks} free tweaks with no card, built-in restore points, zero background processes, and a lifetime Pro option — all in one clean desktop app.`,
   },
   {
     q: "Is REFLUX safe to use?",
