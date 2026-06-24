@@ -85,10 +85,7 @@ function PreviewBenchmarks({ active }: { active: boolean }) {
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
       {BENCH_STATS.map((stat, i) => (
-        <div
-          key={stat.label}
-          className="flex flex-col rounded-xl border border-reflux-border/40 bg-[#0f1217]/90 p-3 sm:p-3.5"
-        >
+        <div key={stat.label} className="app-mock-card flex flex-col p-3 sm:p-3.5">
           <div className="mb-2 text-xl font-extrabold tabular-nums sm:text-2xl">
             <span className="gradient-text">{stat.value}</span>
           </div>
@@ -107,76 +104,97 @@ function PreviewBenchmarks({ active }: { active: boolean }) {
   );
 }
 
+function AppTitlebar({ hero }: { hero: boolean }) {
+  if (hero) return null;
+
+  return (
+    <div className="app-mock-titlebar flex items-center justify-between px-4 py-2">
+      <div className="flex items-center gap-2">
+        <Image src="/favicon.ico" alt="" width={16} height={16} className="rounded-sm" />
+        <span className="text-[11px] font-bold tracking-wide text-white/90">REFLUX PRO</span>
+      </div>
+      <div className="flex items-center gap-1.5">
+        <span className="h-2.5 w-2.5 rounded-sm bg-[#1a1d24] hover:bg-[#252830]" />
+        <span className="h-2.5 w-2.5 rounded-sm bg-[#1a1d24] hover:bg-[#252830]" />
+        <span className="h-2.5 w-2.5 rounded-sm bg-[#f15b50]/80" />
+      </div>
+    </div>
+  );
+}
+
+function AppSidebar({
+  view,
+  onSelect,
+}: {
+  view: AppView;
+  onSelect: (next: AppView) => void;
+}) {
+  return (
+    <aside className="app-mock-sidebar hidden w-[72px] shrink-0 flex-col gap-0.5 overflow-y-auto py-2 sm:flex lg:w-[76px]">
+      {[...sidebarNav, ...sidebarExtra].map((item) => {
+        const isActive = view === item.view;
+        return (
+          <button
+            key={`${item.icon}-${item.label}`}
+            type="button"
+            onClick={() => onSelect(item.view)}
+            className={`app-mock-nav-item mx-1.5 flex flex-col items-center gap-1 px-1 py-2 text-[8px] font-bold ${
+              isActive ? "active" : "text-reflux-muted"
+            }`}
+          >
+            <AppIconChip name={item.icon} size={16} chipSize={30} active={isActive} />
+            {item.label}
+          </button>
+        );
+      })}
+    </aside>
+  );
+}
+
 export function AppPreviewMock({ hero = false }: AppPreviewMockProps) {
   const [view, setView] = useState<AppView>("home");
   const { ref, visible } = useInViewport<HTMLDivElement>("120px");
 
   const shellClass = hero
     ? "rounded-none border-0 bg-transparent shadow-none"
-    : "max-w-4xl rounded-2xl border border-[rgba(241,91,80,0.35)] bg-[#080a0d] shadow-[0_0_60px_rgba(241,91,80,0.12),0_0_0_1px_rgba(255,255,255,0.04)_inset]";
-
-  const selectView = (next: AppView) => setView(next);
+    : "app-mock-shell max-w-4xl overflow-hidden rounded-2xl";
 
   return (
-    <div ref={ref} className={`mx-auto w-full overflow-hidden ${shellClass}`}>
-      {!hero && (
-        <div className="flex items-center gap-2 border-b border-reflux-border/80 bg-[#0a0b0e] px-4 py-3">
-          <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
-          <span className="h-3 w-3 rounded-full bg-[#febc2e]" />
-          <span className="h-3 w-3 rounded-full bg-[#28c840]" />
-          <span className="ml-3 text-xs text-reflux-muted">REFLUX PRO — Unlocked</span>
-        </div>
-      )}
+    <div ref={ref} className={`mx-auto w-full ${shellClass}`}>
+      <AppTitlebar hero={hero} />
 
       <div
-        className={`flex items-center justify-between border-b border-reflux-border/60 bg-gradient-to-r from-[#0c0e12] to-[#0a0b0e] ${hero ? "px-4 py-3" : "px-5 py-4"}`}
+        className={`flex items-center justify-between border-b border-[#161616] bg-gradient-to-r from-[#0c0e12] to-[#080a0d] ${hero ? "px-4 py-3" : "px-5 py-3.5"}`}
       >
         <div className="flex items-center gap-2.5 sm:gap-3">
-          <Image src="/favicon.ico" alt="" width={32} height={32} className="rounded-lg shadow-[0_0_12px_rgba(255,107,91,0.5)]" />
+          <Image
+            src="/favicon.ico"
+            alt=""
+            width={32}
+            height={32}
+            className="rounded-lg shadow-[0_0_14px_rgba(241,91,80,0.55)]"
+          />
           <span className="text-base font-extrabold gradient-text sm:text-lg">REFLUX PRO</span>
           <span className="badge-pill badge-live text-[9px] sm:text-[10px]">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-reflux-green" />
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-reflux-green shadow-[0_0_6px_rgba(93,222,134,0.8)]" />
             Ready
           </span>
         </div>
         <span className="hidden text-[10px] text-reflux-muted sm:inline">Administrator</span>
       </div>
 
-      <div className="flex min-h-[320px] sm:min-h-[360px]">
-        {hero && (
-          <aside className="hidden w-[76px] shrink-0 flex-col gap-0.5 overflow-y-auto border-r border-reflux-border/40 bg-[#080a0d] py-2 sm:flex">
-            {[...sidebarNav, ...sidebarExtra].map((item) => {
-              const isActive = view === item.view;
-              return (
-                <button
-                  key={`${item.icon}-${item.label}`}
-                  type="button"
-                  onClick={() => selectView(item.view)}
-                  className={`mx-1.5 flex flex-col items-center gap-1 rounded-xl px-1 py-2 text-[8px] font-bold transition-all ${
-                    isActive
-                      ? "bg-reflux-accent/15 text-reflux-accent"
-                      : "text-reflux-muted hover:bg-white/5 hover:text-white"
-                  }`}
-                >
-                  <AppIconChip name={item.icon} size={16} chipSize={30} active={isActive} />
-                  {item.label}
-                </button>
-              );
-            })}
-          </aside>
-        )}
+      <div className="flex min-h-[320px] bg-[#030507] sm:min-h-[380px]">
+        <AppSidebar view={view} onSelect={setView} />
 
         <div className="min-w-0 flex-1">
-          <div className="flex gap-0.5 overflow-x-auto border-b border-reflux-border/40 bg-[#0a0c10] px-2 sm:px-3">
+          <div className="flex gap-0.5 overflow-x-auto border-b border-[#161616] bg-[#050608] px-2 sm:px-3">
             {VIEWS.map((id) => (
               <button
                 key={id}
                 type="button"
-                onClick={() => selectView(id)}
-                className={`shrink-0 border-b-2 px-3 py-2.5 text-xs font-semibold transition-all sm:px-4 sm:py-3 sm:text-sm ${
-                  view === id
-                    ? "border-reflux-accent text-reflux-accent"
-                    : "border-transparent text-reflux-muted hover:text-white"
+                onClick={() => setView(id)}
+                className={`app-mock-tab shrink-0 px-3 py-2.5 text-xs font-semibold sm:px-4 sm:py-3 sm:text-sm ${
+                  view === id ? "active" : ""
                 }`}
               >
                 {TAB_LABELS[id]}
@@ -184,7 +202,7 @@ export function AppPreviewMock({ hero = false }: AppPreviewMockProps) {
             ))}
           </div>
 
-          <div className={`min-h-[260px] bg-gradient-to-b from-[#0c0e12] to-[#080a0d] ${hero ? "p-4 sm:p-5" : "p-6"}`}>
+          <div className={`min-h-[260px] bg-gradient-to-b from-[#07090d] to-[#030507] ${hero ? "p-4 sm:p-5" : "p-6"}`}>
             {view === "home" && <AppPreviewHomePanel />}
             {view === "optimizer" && <AppPreviewOptimizerPanel />}
             {view === "tweaks" && <AppPreviewTweaksPanel />}
@@ -194,7 +212,7 @@ export function AppPreviewMock({ hero = false }: AppPreviewMockProps) {
                 {PREVIEW_GAMES.map((game) => (
                   <div
                     key={game.alt}
-                    className="group relative overflow-hidden rounded-xl border border-reflux-border/60 bg-[#0f1217] shadow-[0_8px_24px_rgba(0,0,0,0.35)]"
+                    className="group relative overflow-hidden rounded-xl border border-[#161616] bg-[#050505] shadow-[0_8px_24px_rgba(0,0,0,0.45)]"
                   >
                     <div className="aspect-[460/215] overflow-hidden">
                       <GameImage {...game} sources={[...game.sources]} />
@@ -203,7 +221,7 @@ export function AppPreviewMock({ hero = false }: AppPreviewMockProps) {
                     <div className="absolute inset-x-0 bottom-0 p-2">
                       <button
                         type="button"
-                        className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-reflux-accent/50 bg-black/45 py-1.5 text-[9px] font-bold text-reflux-accent backdrop-blur-sm sm:text-[10px]"
+                        className="app-mock-action flex w-full items-center justify-center gap-1.5 py-1.5 text-[9px] sm:text-[10px]"
                       >
                         <AppIcon name="games" size={12} glow={false} />
                         Optimize
@@ -224,17 +242,14 @@ export function AppPreviewMock({ hero = false }: AppPreviewMockProps) {
                       <div className="text-[11px] text-reflux-muted">Latency & connection tweaks</div>
                     </div>
                   </div>
-                  <button
-                    type="button"
-                    className="shrink-0 rounded-lg border border-reflux-accent/40 bg-reflux-accent/10 px-3 py-1.5 text-[10px] font-bold text-reflux-accent sm:px-4 sm:py-2 sm:text-xs"
-                  >
+                  <button type="button" className="app-mock-action shrink-0 px-3 py-1.5 text-[10px] sm:px-4 sm:py-2 sm:text-xs">
                     Apply All
                   </button>
                 </div>
                 {networkTweaks.map((tweak) => (
                   <div
                     key={tweak.name}
-                    className="flex items-center justify-between gap-3 rounded-xl border border-reflux-border/50 bg-[#0f1217]/90 px-3 py-2.5 sm:px-4 sm:py-3"
+                    className="app-mock-card flex items-center justify-between gap-3 px-3 py-2.5 sm:px-4 sm:py-3"
                   >
                     <div className="min-w-0">
                       <div className="truncate text-xs font-semibold text-white sm:text-sm">{tweak.name}</div>

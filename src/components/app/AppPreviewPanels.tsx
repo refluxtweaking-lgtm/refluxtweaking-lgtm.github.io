@@ -1,14 +1,109 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { AppIcon } from "@/components/ui/AppIcon";
 import { VendorLogo } from "@/components/ui/VendorLogo";
 import { PRODUCT_LIMITS } from "@/data/tweaks";
 import type { AppIconName } from "@/data/app-icons";
 
+type MetricId = "cpu" | "gpu" | "ram";
+
+const METRIC_CHARTS: Record<
+  MetricId,
+  { color: string; fill: string; points: string; fillPoints: string }
+> = {
+  cpu: {
+    color: "#5DDE86",
+    fill: "rgba(93,222,134,0.18)",
+    points: "0,38 24,34 48,30 72,26 96,28 120,22 144,18 168,20 192,14 216,16 240,10",
+    fillPoints:
+      "0,56 0,38 24,34 48,30 72,26 96,28 120,22 144,18 168,20 192,14 216,16 240,10 240,56",
+  },
+  gpu: {
+    color: "#F15B50",
+    fill: "rgba(241,91,80,0.18)",
+    points: "0,42 20,38 40,35 60,28 80,32 100,22 120,18 140,24 160,14 180,16 200,10 220,12 240,8",
+    fillPoints:
+      "0,56 0,42 20,38 40,35 60,28 80,32 100,22 120,18 140,24 160,14 180,16 200,10 220,12 240,8 240,56",
+  },
+  ram: {
+    color: "#B392F0",
+    fill: "rgba(179,146,240,0.18)",
+    points: "0,30 30,32 60,28 90,34 120,26 150,30 180,22 210,24 240,18",
+    fillPoints:
+      "0,56 0,30 30,32 60,28 90,34 120,26 150,30 180,22 210,24 240,18 240,56",
+  },
+};
+
+const HOME_STATS = [
+  { id: "cpu" as const, label: "CPU", val: "24%", accent: "#5DDE86", name: "Intel i7-13700K", vendor: "intel" as const },
+  { id: "gpu" as const, label: "GPU", val: "31%", accent: "#F15B50", name: "RTX 4070", vendor: "nvidia" as const },
+  { id: "ram" as const, label: "RAM", val: "56%", accent: "#B392F0", name: "32 GB Total", vendor: "ram" as const },
+];
+
+function PerformanceMonitor() {
+  const [metric, setMetric] = useState<MetricId>("gpu");
+  const chart = METRIC_CHARTS[metric];
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setMetric((m) => (m === "cpu" ? "gpu" : m === "gpu" ? "ram" : "cpu"));
+    }, 4200);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div className="app-mock-card p-3 sm:p-3.5">
+      <div className="mb-2.5 flex items-center justify-between gap-2">
+        <div className="text-xs font-bold text-white sm:text-sm">Performance Monitor</div>
+        <div className="flex gap-1">
+          {(["cpu", "gpu", "ram"] as const).map((id) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setMetric(id)}
+              className={`rounded-md px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide transition-colors ${
+                metric === id ? "bg-white/8 text-white" : "text-reflux-muted hover:text-white"
+              }`}
+              style={metric === id ? { color: METRIC_CHARTS[id].color } : undefined}
+            >
+              {id}
+            </button>
+          ))}
+        </div>
+      </div>
+      <svg viewBox="0 0 240 56" className="h-16 w-full sm:h-[4.5rem]" aria-hidden="true">
+        <defs>
+          <linearGradient id={`chartGrad-${metric}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={chart.color} stopOpacity="0.35" />
+            <stop offset="100%" stopColor={chart.color} stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <polygon
+          key={`fill-${metric}`}
+          className="app-mock-chart-fill"
+          fill={`url(#chartGrad-${metric})`}
+          points={chart.fillPoints}
+        />
+        <polyline
+          key={`line-${metric}`}
+          className="app-mock-chart-line"
+          fill="none"
+          stroke={chart.color}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          points={chart.points}
+        />
+      </svg>
+    </div>
+  );
+}
+
 export function AppPreviewHomePanel() {
   const demoExpires = useMemo(() => Date.now() + 29 * 86400000 + 5 * 3600000, []);
   const [now, setNow] = useState(() => Date.now());
+  const [activeStat, setActiveStat] = useState<MetricId>("gpu");
 
   useEffect(() => {
     const id = window.setInterval(() => setNow(Date.now()), 1000);
@@ -23,60 +118,58 @@ export function AppPreviewHomePanel() {
 
   return (
     <div className="space-y-3">
-      <div
-        className="reflux-glow-box rounded-xl p-4"
-        style={{
-          borderColor: "rgba(255, 77, 61, 0.35)",
-          boxShadow: "0 0 36px -12px rgba(255, 77, 61, 0.45)",
-        }}
-      >
-        <div className="mb-1 text-[10px] font-bold tracking-[0.18em] text-reflux-accent uppercase">PRO access countdown</div>
-        <div aria-live="polite" className="reflux-metric text-3xl font-extrabold text-white sm:text-4xl">
+      <div className="app-mock-card app-mock-card-accent p-4 sm:p-4.5">
+        <div className="mb-1 text-[10px] font-bold tracking-[0.2em] text-reflux-accent uppercase">
+          PRO access countdown
+        </div>
+        <div aria-live="polite" className="reflux-metric text-3xl font-extrabold tracking-tight text-white sm:text-[2.15rem]">
           {days}d {hours}h {minutes}m {seconds}s
         </div>
-        <p className="mt-2 text-[11px] text-reflux-text-soft">Live timer — starts when you activate your license key in the app.</p>
+        <p className="mt-2 text-[11px] leading-relaxed text-reflux-muted">
+          Live timer — starts when you activate your license key in the app.
+        </p>
       </div>
 
       <div className="grid grid-cols-3 gap-2">
-        {[
-          { label: "CPU", val: "24%", color: "#5DDE86", name: "Intel i7-13700K" },
-          { label: "GPU", val: "31%", color: "#F15B50", name: "RTX 4070" },
-          { label: "RAM", val: "56%", color: "#B392F0", name: "32 GB Total" },
-        ].map((stat) => (
-          <div key={stat.label} className="reflux-glow-box reflux-glow-box-sm rounded-xl p-2.5">
-            <div className="text-[9px] font-bold tracking-wider text-reflux-muted uppercase">{stat.label}</div>
-            <div className="mt-1 text-xl font-extrabold tabular-nums" style={{ color: stat.color }}>
+        {HOME_STATS.map((stat) => (
+          <button
+            key={stat.label}
+            type="button"
+            onClick={() => setActiveStat(stat.id)}
+            className={`app-mock-stat p-2.5 text-left sm:p-3 ${
+              activeStat === stat.id ? "ring-1 ring-inset" : ""
+            }`}
+            style={
+              {
+                "--stat-accent": stat.accent,
+                ...(activeStat === stat.id
+                  ? {
+                      borderColor: `color-mix(in srgb, ${stat.accent} 45%, #161616)`,
+                      boxShadow: `0 0 28px -10px ${stat.accent}`,
+                    }
+                  : {}),
+              } as CSSProperties
+            }
+          >
+            <div className="mb-1.5 flex items-center justify-between gap-1">
+              <span className="text-[9px] font-bold tracking-wider text-reflux-muted uppercase">{stat.label}</span>
+              <VendorLogo vendor={stat.vendor} size={14} className="opacity-80" />
+            </div>
+            <div className="text-xl font-extrabold tabular-nums sm:text-2xl" style={{ color: stat.accent }}>
               {stat.val}
             </div>
-            <div className="mt-1 truncate text-[9px] text-reflux-muted">{stat.name}</div>
-          </div>
+            <div className="mt-1 truncate text-[9px] text-reflux-muted sm:text-[10px]">{stat.name}</div>
+          </button>
         ))}
       </div>
 
-      <div className="reflux-glow-box rounded-xl p-3">
-        <div className="mb-2 text-[10px] font-bold text-white">Performance Monitor</div>
-        <svg viewBox="0 0 240 56" className="h-14 w-full" aria-hidden="true">
-          <polyline
-            fill="none"
-            stroke="#F15B50"
-            strokeWidth="2"
-            points="0,42 20,38 40,35 60,28 80,32 100,22 120,18 140,24 160,14 180,16 200,10 220,12 240,8"
-          />
-          <polygon
-            fill="rgba(241,91,80,0.15)"
-            points="0,56 0,42 20,38 40,35 60,28 80,32 100,22 120,18 140,24 160,14 180,16 200,10 220,12 240,8 240,56"
-          />
-        </svg>
-      </div>
+      <PerformanceMonitor />
 
       <div className="flex flex-wrap gap-2">
         {["Clean RAM", "Optimize Network", "Apply Tweaks"].map((action) => (
-          <span
-            key={action}
-            className="rounded-lg border border-reflux-accent/30 bg-reflux-accent/10 px-2.5 py-1.5 text-[10px] font-bold text-reflux-accent"
-          >
+          <button key={action} type="button" className="app-mock-action px-3 py-1.5 text-[10px] sm:text-[11px]">
             {action}
-          </span>
+          </button>
         ))}
       </div>
     </div>
@@ -98,10 +191,10 @@ function OptimizerHwChip({
 }) {
   return (
     <div
-      className="reflux-glow-box flex min-w-[140px] flex-1 items-center gap-3 rounded-xl p-3"
+      className="app-mock-card flex min-w-[140px] flex-1 items-center gap-3 p-3"
       style={{
-        borderColor: `color-mix(in srgb, ${accent} 35%, transparent)`,
-        boxShadow: `0 0 28px -10px ${accent}, inset 3px 0 0 ${accent}`,
+        borderColor: `color-mix(in srgb, ${accent} 30%, #161616)`,
+        boxShadow: `inset 3px 0 0 ${accent}, 0 0 24px -12px ${accent}`,
       }}
     >
       <VendorLogo vendor={vendor} size={36} className="shrink-0" />
@@ -135,7 +228,7 @@ export function AppPreviewOptimizerPanel() {
         "Full Network Stack Reset",
         "Aggressive RAM Cleanup",
       ].map((cmd, i) => (
-        <div key={cmd} className="reflux-glow-box rounded-xl p-3">
+        <div key={cmd} className="app-mock-card p-3">
           <div className="mb-2 flex items-center gap-2">
             <span className="flex h-5 w-5 items-center justify-center rounded-md bg-reflux-accent/15 text-[10px] font-bold text-reflux-accent">
               {i + 1}
@@ -144,7 +237,7 @@ export function AppPreviewOptimizerPanel() {
           </div>
           <div className="flex gap-2">
             <span className="rounded-md border border-white/10 px-2 py-1 text-[9px] font-semibold text-reflux-muted">Copy</span>
-            <span className="reflux-glow-interactive rounded-md px-2 py-1 text-[9px] font-bold text-reflux-accent">Run</span>
+            <span className="app-mock-action px-2 py-1 text-[9px]">Run</span>
           </div>
         </div>
       ))}
@@ -189,7 +282,7 @@ export function AppPreviewTweaksPanel() {
       {sampleTweaks.map((tweak) => (
         <div
           key={tweak.name}
-          className="flex items-center justify-between gap-3 rounded-xl border border-reflux-border/50 bg-[#0f1217]/90 px-3 py-2.5 sm:px-4 sm:py-3"
+          className="app-mock-card flex items-center justify-between gap-3 px-3 py-2.5 sm:px-4 sm:py-3"
         >
           <div className="flex min-w-0 items-center gap-2.5">
             <AppIcon name={tweak.icon} size={16} glow={false} className="shrink-0 opacity-80" />

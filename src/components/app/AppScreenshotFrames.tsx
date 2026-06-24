@@ -42,10 +42,10 @@ function HwChip({
 }) {
   return (
     <div
-      className="reflux-glow-box flex min-w-[140px] flex-1 items-center gap-3 p-3"
+      className="app-mock-card flex min-w-[140px] flex-1 items-center gap-3 p-3"
       style={{
-        borderColor: `color-mix(in srgb, ${accent} 35%, transparent)`,
-        boxShadow: `0 0 28px -10px ${accent}, inset 3px 0 0 ${accent}`,
+        borderColor: `color-mix(in srgb, ${accent} 30%, #161616)`,
+        boxShadow: `inset 3px 0 0 ${accent}, 0 0 24px -12px ${accent}`,
       }}
     >
       <VendorLogo vendor={vendor} size={36} className="shrink-0" />

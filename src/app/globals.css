@@ -1689,6 +1689,127 @@ html.reduce-effects .particles-canvas {
   box-shadow: 0 0 36px -12px rgba(56, 189, 248, 0.4);
 }
 
+/* ── In-app mock surfaces (match REFLUX PRO desktop UI) ── */
+.app-mock-shell {
+  background: #030507;
+  box-shadow:
+    0 32px 90px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(241, 91, 80, 0.22),
+    0 0 48px -12px rgba(241, 91, 80, 0.28);
+}
+
+.app-mock-titlebar {
+  background: linear-gradient(180deg, #0c0d11 0%, #0a0b0e 100%);
+  border-bottom: 1px solid #161616;
+}
+
+.app-mock-sidebar {
+  background: #050608;
+  border-right: 1px solid #161616;
+}
+
+.app-mock-nav-item {
+  position: relative;
+  border-radius: 0.75rem;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.app-mock-nav-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+}
+
+.app-mock-nav-item.active {
+  background: rgba(241, 91, 80, 0.1);
+  color: #f15b50;
+  box-shadow: inset 0 0 24px -8px rgba(241, 91, 80, 0.35);
+}
+
+.app-mock-nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 18%;
+  bottom: 18%;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(180deg, #ff9588, #f15b50);
+  box-shadow: 0 0 10px rgba(241, 91, 80, 0.7);
+}
+
+.app-mock-card {
+  border-radius: 0.85rem;
+  background: #050505;
+  border: 1px solid #161616;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 0 28px -16px rgba(241, 91, 80, 0.35);
+}
+
+.app-mock-card-accent {
+  border-color: rgba(241, 91, 80, 0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 40px -12px rgba(241, 91, 80, 0.45);
+}
+
+.app-mock-stat {
+  border-radius: 0.75rem;
+  background: #050505;
+  border: 1px solid #161616;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.app-mock-stat:hover {
+  border-color: color-mix(in srgb, var(--stat-accent) 40%, #161616);
+  box-shadow: 0 0 24px -10px color-mix(in srgb, var(--stat-accent) 55%, transparent);
+}
+
+.app-mock-chart-line {
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  animation: appMockChartDraw 2.4s ease forwards;
+}
+
+@keyframes appMockChartDraw {
+  to { stroke-dashoffset: 0; }
+}
+
+.app-mock-chart-fill {
+  opacity: 0;
+  animation: appMockChartFill 1.2s ease 1.2s forwards;
+}
+
+@keyframes appMockChartFill {
+  to { opacity: 1; }
+}
+
+.app-mock-tab {
+  border-bottom: 2px solid transparent;
+  color: #8b929e;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.app-mock-tab.active {
+  color: #f15b50;
+  border-bottom-color: #f15b50;
+}
+
+.app-mock-action {
+  border-radius: 0.55rem;
+  border: 1px solid rgba(241, 91, 80, 0.35);
+  background: rgba(241, 91, 80, 0.06);
+  color: #f15b50;
+  font-weight: 700;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.app-mock-action:hover {
+  background: rgba(241, 91, 80, 0.12);
+  box-shadow: 0 0 20px -8px rgba(241, 91, 80, 0.5);
+  transform: translateY(-1px);
+}
+
 /* Clickable / hard-to-see — glow outline only where it helps */
 .reflux-glow-interactive {
   border: 1px solid rgba(255, 77, 61, 0.22);
