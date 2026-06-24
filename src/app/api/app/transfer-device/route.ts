@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { verifyAppSyncToken } from "@/lib/app-sync-token";
-import { transferLicenseToDevice } from "@/lib/app-license-sync";
+import { transferLicenseToDevice, sanitizeSyncForClient } from "@/lib/app-license-sync";
 
 export const runtime = "nodejs";
 
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
       success: false,
       expired: true,
       message: "Your license period has ended. Renew at refluxtweaks.com.",
-      sync,
+      sync: sanitizeSyncForClient(sync),
     });
   }
 
@@ -41,9 +41,9 @@ export async function POST(request: Request) {
       success: false,
       noLicense: true,
       message: "No active license on your account.",
-      sync,
+      sync: sanitizeSyncForClient(sync),
     });
   }
 
-  return NextResponse.json({ success: true, transferred: true, sync });
+  return NextResponse.json({ success: true, transferred: true, sync: sanitizeSyncForClient(sync) });
 }

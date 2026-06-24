@@ -62,10 +62,11 @@ export async function fetchActiveLicense(email: string): Promise<LicenseRow | nu
 export function buildSyncResponse(license: LicenseRow, hwid: string): AppSyncPayload {
   if (license.plan === "lifetime") {
     const sameDevice = license.activated_hwid === hwid;
+    const allowed = sameDevice && !!license.activated_hwid;
     return {
-      allowed: sameDevice && !!license.activated_hwid,
+      allowed,
       isLifetime: true,
-      licenseKey: license.license_key,
+      ...(allowed ? { licenseKey: license.license_key } : {}),
       plan: license.plan,
       status: license.status,
       needsActivation: !sameDevice || !license.activated_hwid,
@@ -83,7 +84,6 @@ export function buildSyncResponse(license: LicenseRow, hwid: string): AppSyncPay
     return {
       allowed: false,
       needsActivation: true,
-      licenseKey: license.license_key,
       plan: license.plan,
       status: license.status,
       isLifetime: false,
@@ -96,12 +96,13 @@ export function buildSyncResponse(license: LicenseRow, hwid: string): AppSyncPay
     ? new Date(license.activated_at).getTime()
     : accessExpiresAt - duration;
   const secondsRemaining = Math.max(0, Math.floor((accessExpiresAt - Date.now()) / 1000));
+  const allowed = secondsRemaining > 0;
 
   return {
-    allowed: secondsRemaining > 0,
+    allowed,
     expired: secondsRemaining <= 0,
     needsActivation: false,
-    licenseKey: license.license_key,
+    ...(allowed ? { licenseKey: license.license_key } : {}),
     plan: license.plan,
     status: license.status,
     isLifetime: false,
@@ -111,6 +112,19 @@ export function buildSyncResponse(license: LicenseRow, hwid: string): AppSyncPay
     daysLeft: Math.ceil(secondsRemaining / 86400),
     isLastDay: secondsRemaining <= 86400,
   };
+}
+
+/** Include license key only after password auth (login), not on token-only sync. */
+export function sanitizeSyncForClient(
+  sync: AppSyncPayload,
+  options?: { afterPasswordAuth?: boolean; licenseKey?: string },
+): AppSyncPayload {
+  if (sync.allowed) return sync;
+  if (options?.afterPasswordAuth && options.licenseKey) {
+    return { ...sync, licenseKey: options.licenseKey };
+  }
+  const { licenseKey: _omit, ...rest } = sync;
+  return rest;
 }
 
 export async function resyncLicenseAccess(
@@ -128,7 +142,6 @@ export async function markLicenseActivated(
   email: string,
   licenseKey: string,
   hwid: string,
-  plan: string,
 ): Promise<AppSyncPayload | null> {
   const admin = createAdminClient();
   if (!admin) return null;
@@ -159,6 +172,7 @@ export async function markLicenseActivated(
   }
 
   const now = new Date();
+  const plan = String(existing.plan || "monthly").trim().toLowerCase();
   const duration = PLAN_DURATION_MS[plan] ?? PLAN_DURATION_MS.monthly;
   const accessExpiresAt =
     plan === "lifetime" ? null : new Date(now.getTime() + duration);

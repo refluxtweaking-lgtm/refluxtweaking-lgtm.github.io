@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { verifyAppSyncToken } from "@/lib/app-sync-token";
-import { markLicenseActivated, resyncLicenseAccess } from "@/lib/app-license-sync";
+import { markLicenseActivated, resyncLicenseAccess, sanitizeSyncForClient } from "@/lib/app-license-sync";
 
 export const runtime = "nodejs";
 
@@ -29,14 +29,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, message: "Device verification failed." }, { status: 400 });
   }
 
-  if (body.markActivated && body.licenseKey && body.plan) {
-    const sync = await markLicenseActivated(session.email, body.licenseKey, hwid, body.plan);
+  if (body.markActivated && body.licenseKey) {
+    const sync = await markLicenseActivated(session.email, body.licenseKey, hwid);
     if (!sync) {
       return NextResponse.json({ success: false, message: "Could not record activation." }, { status: 500 });
     }
-    return NextResponse.json({ success: true, sync });
+    return NextResponse.json({ success: true, sync: sanitizeSyncForClient(sync) });
   }
 
   const sync = await resyncLicenseAccess(session.email, hwid, body.localKey);
-  return NextResponse.json({ success: true, sync });
+  return NextResponse.json({ success: true, sync: sanitizeSyncForClient(sync) });
 }

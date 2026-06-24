@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { createAppSyncToken } from "@/lib/app-sync-token";
-import { resyncLicenseAccess } from "@/lib/app-license-sync";
+import { fetchActiveLicense, resyncLicenseAccess, sanitizeSyncForClient } from "@/lib/app-license-sync";
 import { getSupabaseAnonKey, getSupabaseUrl, isSupabaseConfigured } from "@/lib/supabase/config";
 
 export const runtime = "nodejs";
@@ -53,11 +53,15 @@ export async function POST(request: Request) {
   }
 
   const sync = await resyncLicenseAccess(data.user.email, hwid, body.localKey);
+  const license = await fetchActiveLicense(data.user.email);
 
   return NextResponse.json({
     success: true,
     token,
     email: data.user.email,
-    sync,
+    sync: sanitizeSyncForClient(sync, {
+      afterPasswordAuth: true,
+      licenseKey: license?.license_key,
+    }),
   });
 }
