@@ -60,22 +60,37 @@ const TAB_LABELS: Record<AppView, string> = {
   benchmarks: "Benchmarks",
 };
 
-const sidebarNav: { icon: AppIconName; label: string; view: AppView }[] = [
-  { icon: "home", label: "Home", view: "home" },
-  { icon: "optimizer", label: "Opt", view: "optimizer" },
-  { icon: "games", label: "Games", view: "games" },
-  { icon: "internet", label: "Net", view: "network" },
-  { icon: "cleanup", label: "Clean", view: "cleanup" },
-  { icon: "benchmark", label: "Bench", view: "benchmarks" },
+type SidebarItem = {
+  id: string;
+  icon: AppIconName;
+  label: string;
+  view: AppView;
+};
+
+const SIDEBAR_ITEMS: SidebarItem[] = [
+  { id: "home", icon: "home", label: "Home", view: "home" },
+  { id: "optimizer", icon: "optimizer", label: "Opt", view: "optimizer" },
+  { id: "games", icon: "games", label: "Games", view: "games" },
+  { id: "network", icon: "internet", label: "Net", view: "network" },
+  { id: "cleanup", icon: "cleanup", label: "Clean", view: "cleanup" },
+  { id: "benchmarks", icon: "benchmark", label: "Bench", view: "benchmarks" },
+  { id: "cpu", icon: "cpu", label: "CPU", view: "tweaks" },
+  { id: "gpu", icon: "gpu", label: "GPU", view: "optimizer" },
+  { id: "ram", icon: "ram", label: "RAM", view: "home" },
+  { id: "debloat", icon: "debloat", label: "Debloat", view: "cleanup" },
+  { id: "system", icon: "system", label: "Sys", view: "tweaks" },
 ];
 
-const sidebarExtra: { icon: AppIconName; label: string; view: AppView }[] = [
-  { icon: "cpu", label: "CPU", view: "tweaks" },
-  { icon: "gpu", label: "GPU", view: "optimizer" },
-  { icon: "ram", label: "RAM", view: "home" },
-  { icon: "debloat", label: "Debloat", view: "cleanup" },
-  { icon: "system", label: "Sys", view: "tweaks" },
-];
+/** Primary sidebar highlight when a top tab is clicked (avoids duplicate active icons). */
+const DEFAULT_SIDEBAR_FOR_VIEW: Record<AppView, string> = {
+  home: "home",
+  optimizer: "optimizer",
+  tweaks: "cpu",
+  games: "games",
+  network: "network",
+  cleanup: "cleanup",
+  benchmarks: "benchmarks",
+};
 
 interface AppPreviewMockProps {
   hero?: boolean;
@@ -123,21 +138,21 @@ function AppTitlebar({ hero }: { hero: boolean }) {
 }
 
 function AppSidebar({
-  view,
+  activeId,
   onSelect,
 }: {
-  view: AppView;
-  onSelect: (next: AppView) => void;
+  activeId: string;
+  onSelect: (item: SidebarItem) => void;
 }) {
   return (
     <aside className="app-mock-sidebar hidden w-[72px] shrink-0 flex-col gap-0.5 overflow-y-auto py-2 sm:flex lg:w-[76px]">
-      {[...sidebarNav, ...sidebarExtra].map((item) => {
-        const isActive = view === item.view;
+      {SIDEBAR_ITEMS.map((item) => {
+        const isActive = activeId === item.id;
         return (
           <button
-            key={`${item.icon}-${item.label}`}
+            key={item.id}
             type="button"
-            onClick={() => onSelect(item.view)}
+            onClick={() => onSelect(item)}
             className={`app-mock-nav-item mx-1.5 flex flex-col items-center gap-1 px-1 py-2 text-[8px] font-bold ${
               isActive ? "active" : "text-reflux-muted"
             }`}
@@ -153,7 +168,18 @@ function AppSidebar({
 
 export function AppPreviewMock({ hero = false }: AppPreviewMockProps) {
   const [view, setView] = useState<AppView>("home");
+  const [activeSidebarId, setActiveSidebarId] = useState("home");
   const { ref, visible } = useInViewport<HTMLDivElement>("120px");
+
+  const selectView = (next: AppView) => {
+    setView(next);
+    setActiveSidebarId(DEFAULT_SIDEBAR_FOR_VIEW[next]);
+  };
+
+  const selectSidebar = (item: SidebarItem) => {
+    setView(item.view);
+    setActiveSidebarId(item.id);
+  };
 
   const shellClass = hero
     ? "rounded-none border-0 bg-transparent shadow-none"
@@ -184,7 +210,7 @@ export function AppPreviewMock({ hero = false }: AppPreviewMockProps) {
       </div>
 
       <div className="flex min-h-[320px] bg-[#030507] sm:min-h-[380px]">
-        <AppSidebar view={view} onSelect={setView} />
+        <AppSidebar activeId={activeSidebarId} onSelect={selectSidebar} />
 
         <div className="min-w-0 flex-1">
           <div className="flex gap-0.5 overflow-x-auto border-b border-[#161616] bg-[#050608] px-2 sm:px-3">
@@ -192,7 +218,7 @@ export function AppPreviewMock({ hero = false }: AppPreviewMockProps) {
               <button
                 key={id}
                 type="button"
-                onClick={() => setView(id)}
+                onClick={() => selectView(id)}
                 className={`app-mock-tab shrink-0 px-3 py-2.5 text-xs font-semibold sm:px-4 sm:py-3 sm:text-sm ${
                   view === id ? "active" : ""
                 }`}
