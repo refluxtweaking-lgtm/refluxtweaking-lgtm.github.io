@@ -138,6 +138,22 @@ export default async function CheckoutPage({
           {/* CTA button */}
           <CheckoutButton plan={plan} />
 
+          <p className="mt-4 text-center text-[11px] leading-relaxed text-reflux-muted">
+            By completing purchase you agree to our{" "}
+            <Link href="/terms" className="text-reflux-accent hover:underline">
+              Terms of Service
+            </Link>
+            ,{" "}
+            <Link href="/eula" className="text-reflux-accent hover:underline">
+              EULA
+            </Link>
+            , and{" "}
+            <Link href="/disclaimer" className="text-reflux-accent hover:underline">
+              Disclaimer
+            </Link>
+            , including limitation of liability, assumption of risk, and binding arbitration where permitted by law.
+          </p>
+
           {/* Trust line */}
           <p className="mt-4 flex items-center justify-center gap-1.5 text-xs text-reflux-muted">
             <svg

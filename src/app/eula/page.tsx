@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { LegalDocument } from "@/components/legal/LegalDocument";
-import { LEGAL_COMPANY, LEGAL_CONTACT_EMAIL } from "@/data/legal";
+import { LEGAL_COMPANY, LEGAL_CONTACT_EMAIL, LEGAL_GOVERNING_COUNTRY, LEGAL_GOVERNING_STATE } from "@/data/legal";
 
 export const metadata: Metadata = {
   title: "End User License Agreement – REFLUX TWEAKS",
@@ -99,34 +99,63 @@ export default function EulaPage() {
       <section>
         <h2>8. Limitation of liability</h2>
         <p>
-          TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, LICENSOR SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL,
-          SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF DATA, PROFITS, HARDWARE, SOFTWARE, OR BUSINESS
-          INTERRUPTION ARISING FROM USE OF THE SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. LICENSOR&apos;S
-          TOTAL LIABILITY FOR PAID SOFTWARE SHALL NOT EXCEED THE AMOUNT YOU PAID FOR THE SOFTWARE IN THE TWELVE (12)
-          MONTHS PRECEDING THE CLAIM. REFLUX FREE IS PROVIDED AT NO CHARGE; IF YOU HAVE NOT PAID FOR THE SOFTWARE, WE
-          HAVE NO MONETARY LIABILITY TO YOU, TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW.
+          TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, LICENSOR AND ITS OWNERS, OPERATORS, EMPLOYEES, AND
+          AFFILIATES SHALL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR
+          PUNITIVE DAMAGES, OR ANY LOSS OF DATA, PROFITS, REVENUE, HARDWARE, GOODWILL, OR BUSINESS INTERRUPTION ARISING
+          FROM USE OF THE SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. LICENSOR&apos;S TOTAL LIABILITY
+          FOR PAID SOFTWARE SHALL NOT EXCEED THE AMOUNT YOU PAID FOR THE SOFTWARE IN THE TWELVE (12) MONTHS PRECEDING
+          THE CLAIM. REFLUX FREE IS PROVIDED AT NO CHARGE; IF YOU HAVE NOT PAID FOR THE SOFTWARE, WE HAVE NO MONETARY
+          LIABILITY TO YOU. SOME JURISDICTIONS DO NOT ALLOW CERTAIN LIMITATIONS; IN THOSE CASES, LIABILITY IS LIMITED
+          TO THE MAXIMUM EXTENT PERMITTED BY LAW.
         </p>
       </section>
 
       <section>
         <h2>9. Indemnification</h2>
         <p>
-          You agree to indemnify and hold harmless {LEGAL_COMPANY} from claims, damages, and expenses arising from your
-          misuse of the Software or violation of this Agreement.
+          You agree to defend, indemnify, and hold harmless {LEGAL_COMPANY} and its owners, operators, employees, and
+          affiliates from any claims, damages, losses, liabilities, costs, and expenses (including reasonable
+          attorneys&apos; fees) arising from your use of the Software, your violation of this Agreement, your violation
+          of any law or third-party right, or harm to systems you were not authorized to modify.
         </p>
       </section>
 
       <section>
-        <h2>10. Governing law</h2>
+        <h2>10. Dispute resolution and class action waiver</h2>
         <p>
-          This Agreement is governed by the laws of the jurisdiction in which {LEGAL_COMPANY} operates, without regard
-          to conflict-of-law principles. Disputes shall be resolved in competent courts of that jurisdiction unless
-          otherwise required by consumer protection law in your country.
+          Before filing a claim, contact{" "}
+          <a href={`mailto:${LEGAL_CONTACT_EMAIL}`}>{LEGAL_CONTACT_EMAIL}</a> and allow at least 30 days to resolve the
+          issue informally. Except where prohibited by law or for qualifying small claims court matters, disputes shall
+          be resolved by binding individual arbitration under AAA Consumer Arbitration Rules.{" "}
+          <strong>
+            YOU AND LICENSOR WAIVE ANY RIGHT TO A JURY TRIAL AND TO PARTICIPATE IN A CLASS ACTION, COLLECTIVE ACTION,
+            OR REPRESENTATIVE PROCEEDING.
+          </strong>{" "}
+          If arbitration does not apply, disputes shall be brought exclusively in courts in {LEGAL_GOVERNING_STATE},{" "}
+          {LEGAL_GOVERNING_COUNTRY}. Non-waivable consumer rights in your country of residence still apply.
         </p>
       </section>
 
       <section>
-        <h2>11. Contact</h2>
+        <h2>11. Governing law</h2>
+        <p>
+          This Agreement is governed by the laws of {LEGAL_GOVERNING_STATE}, {LEGAL_GOVERNING_COUNTRY}, without regard
+          to conflict-of-law principles, except where mandatory consumer protection laws in your country of residence
+          apply.
+        </p>
+      </section>
+
+      <section>
+        <h2>12. Severability</h2>
+        <p>
+          If any provision is held invalid, the remaining provisions remain in effect. This Agreement, our Terms of
+          Service, Privacy Policy, and Disclaimer are the entire agreement between you and Licensor regarding the
+          Software.
+        </p>
+      </section>
+
+      <section>
+        <h2>13. Contact</h2>
         <p>
           {LEGAL_COMPANY} — <a href={`mailto:${LEGAL_CONTACT_EMAIL}`}>{LEGAL_CONTACT_EMAIL}</a>
         </p>
