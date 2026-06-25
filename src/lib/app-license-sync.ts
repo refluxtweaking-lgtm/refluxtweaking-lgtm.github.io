@@ -80,7 +80,31 @@ export function buildSyncResponse(license: LicenseRow, hwid: string): AppSyncPay
   const duration = PLAN_DURATION_MS[license.plan] ?? PLAN_DURATION_MS.monthly;
   const sameDevice = license.activated_hwid === hwid;
 
-  if (!sameDevice || !license.access_expires_at) {
+  if (sameDevice && license.activated_at) {
+    const activatedAt = new Date(license.activated_at).getTime();
+    const accessExpiresAt = license.access_expires_at
+      ? new Date(license.access_expires_at).getTime()
+      : activatedAt + duration;
+    const secondsRemaining = Math.max(0, Math.floor((accessExpiresAt - Date.now()) / 1000));
+    const allowed = secondsRemaining > 0;
+
+    return {
+      allowed,
+      expired: secondsRemaining <= 0,
+      needsActivation: false,
+      ...(allowed ? { licenseKey: license.license_key } : {}),
+      plan: license.plan,
+      status: license.status,
+      isLifetime: false,
+      accessExpiresAt,
+      activatedAt,
+      secondsRemaining,
+      daysLeft: Math.ceil(secondsRemaining / 86400),
+      isLastDay: secondsRemaining <= 86400,
+    };
+  }
+
+  if (!sameDevice || !license.activated_hwid) {
     return {
       allowed: false,
       needsActivation: true,
@@ -91,7 +115,7 @@ export function buildSyncResponse(license: LicenseRow, hwid: string): AppSyncPay
     };
   }
 
-  const accessExpiresAt = new Date(license.access_expires_at).getTime();
+  const accessExpiresAt = new Date(license.access_expires_at!).getTime();
   const activatedAt = license.activated_at
     ? new Date(license.activated_at).getTime()
     : accessExpiresAt - duration;
@@ -167,7 +191,8 @@ export async function markLicenseActivated(
     return buildSyncResponse(existing as LicenseRow, hwid);
   }
 
-  if (existing.activated_hwid === hwid && (existing.plan === "lifetime" || existing.access_expires_at)) {
+  // Same PC signing in again (new app version, re-login, etc.) — never reset the countdown.
+  if (existing.activated_hwid === hwid) {
     return buildSyncResponse(existing as LicenseRow, hwid);
   }
 
