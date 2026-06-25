@@ -212,6 +212,41 @@ export function verifySellHubSignature(rawBody: string, signature: string, secre
   return safeEqual(computedHex, normalized) || safeEqual(computedBase64, normalized);
 }
 
+function readWebhookSecret(request: Request): string {
+  const url = new URL(request.url);
+  const fromQuery = url.searchParams.get("secret")?.trim();
+  if (fromQuery) return fromQuery;
+
+  return (
+    request.headers.get("x-webhook-secret")?.trim() ??
+    request.headers.get("x-sellhub-secret")?.trim() ??
+    ""
+  );
+}
+
+/** Accept signed webhooks or a shared secret in the URL/header (variant delivery webhooks). */
+export function isSellHubWebhookAuthorized(
+  request: Request,
+  rawBody: string,
+  secret: string,
+): boolean {
+  if (!secret) return false;
+
+  const signature =
+    request.headers.get("signature") ??
+    request.headers.get("x-signature") ??
+    request.headers.get("x-webhook-signature") ??
+    request.headers.get("x-sellhub-signature") ??
+    "";
+
+  if (signature && verifySellHubSignature(rawBody, signature, secret)) {
+    return true;
+  }
+
+  const providedSecret = readWebhookSecret(request);
+  return Boolean(providedSecret && safeEqual(providedSecret, secret));
+}
+
 function variantToPlan(variantId: string): PlanName | null {
   const normalized = variantId.trim().toLowerCase();
   const mappings: Array<[string | undefined, PlanName]> = [

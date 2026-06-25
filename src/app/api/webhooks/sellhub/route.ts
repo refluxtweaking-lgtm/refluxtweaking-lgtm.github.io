@@ -5,8 +5,8 @@ import {
   customerLabelFromSellHubPayload,
   customerLocationFromSellHubPayload,
   orderIdFromSellHubPayload,
+  isSellHubWebhookAuthorized,
   planFromSellHubPayload,
-  verifySellHubSignature,
   type SellHubWebhookPayload,
 } from "@/lib/sellhub";
 import { deliverLicense } from "@/lib/license-delivery";
@@ -38,15 +38,9 @@ export async function POST(request: Request) {
   }
 
   const rawBody = await request.text();
-  const signature =
-    request.headers.get("signature") ??
-    request.headers.get("x-signature") ??
-    request.headers.get("x-webhook-signature") ??
-    request.headers.get("x-sellhub-signature") ??
-    "";
 
-  if (!verifySellHubSignature(rawBody, signature, secret)) {
-    return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
+  if (!isSellHubWebhookAuthorized(request, rawBody, secret)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   let payload: SellHubWebhookPayload;
@@ -57,7 +51,12 @@ export async function POST(request: Request) {
   }
 
   const event = payload.event ?? (payload.data?.event as string | undefined);
-  if (event && event !== "order.created") {
+  if (
+    event &&
+    event !== "order.created" &&
+    event !== "order.completed" &&
+    event !== "order.paid"
+  ) {
     return NextResponse.json({ ok: true, ignored: event });
   }
 
