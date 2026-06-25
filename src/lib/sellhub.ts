@@ -177,18 +177,31 @@ async function resolvePlanIds(plan: ProPlanId, apiKey: string): Promise<SellHubP
   return planIds(plan);
 }
 
+function extractCheckoutUrl(data: Record<string, unknown>, sessionId: string): string {
+  for (const key of ["checkoutUrl", "checkout_url", "url", "redirectUrl", "redirect_url"]) {
+    const value = data[key];
+    if (typeof value === "string" && value.startsWith("http")) return value;
+  }
+
+  const session = data.session as Record<string, unknown> | undefined;
+  if (session) {
+    for (const key of ["checkoutUrl", "checkout_url", "url", "redirectUrl", "redirect_url"]) {
+      const value = session[key];
+      if (typeof value === "string" && value.startsWith("http")) return value;
+    }
+  }
+
+  return sellhubCheckoutUrl(sessionId);
+}
+
+/** SellHub hosts payment UI at checkout.sellhub.cx/checkout/{sessionId} (not /payment/). */
 export function sellhubCheckoutUrl(sessionId: string): string {
   const template = process.env.SELLHUB_CHECKOUT_URL_TEMPLATE?.trim();
   if (template) {
     return template.replaceAll("{sessionId}", sessionId).replaceAll("{id}", sessionId);
   }
 
-  const storeUrl = process.env.SELLHUB_STORE_URL?.trim().replace(/\/$/, "");
-  if (storeUrl) {
-    return `${storeUrl}/payment/${sessionId}`;
-  }
-
-  return `https://checkout.sellhub.cx/payment/${sessionId}`;
+  return `https://checkout.sellhub.cx/checkout/${sessionId}`;
 }
 
 function checkoutReturnUrl(siteUrl: string, plan: ProPlanId) {
@@ -348,7 +361,11 @@ export async function createSellHubCheckout(
         continue;
       }
 
-      return { ok: true, checkoutUrl: sellhubCheckoutUrl(sessionId), id: sessionId };
+      return {
+        ok: true,
+        checkoutUrl: extractCheckoutUrl(result.data, sessionId),
+        id: sessionId,
+      };
     }
 
     return { ok: false, error: lastError };
