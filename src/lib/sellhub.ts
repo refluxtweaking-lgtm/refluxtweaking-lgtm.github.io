@@ -45,11 +45,136 @@ function sellhubCurrency() {
   return process.env.SELLHUB_CURRENCY?.trim().toLowerCase() || "usd";
 }
 
-function planIds(plan: ProPlanId): SellHubPlanIds | null {
-  const productId = process.env[`SELLHUB_PRODUCT_${plan.toUpperCase()}` as const]?.trim();
+function variantIdForPlan(plan: ProPlanId): string | null {
   const variantId = process.env[`SELLHUB_VARIANT_${plan.toUpperCase()}` as const]?.trim();
-  if (!productId || !variantId) return null;
+  return variantId || null;
+}
+
+function productIdFromEnv(plan: ProPlanId): string | null {
+  return (
+    process.env[`SELLHUB_PRODUCT_${plan.toUpperCase()}` as const]?.trim() ||
+    process.env.SELLHUB_PRODUCT_ID?.trim() ||
+    null
+  );
+}
+
+function planIds(plan: ProPlanId): SellHubPlanIds | null {
+  const variantId = variantIdForPlan(plan);
+  const productId = productIdFromEnv(plan);
+  if (!variantId || !productId) return null;
   return { productId, variantId };
+}
+
+function sellhubCatalogBases(): string[] {
+  const bases = new Set<string>();
+  const storeUrl = process.env.SELLHUB_STORE_URL?.trim().replace(/\/$/, "");
+  if (storeUrl) bases.add(`${storeUrl}/api`);
+  bases.add("https://dash.sellhub.cx/api/sellhub");
+  bases.add("https://store.sellhub.cx/api");
+  return [...bases];
+}
+
+async function fetchSellHubJson(apiKey: string, url: string): Promise<Record<string, unknown> | null> {
+  for (const authorization of [apiKey, `Basic ${apiKey}`]) {
+    try {
+      const response = await fetch(url, {
+        headers: { Authorization: authorization },
+        cache: "no-store",
+      });
+      if (!response.ok) continue;
+      return (await response.json()) as Record<string, unknown>;
+    } catch {
+      continue;
+    }
+  }
+  return null;
+}
+
+function extractVariants(data: Record<string, unknown>): Record<string, unknown>[] {
+  const dataNode = data.data as Record<string, unknown> | undefined;
+  const variants = dataNode?.variants ?? data.variants;
+
+  if (Array.isArray(variants)) {
+    return variants.filter((entry): entry is Record<string, unknown> => Boolean(entry && typeof entry === "object"));
+  }
+
+  if (variants && typeof variants === "object") {
+    return Object.entries(variants as Record<string, Record<string, unknown>>).map(([key, value]) => ({
+      ...value,
+      id: value.id ?? key,
+    }));
+  }
+
+  return [];
+}
+
+function variantProductId(variant: Record<string, unknown>): string | null {
+  for (const key of ["productId", "product_id", "parentProductId", "parentId"]) {
+    const value = variant[key];
+    if (typeof value === "string" && value.trim()) return value.trim();
+  }
+  return null;
+}
+
+/** Resolve the store's product ID for a variant using the SellHub API. */
+export async function lookupSellHubPlanIds(
+  apiKey: string,
+  variantId: string,
+): Promise<SellHubPlanIds | null> {
+  const normalizedVariantId = variantId.trim();
+  if (!normalizedVariantId) return null;
+
+  for (const base of sellhubCatalogBases()) {
+    const byId = await fetchSellHubJson(
+      apiKey,
+      `${base}/products/variants?id=${encodeURIComponent(normalizedVariantId)}`,
+    );
+    if (byId) {
+      for (const variant of extractVariants(byId)) {
+        const productId = variantProductId(variant);
+        const id = typeof variant.id === "string" ? variant.id : normalizedVariantId;
+        if (productId) return { productId, variantId: id };
+      }
+    }
+  }
+
+  for (const base of sellhubCatalogBases()) {
+    const productsData = await fetchSellHubJson(apiKey, `${base}/products`);
+    if (!productsData) continue;
+
+    const products =
+      (productsData.data as { products?: Record<string, unknown>[] } | undefined)?.products ?? [];
+    for (const product of products) {
+      if (!product || typeof product !== "object") continue;
+      const productId = typeof product.id === "string" ? product.id : null;
+      if (!productId) continue;
+
+      const variantsData = await fetchSellHubJson(
+        apiKey,
+        `${base}/products/variants?productId=${encodeURIComponent(productId)}`,
+      );
+      if (!variantsData) continue;
+
+      for (const variant of extractVariants(variantsData)) {
+        const id = typeof variant.id === "string" ? variant.id : "";
+        if (id.toLowerCase() === normalizedVariantId.toLowerCase()) {
+          return { productId, variantId: id };
+        }
+      }
+    }
+  }
+
+  return null;
+}
+
+async function resolvePlanIds(plan: ProPlanId, apiKey: string): Promise<SellHubPlanIds | null> {
+  const variantId = variantIdForPlan(plan);
+  if (!variantId) return null;
+
+  const fromApi = await lookupSellHubPlanIds(apiKey, variantId);
+  if (fromApi) return fromApi;
+
+  return planIds(plan);
 }
 
 export function sellhubCheckoutUrl(sessionId: string): string {
@@ -78,15 +203,13 @@ function extractSessionId(data: Record<string, unknown>): string | null {
 }
 
 function sellhubCheckoutEndpoints(): string[] {
-  const endpoints = new Set<string>();
-  const configured = process.env.SELLHUB_API_BASE_URL?.trim();
-  if (configured) endpoints.add(configured.replace(/\/$/, ""));
-
   const storeUrl = process.env.SELLHUB_STORE_URL?.trim().replace(/\/$/, "");
-  if (storeUrl) endpoints.add(`${storeUrl}/api`);
+  if (storeUrl) return [`${storeUrl}/api`];
 
-  endpoints.add("https://store.sellhub.cx/api");
-  return [...endpoints];
+  const configured = process.env.SELLHUB_API_BASE_URL?.trim();
+  if (configured) return [configured.replace(/\/$/, "")];
+
+  return ["https://store.sellhub.cx/api"];
 }
 
 function parseSellHubError(data: Record<string, unknown>, status: number): string {
@@ -192,7 +315,7 @@ export async function createSellHubCheckout(
     return { ok: false, error: "Checkout is not configured yet" };
   }
 
-  const ids = planIds(plan);
+  const ids = await resolvePlanIds(plan, apiKey);
   if (!ids) {
     return { ok: false, error: `SellHub product IDs are not configured for ${plan}` };
   }

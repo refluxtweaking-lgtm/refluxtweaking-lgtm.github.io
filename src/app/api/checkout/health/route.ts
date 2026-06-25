@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { lookupSellHubPlanIds } from "@/lib/sellhub";
 
 export const runtime = "nodejs";
 
@@ -16,11 +17,23 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
+  const apiKey = process.env.SELLHUB_API_KEY?.trim();
+  const resolvedPlans: Record<string, { productId: string; variantId: string } | null> = {};
+
+  if (apiKey) {
+    for (const plan of ["monthly", "yearly", "lifetime"] as const) {
+      const variantId = process.env[`SELLHUB_VARIANT_${plan.toUpperCase()}`]?.trim();
+      resolvedPlans[plan] = variantId ? await lookupSellHubPlanIds(apiKey, variantId) : null;
+    }
+  }
+
   return NextResponse.json({
     checkout: {
       provider: "sellhub",
-      apiKeyConfigured: Boolean(process.env.SELLHUB_API_KEY?.trim()),
+      storeUrlConfigured: Boolean(process.env.SELLHUB_STORE_URL?.trim()),
+      apiKeyConfigured: Boolean(apiKey),
       webhookSecretConfigured: Boolean(process.env.SELLHUB_WEBHOOK_SECRET?.trim()),
+      resolvedPlans,
       plansConfigured: {
         monthly: Boolean(
           process.env.SELLHUB_PRODUCT_MONTHLY?.trim() &&
