@@ -111,8 +111,9 @@ export default async function CheckoutPage({
           {/* Tagline */}
           <p className="mb-2 text-center text-sm text-reflux-muted">{planData.tagline}</p>
           <p className="mb-6 text-center text-xs text-reflux-text-soft">
-            Signed in as <span className="font-medium text-white">{buyerEmail}</span>. Your license key will be{" "}
-            <span className="text-reflux-accent">emailed to this address</span> and saved to{" "}
+            Signed in as <span className="font-medium text-white">{buyerEmail}</span>. Use this{" "}
+            <span className="font-medium text-white">same email</span> on the SellHub payment page so your license is
+            emailed correctly and saved to{" "}
             <Link href="/account" className="text-reflux-accent hover:underline">
               your account
             </Link>

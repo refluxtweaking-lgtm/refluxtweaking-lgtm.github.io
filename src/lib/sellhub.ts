@@ -177,45 +177,89 @@ async function resolvePlanIds(plan: ProPlanId, apiKey: string): Promise<SellHubP
   return planIds(plan);
 }
 
-function isSellHubStoreCheckoutUrl(url: string): boolean {
+function sellhubStoreUrl(): string | null {
+  return process.env.SELLHUB_STORE_URL?.trim().replace(/\/$/, "") || null;
+}
+
+/** SellHub exposes checkout via variant embeds — not /embed/checkout/{sessionId}. */
+export function sellhubVariantEmbedUrl(plan: ProPlanId): string | null {
+  const storeUrl = sellhubStoreUrl();
+  const variantId = variantIdForPlan(plan);
+  if (!storeUrl || !variantId) return null;
+  return `${storeUrl}/embed/variant/${variantId}`;
+}
+
+function isSellHubVariantEmbedUrl(url: string): boolean {
   try {
     const parsed = new URL(url);
-    if (!parsed.hostname.toLowerCase().endsWith(".sellhub.cx")) return false;
-    return parsed.pathname.includes("/embed/checkout") || parsed.pathname.includes("/checkout/");
+    return (
+      parsed.hostname.toLowerCase().endsWith(".sellhub.cx") &&
+      parsed.pathname.includes("/embed/variant/")
+    );
   } catch {
     return false;
   }
 }
 
-function extractCheckoutUrl(data: Record<string, unknown>, sessionId: string): string {
+function extractCheckoutUrl(data: Record<string, unknown>, fallbackUrl: string): string {
   const buckets = [data, data.session as Record<string, unknown> | undefined];
   for (const bucket of buckets) {
     if (!bucket || typeof bucket !== "object") continue;
-    for (const key of ["checkoutUrl", "checkout_url"]) {
+    for (const key of ["checkoutUrl", "checkout_url", "url", "redirectUrl", "redirect_url"]) {
       const value = bucket[key];
-      if (typeof value === "string" && isSellHubStoreCheckoutUrl(value)) return value;
+      if (typeof value === "string" && isSellHubVariantEmbedUrl(value)) return value;
+      if (typeof value === "string" && value.includes("moneymotion.io/checkout/")) return value;
     }
   }
 
-  return sellhubCheckoutUrl(sessionId);
+  return fallbackUrl;
 }
 
-/**
- * SellHub checkout sessions open on the store host (e.g. refluxtweaks.sellhub.cx/embed/checkout/{id}).
- * checkout.sellhub.cx is Money Motion's app and only accepts Money Motion session IDs.
- */
-export function sellhubCheckoutUrl(sessionId: string): string {
-  const template = process.env.SELLHUB_CHECKOUT_URL_TEMPLATE?.trim();
-  if (template) {
-    return template.replaceAll("{sessionId}", sessionId).replaceAll("{id}", sessionId);
+async function processCheckoutAtEndpoint(
+  apiBase: string,
+  apiKey: string,
+  sessionId: string,
+  methodName: string,
+): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; error: string }> {
+  const authAttempts = [apiKey, `Basic ${apiKey}`];
+
+  for (const authorization of authAttempts) {
+    const response = await fetch(`${apiBase}/processCheckout`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: authorization,
+      },
+      body: JSON.stringify({ id: sessionId, methodName }),
+      cache: "no-store",
+    });
+
+    const data = (await response.json()) as Record<string, unknown>;
+    if (response.ok) return { ok: true, data };
+
+    if (response.status === 401 && authorization === apiKey) continue;
+    return { ok: false, error: parseSellHubError(data, response.status) };
   }
 
-  const storeUrl = process.env.SELLHUB_STORE_URL?.trim().replace(/\/$/, "");
-  if (storeUrl) {
-    return `${storeUrl}/embed/checkout/${sessionId}`;
-  }
+  return { ok: false, error: "Unauthorized" };
+}
 
-  return `https://store.sellhub.cx/embed/checkout/${sessionId}`;
+function sellhubPaymentMethod(): string {
+  return process.env.SELLHUB_PAYMENT_METHOD?.trim() || "stripe";
+}
+
+function extractMoneyMotionCheckoutUrl(data: Record<string, unknown>): string | null {
+  const buckets = [data, data.session as Record<string, unknown> | undefined];
+  for (const bucket of buckets) {
+    if (!bucket || typeof bucket !== "object") continue;
+    for (const key of ["checkoutUrl", "checkout_url", "url", "redirectUrl", "redirect_url"]) {
+      const value = bucket[key];
+      if (typeof value === "string" && value.includes("moneymotion.io/checkout/")) {
+        return value;
+      }
+    }
+  }
+  return null;
 }
 
 function checkoutReturnUrl(siteUrl: string, plan: ProPlanId) {
@@ -337,14 +381,14 @@ export async function createSellHubCheckout(
   plan: ProPlanId,
   options: SellHubCheckoutOptions = {},
 ): Promise<SellHubCheckoutResult> {
-  const apiKey = process.env.SELLHUB_API_KEY?.trim();
-  if (!apiKey) {
-    return { ok: false, error: "Checkout is not configured yet" };
+  const storeUrl = sellhubStoreUrl();
+  if (!storeUrl) {
+    return { ok: false, error: "SELLHUB_STORE_URL is not configured" };
   }
 
-  const ids = await resolvePlanIds(plan, apiKey);
-  if (!ids) {
-    return { ok: false, error: `SellHub product IDs are not configured for ${plan}` };
+  const variantEmbedUrl = sellhubVariantEmbedUrl(plan);
+  if (!variantEmbedUrl) {
+    return { ok: false, error: `SellHub variant ID is not configured for ${plan}` };
   }
 
   const email = options.email?.trim();
@@ -352,9 +396,18 @@ export async function createSellHubCheckout(
     return { ok: false, error: "Buyer email is required" };
   }
 
+  const apiKey = process.env.SELLHUB_API_KEY?.trim();
+  if (!apiKey) {
+    return { ok: true, checkoutUrl: variantEmbedUrl, id: variantIdForPlan(plan) ?? "" };
+  }
+
+  const ids = await resolvePlanIds(plan, apiKey);
+  if (!ids) {
+    return { ok: true, checkoutUrl: variantEmbedUrl, id: variantIdForPlan(plan) ?? "" };
+  }
+
   const planConfig = SELLHUB_CHECKOUT_PLANS[plan];
   const siteUrl = siteBaseUrl();
-
   const body = buildCheckoutBody(ids, planConfig, email, plan, siteUrl);
 
   try {
@@ -375,16 +428,37 @@ export async function createSellHubCheckout(
         continue;
       }
 
+      const directUrl = extractMoneyMotionCheckoutUrl(result.data);
+      if (directUrl) {
+        return { ok: true, checkoutUrl: directUrl, id: sessionId };
+      }
+
+      const processed = await processCheckoutAtEndpoint(
+        apiBase,
+        apiKey,
+        sessionId,
+        sellhubPaymentMethod(),
+      );
+      if (processed.ok) {
+        const processedUrl = extractMoneyMotionCheckoutUrl(processed.data);
+        if (processedUrl) {
+          return { ok: true, checkoutUrl: processedUrl, id: sessionId };
+        }
+      } else {
+        console.warn("[SellHub] processCheckout failed:", processed.error);
+      }
+
       return {
         ok: true,
-        checkoutUrl: extractCheckoutUrl(result.data, sessionId),
+        checkoutUrl: extractCheckoutUrl(result.data, variantEmbedUrl),
         id: sessionId,
       };
     }
 
-    return { ok: false, error: lastError };
+    console.warn("[SellHub] API checkout failed, using variant embed fallback:", lastError);
+    return { ok: true, checkoutUrl: variantEmbedUrl, id: ids.variantId };
   } catch {
-    return { ok: false, error: "Could not reach SellHub" };
+    return { ok: true, checkoutUrl: variantEmbedUrl, id: ids.variantId };
   }
 }
 
