@@ -177,31 +177,45 @@ async function resolvePlanIds(plan: ProPlanId, apiKey: string): Promise<SellHubP
   return planIds(plan);
 }
 
-function extractCheckoutUrl(data: Record<string, unknown>, sessionId: string): string {
-  for (const key of ["checkoutUrl", "checkout_url", "url", "redirectUrl", "redirect_url"]) {
-    const value = data[key];
-    if (typeof value === "string" && value.startsWith("http")) return value;
+function isSellHubStoreCheckoutUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    if (!parsed.hostname.toLowerCase().endsWith(".sellhub.cx")) return false;
+    return parsed.pathname.includes("/embed/checkout") || parsed.pathname.includes("/checkout/");
+  } catch {
+    return false;
   }
+}
 
-  const session = data.session as Record<string, unknown> | undefined;
-  if (session) {
-    for (const key of ["checkoutUrl", "checkout_url", "url", "redirectUrl", "redirect_url"]) {
-      const value = session[key];
-      if (typeof value === "string" && value.startsWith("http")) return value;
+function extractCheckoutUrl(data: Record<string, unknown>, sessionId: string): string {
+  const buckets = [data, data.session as Record<string, unknown> | undefined];
+  for (const bucket of buckets) {
+    if (!bucket || typeof bucket !== "object") continue;
+    for (const key of ["checkoutUrl", "checkout_url"]) {
+      const value = bucket[key];
+      if (typeof value === "string" && isSellHubStoreCheckoutUrl(value)) return value;
     }
   }
 
   return sellhubCheckoutUrl(sessionId);
 }
 
-/** SellHub hosts payment UI at checkout.sellhub.cx/checkout/{sessionId} (not /payment/). */
+/**
+ * SellHub checkout sessions open on the store host (e.g. refluxtweaks.sellhub.cx/embed/checkout/{id}).
+ * checkout.sellhub.cx is Money Motion's app and only accepts Money Motion session IDs.
+ */
 export function sellhubCheckoutUrl(sessionId: string): string {
   const template = process.env.SELLHUB_CHECKOUT_URL_TEMPLATE?.trim();
   if (template) {
     return template.replaceAll("{sessionId}", sessionId).replaceAll("{id}", sessionId);
   }
 
-  return `https://checkout.sellhub.cx/checkout/${sessionId}`;
+  const storeUrl = process.env.SELLHUB_STORE_URL?.trim().replace(/\/$/, "");
+  if (storeUrl) {
+    return `${storeUrl}/embed/checkout/${sessionId}`;
+  }
+
+  return `https://store.sellhub.cx/embed/checkout/${sessionId}`;
 }
 
 function checkoutReturnUrl(siteUrl: string, plan: ProPlanId) {
