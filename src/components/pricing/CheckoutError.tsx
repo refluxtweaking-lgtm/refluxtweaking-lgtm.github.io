@@ -17,7 +17,7 @@ export function CheckoutError({ plan, message }: CheckoutErrorProps) {
         <h1 className="text-3xl font-bold text-white">Checkout isn&apos;t ready yet</h1>
         <p className="mt-4 text-sm leading-relaxed text-reflux-muted">
           {isNotConfigured
-            ? "Payment setup is still being finished on our end. The site owner needs to connect MoneyMotion in Vercel."
+            ? "Payment setup is still being finished on our end. The site owner needs to connect SellHub in Vercel."
             : "We couldn't open the secure payment page right now. Please try again in a minute."}
         </p>
         <p className="mt-3 rounded-xl border border-reflux-border/60 bg-white/5 px-4 py-3 text-xs text-reflux-muted">

@@ -18,9 +18,23 @@ export async function GET(request: Request) {
 
   return NextResponse.json({
     checkout: {
-      apiKeyConfigured: Boolean(process.env.MONEYMOTION_API_KEY?.trim()),
-      sandbox: process.env.MONEYMOTION_SANDBOX === "true",
-      webhookSecretConfigured: Boolean(process.env.MONEYMOTION_WEBHOOK_SECRET?.trim()),
+      provider: "sellhub",
+      apiKeyConfigured: Boolean(process.env.SELLHUB_API_KEY?.trim()),
+      webhookSecretConfigured: Boolean(process.env.SELLHUB_WEBHOOK_SECRET?.trim()),
+      plansConfigured: {
+        monthly: Boolean(
+          process.env.SELLHUB_PRODUCT_MONTHLY?.trim() &&
+            process.env.SELLHUB_VARIANT_MONTHLY?.trim(),
+        ),
+        yearly: Boolean(
+          process.env.SELLHUB_PRODUCT_YEARLY?.trim() &&
+            process.env.SELLHUB_VARIANT_YEARLY?.trim(),
+        ),
+        lifetime: Boolean(
+          process.env.SELLHUB_PRODUCT_LIFETIME?.trim() &&
+            process.env.SELLHUB_VARIANT_LIFETIME?.trim(),
+        ),
+      },
     },
     licenseDelivery: {
       keyAuthSellerKeyConfigured: Boolean(process.env.KEYAUTH_SELLER_KEY?.trim()),

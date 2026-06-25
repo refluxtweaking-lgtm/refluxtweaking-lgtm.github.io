@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createMoneyMotionCheckout } from "@/lib/moneymotion";
+import { createSellHubCheckout } from "@/lib/sellhub";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import type { ProPlanId } from "@/data/downloads";
@@ -19,10 +19,6 @@ export async function GET(
   }
 
   const plan = planParam as ProPlanId;
-  const userIp =
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    request.headers.get("x-real-ip") ??
-    undefined;
 
   let email: string | undefined;
   if (isSupabaseConfigured()) {
@@ -43,13 +39,13 @@ export async function GET(
     return NextResponse.redirect(loginUrl);
   }
 
-  const result = await createMoneyMotionCheckout(plan, { userIp, email });
+  const result = await createSellHubCheckout(plan, { email });
 
   if (!result.ok) {
     const errorUrl = new URL(`/checkout/${plan}`, request.url);
     errorUrl.searchParams.set("error", "checkout");
     const reason = result.error.toLowerCase();
-    if (reason.includes("not configured")) {
+    if (reason.includes("not configured") || reason.includes("product ids")) {
       errorUrl.searchParams.set("reason", "missing_key");
     } else if (reason.includes("invalidauth") || reason.includes("unauthorized") || reason.includes("invalid api")) {
       errorUrl.searchParams.set("reason", "invalid_key");

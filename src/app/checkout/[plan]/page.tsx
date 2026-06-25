@@ -62,13 +62,13 @@ export default async function CheckoutPage({
   const hasCheckoutError = error === "checkout";
   const errorMessage =
     reason === "missing_key"
-      ? "Payment API key isn't active on the server yet. Add MONEYMOTION_API_KEY in Vercel, then redeploy."
+      ? "Payment API key isn't active on the server yet. Add SELLHUB_API_KEY and product/variant IDs in Vercel, then redeploy."
       : reason === "invalid_key"
-        ? "MoneyMotion rejected the API key. Create a new mk_live_ key in MoneyMotion and update Vercel, then redeploy."
+        ? "SellHub rejected the API key. Create a new API key in your SellHub dashboard and update Vercel, then redeploy."
         : reason === "network"
-          ? "Couldn't reach MoneyMotion. Try again in a minute."
+          ? "Couldn't reach SellHub. Try again in a minute."
           : reason === "api_error"
-            ? "MoneyMotion returned an error. Check your MoneyMotion account is active and try again."
+            ? "SellHub returned an error. Check your SellHub store is active and product IDs are correct."
             : "Payment setup isn't ready yet — please contact support or try again later.";
 
   return (
@@ -196,7 +196,7 @@ export default async function CheckoutPage({
               <rect x="3" y="11" width="18" height="11" rx="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
-            Secure checkout powered by MoneyMotion
+            Secure checkout powered by SellHub
           </p>
 
           {/* Trust indicator row */}
