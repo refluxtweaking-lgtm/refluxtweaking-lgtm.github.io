@@ -6,6 +6,8 @@ import { CheckoutButton } from "@/components/pricing/CheckoutButton";
 import { plans } from "@/data/plans";
 import type { ProPlanId } from "@/data/downloads";
 import type { Metadata } from "next";
+import { createClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 
 const VALID_PLANS = new Set<ProPlanId>(["monthly", "yearly", "lifetime"]);
 
@@ -41,6 +43,21 @@ export default async function CheckoutPage({
   if (!planData) {
     redirect("/pricing");
   }
+
+  if (!isSupabaseConfigured()) {
+    redirect("/login");
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user?.email) {
+    redirect(`/login?next=${encodeURIComponent(`/checkout/${plan}`)}`);
+  }
+
+  const buyerEmail = user.email;
 
   const hasCheckoutError = error === "checkout";
   const errorMessage =
@@ -90,7 +107,15 @@ export default async function CheckoutPage({
           </div>
 
           {/* Tagline */}
-          <p className="mb-6 text-center text-sm text-reflux-muted">{planData.tagline}</p>
+          <p className="mb-2 text-center text-sm text-reflux-muted">{planData.tagline}</p>
+          <p className="mb-6 text-center text-xs text-reflux-text-soft">
+            Signed in as <span className="font-medium text-white">{buyerEmail}</span>. Your license key will be{" "}
+            <span className="text-reflux-accent">emailed to this address</span> and saved to{" "}
+            <Link href="/account" className="text-reflux-accent hover:underline">
+              your account
+            </Link>
+            .
+          </p>
 
           {/* Price */}
           <div className="mb-6 flex items-baseline justify-center gap-2">

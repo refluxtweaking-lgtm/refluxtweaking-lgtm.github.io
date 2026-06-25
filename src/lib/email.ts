@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 import { proDownloadUrl } from "@/data/downloads";
+import { normalizeBuyerEmail } from "@/lib/normalize-email";
 
 function planLabel(plan: string) {
   const value = plan.trim().toLowerCase();
@@ -140,6 +141,12 @@ export async function sendLicenseEmail(
   plan: string,
   licenseKey: string,
 ): Promise<boolean> {
+  const buyerEmail = normalizeBuyerEmail(to);
+  if (!buyerEmail) {
+    console.warn("[email] Invalid recipient email — skipping license email.");
+    return false;
+  }
+
   const apiKey = process.env.RESEND_API_KEY?.trim();
   const from = process.env.RESEND_FROM_EMAIL?.trim();
 
@@ -150,10 +157,10 @@ export async function sendLicenseEmail(
 
   try {
     const resend = new Resend(apiKey);
-    const downloadUrl = proDownloadUrl(to);
+    const downloadUrl = proDownloadUrl(buyerEmail);
     const { error } = await resend.emails.send({
       from,
-      to,
+      to: buyerEmail,
       subject: "Your REFLUX PRO license key & download",
       html: buildHtml(plan, licenseKey, downloadUrl),
       text: buildText(plan, licenseKey, downloadUrl),
@@ -178,6 +185,12 @@ export async function sendLicenseUpdateEmail(
   version: string,
   notes?: string,
 ): Promise<boolean> {
+  const buyerEmail = normalizeBuyerEmail(to);
+  if (!buyerEmail) {
+    console.warn("[email] Invalid recipient email — skipping license update email.");
+    return false;
+  }
+
   const apiKey = process.env.RESEND_API_KEY?.trim();
   const from = process.env.RESEND_FROM_EMAIL?.trim();
 
@@ -188,10 +201,10 @@ export async function sendLicenseUpdateEmail(
 
   try {
     const resend = new Resend(apiKey);
-    const downloadUrl = proDownloadUrl(to);
+    const downloadUrl = proDownloadUrl(buyerEmail);
     const { error } = await resend.emails.send({
       from,
-      to,
+      to: buyerEmail,
       subject: `REFLUX PRO v${version} update — your new license key`,
       html: buildUpdateHtml(plan, licenseKey, downloadUrl, version, notes),
       text: buildUpdateText(plan, licenseKey, downloadUrl, version, notes),

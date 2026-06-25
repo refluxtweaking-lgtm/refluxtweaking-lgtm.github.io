@@ -48,6 +48,22 @@ export async function deliverLicense(
     }
 
     const emailed = await sendLicenseEmail(buyerEmail, plan, license.key);
+
+    if (!stored && !emailed) {
+      console.error("[license-delivery] License key was created but not stored or emailed:", buyerEmail);
+      return {
+        ok: false,
+        error: "License was generated but could not be saved or emailed. Contact support with your receipt.",
+      };
+    }
+
+    if (!stored) {
+      console.error("[license-delivery] Supabase insert failed — key emailed but not on account:", buyerEmail);
+    }
+    if (!emailed) {
+      console.error("[license-delivery] Resend failed — key stored on account but email not sent:", buyerEmail);
+    }
+
     return { ok: true, key: license.key, emailed, stored };
   } catch (err) {
     const message = err instanceof Error ? err.message : "License delivery failed";

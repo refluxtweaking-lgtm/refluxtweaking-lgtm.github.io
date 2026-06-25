@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 const MESSAGES: Record<string, { title: string; body: string; tone: "success" | "error" | "info" }> = {
   success: {
     title: "Payment successful",
-    body: "Thanks for upgrading to REFLUX PRO. Your license details will arrive by email shortly.",
+    body: "Your REFLUX PRO license was emailed to your account address and is ready on your account page. Check spam if you do not see it within a few minutes.",
     tone: "success",
   },
   failed: {
@@ -47,7 +47,12 @@ export function CheckoutNotice() {
       <p className="font-bold text-white">{message.title}</p>
       <p className="mt-1 text-sm leading-relaxed">{message.body}</p>
       {plan && status === "success" ? (
-        <p className="mt-2 text-xs uppercase tracking-wide opacity-80">Plan: {plan}</p>
+        <p className="mt-2 text-xs uppercase tracking-wide opacity-80">
+          Plan: {plan} ·{" "}
+          <a href="/account" className="underline hover:text-white">
+            View license on your account
+          </a>
+        </p>
       ) : null}
     </div>
   );

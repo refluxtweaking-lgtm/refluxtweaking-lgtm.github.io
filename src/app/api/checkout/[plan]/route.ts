@@ -37,6 +37,12 @@ export async function GET(
     }
   }
 
+  if (!email) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("next", `/checkout/${plan}`);
+    return NextResponse.redirect(loginUrl);
+  }
+
   const result = await createMoneyMotionCheckout(plan, { userIp, email });
 
   if (!result.ok) {

@@ -4,6 +4,7 @@ import { SiteShell } from "@/components/layout/SiteShell";
 import { LicenseKeyBox } from "@/components/auth/LicenseKeyBox";
 import { LicenseAccessStatus } from "@/components/auth/LicenseAccessStatus";
 import { ProDownloadButton } from "@/components/auth/ProDownloadButton";
+import { ResendLicenseEmailButton } from "@/components/auth/ResendLicenseEmailButton";
 import { signOut } from "@/app/auth/actions";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
@@ -176,6 +177,7 @@ export default async function AccountPage() {
                   accessExpiresAt={license.access_expires_at}
                 />
                 <LicenseKeyBox licenseKey={license.license_key} />
+                <ResendLicenseEmailButton />
                 <p className="mt-3 text-xs text-reflux-muted">
                   {license.activated_hwid
                     ? "Activated on your PC — this key cannot be reused on another device."
@@ -212,8 +214,8 @@ export default async function AccountPage() {
 
         <p className="reflux-glow-readable mt-8 rounded-xl px-4 py-3 text-center text-xs text-reflux-text-soft">
           {activeLicenses.length > 0
-            ? "Each license works on one PC only (hardware ID). Sign in to REFLUX PRO with this account — after the first activation, just open the app."
-            : "Purchase a plan to unlock REFLUX PRO and get your license key here."}
+            ? "Your license is tied to this account email. We also email your key after purchase — use the button above if you need it resent."
+            : "Purchase a plan while signed in with this email — your license key is emailed and saved here automatically."}
         </p>
       </div>
     </SiteShell>
