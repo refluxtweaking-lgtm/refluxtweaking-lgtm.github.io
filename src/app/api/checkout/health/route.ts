@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { lookupSellHubPlanIds } from "@/lib/sellhub";
 
 export const runtime = "nodejs";
 
@@ -17,36 +16,16 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  const apiKey = process.env.SELLHUB_API_KEY?.trim();
-  const resolvedPlans: Record<string, { productId: string; variantId: string } | null> = {};
-
-  if (apiKey) {
-    for (const plan of ["monthly", "yearly", "lifetime"] as const) {
-      const variantId = process.env[`SELLHUB_VARIANT_${plan.toUpperCase()}`]?.trim();
-      resolvedPlans[plan] = variantId ? await lookupSellHubPlanIds(apiKey, variantId) : null;
-    }
-  }
-
   return NextResponse.json({
     checkout: {
-      provider: "sellhub",
-      storeUrlConfigured: Boolean(process.env.SELLHUB_STORE_URL?.trim()),
-      apiKeyConfigured: Boolean(apiKey),
-      webhookSecretConfigured: Boolean(process.env.SELLHUB_WEBHOOK_SECRET?.trim()),
-      resolvedPlans,
-      plansConfigured: {
-        monthly: Boolean(
-          process.env.SELLHUB_PRODUCT_MONTHLY?.trim() &&
-            process.env.SELLHUB_VARIANT_MONTHLY?.trim(),
-        ),
-        yearly: Boolean(
-          process.env.SELLHUB_PRODUCT_YEARLY?.trim() &&
-            process.env.SELLHUB_VARIANT_YEARLY?.trim(),
-        ),
-        lifetime: Boolean(
-          process.env.SELLHUB_PRODUCT_LIFETIME?.trim() &&
-            process.env.SELLHUB_VARIANT_LIFETIME?.trim(),
-        ),
+      provider: "moneymotion",
+      apiKeyConfigured: Boolean(process.env.MONEYMOTION_API_KEY?.trim()),
+      webhookSecretConfigured: Boolean(process.env.MONEYMOTION_WEBHOOK_SECRET?.trim()),
+      sandbox: process.env.MONEYMOTION_SANDBOX === "true",
+      directLinksConfigured: {
+        monthly: Boolean(process.env.MONEYMOTION_LINK_MONTHLY?.trim()),
+        yearly: Boolean(process.env.MONEYMOTION_LINK_YEARLY?.trim()),
+        lifetime: Boolean(process.env.MONEYMOTION_LINK_LIFETIME?.trim()),
       },
     },
     licenseDelivery: {

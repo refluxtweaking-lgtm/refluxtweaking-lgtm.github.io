@@ -62,15 +62,15 @@ export default async function CheckoutPage({
   const hasCheckoutError = error === "checkout";
   const errorMessage =
     reason === "missing_key"
-      ? "Payment API key isn't active on the server yet. Add SELLHUB_API_KEY and product/variant IDs in Vercel, then redeploy."
+      ? "Payment API key isn't active on the server yet. Add MONEYMOTION_API_KEY in Vercel, then redeploy."
       : reason === "invalid_key"
-        ? "SellHub rejected the API key. Create a new API key in your SellHub dashboard and update Vercel, then redeploy."
+        ? "MoneyMotion rejected the API key. Create a new API key in your MoneyMotion dashboard and update Vercel, then redeploy."
         : reason === "network"
-          ? "Couldn't reach SellHub. Try again in a minute."
+          ? "Couldn't reach MoneyMotion. Try again in a minute."
           : reason === "api_error"
             ? detail
-              ? `SellHub error: ${detail}`
-              : "SellHub returned an error. Check your SellHub store is active and product IDs are correct."
+              ? `MoneyMotion error: ${detail}`
+              : "MoneyMotion returned an error. Check your MoneyMotion account is active."
             : "Payment setup isn't ready yet — please contact support or try again later.";
 
   return (
@@ -111,9 +111,8 @@ export default async function CheckoutPage({
           {/* Tagline */}
           <p className="mb-2 text-center text-sm text-reflux-muted">{planData.tagline}</p>
           <p className="mb-6 text-center text-xs text-reflux-text-soft">
-            Signed in as <span className="font-medium text-white">{buyerEmail}</span>. Use this{" "}
-            <span className="font-medium text-white">same email</span> on the SellHub payment page so your license is
-            emailed correctly and saved to{" "}
+            Signed in as <span className="font-medium text-white">{buyerEmail}</span>. Your license key will be{" "}
+            <span className="text-reflux-accent">emailed to this address</span> and saved to{" "}
             <Link href="/account" className="text-reflux-accent hover:underline">
               your account
             </Link>
@@ -199,7 +198,7 @@ export default async function CheckoutPage({
               <rect x="3" y="11" width="18" height="11" rx="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
-            Secure checkout powered by SellHub
+            Secure checkout powered by MoneyMotion
           </p>
 
           {/* Trust indicator row */}
