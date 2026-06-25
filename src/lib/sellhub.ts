@@ -37,10 +37,6 @@ type SellHubPlanIds = {
   variantId: string;
 };
 
-function sellhubApiBase() {
-  return process.env.SELLHUB_API_BASE_URL?.trim() || "https://store.sellhub.cx/api";
-}
-
 function siteBaseUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.refluxtweaks.com";
 }
@@ -81,6 +77,112 @@ function extractSessionId(data: Record<string, unknown>): string | null {
   return null;
 }
 
+function sellhubCheckoutEndpoints(): string[] {
+  const endpoints = new Set<string>();
+  const configured = process.env.SELLHUB_API_BASE_URL?.trim();
+  if (configured) endpoints.add(configured.replace(/\/$/, ""));
+
+  const storeUrl = process.env.SELLHUB_STORE_URL?.trim().replace(/\/$/, "");
+  if (storeUrl) endpoints.add(`${storeUrl}/api`);
+
+  endpoints.add("https://store.sellhub.cx/api");
+  return [...endpoints];
+}
+
+function parseSellHubError(data: Record<string, unknown>, status: number): string {
+  const errors = data.errors;
+  if (Array.isArray(errors) && errors.length > 0) {
+    const messages = errors
+      .map((entry) => {
+        if (typeof entry === "string") return entry;
+        if (entry && typeof entry === "object" && "message" in entry) {
+          return String((entry as { message?: unknown }).message ?? "");
+        }
+        return "";
+      })
+      .filter(Boolean);
+    if (messages.length > 0) return messages.join(", ");
+  }
+
+  if (typeof data.message === "string" && data.message) return data.message;
+  if (typeof data.error === "string" && data.error) return data.error;
+
+  return `HTTP ${status}`;
+}
+
+function buildCheckoutBody(
+  ids: SellHubPlanIds,
+  planConfig: (typeof SELLHUB_CHECKOUT_PLANS)[ProPlanId],
+  email: string,
+  plan: ProPlanId,
+  siteUrl: string,
+) {
+  return {
+    email,
+    currency: sellhubCurrency(),
+    returnUrl: checkoutReturnUrl(siteUrl, plan),
+    cartBundles: [],
+    methodName: "",
+    bundleIds: [],
+    customFieldValues: [],
+    cart: {
+      items: [
+        {
+          id: ids.productId,
+          coupon: "",
+          name: "",
+          variant: {
+            id: ids.variantId,
+            name: "",
+            price: "0.00",
+          },
+          quantity: 1,
+          addons: [],
+        },
+      ],
+      bundles: [],
+    },
+  };
+}
+
+async function createCheckoutAtEndpoint(
+  apiBase: string,
+  apiKey: string,
+  body: Record<string, unknown>,
+): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; error: string; status: number }> {
+  const authAttempts = [apiKey, `Basic ${apiKey}`];
+
+  for (const authorization of authAttempts) {
+    const response = await fetch(`${apiBase}/checkout`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: authorization,
+      },
+      body: JSON.stringify(body),
+      cache: "no-store",
+    });
+
+    const data = (await response.json()) as Record<string, unknown>;
+
+    if (response.ok && (data.status === "success" || extractSessionId(data))) {
+      return { ok: true, data };
+    }
+
+    if (response.status === 401 && authorization === apiKey) {
+      continue;
+    }
+
+    return {
+      ok: false,
+      error: parseSellHubError(data, response.status),
+      status: response.status,
+    };
+  }
+
+  return { ok: false, error: "Unauthorized", status: 401 };
+}
+
 export async function createSellHubCheckout(
   plan: ProPlanId,
   options: SellHubCheckoutOptions = {},
@@ -103,65 +205,30 @@ export async function createSellHubCheckout(
   const planConfig = SELLHUB_CHECKOUT_PLANS[plan];
   const siteUrl = siteBaseUrl();
 
-  const body = {
-    email,
-    currency: sellhubCurrency(),
-    returnUrl: checkoutReturnUrl(siteUrl, plan),
-    cartBundles: [],
-    methodName: "",
-    bundleIds: [],
-    customFieldValues: [],
-    cart: {
-      items: [
-        {
-          id: ids.productId,
-          coupon: "",
-          name: planConfig.label,
-          variant: {
-            id: ids.variantId,
-            name: planConfig.label,
-            price: planConfig.price,
-          },
-          quantity: 1,
-          addons: [],
-        },
-      ],
-      bundles: [],
-    },
-  };
+  const body = buildCheckoutBody(ids, planConfig, email, plan, siteUrl);
 
   try {
-    const response = await fetch(`${sellhubApiBase()}/checkout`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: apiKey,
-      },
-      body: JSON.stringify(body),
-      cache: "no-store",
-    });
+    let lastError = "SellHub checkout failed";
 
-    const data = (await response.json()) as Record<string, unknown> & {
-      message?: string;
-      error?: string;
-    };
+    for (const apiBase of sellhubCheckoutEndpoints()) {
+      const result = await createCheckoutAtEndpoint(apiBase, apiKey, body);
+      if (!result.ok) {
+        lastError = result.error;
+        console.error("[SellHub] create checkout failed:", apiBase, result.error);
+        if (result.status === 401) continue;
+        continue;
+      }
 
-    if (!response.ok) {
-      const reason =
-        (typeof data.message === "string" && data.message) ||
-        (typeof data.error === "string" && data.error) ||
-        `HTTP ${response.status}`;
-      console.error("[SellHub] create checkout failed:", reason, data);
-      return { ok: false, error: reason };
+      const sessionId = extractSessionId(result.data);
+      if (!sessionId) {
+        lastError = "SellHub did not return a checkout session";
+        continue;
+      }
+
+      return { ok: true, checkoutUrl: sellhubCheckoutUrl(sessionId), id: sessionId };
     }
 
-    const sessionId = extractSessionId(data);
-    if (!sessionId) {
-      console.error("[SellHub] missing session id:", data);
-      return { ok: false, error: "SellHub did not return a checkout session" };
-    }
-
-    return { ok: true, checkoutUrl: sellhubCheckoutUrl(sessionId), id: sessionId };
+    return { ok: false, error: lastError };
   } catch {
     return { ok: false, error: "Could not reach SellHub" };
   }

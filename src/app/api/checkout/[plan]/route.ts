@@ -53,6 +53,9 @@ export async function GET(
       errorUrl.searchParams.set("reason", "network");
     } else {
       errorUrl.searchParams.set("reason", "api_error");
+      if (result.error) {
+        errorUrl.searchParams.set("detail", result.error.slice(0, 180));
+      }
     }
     return NextResponse.redirect(errorUrl);
   }

@@ -28,10 +28,10 @@ export default async function CheckoutPage({
   searchParams,
 }: {
   params: Promise<{ plan: string }>;
-  searchParams: Promise<{ error?: string; reason?: string }>;
+  searchParams: Promise<{ error?: string; reason?: string; detail?: string }>;
 }) {
   const { plan: planParam } = await params;
-  const { error, reason } = await searchParams;
+  const { error, reason, detail } = await searchParams;
 
   if (!VALID_PLANS.has(planParam as ProPlanId)) {
     redirect("/pricing");
@@ -68,7 +68,9 @@ export default async function CheckoutPage({
         : reason === "network"
           ? "Couldn't reach SellHub. Try again in a minute."
           : reason === "api_error"
-            ? "SellHub returned an error. Check your SellHub store is active and product IDs are correct."
+            ? detail
+              ? `SellHub error: ${detail}`
+              : "SellHub returned an error. Check your SellHub store is active and product IDs are correct."
             : "Payment setup isn't ready yet — please contact support or try again later.";
 
   return (
