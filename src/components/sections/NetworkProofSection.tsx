@@ -19,7 +19,7 @@ export function NetworkProofSection() {
             <span className="gradient-text">Eliminate stutters.</span>
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-reflux-text-soft">
-            Orange panel = default Windows. Blue panel = same session with REFLUX. Stacked top → bottom so you can actually read it.
+            Orange panel = stock Windows. Blue panel = same session with REFLUX. Stacked top → bottom so you can actually read it.
           </p>
         </FlowIn>
 

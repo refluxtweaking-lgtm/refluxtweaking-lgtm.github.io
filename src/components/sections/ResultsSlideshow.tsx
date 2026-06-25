@@ -21,7 +21,7 @@ const results: ResultMetric[] = [
     stroke: "#38bdf8",
     fill: "from-reflux-accent to-reflux-accent-light",
     gain: "0.82",
-    beforeLabel: "Default Windows",
+    beforeLabel: "Stock Windows",
     afterLabel: "With REFLUX PRO",
     beforeStroke: "#f97316",
     afterStroke: "#38bdf8",
