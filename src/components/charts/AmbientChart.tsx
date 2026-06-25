@@ -192,7 +192,7 @@ export function AmbientFpsGraph({ className = "" }: AmbientFpsGraphProps) {
             <ChartPanel
               intro={intro}
               label="Before"
-              sublabel="Stock Windows — stutters & drops"
+              sublabel="Default Windows — stutters & drops"
               value={String(beforeAvg)}
               unit=" FPS avg"
               color={CHART_COLORS.fpsBefore}
@@ -245,7 +245,7 @@ export function LatencyMiniChart() {
             <ChartPanel
               intro={intro}
               label="Before"
-              sublabel="Input delay — stock Windows"
+              sublabel="Input delay — default Windows"
               value={beforeAvg.toFixed(1)}
               unit=" ms"
               color={CHART_COLORS.latBefore}
