@@ -557,37 +557,95 @@ function variantToPlan(variantId: string): PlanName | null {
   return null;
 }
 
-function collectVariantIds(payload: SellHubWebhookPayload): string[] {
-  const ids: string[] = [];
-  const buckets = [payload.items, payload.data?.items, payload.order?.items];
+const VARIANT_ID_KEYS = ["variantId", "variant_id", "productVariantId", "product_variant_id"];
+const EMAIL_KEYS = ["email", "buyerEmail", "buyer_email", "customerEmail", "customer_email"];
 
-  for (const bucket of buckets) {
-    if (!Array.isArray(bucket)) continue;
-    for (const item of bucket) {
-      if (!item || typeof item !== "object") continue;
-      const record = item as Record<string, unknown>;
-      const variant = record.variant as { id?: string } | undefined;
-      if (typeof variant?.id === "string") ids.push(variant.id);
-      if (typeof record.variantId === "string") ids.push(record.variantId);
+function deepFindString(node: unknown, keys: string[]): string {
+  if (!node || typeof node !== "object") return "";
+
+  if (Array.isArray(node)) {
+    for (const entry of node) {
+      const found = deepFindString(entry, keys);
+      if (found) return found;
     }
+    return "";
   }
 
-  return ids;
+  const record = node as Record<string, unknown>;
+  for (const key of keys) {
+    const value = record[key];
+    if (typeof value === "string" && value.trim()) return value.trim();
+  }
+
+  const variant = record.variant;
+  if (variant && typeof variant === "object") {
+    const variantId = (variant as { id?: string }).id;
+    if (typeof variantId === "string" && variantId.trim()) return variantId.trim();
+  }
+
+  for (const value of Object.values(record)) {
+    const found = deepFindString(value, keys);
+    if (found) return found;
+  }
+
+  return "";
+}
+
+function collectVariantIds(payload: SellHubWebhookPayload): string[] {
+  const ids = new Set<string>();
+  const buckets = [
+    payload,
+    payload.data,
+    payload.order,
+    payload.items,
+    payload.data?.items,
+    payload.order?.items,
+    payload.data?.order,
+    (payload.data?.order as { items?: unknown } | undefined)?.items,
+    payload.data?.invoice,
+    (payload.data?.invoice as { items?: unknown } | undefined)?.items,
+  ];
+
+  for (const bucket of buckets) {
+    if (!bucket) continue;
+    const found = deepFindString(bucket, VARIANT_ID_KEYS);
+    if (found) ids.add(found);
+  }
+
+  return [...ids];
+}
+
+function planFromQueryParam(planParam: string | null): PlanName | null {
+  switch (planParam?.trim().toLowerCase()) {
+    case "monthly":
+      return "Monthly";
+    case "yearly":
+      return "Yearly";
+    case "lifetime":
+      return "Lifetime";
+    default:
+      return null;
+  }
+}
+
+/** Resolve plan from webhook URL (?plan=monthly) or SellHub payload variant IDs. */
+export function planFromSellHubWebhook(request: Request, payload: SellHubWebhookPayload): PlanName | null {
+  const url = new URL(request.url);
+  const fromQuery = planFromQueryParam(url.searchParams.get("plan"));
+  if (fromQuery) return fromQuery;
+
+  for (const variantId of collectVariantIds(payload)) {
+    const plan = variantToPlan(variantId);
+    if (plan) return plan;
+  }
+
+  return null;
 }
 
 export function planFromSellHubPayload(payload: SellHubWebhookPayload): PlanName | null {
   for (const variantId of collectVariantIds(payload)) {
     const plan = variantToPlan(variantId);
     if (plan) return plan;
-  }
-
-  const data = payload.data;
-  if (data && typeof data === "object") {
-    const nested = data as SellHubWebhookPayload;
-    for (const variantId of collectVariantIds(nested)) {
-      const plan = variantToPlan(variantId);
-      if (plan) return plan;
-    }
   }
 
   return null;
@@ -601,6 +659,7 @@ function readEmail(payload: SellHubWebhookPayload): string {
     (payload.data?.customer as { email?: string } | undefined)?.email,
     payload.order?.email,
     (payload.order?.customer as { email?: string } | undefined)?.email,
+    deepFindString(payload, EMAIL_KEYS),
   ];
 
   for (const value of candidates) {
@@ -618,8 +677,10 @@ export function orderIdFromSellHubPayload(payload: SellHubWebhookPayload): strin
   const candidates = [
     payload.data?.id,
     payload.data?.orderId,
+    payload.data?.invoiceId,
     payload.order?.id,
     payload.order?.orderId,
+    deepFindString(payload, ["orderId", "order_id", "invoiceId", "invoice_id", "id"]),
   ];
 
   for (const value of candidates) {
@@ -628,6 +689,20 @@ export function orderIdFromSellHubPayload(payload: SellHubWebhookPayload): strin
   }
 
   return "";
+}
+
+const IGNORED_SELLHUB_EVENTS = new Set([
+  "coupon.created",
+  "coupon.updated",
+  "coupon.deleted",
+  "inventory.updated",
+  "product.updated",
+]);
+
+export function shouldProcessSellHubWebhookEvent(event: string | undefined): boolean {
+  if (!event) return true;
+  if (IGNORED_SELLHUB_EVENTS.has(event)) return false;
+  return true;
 }
 
 export function customerLabelFromSellHubPayload(payload: SellHubWebhookPayload): string {

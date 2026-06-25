@@ -6,7 +6,8 @@ import {
   customerLocationFromSellHubPayload,
   orderIdFromSellHubPayload,
   isSellHubWebhookAuthorized,
-  planFromSellHubPayload,
+  planFromSellHubWebhook,
+  shouldProcessSellHubWebhookEvent,
   type SellHubWebhookPayload,
 } from "@/lib/sellhub";
 import { deliverLicense } from "@/lib/license-delivery";
@@ -40,6 +41,7 @@ export async function POST(request: Request) {
   const rawBody = await request.text();
 
   if (!isSellHubWebhookAuthorized(request, rawBody, secret)) {
+    console.warn("[sellhub-webhook] Unauthorized request");
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -47,32 +49,39 @@ export async function POST(request: Request) {
   try {
     payload = JSON.parse(rawBody) as SellHubWebhookPayload;
   } catch {
+    console.warn("[sellhub-webhook] Invalid JSON body");
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
   const event = payload.event ?? (payload.data?.event as string | undefined);
-  if (
-    event &&
-    event !== "order.created" &&
-    event !== "order.completed" &&
-    event !== "order.paid"
-  ) {
+  if (!shouldProcessSellHubWebhookEvent(event)) {
     return NextResponse.json({ ok: true, ignored: event });
   }
 
-  const plan = planFromSellHubPayload(payload);
+  const plan = planFromSellHubWebhook(request, payload);
   if (!plan) {
+    console.error("[sellhub-webhook] Could not determine plan", {
+      event: event ?? null,
+      queryPlan: new URL(request.url).searchParams.get("plan"),
+    });
     return NextResponse.json({ error: "Could not determine plan" }, { status: 422 });
   }
+
+  const buyerEmail = normalizeBuyerEmail(buyerEmailFromSellHubPayload(payload));
+  const orderId = orderIdFromSellHubPayload(payload);
+
+  console.log("[sellhub-webhook] Received order", {
+    event: event ?? null,
+    plan,
+    hasEmail: Boolean(buyerEmail),
+    orderId: orderId || null,
+  });
 
   await addPurchase({
     user: customerLabelFromSellHubPayload(payload),
     plan,
     location: customerLocationFromSellHubPayload(payload),
   });
-
-  const buyerEmail = normalizeBuyerEmail(buyerEmailFromSellHubPayload(payload));
-  const orderId = orderIdFromSellHubPayload(payload);
 
   let licenseIssued = false;
   if (buyerEmail) {
