@@ -268,7 +268,7 @@ export function AppPreviewTweaksPanel() {
           <div>
             <div className="text-sm font-bold text-white">Optimizer</div>
             <div className="text-[11px] text-reflux-muted">
-              {PRODUCT_LIMITS.freeTweaks} free · {PRODUCT_LIMITS.totalTweaksLabel} pro
+              {PRODUCT_LIMITS.freeTweaks} free · {PRODUCT_LIMITS.totalTweaksLabel} Pro
             </div>
           </div>
         </div>

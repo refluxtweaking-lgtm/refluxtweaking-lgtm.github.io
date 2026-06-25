@@ -15,7 +15,7 @@ const steps: {
     icon: "rocket",
     step: "01",
     title: "Download",
-    description: "Get the app, run as admin. That's it — no weird setup.",
+    description: "Get the app, run as Administrator. That's it — no weird setup.",
   },
   {
     icon: "optimizer",

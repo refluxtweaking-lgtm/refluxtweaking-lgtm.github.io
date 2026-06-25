@@ -57,7 +57,7 @@ export function RealResults() {
         <div className="reflux-glow-box mb-6 flex flex-col gap-4 rounded-xl p-5 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="mb-1 text-xs font-bold tracking-[0.2em] text-reflux-accent uppercase">Test System</p>
-            <p className="text-sm text-reflux-text-soft">Same hardware, before &amp; after REFLUX Pro</p>
+            <p className="text-sm text-reflux-text-soft">Same hardware, before &amp; after REFLUX PRO</p>
           </div>
           <div className="flex flex-wrap gap-2">
             {testSpecs.map((spec) => (

@@ -22,7 +22,7 @@ const results: ResultMetric[] = [
     fill: "from-reflux-accent to-reflux-accent-light",
     gain: "0.82",
     beforeLabel: "Stock Windows",
-    afterLabel: "With REFLUX Pro",
+    afterLabel: "With REFLUX PRO",
     beforeStroke: "#f97316",
     afterStroke: "#38bdf8",
     beforeGlow: "rgba(249,115,22,0.55)",

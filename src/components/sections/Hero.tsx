@@ -38,7 +38,7 @@ export function Hero() {
               style={{ animationDelay: "0.1s" }}
             >
               REFLUX tunes your PC for <HeroGameTicker /> and every game you grind — live Intel / AMD /
-              NVIDIA detection, {PRODUCT_LIMITS.totalTweaksLabel} pro tweaks, zero background bloat.
+              NVIDIA detection, {PRODUCT_LIMITS.totalTweaksLabel} Pro tweaks, zero background bloat.
             </p>
 
             <div

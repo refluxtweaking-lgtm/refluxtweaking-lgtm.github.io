@@ -57,7 +57,7 @@ export function WhyReflux() {
               </div>
               <span className="reflux-glow-readable inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold text-reflux-green">
                 <Icon name="check" size={12} />
-                {PRODUCT_LIMITS.totalTweaksLabel} pro tweaks
+                {PRODUCT_LIMITS.totalTweaksLabel} Pro tweaks
               </span>
             </div>
           </div>

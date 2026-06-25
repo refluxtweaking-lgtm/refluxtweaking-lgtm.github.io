@@ -289,7 +289,7 @@ export function ResultMetricChart({ metric, isLive, liveKey, large = false }: Re
           }}
         >
           <div className="text-[10px] font-bold tracking-wider uppercase" style={{ color: metric.afterStroke }}>
-            With REFLUX Pro
+            With REFLUX PRO
           </div>
           <div className="reflux-metric mt-1 text-xl font-extrabold tabular-nums sm:text-2xl" style={{ color: metric.afterStroke }}>
             {metric.after}

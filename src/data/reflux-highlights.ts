@@ -87,7 +87,7 @@ export const refluxFeatures = [
   },
   {
     feature: "Game scanner",
-    detail: "Auto-find Steam & Epic titles with per-game optimize (Pro)",
+    detail: "Auto-find Steam & Epic titles with per-game optimization (Pro)",
   },
   {
     feature: "Smart Optimizer",
@@ -171,7 +171,7 @@ export const appGalleryItems: {
     id: "optimizer",
     label: "Smart Optimizer",
     icon: "bolt",
-    title: "One-click pro suites",
+    title: "One-click Pro suites",
     caption: "Quick command library plus custom PowerShell runner — tuned recommendations for your detected hardware.",
     bullets: [
       "One-click suites for your detected hardware",

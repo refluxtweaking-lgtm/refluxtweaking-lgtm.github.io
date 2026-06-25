@@ -25,7 +25,7 @@ export function BenchmarksSlide({ isActive = false }: SlideProps) {
     <GlowCard centered hover={false} className="slide-tight w-full !p-3 sm:!p-5">
       <SlideHeading icon="chart" title="Live Benchmarks" />
       <p className="mb-2 hidden text-center text-sm text-reflux-muted sm:mb-3 sm:block">
-        Real‑time hardware analysis for the ultimate gaming insight.
+        Real‑time hardware analysis for the ultimate gaming insights.
       </p>
 
       <div className="-mx-0.5 flex gap-2 overflow-x-auto px-0.5 pb-0.5 snap-x snap-mandatory sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-3 sm:overflow-visible sm:pb-0">
