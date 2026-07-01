@@ -9,13 +9,24 @@ import {
 export const PROOF_INTRO_MS = 10000;
 
 const W = 900;
-const PANEL_H = 110;
+const PANEL_H = 128;
+
+/** Trash-tier laptop — integrated graphics, the kind people think can't be saved. */
+export const LOW_END_PROOF_SPECS = {
+  machine: "2018 budget laptop",
+  cpu: "Intel Core i5-8250U",
+  gpu: "Intel UHD Graphics 620",
+  ram: "8 GB DDR4",
+  game: "Fortnite (Low settings)",
+} as const;
 
 const FPS_BEFORE = [
-  22, 28, 19, 26, 21, 30, 18, 25, 23, 29, 20, 27, 24, 31, 19, 26, 22, 28, 21, 25,
-  24, 27, 20, 29, 22, 25, 18, 28, 23, 26, 20, 30, 19, 27, 23, 24, 21, 28, 20, 25,
+  13, 17, 11, 15, 12, 18, 10, 14, 13, 16, 11, 15, 12, 19, 10, 14, 13, 17, 11, 15,
+  14, 16, 11, 18, 12, 15, 10, 17, 13, 16, 11, 18, 12, 15, 13, 17, 11, 16, 12, 14,
 ];
-const FPS_AFTER = Array.from({ length: 40 }, (_, i) => 96 + (i % 3 === 0 ? 2 : i % 3 === 1 ? 1 : 0));
+const FPS_AFTER = Array.from({ length: 40 }, (_, i) => 49 + (i % 4 === 0 ? 4 : i % 4 === 1 ? 2 : i % 4 === 2 ? -1 : 1));
+
+const FPS_CHART_MAX = 64;
 
 const LATENCY_BEFORE = [
   11, 13, 9, 12, 10, 14, 9, 11, 12, 13, 10, 11, 12, 14, 9, 12, 10, 11, 9, 13,
@@ -24,10 +35,10 @@ const LATENCY_BEFORE = [
 const LATENCY_AFTER = Array.from({ length: 40 }, (_, i) => 2 + (i % 4 === 0 ? 0.4 : 0));
 
 const CHART_COLORS = {
-  fpsBefore: { stroke: "#f97316", fill: "rgba(249,115,22,0.18)", glow: "rgba(249,115,22,0.55)" },
-  fpsAfter: { stroke: "#38bdf8", fill: "rgba(56,189,248,0.2)", glow: "rgba(56,189,248,0.55)" },
+  fpsBefore: { stroke: "#ff6b5b", fill: "rgba(255,107,91,0.2)", glow: "rgba(255,107,91,0.55)" },
+  fpsAfter: { stroke: "#5ec4ef", fill: "rgba(94,196,239,0.18)", glow: "rgba(94,196,239,0.55)" },
   latBefore: { stroke: "#c084fc", fill: "rgba(192,132,252,0.16)", glow: "rgba(192,132,252,0.5)" },
-  latAfter: { stroke: "#34d399", fill: "rgba(52,211,153,0.18)", glow: "rgba(52,211,153,0.55)" },
+  latAfter: { stroke: "#5dde86", fill: "rgba(93,222,134,0.18)", glow: "rgba(52,211,153,0.55)" },
 };
 
 function valueToY(value: number, min: number, max: number, height: number, pad = 14) {
@@ -176,8 +187,10 @@ interface AmbientFpsGraphProps {
 export function AmbientFpsGraph({ className = "" }: AmbientFpsGraphProps) {
   const beforeAvg = avg(FPS_BEFORE);
   const afterAvg = avg(FPS_AFTER);
+  const gain = Math.round(afterAvg - beforeAvg);
+  const multiplier = (afterAvg / beforeAvg).toFixed(1);
   const min = 0;
-  const max = 120;
+  const max = FPS_CHART_MAX;
 
   const beforePath = toJaggedPath(FPS_BEFORE, W, PANEL_H, min, max);
   const afterPath = toSmoothPath(FPS_AFTER, W, PANEL_H, min, max);
@@ -185,48 +198,72 @@ export function AmbientFpsGraph({ className = "" }: AmbientFpsGraphProps) {
   const afterArea = toArea(afterPath, W, PANEL_H);
 
   return (
-    <div className={`ambient-graph-wrap proof-chart-stacked relative ${className}`}>
-      <ProofChartStage>
+    <div className={`fps-proof-theater ambient-graph-wrap relative ${className}`}>
+      <div className="fps-proof-spec-band">
+        <span className="fps-proof-spec-tag">{LOW_END_PROOF_SPECS.machine}</span>
+        <span className="fps-proof-spec-item">{LOW_END_PROOF_SPECS.cpu}</span>
+        <span className="fps-proof-spec-sep" aria-hidden="true" />
+        <span className="fps-proof-spec-item">{LOW_END_PROOF_SPECS.gpu}</span>
+        <span className="fps-proof-spec-sep" aria-hidden="true" />
+        <span className="fps-proof-spec-item">{LOW_END_PROOF_SPECS.ram}</span>
+        <span className="fps-proof-spec-sep fps-proof-spec-sep--hide-mobile" aria-hidden="true" />
+        <span className="fps-proof-spec-item fps-proof-spec-item--accent fps-proof-spec-item--hide-mobile">
+          {LOW_END_PROOF_SPECS.game}
+        </span>
+      </div>
+
+      <ProofChartStage className="fps-proof-stage">
         {(intro) => (
-          <div className="flex flex-col gap-3">
+          <div className="fps-proof-compare">
             <ChartPanel
               intro={intro}
-              label="Before"
-              sublabel="Stock Windows — stutters & drops"
+              label="Stock Windows"
+              sublabel="Stutters, frame drops, unplayable 1% lows"
               value={String(beforeAvg)}
-              unit=" FPS avg"
+              unit=" FPS"
               color={CHART_COLORS.fpsBefore}
               path={beforePath}
               areaPath={beforeArea}
               min={min}
               max={max}
-              ticks={["120", "60", "0"]}
+              ticks={["60", "30", "0"]}
+              panelClass="fps-proof-panel fps-proof-panel--before"
             />
+
+            <div className="fps-proof-gain" aria-hidden="true">
+              <div className="fps-proof-gain-ring" />
+              <span className="fps-proof-gain-value reflux-metric">+{gain}</span>
+              <span className="fps-proof-gain-label">FPS gained</span>
+              <span className="fps-proof-gain-mult">{multiplier}× smoother</span>
+            </div>
+
             <ChartPanel
               intro={intro}
               smooth
-              label="After REFLUX"
-              sublabel="Same Fortnite session — tweaks on"
+              label="With REFLUX"
+              sublabel="Same session — tweaks applied"
               value={String(Math.round(afterAvg))}
-              unit=" FPS avg"
+              unit=" FPS"
               color={CHART_COLORS.fpsAfter}
               path={afterPath}
               areaPath={afterArea}
               min={min}
               max={max}
-              ticks={["120", "60", "0"]}
+              ticks={["60", "30", "0"]}
+              panelClass="fps-proof-panel fps-proof-panel--after"
             />
           </div>
         )}
       </ProofChartStage>
-      <p className="proof-chart-caption reflux-glow-readable mt-4 rounded-xl px-4 py-3 text-sm text-reflux-text-soft">
-        RTX 4070 · Ryzen 7 7800X3D · Fortnite creative. Top = before, bottom = after. 10s scan then freeze.
+
+      <p className="fps-proof-footnote">
+        10-second live capture, then frozen. If REFLUX can lift a {LOW_END_PROOF_SPECS.gpu} this much, imagine your rig.
       </p>
     </div>
   );
 }
 
-export function LatencyMiniChart() {
+export function LatencyMiniChart({ className = "" }: { className?: string }) {
   const beforeAvg = avg(LATENCY_BEFORE);
   const afterAvg = avg(LATENCY_AFTER);
   const min = 0;
@@ -238,14 +275,14 @@ export function LatencyMiniChart() {
   const afterArea = toArea(afterPath, W, PANEL_H);
 
   return (
-    <div className="latency-mini-chart proof-chart-stacked">
-      <ProofChartStage>
+    <div className={`latency-mini-chart fps-proof-theater fps-proof-theater--latency ${className}`}>
+      <ProofChartStage className="fps-proof-stage">
         {(intro) => (
-          <div className="flex flex-col gap-3">
+          <div className="fps-proof-compare fps-proof-compare--latency">
             <ChartPanel
               intro={intro}
               label="Before"
-              sublabel="Input delay — stock Windows"
+              sublabel={`${LOW_END_PROOF_SPECS.machine} · stock Windows`}
               value={beforeAvg.toFixed(1)}
               unit=" ms"
               color={CHART_COLORS.latBefore}
@@ -253,14 +290,14 @@ export function LatencyMiniChart() {
               areaPath={beforeArea}
               min={min}
               max={max}
-              ticks={["16ms", "8ms", "0"]}
-              panelClass="proof-chart-panel-lat-before"
+              ticks={["16", "8", "0"]}
+              panelClass="fps-proof-panel fps-proof-panel--lat-before"
             />
             <ChartPanel
               intro={intro}
               smooth
-              label="After REFLUX"
-              sublabel="Valorant range — click-to-shot"
+              label="With REFLUX"
+              sublabel="Same machine — network stack tuned"
               value={afterAvg.toFixed(1)}
               unit=" ms"
               color={CHART_COLORS.latAfter}
@@ -268,15 +305,12 @@ export function LatencyMiniChart() {
               areaPath={afterArea}
               min={min}
               max={max}
-              ticks={["16ms", "8ms", "0"]}
-              panelClass="proof-chart-panel-lat-after"
+              ticks={["16", "8", "0"]}
+              panelClass="fps-proof-panel fps-proof-panel--lat-after"
             />
           </div>
         )}
       </ProofChartStage>
-      <p className="proof-chart-caption reflux-glow-readable mt-4 rounded-xl px-4 py-3 text-sm text-reflux-text-soft">
-        Lower line = faster clicks. Purple = before, green = after.
-      </p>
     </div>
   );
 }
