@@ -7,7 +7,10 @@ import {
   orderIdFromSellHubPayload,
   isSellHubWebhookAuthorized,
   planFromSellHubWebhook,
+  planFromSellHubPayload,
   shouldProcessSellHubWebhookEvent,
+  shouldIssueSellHubLicense,
+  sellhubLicenseIdempotencyKey,
   type SellHubWebhookPayload,
 } from "@/lib/sellhub";
 import { deliverLicense } from "@/lib/license-delivery";
@@ -58,6 +61,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true, ignored: event });
   }
 
+  if (!shouldIssueSellHubLicense(event)) {
+    return NextResponse.json({ ok: true, ignored: event, licenseIssued: false });
+  }
+
   const plan = planFromSellHubWebhook(request, payload);
   if (!plan) {
     console.error("[sellhub-webhook] Could not determine plan", {
@@ -69,6 +76,16 @@ export async function POST(request: Request) {
 
   const buyerEmail = normalizeBuyerEmail(buyerEmailFromSellHubPayload(payload));
   const orderId = orderIdFromSellHubPayload(payload);
+  const deliveryId = sellhubLicenseIdempotencyKey(orderId, rawBody);
+  const planFromPayload = planFromSellHubPayload(payload);
+
+  if (!planFromPayload && !orderId) {
+    console.warn("[sellhub-webhook] No variant or order id in payload — using query plan only", {
+      event: event ?? null,
+      plan,
+      hasEmail: Boolean(buyerEmail),
+    });
+  }
 
   console.log("[sellhub-webhook] Received order", {
     event: event ?? null,
@@ -86,9 +103,9 @@ export async function POST(request: Request) {
   let licenseIssued = false;
   if (buyerEmail) {
     const keyauthPlan = PLAN_TO_KEYAUTH[plan];
-    const claimed = await claimCheckoutSession(orderId, buyerEmail, keyauthPlan);
+    const claimed = await claimCheckoutSession(deliveryId, buyerEmail, keyauthPlan);
     if (!claimed) {
-      console.log(`[sellhub-webhook] Duplicate order ignored: ${orderId}`);
+      console.log(`[sellhub-webhook] Duplicate delivery ignored: ${deliveryId}`);
       return NextResponse.json({
         ok: true,
         orderId: orderId || null,

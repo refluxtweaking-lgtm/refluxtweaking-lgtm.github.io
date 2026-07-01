@@ -1,3 +1,4 @@
+import { createHash } from "crypto";
 import { NextResponse } from "next/server";
 import { addPurchase, type PlanName } from "@/lib/purchase-store";
 import {
@@ -72,13 +73,14 @@ export async function POST(request: Request) {
   );
 
   const sessionId = payload.checkoutSession?.id?.trim() || "";
+  const deliveryId = sessionId || `moneymotion-body:${createHash("sha256").update(rawBody).digest("hex")}`;
 
   let licenseIssued = false;
   if (buyerEmail) {
     const keyauthPlan = PLAN_TO_KEYAUTH[plan];
-    const claimed = await claimCheckoutSession(sessionId, buyerEmail, keyauthPlan);
+    const claimed = await claimCheckoutSession(deliveryId, buyerEmail, keyauthPlan);
     if (!claimed) {
-      console.log(`[webhook] Duplicate checkout session ignored: ${sessionId}`);
+      console.log(`[webhook] Duplicate checkout session ignored: ${deliveryId}`);
       return NextResponse.json({
         ok: true,
         sessionId: sessionId || null,

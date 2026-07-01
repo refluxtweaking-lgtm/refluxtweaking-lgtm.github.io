@@ -1,4 +1,4 @@
-import { createHmac, timingSafeEqual } from "crypto";
+import { createHmac, createHash, timingSafeEqual } from "crypto";
 import type { PlanName } from "@/lib/purchase-store";
 import type { ProPlanId } from "@/data/downloads";
 import { maskPurchaseIdentity } from "@/lib/mask-purchase-identity";
@@ -630,16 +630,11 @@ function planFromQueryParam(planParam: string | null): PlanName | null {
 
 /** Resolve plan from webhook URL (?plan=monthly) or SellHub payload variant IDs. */
 export function planFromSellHubWebhook(request: Request, payload: SellHubWebhookPayload): PlanName | null {
+  const fromPayload = planFromSellHubPayload(payload);
+  if (fromPayload) return fromPayload;
+
   const url = new URL(request.url);
-  const fromQuery = planFromQueryParam(url.searchParams.get("plan"));
-  if (fromQuery) return fromQuery;
-
-  for (const variantId of collectVariantIds(payload)) {
-    const plan = variantToPlan(variantId);
-    if (plan) return plan;
-  }
-
-  return null;
+  return planFromQueryParam(url.searchParams.get("plan"));
 }
 
 export function planFromSellHubPayload(payload: SellHubWebhookPayload): PlanName | null {
@@ -699,10 +694,48 @@ const IGNORED_SELLHUB_EVENTS = new Set([
   "product.updated",
 ]);
 
+/** SellHub events that should never mint a license. */
+const NON_PURCHASE_SELLHUB_EVENTS = new Set([
+  "coupon.created",
+  "coupon.updated",
+  "coupon.deleted",
+  "inventory.updated",
+  "product.updated",
+  "product.created",
+  "customer.created",
+  "customer.updated",
+]);
+
 export function shouldProcessSellHubWebhookEvent(event: string | undefined): boolean {
   if (!event) return true;
   if (IGNORED_SELLHUB_EVENTS.has(event)) return false;
   return true;
+}
+
+/** Only issue licenses for purchase-like events (legacy webhooks may omit event). */
+export function shouldIssueSellHubLicense(event: string | undefined): boolean {
+  if (!event) return true;
+  const normalized = event.trim().toLowerCase();
+  if (NON_PURCHASE_SELLHUB_EVENTS.has(normalized)) return false;
+  if (normalized.includes("coupon") || normalized.includes("inventory")) return false;
+  return true;
+}
+
+/** Stable idempotency key — blocks webhook replay when SellHub omits order id. */
+export function sellhubLicenseIdempotencyKey(orderId: string, rawBody: string): string {
+  const id = orderId.trim();
+  if (id) return id;
+  return `sellhub-body:${createHash("sha256").update(rawBody).digest("hex")}`;
+}
+
+export function hasSellHubWebhookSignature(request: Request, rawBody: string, secret: string): boolean {
+  const signature =
+    request.headers.get("signature") ??
+    request.headers.get("x-signature") ??
+    request.headers.get("x-webhook-signature") ??
+    request.headers.get("x-sellhub-signature") ??
+    "";
+  return Boolean(signature && verifySellHubSignature(rawBody, signature, secret));
 }
 
 export function customerLabelFromSellHubPayload(payload: SellHubWebhookPayload): string {
