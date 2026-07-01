@@ -60,7 +60,7 @@ export function Header() {
             aria-label="REFLUX TWEAKS home"
           >
             <Image
-              src="/web-icon.png"
+              src="/favicon.ico"
               alt=""
               width={40}
               height={40}
