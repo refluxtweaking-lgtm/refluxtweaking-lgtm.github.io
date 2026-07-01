@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import { BrandMark } from "@/components/ui/BrandMark";
 import { GameImage } from "@/components/games/GameImage";
 import { AppIcon, AppIconChip } from "@/components/ui/AppIcon";
 import { LiveMetricBar } from "@/components/ui/LiveMetricBar";
@@ -125,7 +125,7 @@ function AppTitlebar({ hero }: { hero: boolean }) {
   return (
     <div className="app-mock-titlebar flex items-center justify-between px-4 py-2">
       <div className="flex items-center gap-2">
-        <Image src="/favicon.ico" alt="" width={16} height={16} className="rounded-sm" />
+        <BrandMark size={16} className="rounded-sm" />
         <span className="text-[11px] font-bold tracking-wide text-white/90">REFLUX PRO</span>
       </div>
       <div className="flex items-center gap-1.5">
@@ -193,13 +193,7 @@ export function AppPreviewMock({ hero = false }: AppPreviewMockProps) {
         className={`flex items-center justify-between border-b border-[#161616] bg-gradient-to-r from-[#0c0e12] to-[#080a0d] ${hero ? "px-4 py-3" : "px-5 py-3.5"}`}
       >
         <div className="flex items-center gap-2.5 sm:gap-3">
-          <Image
-            src="/favicon.ico"
-            alt=""
-            width={32}
-            height={32}
-            className="rounded-lg shadow-[0_0_14px_rgba(241,91,80,0.55)]"
-          />
+          <BrandMark size={32} className="rounded-lg shadow-[0_0_14px_rgba(241,91,80,0.55)]" />
           <span className="text-base font-extrabold gradient-text sm:text-lg">REFLUX PRO</span>
           <span className="badge-pill badge-live text-[9px] sm:text-[10px]">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-reflux-green shadow-[0_0_6px_rgba(93,222,134,0.8)]" />

@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
+import { BrandMark } from "@/components/ui/BrandMark";
 import { HeaderAuth } from "./HeaderAuth";
 import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
 
@@ -59,13 +59,10 @@ export function Header() {
             onClick={closeMenu}
             aria-label="REFLUX TWEAKS home"
           >
-            <Image
-              src="/favicon.ico"
-              alt=""
-              width={40}
-              height={40}
-              className="header-brand-icon h-9 w-9 shrink-0 rounded-lg sm:h-10 sm:w-10"
+            <BrandMark
+              size={40}
               priority
+              className="header-brand-icon h-9 w-9 shrink-0 rounded-lg sm:h-10 sm:w-10"
             />
             <span className="font-display whitespace-nowrap text-lg font-extrabold tracking-tight sm:text-xl md:text-2xl">
               <span className="gradient-text">REFLUX</span>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { BrandMark } from "@/components/ui/BrandMark";
 import { PRODUCT_LIMITS } from "@/data/tweaks";
 import { legalNav } from "@/data/legal";
 import { Button } from "@/components/ui/Button";
@@ -26,7 +26,7 @@ export function Footer() {
         <div className="mb-12 grid gap-10 md:grid-cols-[1.2fr_1fr] md:items-start">
           <div>
             <div className="mb-4 flex items-center gap-2">
-              <Image src="/favicon.ico" alt="" width={36} height={36} className="rounded-lg" />
+              <BrandMark size={36} className="rounded-lg" />
               <span className="text-2xl font-extrabold gradient-text-static">REFLUX TWEAKS</span>
             </div>
             <p className="max-w-md text-base leading-relaxed text-reflux-muted">

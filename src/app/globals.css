@@ -1257,6 +1257,7 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 .header-brand-icon {
   filter: drop-shadow(0 0 12px rgba(255, 107, 91, 0.55));
   transition: transform 0.25s ease, filter 0.25s ease;
+  image-rendering: auto;
 }
 
 .header-brand:hover .header-brand-icon {
