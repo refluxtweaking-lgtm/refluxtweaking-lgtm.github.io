@@ -41,7 +41,7 @@ const HOME_STATS = [
   { id: "ram" as const, label: "RAM", val: "56%", accent: "#B392F0", name: "32 GB Total", vendor: "ram" as const },
 ];
 
-function PerformanceMonitor() {
+function PerformanceMonitor({ hero = false }: { hero?: boolean }) {
   const [metric, setMetric] = useState<MetricId>("gpu");
   const chart = METRIC_CHARTS[metric];
 
@@ -53,7 +53,7 @@ function PerformanceMonitor() {
   }, []);
 
   return (
-    <div className="app-mock-card p-3 sm:p-3.5">
+    <div className={`app-mock-card app-mock-chart-card p-3 sm:p-3.5 ${hero ? "app-mock-chart-card--hero" : ""}`}>
       <div className="mb-2.5 flex items-center justify-between gap-2">
         <div className="text-xs font-bold text-white sm:text-sm">Performance Monitor</div>
         <div className="flex gap-1">
@@ -62,45 +62,78 @@ function PerformanceMonitor() {
               key={id}
               type="button"
               onClick={() => setMetric(id)}
-              className={`rounded-md px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide transition-colors ${
-                metric === id ? "bg-white/8 text-white" : "text-reflux-muted hover:text-white"
+              className={`app-mock-metric-pill rounded-md px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide ${
+                metric === id ? "active" : ""
               }`}
-              style={metric === id ? { color: METRIC_CHARTS[id].color } : undefined}
+              style={
+                metric === id
+                  ? ({
+                      "--pill-accent": METRIC_CHARTS[id].color,
+                      color: METRIC_CHARTS[id].color,
+                    } as CSSProperties)
+                  : undefined
+              }
             >
               {id}
             </button>
           ))}
         </div>
       </div>
-      <svg viewBox="0 0 240 56" className="h-16 w-full sm:h-[4.5rem]" aria-hidden="true">
-        <defs>
-          <linearGradient id={`chartGrad-${metric}`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={chart.color} stopOpacity="0.35" />
-            <stop offset="100%" stopColor={chart.color} stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        <polygon
-          key={`fill-${metric}`}
-          className="app-mock-chart-fill"
-          fill={`url(#chartGrad-${metric})`}
-          points={chart.fillPoints}
-        />
-        <polyline
-          key={`line-${metric}`}
-          className="app-mock-chart-line"
-          fill="none"
-          stroke={chart.color}
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          points={chart.points}
-        />
-      </svg>
+      <div className="app-mock-chart-canvas">
+        <svg viewBox="0 0 240 56" className="h-16 w-full sm:h-[4.75rem]" aria-hidden="true">
+          <defs>
+            <linearGradient id={`chartGrad-${metric}`} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={chart.color} stopOpacity="0.45" />
+              <stop offset="100%" stopColor={chart.color} stopOpacity="0" />
+            </linearGradient>
+            <filter id={`chartGlow-${metric}`} x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="2.2" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          {[14, 28, 42].map((y) => (
+            <line key={y} x1="0" y1={y} x2="240" y2={y} stroke="rgba(255,255,255,0.04)" strokeWidth="1" />
+          ))}
+          <polygon
+            key={`fill-${metric}`}
+            className="app-mock-chart-fill"
+            fill={`url(#chartGrad-${metric})`}
+            points={chart.fillPoints}
+          />
+          <polyline
+            key={`line-${metric}`}
+            className="app-mock-chart-line"
+            fill="none"
+            stroke={chart.color}
+            strokeWidth="2.25"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            filter={`url(#chartGlow-${metric})`}
+            points={chart.points}
+          />
+          {(() => {
+            const last = chart.points.split(" ").pop()?.split(",") ?? ["240", "10"];
+            return (
+              <circle
+                className="app-mock-chart-dot"
+                cx={last[0]}
+                cy={last[1]}
+                r="3.5"
+                fill={chart.color}
+                style={{ filter: `drop-shadow(0 0 6px ${chart.color})` }}
+              />
+            );
+          })()}
+        </svg>
+      </div>
     </div>
   );
 }
 
-export function AppPreviewHomePanel() {
+export function AppPreviewHomePanel({ hero = false }: { hero?: boolean }) {
   const demoExpires = useMemo(() => Date.now() + 29 * 86400000 + 5 * 3600000, []);
   const [now, setNow] = useState(() => Date.now());
   const [activeStat, setActiveStat] = useState<MetricId>("gpu");
@@ -117,17 +150,23 @@ export function AppPreviewHomePanel() {
   const seconds = Math.floor((remaining % 60000) / 1000);
 
   return (
-    <div className="space-y-3">
-      <div className="app-mock-card app-mock-card-accent p-4 sm:p-4.5">
-        <div className="mb-1 text-[10px] font-bold tracking-[0.2em] text-reflux-accent uppercase">
-          PRO access countdown
+    <div className={`space-y-3 ${hero ? "app-mock-home--hero" : ""}`}>
+      <div className="app-mock-card app-mock-card-accent app-mock-countdown p-4 sm:p-4.5">
+        <div className="app-mock-countdown-glow" aria-hidden="true" />
+        <div className="relative z-1">
+          <div className="mb-1 text-[10px] font-bold tracking-[0.2em] text-reflux-accent uppercase">
+            PRO access countdown
+          </div>
+          <div
+            aria-live="polite"
+            className="app-mock-countdown-time reflux-metric text-3xl font-extrabold tracking-tight sm:text-[2.15rem]"
+          >
+            {days}d {hours}h {minutes}m {seconds}s
+          </div>
+          <p className="mt-2 text-[11px] leading-relaxed text-reflux-muted">
+            Live timer — starts when you activate your license key in the app.
+          </p>
         </div>
-        <div aria-live="polite" className="reflux-metric text-3xl font-extrabold tracking-tight text-white sm:text-[2.15rem]">
-          {days}d {hours}h {minutes}m {seconds}s
-        </div>
-        <p className="mt-2 text-[11px] leading-relaxed text-reflux-muted">
-          Live timer — starts when you activate your license key in the app.
-        </p>
       </div>
 
       <div className="grid grid-cols-3 gap-2">
@@ -136,38 +175,33 @@ export function AppPreviewHomePanel() {
             key={stat.label}
             type="button"
             onClick={() => setActiveStat(stat.id)}
-            className={`app-mock-stat p-2.5 text-left sm:p-3 ${
-              activeStat === stat.id ? "ring-1 ring-inset" : ""
-            }`}
-            style={
-              {
-                "--stat-accent": stat.accent,
-                ...(activeStat === stat.id
-                  ? {
-                      borderColor: `color-mix(in srgb, ${stat.accent} 45%, #161616)`,
-                      boxShadow: `0 0 28px -10px ${stat.accent}`,
-                    }
-                  : {}),
-              } as CSSProperties
-            }
+            className={`app-mock-stat p-2.5 text-left sm:p-3 ${activeStat === stat.id ? "app-mock-stat--active" : ""}`}
+            style={{ "--stat-accent": stat.accent } as CSSProperties}
           >
-            <div className="mb-1.5 flex items-center justify-between gap-1">
-              <span className="text-[9px] font-bold tracking-wider text-reflux-muted uppercase">{stat.label}</span>
-              <VendorLogo vendor={stat.vendor} size={14} className="opacity-80" />
+            <div className="app-mock-stat-glow" aria-hidden="true" />
+            <div className="relative z-1">
+              <div className="mb-1.5 flex items-center justify-between gap-1">
+                <span className="text-[9px] font-bold tracking-wider text-reflux-muted uppercase">{stat.label}</span>
+                <VendorLogo vendor={stat.vendor} size={14} className="opacity-90" />
+              </div>
+              <div className="app-mock-stat-value text-xl font-extrabold tabular-nums sm:text-2xl" style={{ color: stat.accent }}>
+                {stat.val}
+              </div>
+              <div className="mt-1 truncate text-[9px] text-reflux-muted sm:text-[10px]">{stat.name}</div>
             </div>
-            <div className="text-xl font-extrabold tabular-nums sm:text-2xl" style={{ color: stat.accent }}>
-              {stat.val}
-            </div>
-            <div className="mt-1 truncate text-[9px] text-reflux-muted sm:text-[10px]">{stat.name}</div>
           </button>
         ))}
       </div>
 
-      <PerformanceMonitor />
+      <PerformanceMonitor hero={hero} />
 
       <div className="flex flex-wrap gap-2">
-        {["Clean RAM", "Optimize Network", "Apply Tweaks"].map((action) => (
-          <button key={action} type="button" className="app-mock-action px-3 py-1.5 text-[10px] sm:text-[11px]">
+        {["Clean RAM", "Optimize Network", "Apply Tweaks"].map((action, i) => (
+          <button
+            key={action}
+            type="button"
+            className={`app-mock-action px-3 py-1.5 text-[10px] sm:text-[11px] ${i === 2 ? "app-mock-action--primary" : ""}`}
+          >
             {action}
           </button>
         ))}

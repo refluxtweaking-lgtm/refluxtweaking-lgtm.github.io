@@ -22,15 +22,6 @@ const FLOAT_BADGES = [
     sub: "lower ping",
     accent: "text-reflux-calm",
   },
-  {
-    id: "detect",
-    className: "hero-float-badge-c",
-    icon: "gpu" as const,
-    value: "Live",
-    unit: "",
-    sub: "HW detect",
-    accent: "text-reflux-green",
-  },
 ] as const;
 
 export function HeroShowcase() {

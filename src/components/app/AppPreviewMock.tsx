@@ -81,6 +81,8 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
   { id: "system", icon: "system", label: "Sys", view: "tweaks" },
 ];
 
+const SIDEBAR_ITEMS_HERO = SIDEBAR_ITEMS.slice(0, 6);
+
 /** Primary sidebar highlight when a top tab is clicked (avoids duplicate active icons). */
 const DEFAULT_SIDEBAR_FOR_VIEW: Record<AppView, string> = {
   home: "home",
@@ -140,13 +142,17 @@ function AppTitlebar({ hero }: { hero: boolean }) {
 function AppSidebar({
   activeId,
   onSelect,
+  compact = false,
 }: {
   activeId: string;
   onSelect: (item: SidebarItem) => void;
+  compact?: boolean;
 }) {
+  const items = compact ? SIDEBAR_ITEMS_HERO : SIDEBAR_ITEMS;
+
   return (
-    <aside className="app-mock-sidebar hidden w-[72px] shrink-0 flex-col gap-0.5 overflow-y-auto py-2 sm:flex lg:w-[76px]">
-      {SIDEBAR_ITEMS.map((item) => {
+    <aside className={`app-mock-sidebar hidden shrink-0 flex-col gap-0.5 overflow-y-auto py-2 sm:flex ${compact ? "w-[64px] lg:w-[68px]" : "w-[72px] lg:w-[76px]"}`}>
+      {items.map((item) => {
         const isActive = activeId === item.id;
         return (
           <button
@@ -186,44 +192,52 @@ export function AppPreviewMock({ hero = false }: AppPreviewMockProps) {
     : "app-mock-shell max-w-4xl overflow-hidden rounded-2xl";
 
   return (
-    <div ref={ref} className={`mx-auto w-full ${shellClass}`}>
+    <div ref={ref} className={`app-mock-root mx-auto w-full ${hero ? "app-mock--hero" : ""} ${shellClass}`}>
       <AppTitlebar hero={hero} />
 
-      <div
-        className={`flex items-center justify-between border-b border-[#161616] bg-gradient-to-r from-[#0c0e12] to-[#080a0d] ${hero ? "px-4 py-3" : "px-5 py-3.5"}`}
-      >
+      <div className={`app-mock-header flex items-center justify-between border-b ${hero ? "px-4 py-3" : "px-5 py-3.5"}`}>
         <div className="flex items-center gap-2.5 sm:gap-3">
           <BrandMark size={32} className="rounded-lg shadow-[0_0_14px_rgba(241,91,80,0.55)]" />
           <span className="text-base font-extrabold gradient-text sm:text-lg">REFLUX PRO</span>
-          <span className="badge-pill badge-live text-[9px] sm:text-[10px]">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-reflux-green shadow-[0_0_6px_rgba(93,222,134,0.8)]" />
+          <span className="app-mock-ready badge-pill badge-live text-[9px] sm:text-[10px]">
+            <span className="app-mock-ready-dot h-1.5 w-1.5 rounded-full bg-reflux-green" />
             Ready
           </span>
         </div>
         <span className="hidden text-[10px] text-reflux-muted sm:inline">Administrator</span>
       </div>
 
-      <div className="flex min-h-[320px] bg-[#030507] sm:min-h-[380px]">
-        <AppSidebar activeId={activeSidebarId} onSelect={selectSidebar} />
+      <div className="app-mock-body flex min-h-[320px] sm:min-h-[380px]">
+        <AppSidebar activeId={activeSidebarId} onSelect={selectSidebar} compact={hero} />
 
         <div className="min-w-0 flex-1">
-          <div className="flex gap-0.5 overflow-x-auto border-b border-[#161616] bg-[#050608] px-2 sm:px-3">
-            {VIEWS.map((id) => (
-              <button
-                key={id}
-                type="button"
-                onClick={() => selectView(id)}
-                className={`app-mock-tab shrink-0 px-3 py-2.5 text-xs font-semibold sm:px-4 sm:py-3 sm:text-sm ${
-                  view === id ? "active" : ""
-                }`}
-              >
-                {TAB_LABELS[id]}
-              </button>
-            ))}
-          </div>
+          {hero ? (
+            <div className="app-mock-hero-rail flex items-center justify-between gap-3 px-4 py-2.5 sm:px-5">
+              <div className="flex items-center gap-2">
+                <span className="app-mock-hero-rail-pulse" aria-hidden="true" />
+                <span className="text-[10px] font-bold tracking-[0.18em] text-reflux-accent uppercase">Live preview</span>
+              </div>
+              <span className="text-[11px] font-bold text-white/90">Home</span>
+            </div>
+          ) : (
+            <div className="flex gap-0.5 overflow-x-auto border-b border-[#161616] bg-[#050608] px-2 sm:px-3">
+              {VIEWS.map((id) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => selectView(id)}
+                  className={`app-mock-tab shrink-0 px-3 py-2.5 text-xs font-semibold sm:px-4 sm:py-3 sm:text-sm ${
+                    view === id ? "active" : ""
+                  }`}
+                >
+                  {TAB_LABELS[id]}
+                </button>
+              ))}
+            </div>
+          )}
 
-          <div className={`min-h-[260px] bg-gradient-to-b from-[#07090d] to-[#030507] ${hero ? "p-4 sm:p-5" : "p-6"}`}>
-            {view === "home" && <AppPreviewHomePanel />}
+          <div className={`app-mock-stage min-h-[260px] ${hero ? "p-4 sm:p-5" : "p-6"}`}>
+            {view === "home" && <AppPreviewHomePanel hero={hero} />}
             {view === "optimizer" && <AppPreviewOptimizerPanel />}
             {view === "tweaks" && <AppPreviewTweaksPanel />}
 

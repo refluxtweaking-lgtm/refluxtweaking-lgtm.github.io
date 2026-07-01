@@ -2254,15 +2254,46 @@ html.reduce-effects .particles-canvas {
 }
 
 .app-mock-stat {
+  position: relative;
+  overflow: hidden;
   border-radius: 0.75rem;
-  background: #050505;
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.45));
   border: 1px solid #161616;
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
+.app-mock-stat::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--stat-accent, #ff6b5b);
+  opacity: 0.85;
+  box-shadow: 0 0 14px var(--stat-accent, #ff6b5b);
+}
+
+.app-mock-stat-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 70% at 50% 0%, color-mix(in srgb, var(--stat-accent, #ff6b5b) 22%, transparent), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.app-mock-stat--active,
 .app-mock-stat:hover {
-  border-color: color-mix(in srgb, var(--stat-accent) 40%, #161616);
-  box-shadow: 0 0 24px -10px color-mix(in srgb, var(--stat-accent) 55%, transparent);
+  border-color: color-mix(in srgb, var(--stat-accent) 42%, #161616);
+  box-shadow:
+    0 0 28px -10px color-mix(in srgb, var(--stat-accent) 60%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--stat-accent) 18%, transparent);
+}
+
+.app-mock-stat--active .app-mock-stat-glow,
+.app-mock-stat:hover .app-mock-stat-glow {
+  opacity: 1;
 }
 
 .app-mock-chart-line {
@@ -2308,6 +2339,117 @@ html.reduce-effects .particles-canvas {
   background: rgba(241, 91, 80, 0.12);
   box-shadow: 0 0 20px -8px rgba(241, 91, 80, 0.5);
   transform: translateY(-1px);
+}
+
+/* Hero homepage mock — richer color, fewer chrome tabs */
+.app-mock--hero .app-mock-header {
+  border-color: rgba(255, 107, 91, 0.14);
+  background:
+    linear-gradient(90deg, rgba(255, 107, 91, 0.08), rgba(8, 10, 14, 0.95) 38%, rgba(94, 196, 239, 0.04)),
+    #080a0e;
+}
+
+.app-mock--hero .app-mock-body {
+  background:
+    radial-gradient(ellipse 90% 55% at 50% 0%, rgba(255, 107, 91, 0.1), transparent 58%),
+    #030507;
+}
+
+.app-mock--hero .app-mock-stage {
+  background:
+    radial-gradient(ellipse 70% 45% at 80% 20%, rgba(94, 196, 239, 0.05), transparent 55%),
+    linear-gradient(180deg, rgba(8, 10, 14, 0.35) 0%, rgba(3, 5, 7, 0.2) 100%);
+}
+
+.app-mock-ready-dot {
+  animation: heroLivePulse 2s ease-in-out infinite;
+  box-shadow: 0 0 6px rgba(93, 222, 134, 0.8);
+}
+
+.app-mock-hero-rail {
+  border-bottom: 1px solid rgba(255, 107, 91, 0.12);
+  background: linear-gradient(90deg, rgba(255, 107, 91, 0.06), transparent 55%);
+}
+
+.app-mock-hero-rail-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff6b5b;
+  box-shadow: 0 0 10px rgba(255, 107, 91, 0.85);
+  animation: heroLivePulse 2s ease-in-out infinite;
+}
+
+.app-mock-countdown {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(255, 107, 91, 0.14), rgba(255, 60, 50, 0.04) 45%, rgba(0, 0, 0, 0.55)),
+    #06080c;
+}
+
+.app-mock-countdown-glow {
+  position: absolute;
+  inset: -30% -10%;
+  background: radial-gradient(circle at 30% 20%, rgba(255, 107, 91, 0.35), transparent 62%);
+  pointer-events: none;
+}
+
+.app-mock-countdown-time {
+  background: linear-gradient(120deg, #ffffff, #ffd4cc 45%, #ff9588);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: #fff;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 18px rgba(255, 107, 91, 0.35));
+}
+
+.app-mock-chart-card--hero {
+  border-color: rgba(255, 107, 91, 0.22);
+  background:
+    linear-gradient(180deg, rgba(255, 107, 91, 0.06), rgba(0, 0, 0, 0.35)),
+    #050608;
+}
+
+.app-mock-chart-canvas {
+  border-radius: 0.65rem;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.15)),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0, rgba(255, 255, 255, 0.02) 1px, transparent 1px, transparent 24px);
+  padding: 0.35rem 0.25rem 0.15rem;
+}
+
+.app-mock-metric-pill {
+  color: #8b929e;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.app-mock-metric-pill.active {
+  background: color-mix(in srgb, var(--pill-accent, #ff6b5b) 14%, transparent);
+  box-shadow: 0 0 14px -4px color-mix(in srgb, var(--pill-accent, #ff6b5b) 55%, transparent);
+}
+
+.app-mock-chart-dot {
+  animation: heroLivePulse 2.4s ease-in-out infinite;
+}
+
+.app-mock-action--primary {
+  border-color: rgba(255, 107, 91, 0.55);
+  background: linear-gradient(135deg, rgba(255, 107, 91, 0.28), rgba(255, 60, 50, 0.12));
+  color: #fff;
+  box-shadow: 0 0 22px -6px rgba(255, 107, 91, 0.55);
+}
+
+.app-mock-action--primary:hover {
+  background: linear-gradient(135deg, rgba(255, 107, 91, 0.42), rgba(255, 60, 50, 0.2));
+  box-shadow: 0 0 28px -4px rgba(255, 107, 91, 0.65);
+}
+
+.app-mock--hero .app-mock-nav-item.active {
+  background: linear-gradient(135deg, rgba(255, 107, 91, 0.18), rgba(255, 107, 91, 0.06));
+  box-shadow:
+    inset 0 0 20px -6px rgba(255, 107, 91, 0.45),
+    0 0 16px -8px rgba(255, 107, 91, 0.35);
 }
 
 /* Clickable / hard-to-see — glow outline only where it helps */
