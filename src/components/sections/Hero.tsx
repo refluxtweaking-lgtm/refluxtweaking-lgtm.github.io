@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import { AppIcon } from "@/components/ui/AppIcon";
+import { HeroProIcon } from "@/components/ui/HeroProIcon";
 import { VendorLogo } from "@/components/ui/VendorLogo";
 import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
 import { PRODUCT_LIMITS } from "@/data/tweaks";
@@ -37,8 +38,8 @@ export function Hero() {
                 </span>
               </div>
               <div className="hero-signal hero-signal--pro">
-                <span className="hero-signal-icon-wrap" aria-hidden="true">
-                  <AppIcon name="sparkle" size={15} glow={false} className="!text-reflux-green" />
+                <span className="hero-signal-icon-wrap hero-signal-icon-wrap--pro" aria-hidden="true">
+                  <HeroProIcon size={16} />
                 </span>
                 <span className="hero-signal-copy">
                   <span className="hero-signal-kicker">Full arsenal</span>
@@ -74,7 +75,6 @@ export function Hero() {
                 <VendorLogo vendor="nvidia" size={30} className="hero-vendor-logo" />
                 <VendorLogo vendor="amd" size={30} className="hero-vendor-logo" />
                 <VendorLogo vendor="intel" size={30} className="hero-vendor-logo" />
-                <VendorLogo vendor="ram" size={30} className="hero-vendor-logo" />
               </div>
             </div>
 
