@@ -151,7 +151,7 @@ export function ResultMetricChart({ metric, isLive, liveKey, large = false }: Re
               className="text-[10px] font-bold uppercase tracking-wider"
               style={{ color: metric.beforeStroke }}
             >
-              Before — {metric.beforeLabel}
+              Before: {metric.beforeLabel}
             </span>
             <span className="reflux-metric text-sm font-bold tabular-nums" style={{ color: metric.beforeStroke }}>
               {beforeReadout}
@@ -207,7 +207,7 @@ export function ResultMetricChart({ metric, isLive, liveKey, large = false }: Re
               className="text-[10px] font-bold uppercase tracking-wider"
               style={{ color: metric.afterStroke }}
             >
-              After — {metric.afterLabel}
+              After: {metric.afterLabel}
             </span>
             <span className="reflux-metric text-sm font-bold tabular-nums" style={{ color: metric.afterStroke }}>
               {afterReadout}

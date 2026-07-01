@@ -37,7 +37,7 @@ export function Hero() {
               className="animate-fade-in-up mx-auto mb-8 max-w-lg text-base leading-relaxed text-reflux-text-soft md:text-lg lg:mx-0"
               style={{ animationDelay: "0.1s" }}
             >
-              REFLUX tunes your PC for <HeroGameTicker /> and every game you grind — live Intel / AMD /
+              REFLUX tunes your PC for <HeroGameTicker /> and every game you grind. Live Intel / AMD /
               NVIDIA detection, {PRODUCT_LIMITS.totalTweaksLabel} Pro tweaks, zero background bloat.
             </p>
 

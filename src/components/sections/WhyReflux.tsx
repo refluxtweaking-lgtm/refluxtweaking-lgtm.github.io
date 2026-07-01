@@ -24,7 +24,7 @@ export function WhyReflux() {
         eyebrow="Still deciding?"
         title={
           <>
-            Four doubts. <span className="gradient-text">Four shutdowns.</span>
+            Four doubts. <span className="headline-accent">Four shutdowns.</span>
           </>
         }
         subtitle="We designed REFLUX around the questions people actually ask before installing a PC tweaker."

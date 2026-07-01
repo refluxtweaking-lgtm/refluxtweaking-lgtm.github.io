@@ -323,6 +323,10 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
   background-clip: text;
 }
 
+.headline-accent {
+  color: #ff6b5b;
+}
+
 .text-gradient-discord {
   background: linear-gradient(135deg, #7289da, #5865f2);
   -webkit-background-clip: text;
@@ -1485,8 +1489,10 @@ html.reduce-effects .particles-canvas {
 .pro-features-grid {
   display: grid;
   grid-template-columns: 1fr;
-  background: transparent;
-  border: none;
+  overflow: hidden;
+  border-radius: 1.15rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(5, 6, 8, 0.65);
 }
 
 @media (min-width: 768px) {
@@ -1496,8 +1502,23 @@ html.reduce-effects .particles-canvas {
 }
 
 .pro-feature-cell {
-  transition: background-color 0.25s ease;
+  transition: background-color 0.2s ease;
   border: none !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+@media (min-width: 768px) {
+  .pro-feature-cell:nth-child(odd) {
+    border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
+  }
+
+  .pro-feature-cell:nth-last-child(-n + 2) {
+    border-bottom: none !important;
+  }
+}
+
+.pro-feature-cell:last-child {
+  border-bottom: none !important;
 }
 
 .pro-feature-cell:hover {
@@ -1660,19 +1681,17 @@ html.reduce-effects .particles-canvas {
 .reflux-glow-box {
   position: relative;
   border-radius: 1.15rem;
-  background: rgba(255, 77, 61, 0.05);
-  border: 1px solid rgba(255, 77, 61, 0.2);
-  box-shadow:
-    0 0 36px -14px rgba(255, 77, 61, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.07);
-  backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 40px -28px rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
 }
 
 .reflux-glow-box-sm {
   border-radius: 0.85rem;
-  background: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 77, 61, 0.14);
-  box-shadow: 0 0 24px -16px rgba(255, 77, 61, 0.35);
+  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.07);
+  box-shadow: none;
 }
 
 .reflux-glow-box-verified {

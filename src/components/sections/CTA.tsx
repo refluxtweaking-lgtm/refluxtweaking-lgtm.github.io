@@ -17,7 +17,7 @@ export function CTA() {
           Still on the fence? <span className="gradient-text-static">Try it free.</span>
         </h2>
         <p className="mx-auto mb-8 max-w-md text-base leading-relaxed text-reflux-muted">
-          {PRODUCT_LIMITS.freeTweaks} real tweaks, full desktop app, no card. If it doesn&apos;t feel faster, delete it — restore points mean you&apos;re never stuck.
+          {PRODUCT_LIMITS.freeTweaks} real tweaks, full desktop app, no card. If it doesn&apos;t feel faster, delete it. Restore points mean you&apos;re never stuck.
         </p>
 
         <div className="mb-8 flex flex-wrap justify-center gap-2">

@@ -13,7 +13,7 @@ export function TrustIndicators() {
         eyebrow="Your doubts, answered"
         title={
           <>
-            Every worry has a <span className="gradient-text">real answer.</span>
+            Every worry has a <span className="headline-accent">real answer.</span>
           </>
         }
         subtitle="Skeptical? Good. Here's the proof behind each thing people ask before they download."
@@ -34,7 +34,7 @@ export function TrustIndicators() {
                   <div className="font-semibold text-white">&ldquo;{item.objection}&rdquo;</div>
                 </div>
               </div>
-              <div className="mt-auto reflux-glow-box reflux-glow-box-sm px-3 py-2.5">
+              <div className="mt-auto border-t border-white/[0.06] pt-3">
                 <div className="text-[10px] font-bold tracking-wider text-reflux-accent uppercase">Proof</div>
                 <div className="text-sm font-semibold text-white/90">{item.proof}</div>
               </div>

@@ -47,14 +47,14 @@ export function RealResults() {
         eyebrow="Does it actually work?"
         title={
           <>
-            Measured gains. <span className="gradient-text">Not simulated.</span>
+            Measured gains. <span className="headline-accent">Not simulated.</span>
           </>
         }
-        subtitle="Live 5-second captures on the same rig — before on top, after on bottom."
+        subtitle="Live 5-second captures on the same rig. Before on top, after on bottom."
       />
 
       <GlowCard className="mx-auto max-w-4xl overflow-hidden" hover={false}>
-        <div className="reflux-glow-box mb-6 flex flex-col gap-4 rounded-xl p-5 md:flex-row md:items-center md:justify-between">
+        <div className="mb-6 flex flex-col gap-4 border-b border-white/[0.06] pb-6 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="mb-1 text-xs font-bold tracking-[0.2em] text-reflux-accent uppercase">Test System</p>
             <p className="text-sm text-reflux-text-soft">Same hardware, before &amp; after REFLUX PRO</p>

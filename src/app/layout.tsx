@@ -26,7 +26,7 @@ const refluxMetric = JetBrains_Mono({
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.refluxtweaks.com";
 const SITE_TITLE = "REFLUX TWEAKS – Windows Gaming Optimizer";
 const SITE_DESCRIPTION =
-  "Windows gaming optimizer built for your specs. Detects your CPU and GPU, applies proven tweaks, and keeps every change reversible — free desktop app.";
+  "Windows gaming optimizer built for your specs. Detects your CPU and GPU, applies proven tweaks, and keeps every change reversible. Free desktop app.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

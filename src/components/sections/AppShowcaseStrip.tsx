@@ -12,7 +12,7 @@ const showcaseCards = [
   {
     id: "tweaks",
     title: "System Tweaks",
-    desc: "Fine-tune Windows from core settings — each toggle explains what it does.",
+    desc: "Fine-tune Windows from core settings. Each toggle explains what it does.",
     ui: "tweak",
   },
   {
@@ -24,13 +24,13 @@ const showcaseCards = [
   {
     id: "games",
     title: "Game Optimizations",
-    desc: "Auto-find Steam & Epic titles — hit Optimize on your main games.",
+    desc: "Auto-find Steam & Epic titles. Hit Optimize on your main games.",
     ui: "games",
   },
   {
     id: "cleanup",
     title: "System Cleaner",
-    desc: "Clear temp, cache, and junk — watch the recoverable space bar fill up.",
+    desc: "Clear temp, cache, and junk. Watch the recoverable space bar fill up.",
     ui: "cleanup",
   },
 ] as const;
@@ -71,14 +71,14 @@ function ShowcaseUi({
       { label: "Processor detected", value: "AMD Ryzen 7 7800X3D", icon: "cpu" as const },
     ];
     return (
-      <div className="showcase-ui-panel mx-auto w-[90%] space-y-2">
+      <div className="showcase-ui-panel mx-auto w-[90%] divide-y divide-white/[0.06] overflow-hidden rounded-xl border border-white/[0.08] bg-[#050608]">
         {items.map((item) => (
-          <div key={item.label} className="reflux-glow-box reflux-glow-box-sm rounded-lg px-2.5 py-2">
+          <div key={item.label} className="px-3 py-2.5">
             <div className="mb-1 flex items-center gap-1.5 text-[9px] font-semibold text-reflux-green">
               <span className="text-reflux-green">✓</span>
               {item.label}
             </div>
-            <div className="flex items-center gap-1.5 rounded-md reflux-glow-readable bg-black/30 px-2 py-1.5">
+            <div className="flex items-center gap-1.5 px-0.5 py-0.5">
               <AppIcon name={item.icon} size={12} glow={false} />
               <span className="truncate text-[10px] font-medium text-white">{item.value}</span>
             </div>
@@ -95,11 +95,11 @@ function ShowcaseUi({
       { name: "CS2", status: "idle" as const },
     ];
     return (
-      <div className="showcase-ui-panel mx-auto w-[92%] space-y-1.5">
+      <div className="showcase-ui-panel mx-auto w-[92%] divide-y divide-white/[0.06] overflow-hidden rounded-xl border border-white/[0.08] bg-[#050608]">
         {games.map((g) => (
           <div
             key={g.name}
-            className="reflux-glow-box reflux-glow-box-sm flex items-center justify-between rounded-lg px-2.5 py-2"
+            className="flex items-center justify-between px-2.5 py-2"
           >
             <div className="flex items-center gap-2">
               <AppIcon name="games" size={14} glow={false} />
@@ -123,9 +123,9 @@ function ShowcaseUi({
   }
 
   return (
-    <div className="showcase-ui-panel mx-auto w-[90%] space-y-2">
+    <div className="showcase-ui-panel mx-auto w-[90%] divide-y divide-white/[0.06] overflow-hidden rounded-xl border border-white/[0.08] bg-[#050608] px-1 py-1">
       {["Clear Temp Files", "Clear Game Cache", "Clear Installer Cache"].map((task) => (
-        <div key={task} className="reflux-glow-box reflux-glow-box-sm flex items-center gap-2 rounded-lg px-2.5 py-2">
+        <div key={task} className="flex items-center gap-2 px-2.5 py-2">
           <AppIcon name="cleanup" size={12} glow={false} />
           <span className="text-[10px] font-medium text-white/90">{task}</span>
         </div>
@@ -153,10 +153,10 @@ export function AppShowcaseStrip() {
         <FlowIn>
           <h2 className="text-3xl font-extrabold tracking-tight text-white md:text-4xl">
             Optimize your system{" "}
-            <span className="gradient-text">for free.</span>
+            <span className="headline-accent">for free.</span>
           </h2>
           <p className="mt-2 max-w-md text-sm text-reflux-muted md:text-base">
-            {PRODUCT_LIMITS.freeTweaks} tweaks in the full desktop app — real UI, not a landing-page mockup.
+            {PRODUCT_LIMITS.freeTweaks} tweaks in the full desktop app. Real UI, not a landing-page mockup.
           </p>
         </FlowIn>
         <FlowIn delay={80}>
