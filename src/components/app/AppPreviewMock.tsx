@@ -194,7 +194,7 @@ export function AppPreviewMock({ hero = false }: AppPreviewMockProps) {
       >
         <div className="flex items-center gap-2.5 sm:gap-3">
           <Image
-            src="/favicon.ico"
+            src="/web-icon.png"
             alt=""
             width={32}
             height={32}

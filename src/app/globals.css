@@ -163,6 +163,30 @@ h3,
   to { transform: translateX(-50%); }
 }
 
+@keyframes heroBeamSweep {
+  0%, 100% { opacity: 0.45; transform: skewX(-12deg) translateX(-4%); }
+  50% { opacity: 0.95; transform: skewX(-12deg) translateX(6%); }
+}
+
+@keyframes heroTickerFlip {
+  0% { transform: rotateX(0deg); opacity: 1; }
+  45% { transform: rotateX(-90deg); opacity: 0; }
+  55% { transform: rotateX(90deg); opacity: 0; }
+  100% { transform: rotateX(0deg); opacity: 1; }
+}
+
+@keyframes heroOrbitSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes heroScanLine {
+  0% { top: -2%; opacity: 0; }
+  8% { opacity: 0.35; }
+  92% { opacity: 0.35; }
+  100% { top: 102%; opacity: 0; }
+}
+
 @keyframes meshShift {
   0%, 100% { opacity: 0.45; transform: scale(1) translateY(0); }
   50% { opacity: 0.65; transform: scale(1.03) translateY(-12px); }
@@ -516,7 +540,21 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 }
 
 .hero-beam {
-  display: none;
+  top: -10%;
+  left: -20%;
+  width: 70%;
+  height: 120%;
+  background: linear-gradient(
+    118deg,
+    transparent 0%,
+    rgba(255, 107, 91, 0.06) 38%,
+    rgba(255, 149, 136, 0.14) 50%,
+    rgba(255, 107, 91, 0.05) 62%,
+    transparent 100%
+  );
+  transform: skewX(-12deg);
+  animation: heroBeamSweep 14s ease-in-out infinite;
+  opacity: 0.9;
 }
 
 .ambient-orb {
@@ -632,10 +670,6 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
   box-shadow: 0 12px 32px -12px rgba(255, 107, 91, 0.45);
 }
 
-.hero-beam {
-  display: none;
-}
-
 /* ── Epic hero (above the fold) ── */
 .hero-stage {
   min-height: min(90vh, 900px);
@@ -651,12 +685,18 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
   top: -15%;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 68% 58% at 0% 0%, rgba(255, 107, 91, 0.12) 0%, transparent 72%),
-    radial-gradient(ellipse 68% 58% at 100% 0%, rgba(255, 107, 91, 0.12) 0%, transparent 72%);
+    radial-gradient(ellipse 72% 62% at 0% 0%, rgba(255, 107, 91, 0.16) 0%, transparent 72%),
+    radial-gradient(ellipse 72% 62% at 100% 0%, rgba(255, 107, 91, 0.16) 0%, transparent 72%),
+    radial-gradient(ellipse 55% 40% at 70% 55%, rgba(94, 196, 239, 0.06) 0%, transparent 70%);
 }
 
 .hero-grid-fade {
-  display: none;
+  background-image:
+    linear-gradient(rgba(255, 77, 61, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 77, 61, 0.045) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 30%, black 10%, transparent 78%);
+  opacity: 0.55;
 }
 
 .hero-headline {
@@ -692,10 +732,83 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 }
 
 .hero-game-ticker {
-  color: #ff6b5b;
-  font-weight: 700;
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  min-width: 7.5rem;
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   background: none;
   -webkit-text-fill-color: currentColor;
+  text-align: center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.hero-game-ticker--flip {
+  animation: heroTickerFlip 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hero-game-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0.2rem;
+  padding: 0.28rem 0.85rem 0.28rem 0.55rem;
+  vertical-align: middle;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 107, 91, 0.45);
+  background:
+    linear-gradient(135deg, rgba(255, 107, 91, 0.22), rgba(255, 60, 50, 0.08)),
+    rgba(8, 8, 10, 0.85);
+  box-shadow:
+    0 0 24px rgba(255, 107, 91, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  perspective: 400px;
+}
+
+.hero-game-pill-glow {
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(120deg, rgba(255, 107, 91, 0.55), transparent 55%, rgba(255, 149, 136, 0.35));
+  opacity: 0.55;
+  filter: blur(6px);
+  z-index: 0;
+}
+
+.hero-game-pill-icon {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 999px;
+  background: rgba(255, 107, 91, 0.25);
+  color: #ff9588;
+  box-shadow: 0 0 10px rgba(255, 107, 91, 0.45);
+}
+
+.hero-tune-copy {
+  line-height: 1.75;
+}
+
+.hero-vendor-row .hero-vendor-logo {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.hero-vendor-row .hero-vendor-logo:hover {
+  transform: translateY(-2px) scale(1.06);
+  box-shadow: 0 8px 20px -8px rgba(255, 107, 91, 0.55);
+}
+
+.hero-chip-muted {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .hero-live-dot {
@@ -720,18 +833,173 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 }
 
 .hero-proof-card {
-  transition: transform 0.25s ease;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01)),
+    rgba(6, 8, 12, 0.72) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .hero-proof-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  border-color: rgba(255, 107, 91, 0.35) !important;
+  box-shadow: 0 16px 40px -18px rgba(255, 107, 91, 0.45);
 }
 
 .hero-device-shell {
-  background: linear-gradient(145deg, rgba(255, 107, 91, 0.55), rgba(255, 60, 50, 0.25), rgba(255, 149, 136, 0.2));
+  background: linear-gradient(145deg, rgba(255, 107, 91, 0.65), rgba(255, 60, 50, 0.3), rgba(255, 149, 136, 0.25));
   background-size: 200% 200%;
   animation: borderFlow 10s ease infinite;
-  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.5), 0 0 60px -20px rgba(255, 107, 91, 0.45);
+  box-shadow:
+    0 32px 90px rgba(0, 0, 0, 0.55),
+    0 0 80px -16px rgba(255, 107, 91, 0.55),
+    0 0 0 1px rgba(255, 107, 91, 0.15);
+}
+
+.hero-device-scan {
+  position: relative;
+}
+
+.hero-device-scan::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 107, 91, 0.65), transparent);
+  animation: heroScanLine 6s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.hero-device-reflection {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: -8px;
+  height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(255, 107, 91, 0.35), transparent 72%);
+  filter: blur(16px);
+  opacity: 0.75;
+}
+
+.hero-orbit-ring {
+  border: 1px solid rgba(255, 107, 91, 0.12);
+  border-radius: 50%;
+  box-shadow:
+    0 0 40px rgba(255, 107, 91, 0.08),
+    inset 0 0 40px rgba(255, 107, 91, 0.04);
+  animation: heroOrbitSpin 48s linear infinite;
+}
+
+.hero-float-badge {
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 0.8rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02)),
+    rgba(6, 8, 12, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.45),
+    0 0 24px -8px rgba(255, 107, 91, 0.35);
+}
+
+.hero-float-badge-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 10px;
+  background: rgba(255, 107, 91, 0.14);
+  border: 1px solid rgba(255, 107, 91, 0.28);
+}
+
+.hero-float-badge-value {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #fff;
+}
+
+.hero-float-badge-sub {
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #8a939f;
+}
+
+.hero-game-marquee {
+  position: relative;
+  padding: 1.1rem 0 0.25rem;
+}
+
+.hero-game-marquee-edge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 72px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hero-game-marquee-edge--left {
+  left: 0;
+  background: linear-gradient(90deg, #000 15%, transparent);
+}
+
+.hero-game-marquee-edge--right {
+  right: 0;
+  background: linear-gradient(270deg, #000 15%, transparent);
+}
+
+.hero-game-marquee-track {
+  animation-duration: 42s;
+}
+
+.hero-game-capsule {
+  position: relative;
+  width: 168px;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #07090d;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero-game-capsule:hover {
+  transform: translateY(-4px) scale(1.03);
+  border-color: rgba(255, 107, 91, 0.45);
+  box-shadow: 0 16px 36px -10px rgba(255, 107, 91, 0.45);
+}
+
+.hero-game-capsule-img {
+  display: block;
+  width: 100%;
+  height: 78px;
+  object-fit: cover;
+}
+
+.hero-game-capsule-label {
+  display: block;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #e8edf2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: linear-gradient(180deg, rgba(7, 9, 13, 0.2), rgba(7, 9, 13, 0.95));
 }
 
 .hero-device-stage {
@@ -750,20 +1018,20 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 }
 
 .hero-float-badge-a {
-  top: 0;
-  left: 0;
+  top: -6px;
+  left: -4px;
   animation: heroFloatA 5s ease-in-out infinite;
 }
 
 .hero-float-badge-b {
-  top: 38%;
-  right: 0;
+  top: 34%;
+  right: -10px;
   animation: heroFloatB 6s ease-in-out infinite;
 }
 
 .hero-float-badge-c {
-  bottom: 26%;
-  left: 2%;
+  bottom: 18%;
+  left: -6px;
   animation: heroFloatC 4.5s ease-in-out infinite;
 }
 
@@ -1201,6 +1469,8 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
   .ambient-orb,
   .ambient-mesh,
   .hero-beam,
+  .hero-orbit-ring,
+  .hero-game-marquee-track,
   .hero-gradient-shimmer,
   .hero-live-dot,
   .hero-float-badge-a,
@@ -1270,6 +1540,8 @@ html.reduce-effects .hero-glow,
 html.reduce-effects .ambient-orb,
 html.reduce-effects .ambient-mesh,
 html.reduce-effects .hero-beam,
+html.reduce-effects .hero-orbit-ring,
+html.reduce-effects .hero-game-marquee-track,
 html.reduce-effects .hero-gradient-shimmer,
 html.reduce-effects .hero-live-dot,
 html.reduce-effects .hero-float-badge-a,
