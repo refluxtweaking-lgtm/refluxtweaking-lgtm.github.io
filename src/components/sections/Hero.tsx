@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import { AppIcon } from "@/components/ui/AppIcon";
-import { HeroProIcon } from "@/components/ui/HeroProIcon";
+import { HeroLaunchRail } from "./HeroLaunchRail";
 import { VendorLogo } from "@/components/ui/VendorLogo";
 import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
 import { PRODUCT_LIMITS } from "@/data/tweaks";
@@ -24,31 +24,8 @@ export function Hero() {
       <div className="relative w-full">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-14">
           <div className="overflow-visible text-center lg:text-left">
-            <div
-              className="hero-signal-row animate-fade-in-up mb-6 flex flex-wrap items-stretch justify-center gap-2.5 lg:justify-start"
-              style={{ animationDelay: "0.02s" }}
-            >
-              <div className="hero-signal hero-signal--free">
-                <span className="hero-signal-icon-wrap" aria-hidden="true">
-                  <AppIcon name="rocket" size={15} glow={false} className="!text-reflux-accent" />
-                </span>
-                <span className="hero-signal-copy">
-                  <span className="hero-signal-kicker">No card required</span>
-                  <span className="hero-signal-value">Free download</span>
-                </span>
-              </div>
-              <div className="hero-signal hero-signal--pro">
-                <span className="hero-signal-icon-wrap hero-signal-icon-wrap--pro" aria-hidden="true">
-                  <HeroProIcon size={16} />
-                </span>
-                <span className="hero-signal-copy">
-                  <span className="hero-signal-kicker">Full arsenal</span>
-                  <span className="hero-signal-value">
-                    <span className="hero-signal-metric reflux-metric">{PRODUCT_LIMITS.totalTweaksLabel}</span>
-                    <span className="hero-signal-value-sub">Pro tweaks</span>
-                  </span>
-                </span>
-              </div>
+            <div className="animate-fade-in-up mb-6 flex justify-center lg:justify-start" style={{ animationDelay: "0.02s" }}>
+              <HeroLaunchRail />
             </div>
 
             <h1 className="hero-headline animate-fade-in-up mb-5 font-extrabold tracking-tight" style={{ animationDelay: "0.05s" }}>
