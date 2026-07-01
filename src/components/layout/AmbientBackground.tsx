@@ -1,20 +1,19 @@
 export function AmbientBackground() {
   return (
-    <div className="pointer-events-none fixed inset-0 -z-15 overflow-visible" aria-hidden="true">
+    <div className="pointer-events-none fixed inset-0 -z-15 overflow-hidden" aria-hidden="true">
+      <div className="ambient-horizon-wash" />
       <div className="top-glow-sides" />
+      <div className="ambient-orb ambient-orb-center absolute -top-56 left-1/2 h-[min(72vh,680px)] w-[min(140vw,1600px)] -translate-x-1/2 rounded-full bg-reflux-accent/12 blur-[180px]" />
       <div
-        className="ambient-orb hero-glow absolute -top-40 -left-[14%] h-[520px] w-[min(58vw,720px)] rounded-full bg-reflux-accent/24 blur-[130px]"
-      />
-      <div
-        className="ambient-orb hero-glow absolute -top-40 -right-[14%] h-[520px] w-[min(58vw,720px)] rounded-full bg-reflux-accent/24 blur-[130px]"
+        className="ambient-orb ambient-orb-left absolute -top-32 -left-[28%] h-[520px] w-[min(72vw,920px)] rounded-full bg-reflux-accent/10 blur-[150px]"
         style={{ animationDelay: "-8s" }}
       />
       <div
-        className="ambient-orb hero-glow absolute top-[18%] left-[22%] h-[380px] w-[380px] rounded-full bg-reflux-accent/10 blur-[100px]"
+        className="ambient-orb ambient-orb-right absolute -top-32 -right-[28%] h-[520px] w-[min(72vw,920px)] rounded-full bg-reflux-accent/10 blur-[150px]"
         style={{ animationDelay: "-14s" }}
       />
       <div
-        className="ambient-orb hero-glow absolute top-[55%] right-[18%] h-[300px] w-[300px] rounded-full bg-reflux-accent/8 blur-[80px]"
+        className="ambient-orb absolute top-[42%] left-1/2 h-[420px] w-[min(100vw,1100px)] -translate-x-1/2 rounded-full bg-reflux-accent/6 blur-[140px]"
         style={{ animationDelay: "-20s" }}
       />
       <div className="grid-overlay absolute inset-0 opacity-30" />

@@ -15,7 +15,7 @@ export function HeroGameTicker() {
       timeout = setTimeout(() => {
         setIndex((current) => (current + 1) % GAMES.length);
         setFlip(false);
-      }, 300);
+      }, 280);
     }, 2800);
 
     return () => {
@@ -25,13 +25,7 @@ export function HeroGameTicker() {
   }, []);
 
   return (
-    <span className="hero-game-pill" aria-live="polite">
-      <span className="hero-game-pill-glow" aria-hidden="true" />
-      <span className="hero-game-pill-icon" aria-hidden="true">
-        <svg viewBox="0 0 16 16" fill="currentColor" className="h-3 w-3">
-          <path d="M4 3.5v9l8-4.5-8-4.5z" />
-        </svg>
-      </span>
+    <span className="hero-game-ticker-wrap" aria-live="polite">
       <span className={`hero-game-ticker ${flip ? "hero-game-ticker--flip" : ""}`}>{GAMES[index]}</span>
     </span>
   );

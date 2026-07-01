@@ -23,15 +23,31 @@ export function Hero() {
       <div className="relative w-full">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-14">
           <div className="overflow-visible text-center lg:text-left">
-            <div className="animate-fade-in-up mb-6 flex flex-wrap items-center justify-center gap-2.5 lg:justify-start">
-              <span className="hero-live-badge reflux-glow-interactive inline-flex items-center gap-2 rounded-full px-4 py-2 text-[11px] font-bold tracking-wide text-reflux-accent uppercase">
-                <span className="hero-live-dot h-2 w-2 rounded-full bg-reflux-accent shadow-[0_0_8px_rgba(255,107,91,0.8)]" />
-                Free to download
-              </span>
-              <span className="hero-chip-muted hidden items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-[11px] font-semibold text-reflux-text-soft sm:inline-flex">
-                <span className="h-1.5 w-1.5 rounded-full bg-reflux-green shadow-[0_0_6px_rgba(93,222,134,0.8)]" />
-                {PRODUCT_LIMITS.totalTweaksLabel} Pro tweaks
-              </span>
+            <div
+              className="hero-signal-row animate-fade-in-up mb-6 flex flex-wrap items-stretch justify-center gap-2.5 lg:justify-start"
+              style={{ animationDelay: "0.02s" }}
+            >
+              <div className="hero-signal hero-signal--free">
+                <span className="hero-signal-icon-wrap" aria-hidden="true">
+                  <AppIcon name="rocket" size={15} glow={false} className="!text-reflux-accent" />
+                </span>
+                <span className="hero-signal-copy">
+                  <span className="hero-signal-kicker">No card required</span>
+                  <span className="hero-signal-value">Free download</span>
+                </span>
+              </div>
+              <div className="hero-signal hero-signal--pro">
+                <span className="hero-signal-icon-wrap" aria-hidden="true">
+                  <AppIcon name="sparkle" size={15} glow={false} className="!text-reflux-green" />
+                </span>
+                <span className="hero-signal-copy">
+                  <span className="hero-signal-kicker">Full arsenal</span>
+                  <span className="hero-signal-value">
+                    <span className="hero-signal-metric reflux-metric">{PRODUCT_LIMITS.totalTweaksLabel}</span>
+                    <span className="hero-signal-value-sub">Pro tweaks</span>
+                  </span>
+                </span>
+              </div>
             </div>
 
             <h1 className="hero-headline animate-fade-in-up mb-5 font-extrabold tracking-tight" style={{ animationDelay: "0.05s" }}>
@@ -50,10 +66,10 @@ export function Hero() {
             </p>
 
             <div
-              className="animate-fade-in-up mb-6 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
+              className="hero-vendor-strip animate-fade-in-up mb-6 flex flex-wrap items-center justify-center lg:justify-start"
               style={{ animationDelay: "0.14s" }}
             >
-              <span className="text-[11px] font-bold tracking-wider text-reflux-muted uppercase">Detects</span>
+              <span className="hero-vendor-strip-label">Detects</span>
               <div className="hero-vendor-row flex items-center gap-2">
                 <VendorLogo vendor="nvidia" size={30} className="hero-vendor-logo" />
                 <VendorLogo vendor="amd" size={30} className="hero-vendor-logo" />
