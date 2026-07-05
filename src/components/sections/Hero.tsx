@@ -3,7 +3,6 @@ import { AppIcon } from "@/components/ui/AppIcon";
 import { HeroLaunchRail } from "./HeroLaunchRail";
 import { VendorLogo } from "@/components/ui/VendorLogo";
 import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
-import { PRODUCT_LIMITS } from "@/data/tweaks";
 import { HeroGameTicker } from "./HeroGameTicker";
 import { HeroGameMarquee } from "./HeroGameMarquee";
 import { HeroShowcase } from "./HeroShowcase";
@@ -86,7 +85,7 @@ export function Hero() {
                   className="hero-proof-card reflux-glow-box flex items-center gap-3 px-4 py-3.5"
                 >
                   <AppIcon name={point.icon} size={18} />
-                  <div className="min-w-0">
+                  <div className="min-w-0 text-left">
                     <div className="hero-metric-value text-lg font-bold text-white md:text-xl">
                       {point.label}
                       <span className="ml-1 text-xs font-semibold text-reflux-accent">{point.unit}</span>

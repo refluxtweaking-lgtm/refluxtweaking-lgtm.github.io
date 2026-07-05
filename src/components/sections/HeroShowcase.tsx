@@ -28,10 +28,9 @@ export function HeroShowcase() {
   return (
     <div className="hero-showcase-wrap relative mx-auto w-full px-2 sm:px-0">
       <div
-        className="pointer-events-none absolute -inset-10 rounded-[48px] bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,rgba(241,91,80,0.18),transparent_72%)]"
+        className="pointer-events-none absolute -inset-8 rounded-[40px] bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,rgba(241,91,80,0.16),transparent_72%)]"
         aria-hidden="true"
       />
-      <div className="hero-orbit-ring pointer-events-none absolute left-1/2 top-1/2 -z-1 h-[108%] w-[108%] -translate-x-1/2 -translate-y-1/2" aria-hidden="true" />
 
       <div className="hero-device-stage relative pb-4">
         {FLOAT_BADGES.map((badge) => (

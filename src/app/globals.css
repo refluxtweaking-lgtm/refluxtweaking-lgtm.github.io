@@ -728,8 +728,8 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 }
 
 .hero-headline {
-  font-size: var(--reflux-display-xl);
-  line-height: 1.2;
+  font-size: clamp(2.85rem, 7.2vw, 4.75rem);
+  line-height: 1.12;
   letter-spacing: -0.04em;
   font-weight: 900;
   overflow: visible;
@@ -743,7 +743,7 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
   display: block;
   overflow: visible;
   padding-bottom: 0.35em;
-  filter: drop-shadow(0 0 32px rgba(255, 107, 91, 0.48));
+  filter: drop-shadow(0 0 28px rgba(255, 107, 91, 0.4));
 }
 
 .hero-gradient-shimmer {
@@ -1056,13 +1056,13 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 }
 
 .hero-device-shell {
-  background: linear-gradient(145deg, rgba(255, 107, 91, 0.65), rgba(255, 60, 50, 0.3), rgba(255, 149, 136, 0.25));
+  background: linear-gradient(145deg, rgba(255, 107, 91, 0.55), rgba(255, 60, 50, 0.28), rgba(255, 149, 136, 0.22));
   background-size: 200% 200%;
-  animation: borderFlow 10s ease infinite;
+  animation: borderFlow 12s ease infinite;
   box-shadow:
-    0 32px 90px rgba(0, 0, 0, 0.55),
-    0 0 80px -16px rgba(255, 107, 91, 0.55),
-    0 0 0 1px rgba(255, 107, 91, 0.15);
+    0 28px 72px rgba(0, 0, 0, 0.5),
+    0 0 64px -18px rgba(255, 107, 91, 0.45),
+    0 0 0 1px rgba(255, 107, 91, 0.12);
 }
 
 .hero-device-scan {
@@ -1211,13 +1211,13 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 }
 
 .hero-device-stage {
-  transform: rotateY(-8deg) rotateX(3deg);
+  transform: rotateY(-6deg) rotateX(2deg);
   transform-style: preserve-3d;
   transition: transform 0.4s ease;
 }
 
 .hero-showcase-wrap:hover .hero-device-stage {
-  transform: rotateY(-4deg) rotateX(2deg) scale(1.01);
+  transform: rotateY(-3deg) rotateX(1deg) scale(1.008);
 }
 
 .hero-device-glow {
@@ -1238,8 +1238,8 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 }
 
 .hero-float-badge-c {
-  bottom: 18%;
-  left: -6px;
+  bottom: 14%;
+  left: -8px;
   animation: heroFloatC 4.5s ease-in-out infinite;
 }
 
