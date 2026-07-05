@@ -81,7 +81,7 @@ export function Header() {
           <div className="hidden items-center gap-3.5 md:flex md:gap-4">
             <HeaderAuth className="header-auth-btn" />
             <Button
-              href="https://discord.gg/xGpHKY8AAC"
+              href="https://discord.gg/refluxtweaks"
               variant="discord"
               external
               className="header-action-btn !px-6 !py-3 !text-[15px]"
@@ -140,7 +140,7 @@ export function Header() {
               <div className="flex flex-col gap-3 border-t border-reflux-border/50 p-4">
                 <HeaderAuth className="w-full" onNavigate={closeMenu} />
                 <Button
-                  href="https://discord.gg/xGpHKY8AAC"
+                  href="https://discord.gg/refluxtweaks"
                   variant="discord"
                   external
                   className="w-full"

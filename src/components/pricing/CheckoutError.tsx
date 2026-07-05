@@ -39,7 +39,7 @@ export function CheckoutError({ plan, message }: CheckoutErrorProps) {
         </div>
         <p className="mt-6 text-xs text-reflux-muted">
           Need help?{" "}
-          <Link href="https://discord.gg/reflux" className="text-reflux-accent hover:underline">
+          <Link href="https://discord.gg/refluxtweaks" className="text-reflux-accent hover:underline">
             Join our Discord
           </Link>
         </p>

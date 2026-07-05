@@ -39,7 +39,7 @@ export function CTA() {
           >
             Get REFLUX FREE
           </Button>
-          <Button href="https://discord.gg/xGpHKY8AAC" variant="discord" external large>
+          <Button href="https://discord.gg/refluxtweaks" variant="discord" external large>
             Join Discord
           </Button>
         </div>

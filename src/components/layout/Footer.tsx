@@ -11,7 +11,7 @@ const footerLinks = [
   { href: "/reviews", label: "Reviews" },
   { href: "/app-preview", label: "The App" },
   { href: "/#faq", label: "FAQ" },
-  { href: "https://discord.gg/xGpHKY8AAC", label: "Discord", external: true },
+  { href: "https://discord.gg/refluxtweaks", label: "Discord", external: true },
   { href: "mailto:refluxtweaking@gmail.com?subject=REFLUX%20Support", label: "Contact", external: true },
 ];
 
