@@ -3,6 +3,8 @@ import { Suspense } from "react";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { PricingCards } from "@/components/pricing/PricingCards";
+import { PricingProofResults } from "@/components/pricing/PricingProofResults";
+import { PricingValueStack } from "@/components/pricing/PricingValueStack";
 import { CheckoutNotice } from "@/components/pricing/CheckoutNotice";
 import { CTA } from "@/components/sections/CTA";
 import { plans } from "@/data/plans";
@@ -11,10 +13,15 @@ import { Icon } from "@/components/ui/Icon";
 
 export const metadata = {
   title: "Pricing – REFLUX TWEAKS",
-  description: "Compare REFLUX TWEAKS plans. Start Monthly at $6.99/mo or go Lifetime.",
+  description:
+    "Real Fortnite results: 109–118 FPS to stable 135–144, ping from 158–773 ms down to 30–38. Compare REFLUX PRO plans.",
 };
 
 const faqs = [
+  {
+    q: "Are those Fortnite numbers real?",
+    a: "Yes — founder's own PC, medium graphics, in-game overlay readout. FPS went from unstable 109–118 to stable 135–144. Ping dropped from 158–773 ms spikes to 30–38 ms (occasional ~70 ms on mesh Wi‑Fi). Your rig will vary, but the tweak stack is the same.",
+  },
   {
     q: "Can I cancel Monthly anytime?",
     a: "Yes. Monthly is no-contract — cancel whenever. You keep access until the period ends.",
@@ -25,7 +32,7 @@ const faqs = [
   },
   {
     q: "Is the Free plan useful?",
-    a: `Yes. ${PRODUCT_LIMITS.freeTweaks} core tweaks, 2 power plans, and basic network optimizations — enough to feel the difference.`,
+    a: `Yes. ${PRODUCT_LIMITS.freeTweaks} core tweaks, 2 power plans, and basic network optimizations — enough to feel the difference. PRO unlocks the full library behind the results above.`,
   },
   {
     q: "Are tweaks safe?",
@@ -35,30 +42,50 @@ const faqs = [
 
 export default function PricingPage() {
   return (
-    <SiteShell mainClassName="pt-8 pb-10">
-      <section className="mb-16 pt-8 text-center">
+    <SiteShell mainClassName="pt-6 pb-10">
+      <section className="mb-10 pt-4 text-center md:mb-12">
         <SectionHeader
-          eyebrow="Simple, honest pricing"
+          eyebrow="Pricing"
           title={
             <>
-              Pick your <span className="gradient-text">power level</span>
+              Pay for <span className="gradient-text">performance you can measure</span>
             </>
           }
-          subtitle="Monthly gives you everything for less than a coffee a week. Lifetime pays for itself in under 2 years."
+          subtitle="Start free. Upgrade when you want the full tweak library — the same stack behind +26 FPS and −90% ping in our own Fortnite session."
+          centered
         />
       </section>
 
-      <Suspense fallback={null}>
-        <CheckoutNotice />
-      </Suspense>
+      <PricingProofResults />
 
-      <PricingCards />
+      <section className="mt-12 md:mt-16">
+        <PricingValueStack />
+      </section>
 
-      <section className="mt-20">
+      <section id="pricing-cards" className="mt-12 scroll-mt-28 md:mt-16">
+        <SectionHeader
+          eyebrow="Pick your plan"
+          title={
+            <>
+              Unlock <span className="gradient-text">PRO</span>
+            </>
+          }
+          subtitle="Monthly is less than a coffee a week. Lifetime pays for itself fast if you game regularly."
+          centered
+        />
+
+        <Suspense fallback={null}>
+          <CheckoutNotice />
+        </Suspense>
+
+        <PricingCards showProofHook />
+      </section>
+
+      <section className="mt-16 md:mt-20">
         <GlowTable />
       </section>
 
-      <section className="mt-20">
+      <section className="mt-16 md:mt-20">
         <SectionHeader eyebrow="FAQ" title="Common questions" centered />
         <div className="mx-auto grid max-w-3xl gap-4">
           {faqs.map((faq) => (
@@ -88,8 +115,11 @@ export default function PricingPage() {
 
 function GlowTable() {
   return (
-    <div className="glass-card-static overflow-hidden rounded-3xl p-8">
-      <h2 className="mb-8 text-center text-2xl font-bold">Quick comparison</h2>
+    <div className="glass-card-static overflow-hidden rounded-3xl p-6 md:p-8">
+      <h2 className="mb-2 text-center text-2xl font-bold">Quick comparison</h2>
+      <p className="mb-8 text-center text-sm text-reflux-muted">
+        Free gets you started. PRO unlocks the network pack and full library behind the Fortnite results above.
+      </p>
       <div className="overflow-x-auto">
         <table className="w-full min-w-[600px] text-sm">
           <thead>
