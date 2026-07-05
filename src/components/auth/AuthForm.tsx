@@ -59,6 +59,14 @@ export function AuthForm({ mode, notice, next }: AuthFormProps) {
             : "Sign up to manage your REFLUX PRO licenses."}
         </p>
 
+        {!isLogin && (
+          <div className="mb-4 rounded-lg border border-reflux-border/50 bg-[rgba(94,196,239,0.08)] px-4 py-3 text-sm leading-relaxed text-reflux-text">
+            <strong className="font-semibold text-white">Same login for the PRO app.</strong>{" "}
+            This email and password are your REFLUX account — use them to sign in to the{" "}
+            <strong className="font-semibold text-white">REFLUX PRO</strong> desktop app on your PC.
+          </div>
+        )}
+
         {notice && (
           <div className="mb-4 rounded-lg border border-reflux-accent/30 bg-[rgba(241,91,80,0.1)] px-4 py-3 text-sm text-reflux-text">
             {notice}
