@@ -4306,14 +4306,20 @@ html.reduce-effects .particles-canvas {
   text-overflow: ellipsis;
 }
 
-.hiw-tweak-toggle {
+.hiw-tweak-toggle-wrap {
   position: relative;
+  flex-shrink: 0;
   width: 22px;
   height: 12px;
-  flex-shrink: 0;
+}
+
+.hiw-tweak-toggle {
+  position: relative;
+  display: block;
+  width: 22px;
+  height: 12px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.12);
-  transition: background 0.25s ease;
 }
 
 .hiw-tweak-toggle--on {
@@ -4481,6 +4487,51 @@ html.reduce-effects .particles-canvas {
   100% { opacity: 0; }
 }
 
+.hiw-cursor--toggle {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 4;
+  width: 16px;
+  height: 20px;
+  animation: hiwCursorToggle 3.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes hiwCursorToggle {
+  0% {
+    opacity: 0;
+    transform: translate(-28px, 22px) scale(1);
+  }
+  10% {
+    opacity: 1;
+  }
+  32% {
+    transform: translate(-2px, 8px) scale(1);
+  }
+  40% {
+    transform: translate(-2px, 8px) scale(0.78);
+  }
+  46% {
+    transform: translate(-2px, 8px) scale(1);
+  }
+  70%, 100% {
+    opacity: 1;
+    transform: translate(-2px, 8px) scale(1);
+  }
+}
+
+.hiw-cursor--toggle .hiw-cursor-ripple {
+  animation: hiwCursorRippleToggle 3.8s ease-out infinite;
+}
+
+@keyframes hiwCursorRippleToggle {
+  0%, 38% { opacity: 0; transform: scale(0.4); }
+  42% { opacity: 1; transform: scale(0.65); }
+  50% { opacity: 0; transform: scale(1.9); }
+  100% { opacity: 0; }
+}
+
 .hiw-cursor--download {
   animation: hiwCursorDownload 3.6s ease-in-out infinite;
 }
@@ -4518,46 +4569,11 @@ html.reduce-effects .particles-canvas {
   }
 }
 
-.hiw-cursor--tweaks {
-  animation: hiwCursorTweaks 3.8s ease-in-out infinite;
-}
-
-@keyframes hiwCursorTweaks {
-  0% {
-    left: 14%;
-    top: 82%;
-    opacity: 0;
-    transform: scale(1);
-  }
-  10% {
-    opacity: 1;
-  }
-  36% {
-    left: calc(100% - 2.35rem);
-    top: 56%;
-    transform: scale(1);
-  }
-  44% {
-    left: calc(100% - 2.35rem);
-    top: 56%;
-    transform: scale(0.8);
-  }
-  50% {
-    left: calc(100% - 2.35rem);
-    top: 56%;
-    transform: scale(1);
-  }
-  72%, 100% {
-    left: calc(100% - 2.35rem);
-    top: 56%;
-    opacity: 1;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .hiw-cursor--download,
-  .hiw-cursor--tweaks,
+  .hiw-cursor--toggle,
   .hiw-cursor--clicking .hiw-cursor-ripple,
+  .hiw-cursor--toggle .hiw-cursor-ripple,
   .hiw-download-cta--pulse,
   .hiw-tweak-row--target,
   .hiw-tweak-toggle--click,
