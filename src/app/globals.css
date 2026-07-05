@@ -2,8 +2,8 @@
 @import "../styles/reflux-tokens.css";
 
 @theme {
-  --color-reflux-bg: #000000;
-  --color-reflux-surface: #000000;
+  --color-reflux-bg: #050608;
+  --color-reflux-surface: #050608;
   --color-reflux-text: #f6f8fc;
   --color-reflux-muted: #6e7684;
   --color-reflux-text-soft: #b8c0cc;
@@ -13,13 +13,13 @@
   --color-reflux-discord: #5865f2;
   --color-reflux-green: #5dde86;
   --color-reflux-purple: #b392f0;
-  --color-reflux-card: #000000;
+  --color-reflux-card: #080a0e;
   --color-reflux-border: rgba(255, 77, 61, 0.14);
 }
 
 html {
   scroll-behavior: smooth;
-  background: #000000;
+  background: #050608;
 }
 
 body {
@@ -39,11 +39,12 @@ body::before {
   z-index: -25;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 130% 58% at 50% -6%, rgba(255, 77, 61, 0.11) 0%, rgba(255, 77, 61, 0.04) 38%, transparent 68%),
-    radial-gradient(ellipse 95% 52% at 0% 0%, rgba(255, 77, 61, 0.09) 0%, transparent 58%),
-    radial-gradient(ellipse 95% 52% at 100% 0%, rgba(255, 77, 61, 0.09) 0%, transparent 58%),
-    radial-gradient(ellipse 50% 38% at 100% 42%, rgba(255, 60, 50, 0.05) 0%, transparent 62%),
-    radial-gradient(ellipse 45% 34% at 0% 68%, rgba(255, 77, 61, 0.04) 0%, transparent 62%);
+    radial-gradient(ellipse 140% 62% at 50% -6%, rgba(255, 77, 61, 0.11) 0%, rgba(255, 77, 61, 0.04) 38%, transparent 72%),
+    radial-gradient(ellipse 110% 58% at 0% 0%, rgba(255, 77, 61, 0.08) 0%, transparent 65%),
+    radial-gradient(ellipse 110% 58% at 100% 0%, rgba(255, 77, 61, 0.08) 0%, transparent 65%),
+    radial-gradient(ellipse 70% 50% at 100% 50%, rgba(255, 60, 50, 0.05) 0%, transparent 70%),
+    radial-gradient(ellipse 70% 50% at 0% 55%, rgba(255, 77, 61, 0.04) 0%, transparent 70%),
+    #050608;
 }
 
 .noise-texture {
@@ -577,20 +578,16 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
   animation: meshShift 14s ease-in-out infinite;
 }
 
+.hero-grid-fade {
+  display: none;
+}
+
+.hero-flank {
+  display: none;
+}
+
 .grid-overlay {
-  background-image:
-    linear-gradient(rgba(255, 77, 61, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 77, 61, 0.03) 1px, transparent 1px);
-  background-size: 80px 80px;
-  mask-image:
-    linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%),
-    radial-gradient(ellipse 120% 60% at 50% 0%, black 6%, transparent 82%);
-  mask-composite: intersect;
-  -webkit-mask-image:
-    linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%),
-    radial-gradient(ellipse 120% 60% at 50% 0%, black 6%, transparent 82%);
-  -webkit-mask-composite: source-in;
-  opacity: 0.35;
+  display: none;
 }
 
 .icon-glow {
@@ -704,14 +701,9 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
   opacity: 0.9;
 }
 
-.hero-flank {
-  background: linear-gradient(90deg, rgba(255, 107, 91, 0.06), transparent 72%);
-  opacity: 0.45;
-  mask-image: linear-gradient(180deg, transparent, black 18%, black 82%, transparent);
-}
-
+.hero-flank,
 .hero-flank--right {
-  background: linear-gradient(270deg, rgba(94, 196, 239, 0.05), transparent 72%);
+  display: none;
 }
 
 .hero-spotlight {
@@ -729,19 +721,7 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 }
 
 .hero-grid-fade {
-  background-image:
-    linear-gradient(rgba(255, 77, 61, 0.055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 77, 61, 0.055) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image:
-    linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%),
-    radial-gradient(ellipse 115% 78% at 50% 28%, black 5%, transparent 84%);
-  mask-composite: intersect;
-  -webkit-mask-image:
-    linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%),
-    radial-gradient(ellipse 115% 78% at 50% 28%, black 5%, transparent 84%);
-  -webkit-mask-composite: source-in;
-  opacity: 0.65;
+  display: none;
 }
 
 .hero-edition-tag {
@@ -1322,12 +1302,12 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 
 .hero-game-marquee-edge--left {
   left: 0;
-  background: linear-gradient(90deg, #000 15%, transparent);
+  background: linear-gradient(90deg, #050608 15%, transparent);
 }
 
 .hero-game-marquee-edge--right {
   right: 0;
-  background: linear-gradient(270deg, #000 15%, transparent);
+  background: linear-gradient(270deg, #050608 15%, transparent);
 }
 
 .hero-game-marquee-track {

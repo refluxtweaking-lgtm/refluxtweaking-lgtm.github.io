@@ -74,9 +74,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="bg-black">
+    <html lang="en" className="bg-[#050608]">
       <body
-        className={`${refluxBody.variable} ${refluxDisplay.variable} ${refluxMetric.variable} bg-black antialiased`}
+        className={`${refluxBody.variable} ${refluxDisplay.variable} ${refluxMetric.variable} bg-[#050608] antialiased`}
       >
         {children}
       </body>

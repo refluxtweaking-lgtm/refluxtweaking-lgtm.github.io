@@ -18,10 +18,7 @@ export function Hero() {
     <section className="hero-stage relative w-full overflow-visible pb-2 pt-2 md:pt-8">
       <div className="hero-spotlight pointer-events-none absolute inset-0" aria-hidden="true" />
       <div className="hero-aurora pointer-events-none absolute inset-0" aria-hidden="true" />
-      <div className="hero-grid-fade pointer-events-none absolute inset-0" aria-hidden="true" />
       <div className="hero-beam pointer-events-none absolute inset-0" aria-hidden="true" />
-      <div className="hero-flank hero-flank--left pointer-events-none absolute inset-y-0 left-0 w-1/3" aria-hidden="true" />
-      <div className="hero-flank hero-flank--right pointer-events-none absolute inset-y-0 right-0 w-1/3" aria-hidden="true" />
 
       <div className="relative w-full">
         <div className="grid items-center gap-14 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] lg:gap-12 xl:gap-16">
