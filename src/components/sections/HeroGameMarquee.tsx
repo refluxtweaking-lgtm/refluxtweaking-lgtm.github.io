@@ -19,7 +19,7 @@ function GameCapsule({ appId, name }: { appId: number; name: string }) {
   const src = `https://cdn.cloudflare.steamstatic.com/steam/apps/${appId}/capsule_616x353.jpg`;
 
   return (
-    <div className="hero-game-capsule group shrink-0">
+    <div className="hero-game-capsule hero-game-capsule--compact group shrink-0">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={src} alt={name} loading="lazy" className="hero-game-capsule-img" />
       <span className="hero-game-capsule-label">{name}</span>
@@ -27,18 +27,31 @@ function GameCapsule({ appId, name }: { appId: number; name: string }) {
   );
 }
 
-export function HeroGameMarquee() {
+type HeroGameMarqueeProps = {
+  prominent?: boolean;
+};
+
+export function HeroGameMarquee({ prominent = false }: HeroGameMarqueeProps) {
   const track = [...MARQUEE_GAMES, ...MARQUEE_GAMES];
 
   return (
-    <div className="hero-game-marquee mt-10 md:mt-14" aria-hidden="true">
-      <div className="hero-game-marquee-edge hero-game-marquee-edge--left" />
-      <div className="hero-game-marquee-edge hero-game-marquee-edge--right" />
-      <div className="marquee-viewport">
-        <div className="marquee-track hero-game-marquee-track flex w-max gap-3 px-1">
-          {track.map((game, i) => (
-            <GameCapsule key={`${game.id}-${i}`} appId={game.id} name={game.name} />
-          ))}
+    <div
+      className={`hero-game-marquee ${prominent ? "hero-game-marquee--prominent" : ""}`}
+      aria-label="Games optimized by REFLUX"
+    >
+      <div className="hero-game-marquee-header">
+        <span className="hero-game-marquee-dot" aria-hidden="true" />
+        <span>Tuned for your library</span>
+      </div>
+      <div className="hero-game-marquee-viewport">
+        <div className="hero-game-marquee-edge hero-game-marquee-edge--left" aria-hidden="true" />
+        <div className="hero-game-marquee-edge hero-game-marquee-edge--right" aria-hidden="true" />
+        <div className="marquee-viewport">
+          <div className="marquee-track hero-game-marquee-track flex w-max gap-2.5 px-1">
+            {track.map((game, i) => (
+              <GameCapsule key={`${game.id}-${i}`} appId={game.id} name={game.name} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
