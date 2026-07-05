@@ -121,7 +121,7 @@ function ProofMetricBlock({
 }
 
 export function PricingProofResults() {
-  const { fps, ping, game, settings, context, meshNote } = PRICING_PROOF;
+  const { fps, ping, game, settings, hardware, context, meshNote } = PRICING_PROOF;
 
   return (
     <section className="pricing-proof-section relative overflow-hidden">
@@ -141,12 +141,14 @@ export function PricingProofResults() {
         </FlowIn>
 
         <div className="pricing-proof-spec-band">
-          <span className="fps-proof-spec-tag">{game}</span>
-          <span className="fps-proof-spec-item">{settings}</span>
+          <span className="fps-proof-spec-tag">{hardware.machine}</span>
+          <span className="fps-proof-spec-item">{hardware.cpu}</span>
           <span className="fps-proof-spec-sep" aria-hidden="true" />
-          <span className="fps-proof-spec-item fps-proof-spec-item--accent">In-game overlay</span>
+          <span className="fps-proof-spec-item">{hardware.gpu}</span>
           <span className="fps-proof-spec-sep fps-proof-spec-sep--hide-mobile" aria-hidden="true" />
-          <span className="fps-proof-spec-item fps-proof-spec-item--hide-mobile">Same PC · same lobby</span>
+          <span className="fps-proof-spec-item fps-proof-spec-item--hide-mobile">{hardware.ram}</span>
+          <span className="fps-proof-spec-sep" aria-hidden="true" />
+          <span className="fps-proof-spec-item fps-proof-spec-item--accent">{game} · {settings}</span>
         </div>
 
         <FlowIn delay={60}>

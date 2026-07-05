@@ -2,7 +2,14 @@
 export const PRICING_PROOF = {
   game: "Fortnite",
   settings: "Medium graphics",
-  context: "Same session · in-game FPS & ping overlay · founder's daily driver PC",
+  hardware: {
+    machine: "Gaming laptop",
+    cpu: "AMD Ryzen 5 7235HS",
+    gpu: "NVIDIA GeForce RTX 4050 Laptop",
+    ram: "12 GB DDR5",
+  },
+  context:
+    "Same session on my daily-driver laptop — Ryzen 5 7235HS, RTX 4050, 12 GB DDR5. In-game FPS & ping overlay, medium graphics.",
   meshNote: "Ping spikes to ~70 ms occasionally on mesh Wi‑Fi — still a fraction of stock Windows.",
   fps: {
     before: { low: 109, high: 118, label: "109–118", note: "Unstable, dipping in fights" },

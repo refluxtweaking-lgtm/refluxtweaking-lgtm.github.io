@@ -14,13 +14,13 @@ import { Icon } from "@/components/ui/Icon";
 export const metadata = {
   title: "Pricing – REFLUX TWEAKS",
   description:
-    "Real Fortnite results: 109–118 FPS to stable 135–144, ping from 158–773 ms down to 30–38. Compare REFLUX PRO plans.",
+    "Real Fortnite results on Ryzen 5 7235HS + RTX 4050 laptop: 109–118 FPS to stable 135–144, ping from 158–773 ms down to 30–38. Compare REFLUX PRO plans.",
 };
 
 const faqs = [
   {
     q: "Are those Fortnite numbers real?",
-    a: "Yes — founder's own PC, medium graphics, in-game overlay readout. FPS went from unstable 109–118 to stable 135–144. Ping dropped from 158–773 ms spikes to 30–38 ms (occasional ~70 ms on mesh Wi‑Fi). Your rig will vary, but the tweak stack is the same.",
+    a: "Yes — tested on my Ryzen 5 7235HS / RTX 4050 laptop with 12 GB DDR5, Fortnite medium graphics, in-game overlay. FPS went from unstable 109–118 to stable 135–144. Ping dropped from 158–773 ms spikes to 30–38 ms (occasional ~70 ms on mesh Wi‑Fi). Your rig will vary, but the tweak stack is the same.",
   },
   {
     q: "Can I cancel Monthly anytime?",
