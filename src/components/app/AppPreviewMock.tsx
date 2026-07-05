@@ -199,10 +199,17 @@ export function AppPreviewMock({ hero = false }: AppPreviewMockProps) {
         <div className="flex items-center gap-2.5 sm:gap-3">
           <BrandMark size={32} className="rounded-lg shadow-[0_0_14px_rgba(241,91,80,0.55)]" />
           <span className="text-base font-extrabold gradient-text sm:text-lg">REFLUX PRO</span>
-          <span className="app-mock-ready badge-pill badge-live text-[9px] sm:text-[10px]">
-            <span className="app-mock-ready-dot h-1.5 w-1.5 rounded-full bg-reflux-green" />
-            Ready
-          </span>
+          {hero ? (
+            <span className="hero-mock-status">
+              <span className="hero-mock-status-dot" aria-hidden="true" />
+              LIVE
+            </span>
+          ) : (
+            <span className="app-mock-ready badge-pill badge-live text-[9px] sm:text-[10px]">
+              <span className="app-mock-ready-dot h-1.5 w-1.5 rounded-full bg-reflux-green" />
+              Ready
+            </span>
+          )}
         </div>
         <span className="hidden text-[10px] text-reflux-muted sm:inline">Administrator</span>
       </div>

@@ -62,7 +62,7 @@ function PerformanceMonitor({ hero = false }: { hero?: boolean }) {
               key={id}
               type="button"
               onClick={() => setMetric(id)}
-              className={`app-mock-metric-pill rounded-md px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide ${
+              className={`app-mock-metric-pill ${hero ? "app-mock-metric-tab" : "rounded-md"} px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide ${
                 metric === id ? "active" : ""
               }`}
               style={

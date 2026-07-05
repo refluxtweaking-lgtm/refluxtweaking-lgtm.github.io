@@ -17,25 +17,32 @@ export function Hero() {
   return (
     <section className="hero-stage relative w-full overflow-visible pb-2 pt-2 md:pt-8">
       <div className="hero-spotlight pointer-events-none absolute inset-0" aria-hidden="true" />
+      <div className="hero-aurora pointer-events-none absolute inset-0" aria-hidden="true" />
       <div className="hero-grid-fade pointer-events-none absolute inset-0" aria-hidden="true" />
       <div className="hero-beam pointer-events-none absolute inset-0" aria-hidden="true" />
+      <div className="hero-flank hero-flank--left pointer-events-none absolute inset-y-0 left-0 w-1/3" aria-hidden="true" />
+      <div className="hero-flank hero-flank--right pointer-events-none absolute inset-y-0 right-0 w-1/3" aria-hidden="true" />
 
       <div className="relative w-full">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-14">
+        <div className="grid items-center gap-14 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] lg:gap-12 xl:gap-16">
           <div className="overflow-visible text-center lg:text-left">
-            <div className="animate-fade-in-up mb-6 flex justify-center lg:justify-start" style={{ animationDelay: "0.02s" }}>
+            <div className="animate-fade-in-up mb-5 flex justify-center lg:justify-start" style={{ animationDelay: "0.02s" }}>
               <HeroLaunchRail />
             </div>
 
+            <p className="hero-edition-tag animate-fade-in-up mb-4" style={{ animationDelay: "0.04s" }}>
+              Windows gaming optimizer
+            </p>
+
             <h1 className="hero-headline animate-fade-in-up mb-5 font-extrabold tracking-tight" style={{ animationDelay: "0.05s" }}>
               <span className="hero-headline-line block text-white">Stop losing to lag.</span>
-              <span className="hero-gradient-shimmer-wrap mt-2 block">
+              <span className="hero-gradient-shimmer-wrap mt-1 block md:mt-2">
                 <span className="hero-gradient-shimmer">Start winning fights.</span>
               </span>
             </h1>
 
             <p
-              className="hero-tune-copy animate-fade-in-up mx-auto mb-8 max-w-lg text-base leading-relaxed text-reflux-text-soft md:text-lg lg:mx-0"
+              className="hero-tune-copy animate-fade-in-up mx-auto mb-8 max-w-xl text-base leading-relaxed text-reflux-text-soft md:text-lg lg:mx-0"
               style={{ animationDelay: "0.1s" }}
             >
               REFLUX tunes your PC for <HeroGameTicker /> and every game you grind. Live Intel / AMD /
@@ -43,19 +50,19 @@ export function Hero() {
             </p>
 
             <div
-              className="hero-vendor-strip animate-fade-in-up mb-6 flex flex-wrap items-center justify-center lg:justify-start"
+              className="hero-vendor-strip animate-fade-in-up mb-7 flex flex-wrap items-center justify-center lg:justify-start"
               style={{ animationDelay: "0.14s" }}
             >
               <span className="hero-vendor-strip-label">Detects</span>
-              <div className="hero-vendor-row flex items-center gap-2">
-                <VendorLogo vendor="nvidia" size={30} className="hero-vendor-logo" />
-                <VendorLogo vendor="amd" size={30} className="hero-vendor-logo" />
-                <VendorLogo vendor="intel" size={30} className="hero-vendor-logo" />
+              <div className="hero-vendor-row flex items-center gap-2.5">
+                <VendorLogo vendor="nvidia" size={32} className="hero-vendor-logo" />
+                <VendorLogo vendor="amd" size={32} className="hero-vendor-logo" />
+                <VendorLogo vendor="intel" size={32} className="hero-vendor-logo" />
               </div>
             </div>
 
             <div
-              className="animate-fade-in-up mb-8 flex flex-wrap justify-center gap-3 lg:justify-start"
+              className="animate-fade-in-up mb-9 flex flex-wrap justify-center gap-3 lg:justify-start"
               style={{ animationDelay: "0.16s" }}
             >
               <div className="hero-cta-glow">
@@ -65,32 +72,32 @@ export function Hero() {
                   variant="primary"
                   large
                   showIcon
-                  className="min-w-[210px]"
+                  className="min-w-[220px] !rounded-xl"
                 >
                   Download Free
                 </Button>
               </div>
-              <Button href="#app-gallery" variant="secondary" large>
+              <Button href="#app-gallery" variant="secondary" large className="!rounded-xl">
                 See the app
               </Button>
             </div>
 
             <div
-              className="animate-fade-in-up mx-auto grid w-full grid-cols-1 gap-2.5 sm:grid-cols-3 lg:mx-0"
+              className="animate-fade-in-up mx-auto grid w-full grid-cols-1 gap-3 sm:grid-cols-3 lg:mx-0"
               style={{ animationDelay: "0.22s" }}
             >
               {proofPoints.map((point) => (
-                <div
-                  key={point.label}
-                  className="hero-proof-card reflux-glow-box flex items-center gap-3 px-4 py-3.5"
-                >
-                  <AppIcon name={point.icon} size={18} />
-                  <div className="min-w-0 text-left">
-                    <div className="hero-metric-value text-lg font-bold text-white md:text-xl">
+                <div key={point.label} className="hero-stat-tile">
+                  <div className="hero-stat-tile-accent" aria-hidden="true" />
+                  <div className="hero-stat-tile-icon">
+                    <AppIcon name={point.icon} size={20} />
+                  </div>
+                  <div className="hero-stat-tile-body">
+                    <div className="hero-stat-tile-value">
                       {point.label}
-                      <span className="ml-1 text-xs font-semibold text-reflux-accent">{point.unit}</span>
+                      <span className="hero-stat-tile-unit">{point.unit}</span>
                     </div>
-                    <div className="text-[11px] text-reflux-muted">{point.sub}</div>
+                    <div className="hero-stat-tile-sub">{point.sub}</div>
                   </div>
                 </div>
               ))}

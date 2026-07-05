@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { AppScreenshotFrame } from "@/components/app/AppScreenshotFrames";
 import { AppIcon } from "@/components/ui/AppIcon";
+import { BrandMark } from "@/components/ui/BrandMark";
 import { FlowIn } from "@/components/ui/FlowIn";
 import { Icon } from "@/components/ui/Icon";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -86,12 +87,11 @@ export function AppGallery() {
               <div className="app-gallery-device reflux-glow-box relative overflow-hidden rounded-2xl">
                 <div className="flex items-center justify-between border-b border-white/8 bg-[#0b0e15] px-4 py-2.5">
                   <div className="flex items-center gap-2">
-                    <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+                    <BrandMark size={16} className="rounded-sm" />
+                    <span className="text-[11px] font-bold tracking-wide text-white/90">REFLUX PRO</span>
                   </div>
                   <span className="text-[10px] font-semibold tracking-wide text-reflux-muted uppercase">
-                    REFLUX — {current.label}
+                    {current.label}
                   </span>
                 </div>
                 <div className="min-h-[320px] bg-gradient-to-b from-[#0c0e12] to-[#080a0d] p-4 sm:p-5">

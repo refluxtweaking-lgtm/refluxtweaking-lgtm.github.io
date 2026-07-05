@@ -27,8 +27,9 @@ const FLOAT_BADGES = [
 export function HeroShowcase() {
   return (
     <div className="hero-showcase-wrap relative mx-auto w-full px-2 sm:px-0">
+      <div className="hero-showcase-halo pointer-events-none absolute -inset-10" aria-hidden="true" />
       <div
-        className="pointer-events-none absolute -inset-8 rounded-[40px] bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,rgba(241,91,80,0.16),transparent_72%)]"
+        className="pointer-events-none absolute -inset-6 rounded-[32px] bg-[radial-gradient(ellipse_75%_60%_at_50%_42%,rgba(241,91,80,0.22),transparent_70%)]"
         aria-hidden="true"
       />
 
@@ -51,10 +52,14 @@ export function HeroShowcase() {
           </div>
         ))}
 
-        <div className="hero-device-shell overflow-hidden rounded-[24px] p-px">
-          <div className="hero-device-inner hero-device-scan overflow-hidden rounded-[23px] bg-[#030507]">
-            <AppPreviewMock hero />
+        <div className="hero-device-frame">
+          <div className="hero-device-notch" aria-hidden="true" />
+          <div className="hero-device-shell overflow-hidden">
+            <div className="hero-device-inner hero-device-scan overflow-hidden bg-[#030507]">
+              <AppPreviewMock hero />
+            </div>
           </div>
+          <div className="hero-device-base" aria-hidden="true" />
         </div>
 
         <div className="hero-device-reflection pointer-events-none" aria-hidden="true" />
