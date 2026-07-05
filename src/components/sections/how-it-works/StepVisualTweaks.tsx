@@ -3,7 +3,7 @@ import { AnimatedCursor } from "./AnimatedCursor";
 const TWEAKS = [
   { name: "Disable Game DVR", on: true },
   { name: "GPU Scheduling", on: true },
-  { name: "TCP NoDelay", on: false },
+  { name: "TCP NoDelay", on: false, target: true },
   { name: "Timer Resolution", on: true },
 ] as const;
 
@@ -17,19 +17,22 @@ export function StepVisualTweaks() {
         </div>
         <div className="hiw-tweak-list">
           {TWEAKS.map((tweak) => (
-            <div key={tweak.name} className={`hiw-tweak-row ${tweak.on ? "hiw-tweak-row--on" : ""}`}>
+            <div
+              key={tweak.name}
+              className={`hiw-tweak-row ${tweak.on ? "hiw-tweak-row--on" : ""} ${"target" in tweak && tweak.target ? "hiw-tweak-row--target" : ""}`}
+            >
               <span className="hiw-tweak-name">{tweak.name}</span>
-              <span className={`hiw-tweak-toggle ${tweak.on ? "hiw-tweak-toggle--on" : ""}`} aria-hidden="true">
+              <span
+                className={`hiw-tweak-toggle ${tweak.on ? "hiw-tweak-toggle--on" : ""} ${"target" in tweak && tweak.target ? "hiw-tweak-toggle--click" : ""}`}
+                aria-hidden="true"
+              >
                 <span className="hiw-tweak-toggle-knob" />
               </span>
             </div>
           ))}
         </div>
-        <button type="button" className="hiw-apply-all" tabIndex={-1}>
-          Apply all tweaks
-        </button>
       </div>
-      <AnimatedCursor className="hiw-cursor--tweaks" />
+      <AnimatedCursor className="hiw-cursor--tweaks" clicking />
     </div>
   );
 }

@@ -4147,123 +4147,73 @@ html.reduce-effects .particles-canvas {
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-/* Download — mini site header */
+/* Download — centered Get App click demo */
 .hiw-visual--download {
-  padding: 0.65rem 0.75rem 0.75rem;
+  padding: 0;
 }
 
-.hiw-browser-chrome {
+.hiw-download-stage {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
-  gap: 0.45rem 0.55rem;
-  padding: 0.45rem 0.55rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(0, 0, 0, 0.45);
-  border-radius: 0;
-  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
-}
-
-.hiw-browser-dots {
-  display: flex;
-  gap: 0.25rem;
-}
-
-.hiw-browser-dots span {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.18);
-}
-
-.hiw-browser-bar {
-  display: flex;
-  align-items: center;
+  justify-content: center;
+  height: 100%;
   gap: 0.55rem;
-  min-width: 0;
-  flex: 1;
+  padding: 1rem;
+  text-align: center;
 }
 
-.hiw-browser-logo {
-  font-size: 8px;
+.hiw-download-logo {
+  font-size: 9px;
   font-weight: 900;
-  letter-spacing: 0.14em;
-  color: #ff9588;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 149, 136, 0.75);
 }
 
-.hiw-browser-link {
-  font-size: 7px;
-  font-weight: 600;
-  color: #8a939f;
-}
-
-.hiw-browser-actions {
-  display: flex;
+.hiw-download-cta {
+  display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  margin-left: auto;
-}
-
-.hiw-browser-login {
-  font-size: 7px;
-  color: #8a939f;
-}
-
-.hiw-browser-btn {
-  font-size: 7px;
+  justify-content: center;
+  min-width: 7.5rem;
+  padding: 0.7rem 1.35rem;
+  font-size: 13px;
   font-weight: 800;
-  padding: 0.28rem 0.45rem;
-  border-radius: 0;
-  clip-path: polygon(3px 0, 100% 0, calc(100% - 3px) 100%, 0 100%);
-}
-
-.hiw-browser-btn--discord {
-  color: #fff;
-  background: linear-gradient(90deg, #5865f2, #4752c4);
-}
-
-.hiw-browser-btn--cta {
+  letter-spacing: 0.02em;
   color: #fff;
   background: linear-gradient(90deg, #ff6b5b, #e85548);
-  box-shadow: 0 0 16px rgba(255, 107, 91, 0.45);
+  border: 1px solid rgba(255, 149, 136, 0.55);
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  box-shadow: 0 0 24px rgba(255, 107, 91, 0.45);
 }
 
-.hiw-browser-btn--pulse {
-  animation: hiwGetAppPulse 4.2s ease-in-out infinite;
+.hiw-download-cta--pulse {
+  animation: hiwGetAppPulse 3.6s ease-in-out infinite;
 }
 
 @keyframes hiwGetAppPulse {
-  0%, 38% {
-    box-shadow: 0 0 12px rgba(255, 107, 91, 0.35);
+  0%, 42% {
+    box-shadow: 0 0 20px rgba(255, 107, 91, 0.4);
     transform: scale(1);
   }
-  44%, 52% {
-    box-shadow: 0 0 28px rgba(255, 107, 91, 0.75);
-    transform: scale(1.06);
+  48%, 54% {
+    box-shadow: 0 0 36px rgba(255, 107, 91, 0.85);
+    transform: scale(0.94);
   }
-  58%, 100% {
-    box-shadow: 0 0 14px rgba(255, 107, 91, 0.4);
+  60%, 100% {
+    box-shadow: 0 0 22px rgba(255, 107, 91, 0.5);
     transform: scale(1);
   }
 }
 
-.hiw-browser-body {
-  margin-top: 0.65rem;
-  padding: 0.35rem 0.15rem;
+.hiw-download-hint {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #8a939f;
 }
 
-.hiw-browser-hero-line {
-  height: 7px;
-  margin-bottom: 0.35rem;
-  border-radius: 2px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
-}
-
-.hiw-browser-hero-line--short {
-  width: 62%;
-}
-
-/* Tweaks — mini app panel */
+/* Tweaks — toggle click demo */
 .hiw-visual--tweaks {
   padding: 0.55rem;
 }
@@ -4330,23 +4280,20 @@ html.reduce-effects .particles-canvas {
   background: rgba(93, 222, 134, 0.06);
 }
 
-.hiw-tweak-row:nth-child(2) {
-  animation: hiwTweakHover 5s ease-in-out infinite;
+.hiw-tweak-row--target {
+  animation: hiwTweakRowActivate 3.8s ease-in-out infinite;
 }
 
-.hiw-tweak-row:nth-child(3) {
-  animation: hiwTweakHover 5s ease-in-out 1.8s infinite;
-}
-
-@keyframes hiwTweakHover {
-  0%, 28%, 100% {
-    border-color: rgba(255, 255, 255, 0.06);
-    background: rgba(255, 255, 255, 0.02);
+@keyframes hiwTweakRowActivate {
+  0%, 44% {
+    border-color: rgba(255, 107, 91, 0.35);
+    background: rgba(255, 107, 91, 0.08);
+    box-shadow: none;
   }
-  34%, 48% {
-    border-color: rgba(255, 107, 91, 0.45);
-    background: rgba(255, 107, 91, 0.1);
-    box-shadow: 0 0 20px rgba(255, 107, 91, 0.15);
+  52%, 100% {
+    border-color: rgba(93, 222, 134, 0.4);
+    background: rgba(93, 222, 134, 0.12);
+    box-shadow: 0 0 18px rgba(93, 222, 134, 0.15);
   }
 }
 
@@ -4373,6 +4320,19 @@ html.reduce-effects .particles-canvas {
   background: rgba(93, 222, 134, 0.45);
 }
 
+.hiw-tweak-toggle--click {
+  animation: hiwToggleTrack 3.8s ease-in-out infinite;
+}
+
+@keyframes hiwToggleTrack {
+  0%, 46% {
+    background: rgba(255, 255, 255, 0.14);
+  }
+  54%, 100% {
+    background: rgba(93, 222, 134, 0.5);
+  }
+}
+
 .hiw-tweak-toggle-knob {
   position: absolute;
   top: 1px;
@@ -4382,25 +4342,23 @@ html.reduce-effects .particles-canvas {
   border-radius: 50%;
   background: #fff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
-  transition: transform 0.25s ease;
 }
 
 .hiw-tweak-toggle--on .hiw-tweak-toggle-knob {
   transform: translateX(10px);
 }
 
-.hiw-apply-all {
-  margin: 0 0.5rem 0.45rem;
-  padding: 0.35rem;
-  font-size: 7px;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #fff;
-  background: linear-gradient(90deg, #ff6b5b, #e85548);
-  border: none;
-  clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
-  pointer-events: none;
+.hiw-tweak-toggle--click .hiw-tweak-toggle-knob {
+  animation: hiwToggleKnob 3.8s ease-in-out infinite;
+}
+
+@keyframes hiwToggleKnob {
+  0%, 46% {
+    transform: translateX(0);
+  }
+  54%, 100% {
+    transform: translateX(10px);
+  }
 }
 
 /* Play — Fortnite scene */
@@ -4513,53 +4471,109 @@ html.reduce-effects .particles-canvas {
 }
 
 .hiw-cursor--clicking .hiw-cursor-ripple {
-  animation: hiwCursorRipple 4.2s ease-out infinite;
+  animation: hiwCursorRipple 3.8s ease-out infinite;
 }
 
 @keyframes hiwCursorRipple {
-  0%, 40% { opacity: 0; transform: scale(0.4); }
-  44% { opacity: 1; transform: scale(0.6); }
-  52% { opacity: 0; transform: scale(1.8); }
+  0%, 44% { opacity: 0; transform: scale(0.4); }
+  48% { opacity: 1; transform: scale(0.65); }
+  56% { opacity: 0; transform: scale(1.9); }
   100% { opacity: 0; }
 }
 
 .hiw-cursor--download {
-  animation: hiwCursorDownload 4.2s ease-in-out infinite;
+  animation: hiwCursorDownload 3.6s ease-in-out infinite;
 }
 
 @keyframes hiwCursorDownload {
-  0% { left: 8%; top: 78%; opacity: 0; }
-  8% { opacity: 1; }
-  32% { left: 78%; top: 22%; }
-  42% { transform: scale(0.9); }
-  48% { transform: scale(1); }
-  70%, 100% { left: 78%; top: 22%; opacity: 1; }
+  0% {
+    left: 20%;
+    top: 75%;
+    opacity: 0;
+    transform: translate(0, 0) scale(1);
+  }
+  10% {
+    opacity: 1;
+  }
+  38% {
+    left: 50%;
+    top: 51%;
+    transform: translate(0, 10px) scale(1);
+  }
+  46% {
+    left: 50%;
+    top: 51%;
+    transform: translate(0, 10px) scale(0.8);
+  }
+  52% {
+    left: 50%;
+    top: 51%;
+    transform: translate(0, 10px) scale(1);
+  }
+  72%, 100% {
+    left: 50%;
+    top: 51%;
+    opacity: 1;
+    transform: translate(0, 10px) scale(1);
+  }
 }
 
 .hiw-cursor--tweaks {
-  animation: hiwCursorTweaks 5s ease-in-out infinite;
+  animation: hiwCursorTweaks 3.8s ease-in-out infinite;
 }
 
 @keyframes hiwCursorTweaks {
-  0% { left: 72%; top: 88%; opacity: 0; }
-  8% { opacity: 1; left: 72%; top: 38%; }
-  28% { left: 82%; top: 38%; }
-  48% { left: 82%; top: 52%; }
-  68% { left: 82%; top: 66%; }
-  88%, 100% { left: 82%; top: 66%; opacity: 1; }
+  0% {
+    left: 14%;
+    top: 82%;
+    opacity: 0;
+    transform: scale(1);
+  }
+  10% {
+    opacity: 1;
+  }
+  36% {
+    left: calc(100% - 2.35rem);
+    top: 56%;
+    transform: scale(1);
+  }
+  44% {
+    left: calc(100% - 2.35rem);
+    top: 56%;
+    transform: scale(0.8);
+  }
+  50% {
+    left: calc(100% - 2.35rem);
+    top: 56%;
+    transform: scale(1);
+  }
+  72%, 100% {
+    left: calc(100% - 2.35rem);
+    top: 56%;
+    opacity: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .hiw-cursor--download,
   .hiw-cursor--tweaks,
   .hiw-cursor--clicking .hiw-cursor-ripple,
-  .hiw-browser-btn--pulse,
-  .hiw-tweak-row:nth-child(2),
-  .hiw-tweak-row:nth-child(3),
+  .hiw-download-cta--pulse,
+  .hiw-tweak-row--target,
+  .hiw-tweak-toggle--click,
+  .hiw-tweak-toggle--click .hiw-tweak-toggle-knob,
   .hiw-play-media,
   .hiw-play-scan,
   .hiw-play-hud-fps {
     animation: none !important;
+  }
+
+  .hiw-tweak-toggle--click {
+    background: rgba(93, 222, 134, 0.5);
+  }
+
+  .hiw-tweak-toggle--click .hiw-tweak-toggle-knob {
+    transform: translateX(10px);
   }
 }
 
