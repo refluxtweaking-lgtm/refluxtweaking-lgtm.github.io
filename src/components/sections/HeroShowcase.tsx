@@ -26,14 +26,15 @@ const FLOAT_BADGES = [
 
 export function HeroShowcase() {
   return (
-    <div className="hero-showcase-wrap relative mx-auto w-full px-2 sm:px-0">
-      <div className="hero-showcase-halo pointer-events-none absolute -inset-10" aria-hidden="true" />
+    <div className="hero-showcase-wrap relative mx-auto w-full px-0 sm:px-2">
+      <div className="hero-showcase-halo pointer-events-none absolute -inset-12" aria-hidden="true" />
+      <div className="hero-showcase-ring pointer-events-none absolute left-1/2 top-[42%] -z-10 h-[min(88%,520px)] w-[min(95%,640px)] -translate-x-1/2 -translate-y-1/2" aria-hidden="true" />
       <div
-        className="pointer-events-none absolute -inset-6 rounded-[32px] bg-[radial-gradient(ellipse_75%_60%_at_50%_42%,rgba(241,91,80,0.22),transparent_70%)]"
+        className="pointer-events-none absolute -inset-8 bg-[radial-gradient(ellipse_80%_65%_at_50%_40%,rgba(241,91,80,0.28),transparent_68%)]"
         aria-hidden="true"
       />
 
-      <div className="hero-device-stage relative pb-4">
+      <div className="hero-device-stage relative pb-6">
         {FLOAT_BADGES.map((badge) => (
           <div
             key={badge.id}
