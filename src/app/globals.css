@@ -1123,15 +1123,9 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
   filter: drop-shadow(0 0 32px rgba(255, 107, 91, 0.35));
 }
 
-.hero-game-ticker-wrap {
-  display: inline-block;
-  min-width: 7.25rem;
-  vertical-align: baseline;
-  text-align: left;
-}
-
 .hero-game-ticker {
   display: inline;
+  white-space: nowrap;
   font-weight: 800;
   letter-spacing: -0.02em;
   background: linear-gradient(120deg, #ffd4cc, #ff6b5b, #ff9588, #ff6b5b);
@@ -1145,14 +1139,14 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 }
 
 .hero-game-ticker--flip {
-  animation: heroTickerChange 0.45s ease, heroTextShimmer 5s ease-in-out infinite;
+  animation: heroTickerChange 0.38s ease, heroTextShimmer 5s ease-in-out infinite;
 }
 
 @keyframes heroTickerChange {
-  0% { opacity: 1; transform: translateY(0); }
-  40% { opacity: 0; transform: translateY(-5px); }
-  60% { opacity: 0; transform: translateY(5px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  45% { opacity: 0; transform: translateY(-3px) scale(0.98); }
+  55% { opacity: 0; transform: translateY(3px) scale(0.98); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .hero-tune-copy {

@@ -15,8 +15,8 @@ export function HeroGameTicker() {
       timeout = setTimeout(() => {
         setIndex((current) => (current + 1) % GAMES.length);
         setFlip(false);
-      }, 280);
-    }, 2800);
+      }, 220);
+    }, 2000);
 
     return () => {
       clearInterval(interval);
@@ -25,8 +25,8 @@ export function HeroGameTicker() {
   }, []);
 
   return (
-    <span className="hero-game-ticker-wrap" aria-live="polite">
-      <span className={`hero-game-ticker ${flip ? "hero-game-ticker--flip" : ""}`}>{GAMES[index]}</span>
+    <span className={`hero-game-ticker ${flip ? "hero-game-ticker--flip" : ""}`} aria-live="polite">
+      {GAMES[index]}
     </span>
   );
 }
