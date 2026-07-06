@@ -43,7 +43,9 @@ export function PricingCards({ compact = false, showProofHook = false }: Pricing
                 <div className="pricing-card-hero-glow pointer-events-none absolute inset-0 rounded-2xl" aria-hidden="true" />
                 <div className="pricing-card-hero-ring pointer-events-none absolute -inset-px rounded-2xl" aria-hidden="true" />
               </>
-            ) : null}
+            ) : (
+              <div className="pricing-card-sheen pointer-events-none absolute inset-0 rounded-2xl" aria-hidden="true" />
+            )}
 
             {plan.badge ? (
               <span
@@ -139,12 +141,12 @@ export function PricingCards({ compact = false, showProofHook = false }: Pricing
 
             <Button
               href={plan.ctaHref}
-              variant={plan.highlighted ? "discord" : "primary"}
+              variant="ghost"
               external={!plan.downloadFilename}
               download={plan.downloadFilename}
               large={isHero}
-              className={`relative z-[1] mt-auto w-full ${isPro || isHero ? "btn-angular" : ""} ${
-                isHero ? "pricing-card-hero-cta" : ""
+              className={`btn-pricing-buy relative z-[1] mt-auto w-full btn-angular ${
+                isHero ? "btn-pricing-buy--hero" : plan.id === "free" ? "btn-pricing-buy--free" : ""
               }`}
             >
               {plan.cta}
