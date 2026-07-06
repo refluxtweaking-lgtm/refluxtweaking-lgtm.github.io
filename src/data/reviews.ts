@@ -30,7 +30,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r3",
-    quote: "W works good",
+    quote: "works good",
     author: "***",
     game: "Apex Legends",
     rating: 4.9,
@@ -46,7 +46,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r5",
-    quote: "W stable fps",
+    quote: "stable fps now",
     author: "D*** R.",
     game: "CS2",
     rating: 4.7,
@@ -62,7 +62,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r7",
-    quote: "W just works",
+    quote: "just works",
     author: "Noah K.",
     game: "Apex Legends",
     rating: 5,
@@ -70,7 +70,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r8",
-    quote: "W better ping",
+    quote: "better ping fs",
     author: "***",
     game: "Valorant",
     rating: 4.6,
@@ -78,7 +78,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r9",
-    quote: "W found games",
+    quote: "found my games",
     author: "E***",
     game: "Cyberpunk 2077",
     rating: 4.8,
@@ -94,7 +94,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r11",
-    quote: "W no stutter",
+    quote: "no stutter now",
     author: "***",
     game: "Elden Ring",
     rating: 4.5,
@@ -102,7 +102,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r12",
-    quote: "W fps jumped",
+    quote: "fps jumped crazy",
     author: "t***",
     game: "Warzone",
     rating: 4.9,
@@ -110,7 +110,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r13",
-    quote: "W free hits",
+    quote: "free version hits",
     author: "Kai M.",
     game: "CS2",
     rating: 4.7,
@@ -126,7 +126,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r15",
-    quote: "W tweaks hit",
+    quote: "tweaks hit hard",
     author: "***",
     game: "Rainbow Six Siege",
     rating: 4.6,
@@ -142,7 +142,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r17",
-    quote: "W fast support",
+    quote: "fast support fs",
     author: "S*** P.",
     game: "Valorant",
     rating: 5,
@@ -158,7 +158,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r19",
-    quote: "W ping fixed",
+    quote: "ping fixed lowkey",
     author: "***",
     game: "Valorant",
     rating: 4.8,
@@ -190,7 +190,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r23",
-    quote: "W worth it",
+    quote: "worth it tbh",
     author: "A***",
     game: "Destiny 2",
     rating: 4.8,
@@ -206,7 +206,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r25",
-    quote: "W easy tweak",
+    quote: "easy tweak fs",
     author: "***",
     game: "League of Legends",
     rating: 4.6,
@@ -222,7 +222,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r27",
-    quote: "W no lag",
+    quote: "no lag now",
     author: "***",
     game: "Apex Legends",
     rating: 4.8,
@@ -238,7 +238,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r29",
-    quote: "W clean tweaks",
+    quote: "clean tweaks fs",
     author: "L***",
     game: "Warzone",
     rating: 4.7,
@@ -246,7 +246,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r30",
-    quote: "solid W app",
+    quote: "solid app fs",
     author: "***",
     game: "Valorant",
     rating: 5,

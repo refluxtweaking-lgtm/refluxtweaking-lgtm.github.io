@@ -821,6 +821,10 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
   padding: 0.55rem 1rem;
 }
 
+.review-rating-badge--home {
+  padding: 0.6rem 1.1rem;
+}
+
 .hero-headline-row {
   display: flex;
   align-items: flex-start;
