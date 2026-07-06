@@ -786,6 +786,41 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
   animation: heroLivePulse 2s ease-in-out infinite;
 }
 
+.review-rating-badge {
+  padding: 0.45rem 0.85rem;
+  border: 1px solid rgba(255, 107, 91, 0.28);
+  background:
+    linear-gradient(180deg, rgba(255, 107, 91, 0.1), rgba(255, 107, 91, 0.04)),
+    rgba(8, 10, 14, 0.72);
+  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+  box-shadow:
+    0 4px 18px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.review-rating-badge:hover {
+  border-color: rgba(255, 107, 91, 0.48);
+  box-shadow:
+    0 6px 24px rgba(0, 0, 0, 0.34),
+    0 0 28px -8px rgba(255, 107, 91, 0.35);
+  transform: translateY(-1px);
+}
+
+.review-rating-badge-divider {
+  width: 1px;
+  height: 14px;
+  background: rgba(255, 107, 91, 0.28);
+}
+
+.review-rating-badge--page {
+  padding: 0.55rem 1rem;
+}
+
 .hero-headline-row {
   display: flex;
   align-items: flex-start;

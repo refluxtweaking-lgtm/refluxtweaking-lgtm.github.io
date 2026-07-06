@@ -156,7 +156,114 @@ export const reviews: Review[] = [
     rating: 5,
     tone: "casual",
   },
+  {
+    id: "r19",
+    quote: "W ping fixed",
+    author: "***",
+    game: "Valorant",
+    rating: 4.8,
+    tone: "casual",
+  },
+  {
+    id: "r20",
+    quote: "runs way smoother",
+    author: "m***",
+    game: "Rust",
+    rating: 4.9,
+    tone: "casual",
+  },
+  {
+    id: "r21",
+    quote: "W lowkey fire",
+    author: "***",
+    game: "Overwatch 2",
+    rating: 5,
+    tone: "casual",
+  },
+  {
+    id: "r22",
+    quote: "got more fps fs",
+    author: "***",
+    game: "PUBG",
+    rating: 4.7,
+    tone: "casual",
+  },
+  {
+    id: "r23",
+    quote: "W worth it",
+    author: "A***",
+    game: "Destiny 2",
+    rating: 4.8,
+    tone: "casual",
+  },
+  {
+    id: "r24",
+    quote: "ping down fps up",
+    author: "***",
+    game: "Rainbow Six Siege",
+    rating: 4.9,
+    tone: "casual",
+  },
+  {
+    id: "r25",
+    quote: "W easy tweak",
+    author: "***",
+    game: "League of Legends",
+    rating: 4.6,
+    tone: "casual",
+  },
+  {
+    id: "r26",
+    quote: "game feels snappy",
+    author: "r***",
+    game: "CS2",
+    rating: 5,
+    tone: "casual",
+  },
+  {
+    id: "r27",
+    quote: "W no lag",
+    author: "***",
+    game: "Apex Legends",
+    rating: 4.8,
+    tone: "casual",
+  },
+  {
+    id: "r28",
+    quote: "fps boost lowkey",
+    author: "***",
+    game: "Fortnite",
+    rating: 4.9,
+    tone: "casual",
+  },
+  {
+    id: "r29",
+    quote: "W clean tweaks",
+    author: "L***",
+    game: "Warzone",
+    rating: 4.7,
+    tone: "casual",
+  },
+  {
+    id: "r30",
+    quote: "solid W app",
+    author: "***",
+    game: "Valorant",
+    rating: 5,
+    tone: "casual",
+  },
 ];
+
+export function getReviewStats() {
+  const count = reviews.length;
+  const averageRating =
+    count === 0 ? 0 : reviews.reduce((sum, review) => sum + review.rating, 0) / count;
+
+  return {
+    count,
+    averageRating: Math.round(averageRating * 10) / 10,
+  };
+}
 
 export function reviewAuthorInitial(author: string): string {
   const trimmed = author.trim();

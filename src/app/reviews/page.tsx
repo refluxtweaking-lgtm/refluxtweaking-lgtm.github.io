@@ -2,6 +2,8 @@ import Link from "next/link";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ReviewsPager } from "@/components/reviews/ReviewsPager";
+import { ReviewRatingBadge } from "@/components/reviews/ReviewRatingBadge";
+import { getReviewStats } from "@/data/reviews";
 import { Icon } from "@/components/ui/Icon";
 
 export const metadata = {
@@ -10,8 +12,14 @@ export const metadata = {
 };
 
 export default function ReviewsPage() {
+  const { averageRating, count } = getReviewStats();
+
   return (
     <SiteShell mainClassName="pt-8 pb-10">
+      <div className="mb-8 flex justify-center">
+        <ReviewRatingBadge className="review-rating-badge--page" />
+      </div>
+
       <SectionHeader
         eyebrow="Community Reviews"
         title={
@@ -19,7 +27,7 @@ export default function ReviewsPage() {
             Real players. <span className="gradient-text">Real results.</span>
           </>
         }
-        subtitle="Some names are hidden on purpose. Use the arrows to read more."
+        subtitle={`${averageRating.toFixed(1)} average from ${count} reviews. Some names are hidden on purpose — use the arrows to read more.`}
       />
 
       <ReviewsPager />
