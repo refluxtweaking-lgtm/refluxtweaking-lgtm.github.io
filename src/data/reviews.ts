@@ -22,7 +22,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r2",
-    quote: "tweaked my pc good asff",
+    quote: "tweaked my pc good af",
     author: "***",
     game: "Fortnite",
     rating: 5,
@@ -142,7 +142,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r17",
-    quote: "fast support fs",
+    quote: "fast support",
     author: "S*** P.",
     game: "Valorant",
     rating: 5,
@@ -182,7 +182,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r22",
-    quote: "got more fps fs",
+    quote: "got more fps",
     author: "***",
     game: "PUBG",
     rating: 4.7,
@@ -206,7 +206,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r25",
-    quote: "easy tweak fs",
+    quote: "easy tweak",
     author: "***",
     game: "League of Legends",
     rating: 4.6,
@@ -238,7 +238,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r29",
-    quote: "clean tweaks fs",
+    quote: "clean tweaks",
     author: "L***",
     game: "Warzone",
     rating: 4.7,
@@ -246,7 +246,7 @@ export const reviews: Review[] = [
   },
   {
     id: "r30",
-    quote: "solid app fs",
+    quote: "solid app",
     author: "***",
     game: "Valorant",
     rating: 5,
