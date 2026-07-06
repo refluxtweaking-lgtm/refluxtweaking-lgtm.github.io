@@ -811,10 +811,8 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
   transform: translateY(-1px);
 }
 
-.review-rating-badge-divider {
-  width: 1px;
-  height: 14px;
-  background: rgba(255, 107, 91, 0.28);
+.review-rating-badge-arrow {
+  opacity: 0.85;
 }
 
 .review-rating-badge--page {

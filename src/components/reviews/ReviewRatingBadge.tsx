@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getReviewStats } from "@/data/reviews";
 import { StarRating } from "@/components/reviews/StarRating";
+import { Icon } from "@/components/ui/Icon";
 
 type ReviewRatingBadgeProps = {
   className?: string;
@@ -12,7 +13,7 @@ export function ReviewRatingBadge({ className = "" }: ReviewRatingBadgeProps) {
   return (
     <Link
       href="/reviews"
-      className={`review-rating-badge reflux-glow-interactive group inline-flex items-center gap-2.5 ${className}`}
+      className={`review-rating-badge reflux-glow-interactive group inline-flex items-center gap-2 ${className}`}
       aria-label={`${averageRating.toFixed(1)} out of 5 stars from ${count} reviews — read reviews`}
     >
       <StarRating
@@ -20,10 +21,13 @@ export function ReviewRatingBadge({ className = "" }: ReviewRatingBadgeProps) {
         size={14}
         valueClassName="text-sm font-bold text-reflux-accent reflux-metric"
       />
-      <span className="review-rating-badge-divider" aria-hidden="true" />
-      <span className="text-[11px] font-semibold tracking-wide text-reflux-text-soft uppercase group-hover:text-white">
-        {count} reviews
-      </span>
+      <Icon
+        name="arrowRight"
+        size={14}
+        strokeWidth={2.4}
+        glow={false}
+        className="review-rating-badge-arrow text-reflux-accent transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-white"
+      />
     </Link>
   );
 }

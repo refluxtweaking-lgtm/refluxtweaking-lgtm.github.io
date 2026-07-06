@@ -5,6 +5,7 @@ import { VendorLogo } from "@/components/ui/VendorLogo";
 import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
 import { HeroGameMarquee } from "./HeroGameMarquee";
 import { HeroShowcase } from "./HeroShowcase";
+import { ReviewRatingBadge } from "@/components/reviews/ReviewRatingBadge";
 
 const proofPoints = [
   { icon: "bolt" as const, label: "+52", unit: "avg FPS", sub: "Real user results", accent: "#5dde86" },
@@ -21,7 +22,11 @@ export function Hero() {
         <div className="hero-compact-flow flex flex-col gap-4 lg:gap-5">
           <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.72fr)] lg:items-start lg:gap-6">
             <div className="hero-copy order-1 overflow-visible text-center lg:text-left">
-              <div className="animate-fade-in-up mb-3 flex justify-center lg:justify-start" style={{ animationDelay: "0.02s" }}>
+              <div
+                className="animate-fade-in-up mb-3 flex flex-col items-center gap-2.5 lg:items-start"
+                style={{ animationDelay: "0.02s" }}
+              >
+                <ReviewRatingBadge />
                 <HeroLaunchRail />
               </div>
 

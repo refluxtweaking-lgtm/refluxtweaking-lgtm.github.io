@@ -3,7 +3,6 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { FlowIn } from "@/components/ui/FlowIn";
 import { Icon } from "@/components/ui/Icon";
 import { ReviewCard } from "@/components/reviews/ReviewCard";
-import { ReviewRatingBadge } from "@/components/reviews/ReviewRatingBadge";
 import { reviews } from "@/data/reviews";
 
 const HOME_REVIEW_COUNT = 6;
@@ -14,9 +13,6 @@ export function Testimonials() {
   return (
     <section className="section-flow">
       <div className="section-flow-divider" aria-hidden="true" />
-      <div className="mb-8 flex justify-center">
-        <ReviewRatingBadge className="review-rating-badge--home" />
-      </div>
       <SectionHeader
         eyebrow="Social Proof"
         title={
