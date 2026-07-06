@@ -4126,6 +4126,133 @@ html.reduce-effects .particles-canvas {
     0 24px 60px -20px rgba(255, 107, 91, 0.35);
 }
 
+.pricing-card--hero {
+  overflow: visible;
+  border-color: rgba(255, 107, 91, 0.55) !important;
+  background:
+    linear-gradient(165deg, rgba(255, 107, 91, 0.14) 0%, rgba(255, 77, 61, 0.04) 38%, rgba(8, 10, 14, 0.92) 72%),
+    rgba(8, 10, 14, 0.88) !important;
+  box-shadow:
+    0 0 0 1px rgba(255, 149, 136, 0.22) inset,
+    0 28px 70px -18px rgba(255, 77, 61, 0.45),
+    0 0 80px -24px rgba(255, 107, 91, 0.55);
+}
+
+.pricing-card-hero-glow {
+  background:
+    radial-gradient(ellipse 90% 70% at 50% -10%, rgba(255, 107, 91, 0.28), transparent 62%),
+    radial-gradient(ellipse 70% 55% at 50% 110%, rgba(255, 77, 61, 0.12), transparent 58%);
+  opacity: 0.95;
+}
+
+.pricing-card-hero-ring {
+  border: 1px solid rgba(255, 149, 136, 0.35);
+  box-shadow:
+    0 0 0 1px rgba(255, 77, 61, 0.15),
+    0 0 40px rgba(255, 107, 91, 0.25);
+  animation: pricingHeroRingPulse 3.5s ease-in-out infinite;
+}
+
+@keyframes pricingHeroRingPulse {
+  0%, 100% {
+    opacity: 0.75;
+    box-shadow:
+      0 0 0 1px rgba(255, 77, 61, 0.15),
+      0 0 32px rgba(255, 107, 91, 0.2);
+  }
+  50% {
+    opacity: 1;
+    box-shadow:
+      0 0 0 1px rgba(255, 149, 136, 0.35),
+      0 0 48px rgba(255, 107, 91, 0.42);
+  }
+}
+
+.pricing-card-hero-badge {
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.95rem;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: #fff;
+  background: linear-gradient(90deg, #ff6b5b, #ff3d2e, #ff9588);
+  background-size: 200% auto;
+  animation: heroTextShimmer 4s ease-in-out infinite;
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  box-shadow:
+    0 0 24px rgba(255, 107, 91, 0.55),
+    0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.pricing-card-hero-badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+  animation: heroLivePulse 2s ease-in-out infinite;
+}
+
+.pricing-card-hero-kicker {
+  display: inline-block;
+  padding: 0.28rem 0.55rem;
+  border: 1px solid rgba(255, 107, 91, 0.28);
+  background: rgba(255, 107, 91, 0.08);
+  clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
+}
+
+.pricing-card-hero-price-value {
+  background: linear-gradient(135deg, #fff5f2 0%, #ffd4cc 35%, #ff6b5b 70%, #ff9588 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 18px rgba(255, 107, 91, 0.35));
+}
+
+.pricing-card-hero-tweak-pill {
+  background: linear-gradient(90deg, rgba(255, 107, 91, 0.85), rgba(255, 77, 61, 0.95));
+  box-shadow: 0 0 22px rgba(255, 107, 91, 0.4);
+}
+
+.pricing-card-hero-feature::before {
+  filter: drop-shadow(0 0 6px rgba(255, 107, 91, 0.85));
+}
+
+.pricing-card-hero-cta {
+  box-shadow:
+    0 8px 28px rgba(255, 77, 61, 0.45),
+    0 0 40px -8px rgba(255, 107, 91, 0.55) !important;
+}
+
+.pricing-card-proof-hook--hero {
+  padding: 0.45rem 0.65rem;
+  font-weight: 700;
+  color: #ffd4cc;
+  border: 1px solid rgba(255, 149, 136, 0.35);
+  background: rgba(255, 107, 91, 0.12);
+  clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
+}
+
+@media (max-width: 1279px) {
+  .pricing-cards-grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pricing-card--free {
+    order: 0;
+  }
+
+  .pricing-card--hero {
+    order: 1;
+  }
+
+  .pricing-card:not(.pricing-card--free):not(.pricing-card--hero) {
+    order: 2;
+  }
+}
+
 .pricing-card--pro {
   border-color: rgba(255, 107, 91, 0.18);
 }
