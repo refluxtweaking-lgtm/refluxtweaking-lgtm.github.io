@@ -26,6 +26,7 @@ export function Hero() {
                 className="animate-fade-in-up mb-3 flex flex-col items-center gap-2.5 lg:items-start"
                 style={{ animationDelay: "0.02s" }}
               >
+                <span className="hero-rank-kicker">#1 Tweaking Software for PC</span>
                 <ReviewRatingBadge />
                 <HeroLaunchRail />
               </div>

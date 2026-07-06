@@ -815,6 +815,27 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
   opacity: 0.85;
 }
 
+.hero-rank-kicker {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.8rem;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #ffd4cc;
+  border: 1px solid rgba(255, 107, 91, 0.35);
+  background:
+    linear-gradient(180deg, rgba(255, 107, 91, 0.14), rgba(255, 107, 91, 0.05)),
+    rgba(6, 8, 12, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+  box-shadow:
+    0 0 28px -8px rgba(255, 107, 91, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
 .review-rating-badge--page {
   padding: 0.55rem 1rem;
 }
