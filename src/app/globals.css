@@ -963,9 +963,7 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 }
 
 .hero-showcase-wrap--compact .hero-device-frame {
-  box-shadow:
-    0 20px 48px rgba(0, 0, 0, 0.5),
-    0 0 48px -24px rgba(255, 107, 91, 0.45);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.48);
 }
 
 .hero-showcase-wrap--compact .hero-device-notch {
@@ -1126,9 +1124,10 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 }
 
 .hero-game-ticker-wrap {
-  display: inline;
+  display: inline-block;
+  min-width: 7.25rem;
   vertical-align: baseline;
-  white-space: nowrap;
+  text-align: left;
 }
 
 .hero-game-ticker {
@@ -1142,6 +1141,7 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
   color: #ff6b5b;
   -webkit-text-fill-color: transparent;
   animation: heroTextShimmer 5s ease-in-out infinite;
+  filter: drop-shadow(0 0 16px rgba(255, 107, 91, 0.5));
 }
 
 .hero-game-ticker--flip {

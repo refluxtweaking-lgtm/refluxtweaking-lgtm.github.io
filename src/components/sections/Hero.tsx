@@ -4,6 +4,7 @@ import { HeroLaunchRail } from "./HeroLaunchRail";
 import { VendorLogo } from "@/components/ui/VendorLogo";
 import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
 import { HeroGameMarquee } from "./HeroGameMarquee";
+import { HeroGameTicker } from "./HeroGameTicker";
 import { HeroShowcase } from "./HeroShowcase";
 import { ReviewRatingBadge } from "@/components/reviews/ReviewRatingBadge";
 
@@ -47,7 +48,7 @@ export function Hero() {
                 className="hero-tune-copy hero-tune-copy--compact animate-fade-in-up mx-auto mb-4 max-w-lg text-sm leading-relaxed text-reflux-text-soft md:text-base lg:mx-0"
                 style={{ animationDelay: "0.08s" }}
               >
-                One-click Windows tuning for CS2, Apex, Valorant, and every game you grind. Intel, AMD, and NVIDIA
+                REFLUX tunes your PC for <HeroGameTicker /> and every game you grind. Intel, AMD, and NVIDIA
                 detected automatically.
               </p>
 
