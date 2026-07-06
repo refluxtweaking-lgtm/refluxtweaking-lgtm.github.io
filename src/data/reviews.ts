@@ -14,7 +14,7 @@ export const REVIEWS_PAGE_SIZE = 6;
 export const reviews: Review[] = [
   {
     id: "r1",
-    quote: "W good fps now",
+    quote: "ts acc worth it bro 😭",
     author: "Marcus L.",
     game: "Valorant",
     rating: 4.8,
