@@ -14,12 +14,11 @@ export const REVIEWS_PAGE_SIZE = 6;
 export const reviews: Review[] = [
   {
     id: "r1",
-    quote:
-      "I was skeptical at first, but the network tweaks alone dropped my ping by roughly nine milliseconds. Setup took under ten minutes.",
+    quote: "W good fps now",
     author: "Marcus L.",
     game: "Valorant",
     rating: 4.8,
-    tone: "professional",
+    tone: "casual",
   },
   {
     id: "r2",
@@ -31,12 +30,11 @@ export const reviews: Review[] = [
   },
   {
     id: "r3",
-    quote:
-      "Clear explanations for every toggle, and the restore point ran before anything changed. That alone sold me on Pro.",
+    quote: "W works good",
     author: "***",
     game: "Apex Legends",
     rating: 4.9,
-    tone: "professional",
+    tone: "casual",
   },
   {
     id: "r4",
@@ -48,12 +46,11 @@ export const reviews: Review[] = [
   },
   {
     id: "r5",
-    quote:
-      "My one-percent lows improved noticeably after the CPU and power plan changes. I still use Windows restore before big batches, just in case.",
+    quote: "W stable fps",
     author: "D*** R.",
     game: "CS2",
     rating: 4.7,
-    tone: "professional",
+    tone: "casual",
   },
   {
     id: "r6",
@@ -65,16 +62,15 @@ export const reviews: Review[] = [
   },
   {
     id: "r7",
-    quote:
-      "Finally a tweaker that does not install sketchy background services. Everything is reversible, and the hardware detection matched my rig on the first launch.",
+    quote: "W just works",
     author: "Noah K.",
     game: "Apex Legends",
     rating: 5,
-    tone: "professional",
+    tone: "casual",
   },
   {
     id: "r8",
-    quote: "ping feels way snappier tbh",
+    quote: "W better ping",
     author: "***",
     game: "Valorant",
     rating: 4.6,
@@ -82,12 +78,11 @@ export const reviews: Review[] = [
   },
   {
     id: "r9",
-    quote:
-      "The game scanner found my Steam library instantly, and the per-title optimize button is exactly what I wanted. Worth it for the time saved alone.",
+    quote: "W found games",
     author: "E***",
     game: "Cyberpunk 2077",
     rating: 4.8,
-    tone: "professional",
+    tone: "casual",
   },
   {
     id: "r10",
@@ -99,16 +94,15 @@ export const reviews: Review[] = [
   },
   {
     id: "r11",
-    quote:
-      "Stuttering in open-world games dropped a lot after the GPU scheduling tweaks. Not magic, but a solid improvement on my laptop.",
+    quote: "W no stutter",
     author: "***",
     game: "Elden Ring",
     rating: 4.5,
-    tone: "professional",
+    tone: "casual",
   },
   {
     id: "r12",
-    quote: "bro my fps jumped like crazy",
+    quote: "W fps jumped",
     author: "t***",
     game: "Warzone",
     rating: 4.9,
@@ -116,12 +110,11 @@ export const reviews: Review[] = [
   },
   {
     id: "r13",
-    quote:
-      "I like that Free is a real desktop app, not a watered-down demo. Upgraded after a week because the optimizer recommendations matched my CPU and GPU.",
+    quote: "W free hits",
     author: "Kai M.",
     game: "CS2",
     rating: 4.7,
-    tone: "professional",
+    tone: "casual",
   },
   {
     id: "r14",
@@ -133,12 +126,11 @@ export const reviews: Review[] = [
   },
   {
     id: "r15",
-    quote:
-      "Debloat section is aggressive, so I stuck to the performance tabs. Results were still strong, and I appreciated the warnings on experimental tweaks.",
+    quote: "W tweaks hit",
     author: "***",
     game: "Rainbow Six Siege",
     rating: 4.6,
-    tone: "professional",
+    tone: "casual",
   },
   {
     id: "r16",
@@ -150,12 +142,11 @@ export const reviews: Review[] = [
   },
   {
     id: "r17",
-    quote:
-      "Support on Discord answered a license question within an hour. The installer was straightforward, and my lifetime key activated on the first try.",
+    quote: "W fast support",
     author: "S*** P.",
     game: "Valorant",
     rating: 5,
-    tone: "professional",
+    tone: "casual",
   },
   {
     id: "r18",

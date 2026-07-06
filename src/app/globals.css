@@ -39,19 +39,30 @@ body::before {
   z-index: -25;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 140% 62% at 50% -6%, rgba(255, 77, 61, 0.11) 0%, rgba(255, 77, 61, 0.04) 38%, transparent 72%),
-    radial-gradient(ellipse 110% 58% at 0% 0%, rgba(255, 77, 61, 0.08) 0%, transparent 65%),
-    radial-gradient(ellipse 110% 58% at 100% 0%, rgba(255, 77, 61, 0.08) 0%, transparent 65%),
-    radial-gradient(ellipse 70% 50% at 100% 50%, rgba(255, 60, 50, 0.05) 0%, transparent 70%),
-    radial-gradient(ellipse 70% 50% at 0% 55%, rgba(255, 77, 61, 0.04) 0%, transparent 70%),
-    #050608;
+    radial-gradient(
+      ellipse 130% 70% at 50% -8%,
+      color-mix(in srgb, var(--reflux-accent) 10%, var(--reflux-bg)) 0%,
+      color-mix(in srgb, var(--reflux-accent) 4%, var(--reflux-bg)) 32%,
+      var(--reflux-bg) 68%
+    ),
+    radial-gradient(
+      ellipse 85% 55% at 0% 0%,
+      color-mix(in srgb, var(--reflux-accent) 6%, var(--reflux-bg)) 0%,
+      var(--reflux-bg) 58%
+    ),
+    radial-gradient(
+      ellipse 85% 55% at 100% 0%,
+      color-mix(in srgb, var(--reflux-accent) 6%, var(--reflux-bg)) 0%,
+      var(--reflux-bg) 58%
+    ),
+    var(--reflux-bg);
 }
 
 .noise-texture {
-  opacity: 0.018;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.022;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: repeat;
-  background-size: 180px 180px;
+  background-size: 256px 256px;
 }
 
 .app-icon-glow {
@@ -88,7 +99,7 @@ h3,
 }
 
 ::-webkit-scrollbar-track {
-  background: #000000;
+  background: var(--reflux-bg);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -514,34 +525,34 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
   pointer-events: none;
 }
 
-.ambient-horizon-wash {
+.ambient-bg-wash {
   position: absolute;
   inset: 0;
-  top: -18vh;
-  height: 82vh;
   background:
-    radial-gradient(ellipse 155% 85% at 50% 0%, rgba(255, 107, 91, 0.2) 0%, rgba(255, 77, 61, 0.06) 40%, transparent 74%),
-    linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(255, 77, 61, 0.035) 12%,
-      rgba(255, 77, 61, 0.06) 50%,
-      rgba(255, 77, 61, 0.035) 88%,
-      transparent 100%
+    radial-gradient(
+      ellipse 100% 72% at 50% 0%,
+      color-mix(in srgb, var(--reflux-accent) 8%, var(--reflux-bg)) 0%,
+      color-mix(in srgb, var(--reflux-accent) 3%, var(--reflux-bg)) 38%,
+      var(--reflux-bg) 72%
+    ),
+    radial-gradient(
+      ellipse 70% 50% at 100% 42%,
+      color-mix(in srgb, var(--reflux-accent) 4%, var(--reflux-bg)) 0%,
+      var(--reflux-bg) 62%
+    ),
+    radial-gradient(
+      ellipse 70% 50% at 0% 48%,
+      color-mix(in srgb, var(--reflux-accent) 3%, var(--reflux-bg)) 0%,
+      var(--reflux-bg) 62%
     );
-  animation: beamPulse 12s ease-in-out infinite;
+}
+
+.ambient-horizon-wash {
+  display: none;
 }
 
 .top-glow-sides {
-  position: absolute;
-  inset: 0;
-  top: -22vh;
-  height: 72vh;
-  background:
-    radial-gradient(ellipse 120% 70% at 50% 0%, rgba(255, 107, 91, 0.1) 0%, transparent 64%),
-    radial-gradient(ellipse 70% 55% at 0% 8%, rgba(255, 107, 91, 0.08) 0%, transparent 58%),
-    radial-gradient(ellipse 70% 55% at 100% 8%, rgba(255, 107, 91, 0.08) 0%, transparent 58%);
-  opacity: 0.9;
+  display: none;
 }
 
 .top-glow-wash,
@@ -963,30 +974,32 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
     0 0 56px -12px rgba(255, 107, 91, 0.3);
 }
 
-.hero-aurora {
+.hero-bg-glow {
   background:
-    radial-gradient(ellipse 90% 55% at 18% 12%, rgba(94, 196, 239, 0.07) 0%, transparent 58%),
-    radial-gradient(ellipse 70% 50% at 82% 18%, rgba(255, 107, 91, 0.1) 0%, transparent 62%);
-  opacity: 0.9;
+    radial-gradient(
+      ellipse 115% 68% at 50% -6%,
+      color-mix(in srgb, var(--reflux-accent) 12%, var(--reflux-bg)) 0%,
+      color-mix(in srgb, var(--reflux-accent) 4%, var(--reflux-bg)) 42%,
+      var(--reflux-bg) 68%
+    ),
+    radial-gradient(
+      ellipse 72% 52% at 18% 14%,
+      color-mix(in srgb, #5ec4ef 5%, var(--reflux-bg)) 0%,
+      var(--reflux-bg) 58%
+    ),
+    radial-gradient(
+      ellipse 68% 48% at 82% 18%,
+      color-mix(in srgb, var(--reflux-accent) 7%, var(--reflux-bg)) 0%,
+      var(--reflux-bg) 58%
+    );
 }
 
-.hero-flank,
-.hero-flank--right {
+.hero-aurora {
   display: none;
 }
 
 .hero-spotlight {
-  position: absolute;
-  inset: 0;
-  top: -18%;
-  left: -10%;
-  right: -10%;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse 130% 75% at 50% -5%, rgba(255, 107, 91, 0.18) 0%, transparent 62%),
-    radial-gradient(ellipse 85% 60% at 0% 5%, rgba(255, 107, 91, 0.12) 0%, transparent 58%),
-    radial-gradient(ellipse 85% 60% at 100% 5%, rgba(255, 107, 91, 0.12) 0%, transparent 58%),
-    radial-gradient(ellipse 50% 42% at 72% 58%, rgba(94, 196, 239, 0.07) 0%, transparent 72%);
+  display: none;
 }
 
 .hero-grid-fade {
@@ -1717,10 +1730,6 @@ html.js-ready .scroll-reveal.scroll-reveal-visible {
 .hero-showcase-wrap {
   perspective: 1200px;
   overflow: visible;
-}
-
-.ambient-orb {
-  animation: flowDrift 20s ease-in-out infinite;
 }
 
 .header-shell {

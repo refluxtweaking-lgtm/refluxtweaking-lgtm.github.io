@@ -15,8 +15,7 @@ const proofPoints = [
 export function Hero() {
   return (
     <section className="hero-stage hero-stage--bleed hero-stage--compact relative w-full overflow-x-clip pb-2 pt-0">
-      <div className="hero-spotlight pointer-events-none absolute inset-0" aria-hidden="true" />
-      <div className="hero-aurora pointer-events-none absolute inset-0" aria-hidden="true" />
+      <div className="hero-bg-glow pointer-events-none absolute inset-0" aria-hidden="true" />
 
       <div className="hero-stage-inner relative mx-auto w-full max-w-[1480px]">
         <div className="hero-compact-flow flex flex-col gap-4 lg:gap-5">

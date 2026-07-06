@@ -4,9 +4,9 @@
  */
 :root {
   /* Surfaces */
-  --reflux-bg: #000000;
-  --reflux-surface: #000000;
-  --reflux-elevated: #050505;
+  --reflux-bg: #050608;
+  --reflux-surface: #050608;
+  --reflux-elevated: #080a0e;
 
   /* Type */
   --reflux-font-body: var(--font-reflux-body), system-ui, sans-serif;
