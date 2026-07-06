@@ -4120,6 +4120,31 @@ html.reduce-effects .particles-canvas {
   color: var(--reflux-text-soft);
 }
 
+.pricing-card.reflux-glow-box {
+  background: rgba(6, 8, 12, 0.32) !important;
+  border: 1px solid rgba(255, 107, 91, 0.2) !important;
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow:
+    0 0 0 1px rgba(255, 149, 136, 0.06) inset,
+    0 18px 50px -28px rgba(0, 0, 0, 0.65),
+    0 0 36px -16px rgba(255, 107, 91, 0.28);
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.pricing-card.reflux-glow-box:hover {
+  background: rgba(8, 10, 14, 0.4) !important;
+  border-color: rgba(255, 107, 91, 0.38) !important;
+  box-shadow:
+    0 0 0 1px rgba(255, 149, 136, 0.12) inset,
+    0 22px 58px -24px rgba(0, 0, 0, 0.6),
+    0 0 52px -12px rgba(255, 107, 91, 0.42);
+}
+
 .pricing-card--featured {
   box-shadow:
     0 0 0 1px rgba(255, 107, 91, 0.15) inset,
@@ -4128,14 +4153,20 @@ html.reduce-effects .particles-canvas {
 
 .pricing-card--hero {
   overflow: visible;
-  border-color: rgba(255, 107, 91, 0.55) !important;
+  border-color: rgba(255, 107, 91, 0.5) !important;
   background:
-    linear-gradient(165deg, rgba(255, 107, 91, 0.14) 0%, rgba(255, 77, 61, 0.04) 38%, rgba(8, 10, 14, 0.92) 72%),
-    rgba(8, 10, 14, 0.88) !important;
+    linear-gradient(
+      165deg,
+      rgba(255, 107, 91, 0.16) 0%,
+      rgba(255, 77, 61, 0.06) 42%,
+      rgba(6, 8, 12, 0.38) 100%
+    ) !important;
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
   box-shadow:
-    0 0 0 1px rgba(255, 149, 136, 0.22) inset,
-    0 28px 70px -18px rgba(255, 77, 61, 0.45),
-    0 0 80px -24px rgba(255, 107, 91, 0.55);
+    0 0 0 1px rgba(255, 149, 136, 0.18) inset,
+    0 28px 70px -18px rgba(255, 77, 61, 0.4),
+    0 0 90px -20px rgba(255, 107, 91, 0.55);
 }
 
 .pricing-card-hero-glow {
@@ -4254,7 +4285,22 @@ html.reduce-effects .particles-canvas {
 }
 
 .pricing-card--pro {
-  border-color: rgba(255, 107, 91, 0.18);
+  border-color: rgba(255, 107, 91, 0.26) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 107, 91, 0.06) 0%, rgba(6, 8, 12, 0.34) 55%) !important;
+  box-shadow:
+    0 0 0 1px rgba(255, 149, 136, 0.05) inset,
+    0 16px 44px -26px rgba(0, 0, 0, 0.62),
+    0 0 32px -18px rgba(255, 107, 91, 0.22);
+}
+
+.pricing-card--free {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  background: rgba(6, 8, 12, 0.28) !important;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 16px 44px -28px rgba(0, 0, 0, 0.65),
+    0 0 28px -20px rgba(255, 255, 255, 0.06);
 }
 
 .pricing-card-proof-hook {
