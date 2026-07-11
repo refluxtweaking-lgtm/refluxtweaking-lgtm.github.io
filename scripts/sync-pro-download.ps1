@@ -45,3 +45,10 @@ if (Test-Path $legacyPublicFile) {
   Remove-Item -Path $legacyPublicFile -Force
 }
 Write-Host "Synced $($installer.FullName) -> $destFile"
+
+Push-Location (Join-Path $PSScriptRoot "..")
+try {
+  node scripts/sync-app-releases.js
+} finally {
+  Pop-Location
+}

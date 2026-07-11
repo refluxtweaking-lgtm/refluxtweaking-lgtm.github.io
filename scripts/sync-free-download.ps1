@@ -34,3 +34,10 @@ if ($installer.Length -lt 76200000) {
 New-Item -ItemType Directory -Force -Path $destDir | Out-Null
 Copy-Item -Path $installer.FullName -Destination $destFile -Force
 Write-Host "Synced $($installer.FullName) -> $destFile"
+
+Push-Location (Join-Path $PSScriptRoot "..")
+try {
+  node scripts/sync-app-releases.js
+} finally {
+  Pop-Location
+}

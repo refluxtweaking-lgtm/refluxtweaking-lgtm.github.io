@@ -1,0 +1,14 @@
+{
+  "free": {
+    "version": "1.0.0",
+    "label": "REFLUX FREE",
+    "downloadUrl": "https://www.refluxtweaks.com/downloads/REFLUX-FREE-Setup.exe",
+    "message": "A new version of REFLUX FREE is ready. Please install the new version."
+  },
+  "pro": {
+    "version": "1.0.0",
+    "label": "REFLUX PRO v1.0",
+    "downloadUrl": "https://www.refluxtweaks.com/account",
+    "message": "A new version of REFLUX PRO is ready. Please install the new version from your account."
+  }
+}
