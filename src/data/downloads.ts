@@ -1,10 +1,12 @@
 import { createProDownloadToken } from "@/lib/pro-download-token";
+import appReleases from "../../public/app-releases.json";
 
 /** Served from /public/downloads/ after syncing the electron-builder output. */
 export const REFLUX_FREE_DOWNLOAD = {
   href: "/downloads/REFLUX-FREE-Setup.exe",
   filename: "REFLUX-FREE-Setup.exe",
-  label: "REFLUX FREE",
+  version: appReleases.free.version,
+  label: appReleases.free.label || `REFLUX FREE v${appReleases.free.version}`,
 } as const;
 
 export const REFLUX_BRAND_BANNER = {
@@ -21,8 +23,10 @@ export const REFLUX_PRO_APP_URL = "https://app.refluxtweaks.com";
 /** Gated download — served only via /api/download/pro after purchase verification. */
 export const REFLUX_PRO_DOWNLOAD = {
   href: "/api/download/pro",
+  /** Stable private filename used by the download API (installer artifact name). */
   filename: "REFLUX-PRO-v1.0-Setup.exe",
-  label: "REFLUX PRO v1.0",
+  version: appReleases.pro.version,
+  label: appReleases.pro.label || `REFLUX PRO v${appReleases.pro.version}`,
 } as const;
 
 export function proDownloadUrl(

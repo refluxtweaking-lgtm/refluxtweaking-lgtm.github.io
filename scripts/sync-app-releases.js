@@ -13,10 +13,13 @@ function readPkg(filePath) {
     return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
-function formatProLabel(version, productName) {
-    const majorMinor = String(version || '1.0.0').split('.').slice(0, 2).join('.');
-    const base = productName || 'REFLUX PRO';
-    return base.includes('v') ? base : `${base} v${majorMinor}`;
+function formatProLabel(version) {
+    return `REFLUX PRO v${String(version || '1.0.0').trim()}`;
+}
+
+function formatFreeLabel(version, productName) {
+    const base = productName || 'REFLUX FREE';
+    return `${base} v${String(version || '1.0.0').trim()}`;
 }
 
 function main() {
@@ -26,13 +29,13 @@ function main() {
     const manifest = {
         free: {
             version: freePkg.version,
-            label: freePkg.productName || freePkg.build?.productName || 'REFLUX FREE',
+            label: formatFreeLabel(freePkg.version, freePkg.productName || freePkg.build?.productName),
             downloadUrl: 'https://www.refluxtweaks.com/downloads/REFLUX-FREE-Setup.exe',
             message: 'A new version of REFLUX FREE is ready. Please install the new version.'
         },
         pro: {
             version: proPkg.version,
-            label: formatProLabel(proPkg.version, proPkg.build?.productName || proPkg.productName),
+            label: formatProLabel(proPkg.version),
             downloadUrl: 'https://www.refluxtweaks.com/account',
             message: 'A new version of REFLUX PRO is ready. Please install the new version from your account.'
         }
