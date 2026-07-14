@@ -59,6 +59,40 @@ export async function fetchActiveLicense(email: string): Promise<LicenseRow | nu
   return data as LicenseRow | null;
 }
 
+/** Resolve an active license that is already unlocked on this device HWID. */
+export async function fetchLicenseByKeyAndHwid(
+  licenseKey: string,
+  hwid: string,
+): Promise<LicenseRow | null> {
+  const admin = createAdminClient();
+  const key = licenseKey?.trim();
+  const device = hwid?.trim();
+  if (!admin || !key || !device || device.length < 8) return null;
+
+  const { data, error } = await admin
+    .from("licenses")
+    .select(
+      "id, email, plan, license_key, status, created_at, activated_at, activated_hwid, access_expires_at",
+    )
+    .eq("status", "active")
+    .eq("license_key", key)
+    .maybeSingle();
+
+  if (error) {
+    console.error("[app-sync] License key lookup failed:", error.message);
+    return null;
+  }
+  if (!data) return null;
+
+  const row = data as LicenseRow;
+  if (!row.activated_hwid || row.activated_hwid !== device) return null;
+  if (row.access_expires_at) {
+    const exp = Date.parse(row.access_expires_at);
+    if (Number.isFinite(exp) && exp < Date.now()) return null;
+  }
+  return row;
+}
+
 export function buildSyncResponse(license: LicenseRow, hwid: string): AppSyncPayload {
   if (license.plan === "lifetime") {
     const sameDevice = license.activated_hwid === hwid;
