@@ -18,6 +18,7 @@ export async function POST(request: Request) {
     score?: number;
     accuracy?: number;
     durationMs?: number;
+    mode?: string;
   };
   try {
     body = await request.json();
@@ -53,6 +54,7 @@ export async function POST(request: Request) {
     score: Number(body.score) || 0,
     accuracy: Number(body.accuracy) || 0,
     durationMs: Number(body.durationMs) || 60000,
+    mode: body.mode,
   });
 
   if (!result.success) {
