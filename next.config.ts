@@ -6,6 +6,12 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        source: "/app-releases.json",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=0, must-revalidate" },
+        ],
+      },
+      {
         source: "/downloads/REFLUX-FREE-Setup.exe",
         headers: [
           { key: "Content-Type", value: "application/octet-stream" },
