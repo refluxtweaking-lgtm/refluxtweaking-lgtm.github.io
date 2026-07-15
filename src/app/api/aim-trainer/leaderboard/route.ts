@@ -22,7 +22,7 @@ export async function GET(request: Request) {
     prize: mode === "hardcore"
       ? {
           places: AIM_PRIZES,
-          note: "REFLUX FREE Hardcore top 3 Discord usernames win free PRO license days (staff verified): #1 30 days, #2 14 days, #3 7 days.",
+          note: "REFLUX FREE Hardcore top 3 Discord usernames win free PRO license days (staff verified / manually issued): #1 7 days, #2 3 days, #3 1 day.",
         }
       : {
           places: [],

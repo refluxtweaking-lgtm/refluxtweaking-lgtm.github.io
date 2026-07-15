@@ -62,9 +62,9 @@ export function freeCompetitorEmail(playerId: string): string | null {
 }
 
 export const AIM_PRIZES = [
-  { place: 1, days: 30, label: "1st · 30-day PRO license" },
-  { place: 2, days: 14, label: "2nd · 14-day PRO license" },
-  { place: 3, days: 7, label: "3rd · 7-day PRO license" },
+  { place: 1, days: 7, label: "1st · 7-day PRO license" },
+  { place: 2, days: 3, label: "2nd · 3-day PRO license" },
+  { place: 3, days: 1, label: "3rd · 1-day PRO license" },
 ] as const;
 
 export type AimLeaderboardEntry = {
