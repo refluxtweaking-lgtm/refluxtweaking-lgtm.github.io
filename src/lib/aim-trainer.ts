@@ -40,9 +40,26 @@ export const AIM_MODE_META: Record<
     short: "Hardcore",
     difficulty: "Extreme",
     prizeEligible: true,
-    description: "Tiny erratic targets — top 3 win free PRO license days.",
+    description: "Tiny erratic targets — FREE app top 3 win PRO license days.",
   },
 };
+
+/** FREE compete scores use synthetic emails free:<playerId>. */
+export function isFreeCompetitorEmail(email: string | null | undefined): boolean {
+  return String(email || "")
+    .trim()
+    .toLowerCase()
+    .startsWith("free:");
+}
+
+export function freeCompetitorEmail(playerId: string): string | null {
+  const id = String(playerId || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9_-]/g, "");
+  if (id.length < 8 || id.length > 80) return null;
+  return `free:${id}`;
+}
 
 export const AIM_PRIZES = [
   { place: 1, days: 30, label: "1st · 30-day PRO license" },
@@ -101,10 +118,12 @@ export async function getAimLeaderboard(
     };
   }
 
+  // Prize / compete board is FREE-app only (emails free:…).
   const { data, error } = await admin
     .from("aim_trainer_scores")
     .select("email, discord_username, score, accuracy, created_at, mode")
     .eq("mode", mode)
+    .ilike("email", "free:%")
     .order("score", { ascending: false })
     .order("created_at", { ascending: true })
     .limit(Math.max(1, Math.min(100, limit)));

@@ -11,7 +11,8 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const limit = Number(searchParams.get("limit") || 25);
   const mode = normalizeAimMode(searchParams.get("mode") || "hardcore");
-  const board = await getAimLeaderboard(limit, undefined, mode);
+  const viewer = searchParams.get("viewer") || searchParams.get("email") || undefined;
+  const board = await getAimLeaderboard(limit, viewer || undefined, mode);
 
   return NextResponse.json({
     success: true,
@@ -21,12 +22,13 @@ export async function GET(request: Request) {
     prize: mode === "hardcore"
       ? {
           places: AIM_PRIZES,
-          note: "Hardcore top 3 Discord usernames win free PRO license days (staff verified): #1 30 days, #2 14 days, #3 7 days.",
+          note: "REFLUX FREE Hardcore top 3 Discord usernames win free PRO license days (staff verified): #1 30 days, #2 14 days, #3 7 days.",
         }
       : {
           places: [],
           note: "Practice mode — no giveaway prizes on this board.",
         },
+    channel: "free",
     topDiscord: board.topDiscord,
     prizes: board.prizes,
     entries: board.entries,
