@@ -129,6 +129,12 @@ export function AuthForm({ mode, notice, next }: AuthFormProps) {
               <Link href="/signup" className="font-semibold text-reflux-accent hover:underline">
                 Sign up
               </Link>
+              <span className="mt-2 block">
+                Have a license key?{" "}
+                <Link href="/redeem" className="font-semibold text-reflux-accent hover:underline">
+                  Redeem without an account
+                </Link>
+              </span>
             </>
           ) : (
             <>
