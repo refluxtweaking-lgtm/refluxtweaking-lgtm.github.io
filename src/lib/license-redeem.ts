@@ -1,7 +1,9 @@
+import { createHash } from "crypto";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isProLicenseCurrentlyValid } from "@/lib/pro-download-access";
 import { createProDownloadToken } from "@/lib/pro-download-token";
-import { isClaimReason } from "@/lib/license-claim-reasons";
+import { isClaimReason, type LicenseClaimReason } from "@/lib/license-claim-reasons";
+import { verifyKeyAuthLicenseExists } from "@/lib/keyauth";
 
 export type RedeemLicenseResult =
   | {
@@ -17,6 +19,92 @@ export type RedeemLicenseResult =
     }
   | { ok: false; error: string };
 
+type LicenseRow = {
+  id: string;
+  email: string;
+  plan: string;
+  license_key: string;
+  status: string;
+  activated_at: string | null;
+  access_expires_at: string | null;
+};
+
+function syntheticRedeemEmail(licenseKey: string): string {
+  const hash = createHash("sha256").update(licenseKey.trim().toLowerCase()).digest("hex").slice(0, 16);
+  return `keyauth-${hash}@redeem.refluxtweaks.com`;
+}
+
+function planFromReason(reason: LicenseClaimReason): string {
+  // KeyAuth dashboard keys often have their own duration; we store a sensible default
+  // and leave activated_at null so the PRO app / KeyAuth still owns the real timer.
+  if (reason === "owners_friend") return "lifetime";
+  if (reason === "aim_trainer") return "monthly";
+  if (reason === "gift") return "monthly";
+  if (reason === "purchase") return "monthly";
+  return "monthly";
+}
+
+async function findLicenseByKey(admin: NonNullable<ReturnType<typeof createAdminClient>>, key: string) {
+  const exact = await admin
+    .from("licenses")
+    .select("id, email, plan, license_key, status, activated_at, access_expires_at")
+    .eq("license_key", key)
+    .maybeSingle();
+
+  if (exact.data) return { data: exact.data as LicenseRow, error: exact.error };
+
+  // Soft match (trim / case) for keys pasted with different casing
+  const { data: rows, error } = await admin
+    .from("licenses")
+    .select("id, email, plan, license_key, status, activated_at, access_expires_at")
+    .ilike("license_key", key)
+    .limit(5);
+
+  if (error) return { data: null, error };
+  const list = (rows as LicenseRow[] | null) ?? [];
+  const match =
+    list.find((r) => r.license_key.trim() === key) ||
+    list.find((r) => r.license_key.trim().toLowerCase() === key.toLowerCase()) ||
+    null;
+  return { data: match, error: null };
+}
+
+async function importKeyAuthLicense(
+  admin: NonNullable<ReturnType<typeof createAdminClient>>,
+  key: string,
+  reason: LicenseClaimReason,
+): Promise<LicenseRow | null> {
+  const verified = await verifyKeyAuthLicenseExists(key);
+  if (!verified.ok) return null;
+
+  const email = syntheticRedeemEmail(key);
+  const plan = planFromReason(reason);
+  const row = {
+    email,
+    plan,
+    license_key: key,
+    status: "active",
+    created_at: new Date().toISOString(),
+    activated_at: null,
+    access_expires_at: null,
+  };
+
+  const { data, error } = await admin
+    .from("licenses")
+    .insert(row)
+    .select("id, email, plan, license_key, status, activated_at, access_expires_at")
+    .maybeSingle();
+
+  if (error) {
+    // Race: another redeem inserted it — re-read
+    console.error("[redeem] KeyAuth import insert failed:", error.message);
+    const again = await findLicenseByKey(admin, key);
+    return again.data;
+  }
+
+  return (data as LicenseRow | null) ?? null;
+}
+
 export async function redeemLicenseKey(input: {
   licenseKey: string;
   reason: string;
@@ -26,7 +114,7 @@ export async function redeemLicenseKey(input: {
   const reasonRaw = String(input.reason || "").trim().toLowerCase();
   const note = String(input.note || "").trim().slice(0, 280);
 
-  if (!key || key.length < 8) {
+  if (!key || key.length < 6) {
     return { ok: false, error: "Enter a valid license key." };
   }
   if (!isClaimReason(reasonRaw)) {
@@ -38,18 +126,27 @@ export async function redeemLicenseKey(input: {
     return { ok: false, error: "License lookup is temporarily unavailable." };
   }
 
-  const { data, error } = await admin
-    .from("licenses")
-    .select("id, email, plan, license_key, status, activated_at, access_expires_at")
-    .eq("license_key", key)
-    .maybeSingle();
+  let { data, error } = await findLicenseByKey(admin, key);
 
   if (error) {
     console.error("[redeem] lookup failed:", error.message);
     return { ok: false, error: "Could not verify that license key." };
   }
+
+  // Not in site database — accept if KeyAuth still has the key (manual dashboard keys).
   if (!data) {
-    return { ok: false, error: "That license key was not found." };
+    data = await importKeyAuthLicense(admin, key, reasonRaw);
+    if (!data) {
+      const keyAuth = await verifyKeyAuthLicenseExists(key);
+      return {
+        ok: false,
+        error: keyAuth.ok
+          ? "Key exists in KeyAuth but could not be linked on the site. Try again or contact support."
+          : keyAuth.error.includes("not found") || keyAuth.error.toLowerCase().includes("invalid")
+            ? "That license key was not found in REFLUX or KeyAuth."
+            : keyAuth.error || "That license key was not found.",
+      };
+    }
   }
 
   const validNow = isProLicenseCurrentlyValid({
@@ -97,6 +194,6 @@ export async function redeemLicenseKey(input: {
       ? "Lifetime key verified. Download PRO and paste this key in the app."
       : data.activated_at && data.access_expires_at
         ? "Key verified. Your remaining access time is shown below — download PRO and paste this key in the app."
-        : "Key verified. Time starts when you first activate it in the PRO app on your PC.",
+        : "Key verified with KeyAuth. Time follows this key when you activate it in the PRO app.",
   };
 }

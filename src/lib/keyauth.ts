@@ -79,3 +79,31 @@ export async function deleteKeyAuthLicense(licenseKey: string): Promise<KeyAuthR
     return { ok: false, error: "Could not reach KeyAuth" };
   }
 }
+
+export type KeyAuthVerifyResult =
+  | { ok: true; key: string; message?: string }
+  | { ok: false; error: string };
+
+/** Seller API: confirm a license key exists in KeyAuth (keys created outside Supabase). */
+export async function verifyKeyAuthLicenseExists(licenseKey: string): Promise<KeyAuthVerifyResult> {
+  const auth = sellerKeyOrError();
+  if (!auth.ok) return auth;
+
+  const key = licenseKey.trim();
+  if (!key) return { ok: false, error: "Missing license key" };
+
+  const url =
+    `https://keyauth.win/api/seller/?sellerkey=${auth.sellerKey}` +
+    `&type=verify&format=JSON&key=${encodeURIComponent(key)}`;
+
+  try {
+    const response = await fetch(url, { method: "GET", cache: "no-store" });
+    const data = (await response.json()) as { success?: boolean; message?: string };
+    if (data.success) {
+      return { ok: true, key, message: data.message };
+    }
+    return { ok: false, error: data.message || "License key not found in KeyAuth" };
+  } catch {
+    return { ok: false, error: "Could not reach KeyAuth" };
+  }
+}
