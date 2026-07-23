@@ -5,6 +5,7 @@ import { LicenseKeyBox } from "@/components/auth/LicenseKeyBox";
 import { LicenseAccessStatus } from "@/components/auth/LicenseAccessStatus";
 import { ProDownloadButton } from "@/components/auth/ProDownloadButton";
 import { ResendLicenseEmailButton } from "@/components/auth/ResendLicenseEmailButton";
+import { DiscordUsernameCard } from "@/components/auth/DiscordUsernameCard";
 import { signOut } from "@/app/auth/actions";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
@@ -123,6 +124,8 @@ export default async function AccountPage() {
         <h2 className="reflux-glow-readable mb-4 inline-block rounded-full px-3 py-1 text-sm font-bold uppercase tracking-[0.2em] text-reflux-muted">
           Your license keys
         </h2>
+
+        {activeLicenses.length > 0 ? <DiscordUsernameCard /> : null}
 
         {activeLicenses.length === 0 ? (
           <div className="reflux-glow-box rounded-2xl p-8 text-center">
