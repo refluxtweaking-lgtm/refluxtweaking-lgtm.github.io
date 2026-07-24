@@ -1,27 +1,24 @@
 import { NextResponse } from "next/server";
 import { verifyAppSyncToken } from "@/lib/app-sync-token";
-import { verifyKeyAuthLicenseExists } from "@/lib/keyauth";
 import { notifyLicenseUpdate, type LicenseAlertEvent } from "@/lib/reflux-licenses-update";
 import { clientIp, rateLimit, rateLimitResponse } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
-const ALLOWED: LicenseAlertEvent[] = [
-  "issued",
-  "activated",
-  "session",
-  "expired",
-  "transferred",
-];
+/** Public API may only report session heartbeats. Lifecycle events fire server-side only. */
+const PUBLIC_ALLOWED: LicenseAlertEvent[] = ["session"];
 
 /**
- * PRO app (and internal callers) report license lifecycle events.
+ * PRO app reports license session heartbeats for Discord alerts.
  * Discord webhook URL stays on the server — never in the desktop build.
  *
- * Auth: valid app sync token, OR license key that exists in KeyAuth (key-only users).
+ * Auth: valid app sync token ONLY.
+ * - Does not unlock licenses
+ * - Does not verify / enumerate KeyAuth keys (closed oracle)
+ * - Does not accept issued/activated/expired/transferred from the public internet
  */
 export async function POST(request: Request) {
-  const ipLimit = await rateLimit(`licenses-update:ip:${clientIp(request)}`, 60, 15 * 60);
+  const ipLimit = await rateLimit(`licenses-update:ip:${clientIp(request)}`, 30, 15 * 60);
   if (!ipLimit.ok) return rateLimitResponse(ipLimit.retryAfterSec);
 
   let body: {
@@ -44,42 +41,36 @@ export async function POST(request: Request) {
   }
 
   const event = String(body.event || "").trim() as LicenseAlertEvent;
-  if (!ALLOWED.includes(event)) {
+  if (!PUBLIC_ALLOWED.includes(event)) {
     return NextResponse.json({ success: false, message: "Unknown event." }, { status: 400 });
   }
 
-  const licenseKey = String(body.licenseKey || "").trim();
-  const hwid = String(body.hwid || "").trim();
-  let email = String(body.email || "").trim().toLowerCase() || null;
-
   const session = body.token ? verifyAppSyncToken(body.token) : null;
-  if (session?.email) {
-    email = session.email;
-  } else if (licenseKey) {
-    const exists = await verifyKeyAuthLicenseExists(licenseKey);
-    if (!exists.ok) {
-      return NextResponse.json(
-        { success: false, message: "Could not verify license for alerts." },
-        { status: 401 },
-      );
-    }
-  } else {
+  if (!session?.email) {
     return NextResponse.json(
-      { success: false, message: "Sign in or provide a valid license key." },
+      { success: false, message: "Sign in required for license alerts." },
       { status: 401 },
     );
   }
 
+  const emailKey = session.email.toLowerCase();
+  const hwid = String(body.hwid || "").trim().slice(0, 128);
+  const userLimit = await rateLimit(`licenses-update:user:${emailKey}:${hwid || "na"}`, 4, 12 * 60 * 60);
+  if (!userLimit.ok) {
+    return NextResponse.json({ success: true, delivered: false, skipped: true });
+  }
+
   const result = await notifyLicenseUpdate({
     event,
-    licenseKey: licenseKey || null,
-    email,
-    plan: body.plan || null,
+    // Client may send a key string for masking only — never used to unlock or verify existence.
+    licenseKey: String(body.licenseKey || "").trim().slice(0, 128) || null,
+    email: session.email,
+    plan: String(body.plan || "").trim().slice(0, 32) || null,
     hwid: hwid || null,
     accessExpiresAt: body.accessExpiresAt ?? null,
     activatedAt: body.activatedAt ?? null,
-    note: body.note || null,
-    source: body.source || "api",
+    note: body.note ? String(body.note).slice(0, 200) : null,
+    source: String(body.source || "api").slice(0, 80),
   });
 
   return NextResponse.json({
@@ -90,9 +81,5 @@ export async function POST(request: Request) {
 }
 
 export async function GET() {
-  return NextResponse.json({
-    system: "reflux-licenses-update",
-    mode: "discord-webhook-only",
-    ok: true,
-  });
+  return NextResponse.json({ error: "Not found" }, { status: 404 });
 }

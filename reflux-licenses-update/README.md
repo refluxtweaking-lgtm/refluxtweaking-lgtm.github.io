@@ -26,8 +26,16 @@ DISCORD_LICENSE_WEBHOOK_URL=https://discord.com/api/webhooks/YOUR_ID/YOUR_TOKEN
 
 Keys and emails are **masked** in Discord. The webhook URL never ships inside the desktop app.
 
+## Security
+
+- Discord alerts **do not unlock** licenses and never include full keys.
+- Public `POST /api/reflux-licenses-update/event` requires a signed **app sync token** and only accepts `session` heartbeats.
+- `issued` / `activated` / `expired` / `transferred` are fired **server-side only** (purchase + sync), never from an unauthenticated browser/Discord path.
+- KeyAuth key lookup is **not** exposed on this endpoint (no key-oracle).
+
 ## Code
 
 - Library: `src/lib/reflux-licenses-update/`
 - API: `POST /api/reflux-licenses-update/event`
 - PRO reporter: `reflux-licenses-update/` in the PRO repo
+
