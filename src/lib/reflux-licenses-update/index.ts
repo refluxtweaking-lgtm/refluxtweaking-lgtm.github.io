@@ -1,5 +1,5 @@
 import { postLicenseDiscordWebhook } from "./discord-webhook";
-import type { LicenseAlertEvent, LicenseAlertPayload } from "./types";
+import type { LicenseAlertEvent, LicenseAlertPayload, VersionChange } from "./types";
 
 /** In-memory debounce so session spam does not flood Discord (resets on cold start). */
 const recent = new Map<string, number>();
