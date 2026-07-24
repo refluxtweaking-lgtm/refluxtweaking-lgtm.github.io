@@ -303,6 +303,7 @@ export async function sendLicenseUpdates(options: {
       downloadUrl: "https://www.refluxtweaks.com/account",
       recipients: summary.sent,
       note: notes?.trim() || `Installer / license update emailed to ${summary.sent} buyer(s)`,
+      fixes: notes?.trim() || `Installer / license update emailed to ${summary.sent} buyer(s)`,
       source: "license-updates",
     });
   }

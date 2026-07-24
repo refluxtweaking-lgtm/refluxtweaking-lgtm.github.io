@@ -44,11 +44,39 @@ function formatVersionLine(change?: VersionChange | null, fallbackVersion?: stri
   if (change?.to) {
     const from = change.from ? String(change.from) : null;
     const to = String(change.to);
-    if (from && from !== to) return `\`${from}\` → **\`${to}\`**`;
-    return `**\`${to}\`**`;
+    if (from && from !== to) return `\`${from}\` → \`${to}\``;
+    return `\`${to}\``;
   }
-  if (fallbackVersion) return `**\`${fallbackVersion}\`**`;
+  if (fallbackVersion) return `\`${fallbackVersion}\``;
   return "—";
+}
+
+function buildReleaseDescription(payload: LicenseAlertPayload): string {
+  const lines: string[] = [];
+
+  const proLine = formatVersionLine(
+    payload.pro,
+    payload.product?.toUpperCase().includes("PRO") ? payload.version : null,
+  );
+  const freeLine = formatVersionLine(
+    payload.free,
+    payload.product?.toUpperCase().includes("FREE") ? payload.version : null,
+  );
+
+  if (proLine !== "—") lines.push(`⚡ **PRO**  ${proLine}`);
+  else lines.push(`⚡ **PRO**  — unchanged`);
+
+  if (freeLine !== "—") lines.push(`🌿 **FREE**  ${freeLine}`);
+  else lines.push(`🌿 **FREE**  — unchanged`);
+
+  const fixes = String(payload.fixes || payload.note || "").trim();
+  if (fixes) {
+    lines.push("");
+    lines.push("🛠️ **What's fixed**");
+    lines.push(fixes.slice(0, 500));
+  }
+
+  return lines.join("\n");
 }
 
 function buildLicenseFields(
@@ -85,54 +113,6 @@ function buildLicenseFields(
   if (payload.note) {
     fields.push({ name: "Note", value: String(payload.note).slice(0, 200), inline: false });
   }
-  if (payload.source) {
-    fields.push({ name: "Source", value: String(payload.source).slice(0, 80), inline: true });
-  }
-  return fields;
-}
-
-function buildReleaseFields(
-  payload: LicenseAlertPayload,
-): Array<{ name: string; value: string; inline: boolean }> {
-  const fields = [
-    {
-      name: "PRO",
-      value: formatVersionLine(
-        payload.pro,
-        payload.product?.toUpperCase().includes("PRO") ? payload.version : null,
-      ),
-      inline: false,
-    },
-    {
-      name: "FREE",
-      value: formatVersionLine(
-        payload.free,
-        payload.product?.toUpperCase().includes("FREE") ? payload.version : null,
-      ),
-      inline: false,
-    },
-  ];
-
-  const proUrl = payload.pro?.downloadUrl || (payload.product?.includes("PRO") ? payload.downloadUrl : null);
-  const freeUrl =
-    payload.free?.downloadUrl || (payload.product?.includes("FREE") ? payload.downloadUrl : null);
-  if (proUrl) {
-    fields.push({ name: "PRO installer", value: String(proUrl).slice(0, 300), inline: false });
-  }
-  if (freeUrl) {
-    fields.push({ name: "FREE installer", value: String(freeUrl).slice(0, 300), inline: false });
-  }
-  if (payload.recipients != null) {
-    fields.push({
-      name: "Update emails sent",
-      value: String(payload.recipients),
-      inline: true,
-    });
-  }
-  if (payload.note) {
-    fields.push({ name: "Note", value: String(payload.note).slice(0, 300), inline: false });
-  }
-  fields.push({ name: "Time", value: formatWhen(Date.now()), inline: true });
   if (payload.source) {
     fields.push({ name: "Source", value: String(payload.source).slice(0, 80), inline: true });
   }
@@ -203,25 +183,14 @@ export async function postReleaseDiscordWebhook(
   }
 
   const target = releaseWebhookUrl() || licenseWebhookUrl();
-  const proTo = payload.pro?.to || (payload.product?.includes("PRO") ? payload.version : null);
-  const freeTo = payload.free?.to || (payload.product?.includes("FREE") ? payload.version : null);
-  const summaryBits = [
-    proTo ? `PRO → ${proTo}` : null,
-    freeTo ? `FREE → ${freeTo}` : null,
-  ].filter(Boolean);
 
   return postToDiscord(target, {
     username: "REFLUX Releases",
     embeds: [
       {
-        title: "New REFLUX build live",
+        title: "🚀 REFLUX Update",
         color: RELEASE_RED,
-        description: summaryBits.length
-          ? summaryBits.join(" · ")
-          : String(payload.note || "Installer / deployment update").slice(0, 200),
-        fields: buildReleaseFields(payload),
-        footer: { text: "reflux-releases · red webhook" },
-        timestamp: new Date().toISOString(),
+        description: buildReleaseDescription(payload),
       },
     ],
   });

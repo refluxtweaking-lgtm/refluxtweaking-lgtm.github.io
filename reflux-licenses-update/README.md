@@ -2,49 +2,30 @@
 
 Discord **webhook-only** alerts (no Discord bot).
 
-## Setup — two webhooks (recommended)
+## Setup — two webhooks
 
-### 1) License alerts (existing)
-Discord → Integrations → Webhooks → copy URL → Vercel:
-
+### License alerts
 ```env
 DISCORD_LICENSE_WEBHOOK_URL=https://discord.com/api/webhooks/...
 ```
 
-### 2) Releases (new, red card)
-Make a **second** webhook (same or different channel) → Vercel:
-
+### Releases (red, clean card)
 ```env
 DISCORD_RELEASE_WEBHOOK_URL=https://discord.com/api/webhooks/...
 ```
 
-Redeploy after adding. Release posts are **red** and show:
+Release posts look like:
 
-- **PRO** `old → new`
-- **FREE** `old → new`
+```
+🚀 REFLUX Update
 
-If `DISCORD_RELEASE_WEBHOOK_URL` is missing, release posts fall back to the license webhook.
+⚡ PRO  `1.0.23` → `1.0.24`
+🌿 FREE  `1.0.15` → `1.0.16`
 
-### Quick test (licenses)
-
-```bash
-node scripts/send-license-webhook-test.js "This is a test"
+🛠️ What's fixed
+Darker UI background all around for a deeper, cleaner look.
 ```
 
-Ops: `POST /api/reflux-licenses-update/test` with `Authorization: Bearer <REFLUX_OPS_SECRET>`.
+No extra fields, footer, links, or source lines — just versions + what's fixed.
 
-## What you get
-
-| Event | Channel | When |
-|--------|---------|------|
-| issued / activated / session / expired / transferred | license webhook | license lifecycle |
-| test | license webhook | manual connectivity check |
-| deployed | **red release webhook** | new FREE/PRO versions or update emails |
-
-Keys/emails stay masked on the license channel. Webhook URLs never ship in the desktop app.
-
-## Code
-
-- Library: `src/lib/reflux-licenses-update/`
-- Ship share: `scripts/sync-app-releases.js`
-- PRO reporter: `reflux-licenses-update/` in the PRO repo
+Put `releaseNotes` in each app `package.json` so the ship script picks up the fix text.

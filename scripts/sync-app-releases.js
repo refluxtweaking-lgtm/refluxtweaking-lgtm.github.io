@@ -12,6 +12,10 @@ const FREE_PKG = 'C:\\! REFLUX FREE TWEAKING UTILITY\\package.json';
 const PRO_PKG = 'C:\\! REFLUX PRO TWEAKING UTILITY\\package.json';
 const RELEASE_RED = 0xe74c3c;
 
+/** Default blurb when package.json has no releaseNotes. */
+const DEFAULT_FIXES =
+  'Darker UI background all around for a deeper, cleaner look.';
+
 function readPkg(filePath) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
@@ -60,54 +64,43 @@ function releaseWebhookUrlFromEnv() {
 }
 
 function versionLine(from, to) {
-  if (from && from !== to) return `\`${from}\` → **\`${to}\`**`;
-  return `**\`${to}\`**`;
+  if (from && from !== to) return `\`${from}\` → \`${to}\``;
+  return `\`${to}\``;
 }
 
-function postDiscordRelease({ pro, free, note }) {
+function collectFixes(proPkg, freePkg, proChanged, freeChanged) {
+  const bits = [];
+  if (proChanged && proPkg.releaseNotes) bits.push(String(proPkg.releaseNotes).trim());
+  if (freeChanged && freePkg.releaseNotes) bits.push(String(freePkg.releaseNotes).trim());
+  const unique = [...new Set(bits.filter(Boolean))];
+  return unique.length ? unique.join('\n') : DEFAULT_FIXES;
+}
+
+function postDiscordRelease({ pro, free, fixes }) {
   const url = releaseWebhookUrlFromEnv();
   if (!url) {
     console.log('[discord] skipped release share — DISCORD_RELEASE_WEBHOOK_URL not set');
     return Promise.resolve({ ok: false, skipped: true });
   }
 
-  const summary = [
-    pro ? `PRO → ${pro.to}` : null,
-    free ? `FREE → ${free.to}` : null,
-  ]
-    .filter(Boolean)
-    .join(' · ');
-
-  const fields = [];
-  if (pro) {
-    fields.push({ name: 'PRO', value: versionLine(pro.from, pro.to), inline: false });
-    if (pro.downloadUrl) {
-      fields.push({ name: 'PRO installer', value: String(pro.downloadUrl).slice(0, 300), inline: false });
-    }
-  } else {
-    fields.push({ name: 'PRO', value: '— (unchanged)', inline: false });
+  const lines = [];
+  if (pro) lines.push(`⚡ **PRO**  ${versionLine(pro.from, pro.to)}`);
+  else lines.push('⚡ **PRO**  — unchanged');
+  if (free) lines.push(`🌿 **FREE**  ${versionLine(free.from, free.to)}`);
+  else lines.push('🌿 **FREE**  — unchanged');
+  if (fixes) {
+    lines.push('');
+    lines.push("🛠️ **What's fixed**");
+    lines.push(String(fixes).slice(0, 500));
   }
-  if (free) {
-    fields.push({ name: 'FREE', value: versionLine(free.from, free.to), inline: false });
-    if (free.downloadUrl) {
-      fields.push({ name: 'FREE installer', value: String(free.downloadUrl).slice(0, 300), inline: false });
-    }
-  } else {
-    fields.push({ name: 'FREE', value: '— (unchanged)', inline: false });
-  }
-  if (note) fields.push({ name: 'Note', value: String(note).slice(0, 300), inline: false });
-  fields.push({ name: 'Source', value: 'sync-app-releases', inline: true });
 
   const body = JSON.stringify({
     username: 'REFLUX Releases',
     embeds: [
       {
-        title: 'New REFLUX build live',
+        title: '🚀 REFLUX Update',
         color: RELEASE_RED,
-        description: summary || 'Installer / deployment update',
-        fields,
-        footer: { text: 'reflux-releases · red webhook' },
-        timestamp: new Date().toISOString(),
+        description: lines.join('\n'),
       },
     ],
   });
@@ -145,18 +138,25 @@ async function main() {
   const freePkg = readPkg(FREE_PKG);
   const proPkg = readPkg(PRO_PKG);
 
+  const fixesText = collectFixes(
+    proPkg,
+    freePkg,
+    !prev || prev.pro?.version !== proPkg.version,
+    !prev || prev.free?.version !== freePkg.version,
+  );
+
   const manifest = {
     free: {
       version: freePkg.version,
       label: formatFreeLabel(freePkg.version, freePkg.productName || freePkg.build?.productName),
       downloadUrl: 'https://www.refluxtweaks.com/downloads/REFLUX-FREE-Setup.exe',
-      message: 'A new version of REFLUX FREE is ready. Please install the new version.',
+      message: fixesText,
     },
     pro: {
       version: proPkg.version,
       label: formatProLabel(proPkg.version),
       downloadUrl: 'https://www.refluxtweaks.com/account',
-      message: 'A new version of REFLUX PRO is ready. Please install the new version from your account.',
+      message: fixesText,
     },
   };
 
@@ -177,22 +177,18 @@ async function main() {
       ? {
           from: prev?.pro?.version || null,
           to: manifest.pro.version,
-          label: manifest.pro.label,
-          downloadUrl: manifest.pro.downloadUrl,
         }
       : null,
     free: freeChanged
       ? {
           from: prev?.free?.version || null,
           to: manifest.free.version,
-          label: manifest.free.label,
-          downloadUrl: manifest.free.downloadUrl,
         }
       : null,
-    note: 'app-releases.json updated',
+    fixes: fixesText,
   });
 
-  if (result.ok) console.log('[discord] shared red release card (PRO + FREE)');
+  if (result.ok) console.log('[discord] shared clean red release card');
   else if (result.skipped) console.log('[discord] skipped');
   else console.warn('[discord] share failed:', result.status || result.error);
 }
