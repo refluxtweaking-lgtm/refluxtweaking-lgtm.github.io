@@ -7,6 +7,13 @@ export type LicenseAlertEvent =
   | "test"
   | "deployed";
 
+export type VersionChange = {
+  from?: string | null;
+  to: string;
+  label?: string | null;
+  downloadUrl?: string | null;
+};
+
 export type LicenseAlertPayload = {
   event: LicenseAlertEvent;
   licenseKey?: string | null;
@@ -23,4 +30,7 @@ export type LicenseAlertPayload = {
   label?: string | null;
   downloadUrl?: string | null;
   recipients?: number | null;
+  /** Prefer these for red release webhook cards */
+  pro?: VersionChange | null;
+  free?: VersionChange | null;
 };

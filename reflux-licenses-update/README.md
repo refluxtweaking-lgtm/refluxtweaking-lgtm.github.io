@@ -1,57 +1,50 @@
 # REFLUX Licenses Update
 
-Discord **webhook-only** license alerts (no Discord bot).
+Discord **webhook-only** alerts (no Discord bot).
 
-## Setup
+## Setup — two webhooks (recommended)
 
-1. Discord → Server Settings → Integrations → Webhooks → **New Webhook**
-2. Name it e.g. `REFLUX Licenses Update`, pick a channel, **Copy Webhook URL**
-3. Add to Vercel env (or `.env.local`) the **full** URL — it must look like:
+### 1) License alerts (existing)
+Discord → Integrations → Webhooks → copy URL → Vercel:
 
 ```env
-DISCORD_LICENSE_WEBHOOK_URL=https://discord.com/api/webhooks/1234567890123456789/AbCdEf...long-token...
+DISCORD_LICENSE_WEBHOOK_URL=https://discord.com/api/webhooks/...
 ```
 
-   Not a channel name, not a short token alone. Length is usually **100+ characters**.
-4. Redeploy the site
+### 2) Releases (new, red card)
+Make a **second** webhook (same or different channel) → Vercel:
 
-### Quick test (local)
+```env
+DISCORD_RELEASE_WEBHOOK_URL=https://discord.com/api/webhooks/...
+```
+
+Redeploy after adding. Release posts are **red** and show:
+
+- **PRO** `old → new`
+- **FREE** `old → new`
+
+If `DISCORD_RELEASE_WEBHOOK_URL` is missing, release posts fall back to the license webhook.
+
+### Quick test (licenses)
 
 ```bash
-# after: npx vercel env pull .env.webhook-pull --environment=production
-node scripts/diagnose-license-webhook.js
 node scripts/send-license-webhook-test.js "This is a test"
 ```
 
-### Ops test (live)
-
-`POST /api/reflux-licenses-update/test` with header `Authorization: Bearer <REFLUX_OPS_SECRET>` and optional JSON `{ "message": "This is a test" }`.
+Ops: `POST /api/reflux-licenses-update/test` with `Authorization: Bearer <REFLUX_OPS_SECRET>`.
 
 ## What you get
 
-| Event | When |
-|--------|------|
-| issued | License created at purchase |
-| activated | First unlock on a PC |
-| session | PRO opened with a valid license (max 1× / 12h per key+PC) |
-| expired | License period ended |
-| transferred | License moved to a new PC |
-| test | Manual webhook connectivity check |
-| deployed | New FREE/PRO version in `app-releases.json`, or installer/update emails sent |
+| Event | Channel | When |
+|--------|---------|------|
+| issued / activated / session / expired / transferred | license webhook | license lifecycle |
+| test | license webhook | manual connectivity check |
+| deployed | **red release webhook** | new FREE/PRO versions or update emails |
 
-Keys and emails are **masked** in Discord. The webhook URL never ships inside the desktop app.
-
-## Security
-
-- Discord alerts **do not unlock** licenses and never include full keys.
-- Public `POST /api/reflux-licenses-update/event` requires a signed **app sync token** and only accepts `session` heartbeats.
-- `issued` / `activated` / `expired` / `transferred` are fired **server-side only** (purchase + sync), never from an unauthenticated browser/Discord path.
-- KeyAuth key lookup is **not** exposed on this endpoint (no key-oracle).
+Keys/emails stay masked on the license channel. Webhook URLs never ship in the desktop app.
 
 ## Code
 
 - Library: `src/lib/reflux-licenses-update/`
-- API: `POST /api/reflux-licenses-update/event`
-- Test: `POST /api/reflux-licenses-update/test`
-- Ship share: `scripts/sync-app-releases.js` (Discord when FREE/PRO version changes)
+- Ship share: `scripts/sync-app-releases.js`
 - PRO reporter: `reflux-licenses-update/` in the PRO repo

@@ -294,7 +294,12 @@ export async function sendLicenseUpdates(options: {
       event: "deployed",
       product: "REFLUX PRO",
       version,
-      label: `REFLUX PRO v${version} update emails`,
+      pro: {
+        to: version,
+        label: `REFLUX PRO v${version}`,
+        downloadUrl: "https://www.refluxtweaks.com/account",
+      },
+      free: null,
       downloadUrl: "https://www.refluxtweaks.com/account",
       recipients: summary.sent,
       note: notes?.trim() || `Installer / license update emailed to ${summary.sent} buyer(s)`,

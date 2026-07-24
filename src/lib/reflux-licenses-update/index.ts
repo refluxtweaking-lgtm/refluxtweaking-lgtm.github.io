@@ -54,5 +54,6 @@ export function notifyLicenseUpdateFireAndForget(payload: LicenseAlertPayload): 
   void notifyLicenseUpdate(payload);
 }
 
-export type { LicenseAlertEvent, LicenseAlertPayload };
-export { licenseAlertsConfigured } from "./discord-webhook";
+export type { LicenseAlertEvent, LicenseAlertPayload, VersionChange };
+export { licenseAlertsConfigured, releaseAlertsConfigured } from "./discord-webhook";
+export { postReleaseDiscordWebhook } from "./discord-webhook";

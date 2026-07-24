@@ -1,8 +1,11 @@
-import type { LicenseAlertEvent, LicenseAlertPayload } from "./types";
+import type { LicenseAlertEvent, LicenseAlertPayload, VersionChange } from "./types";
 import { formatWhen, maskEmail, maskLicenseKey, shortHwid } from "./format";
 
+/** Strong red for the separate releases webhook. */
+const RELEASE_RED = 0xe74c3c;
+
 const EVENT_META: Record<
-  LicenseAlertEvent,
+  Exclude<LicenseAlertEvent, "deployed">,
   { title: string; color: number; emoji: string }
 > = {
   issued: { title: "License issued", color: 0x5ec4ef, emoji: "🆕" },
@@ -11,10 +14,9 @@ const EVENT_META: Record<
   expired: { title: "License ended", color: 0xf87171, emoji: "⛔" },
   transferred: { title: "License moved to new PC", color: 0xfbbf24, emoji: "💻" },
   test: { title: "Webhook test", color: 0x94a3b8, emoji: "🧪" },
-  deployed: { title: "New installer / deployment", color: 0xa78bfa, emoji: "🚀" },
 };
 
-function webhookUrl(): string {
+function licenseWebhookUrl(): string {
   return (
     process.env.DISCORD_LICENSE_WEBHOOK_URL?.trim() ||
     process.env.REFLUX_LICENSES_UPDATE_WEBHOOK_URL?.trim() ||
@@ -22,11 +24,36 @@ function webhookUrl(): string {
   );
 }
 
-export function licenseAlertsConfigured(): boolean {
-  return Boolean(webhookUrl());
+function releaseWebhookUrl(): string {
+  return (
+    process.env.DISCORD_RELEASE_WEBHOOK_URL?.trim() ||
+    process.env.REFLUX_RELEASE_WEBHOOK_URL?.trim() ||
+    ""
+  );
 }
 
-function buildFields(payload: LicenseAlertPayload): Array<{ name: string; value: string; inline: boolean }> {
+export function licenseAlertsConfigured(): boolean {
+  return Boolean(licenseWebhookUrl());
+}
+
+export function releaseAlertsConfigured(): boolean {
+  return Boolean(releaseWebhookUrl());
+}
+
+function formatVersionLine(change?: VersionChange | null, fallbackVersion?: string | null): string {
+  if (change?.to) {
+    const from = change.from ? String(change.from) : null;
+    const to = String(change.to);
+    if (from && from !== to) return `\`${from}\` → **\`${to}\`**`;
+    return `**\`${to}\`**`;
+  }
+  if (fallbackVersion) return `**\`${fallbackVersion}\`**`;
+  return "—";
+}
+
+function buildLicenseFields(
+  payload: LicenseAlertPayload,
+): Array<{ name: string; value: string; inline: boolean }> {
   if (payload.event === "test") {
     return [
       {
@@ -37,38 +64,6 @@ function buildFields(payload: LicenseAlertPayload): Array<{ name: string; value:
       { name: "Time", value: formatWhen(Date.now()), inline: true },
       { name: "Source", value: String(payload.source || "test").slice(0, 80), inline: true },
     ];
-  }
-
-  if (payload.event === "deployed") {
-    const fields = [
-      { name: "Product", value: String(payload.product || payload.label || "REFLUX").slice(0, 80), inline: true },
-      { name: "Version", value: String(payload.version || "—").slice(0, 40), inline: true },
-      { name: "Time", value: formatWhen(Date.now()), inline: true },
-    ];
-    if (payload.label) {
-      fields.push({ name: "Label", value: String(payload.label).slice(0, 120), inline: false });
-    }
-    if (payload.downloadUrl) {
-      fields.push({
-        name: "Installer / link",
-        value: String(payload.downloadUrl).slice(0, 300),
-        inline: false,
-      });
-    }
-    if (payload.recipients != null) {
-      fields.push({
-        name: "Update emails sent",
-        value: String(payload.recipients),
-        inline: true,
-      });
-    }
-    if (payload.note) {
-      fields.push({ name: "Note", value: String(payload.note).slice(0, 300), inline: false });
-    }
-    if (payload.source) {
-      fields.push({ name: "Source", value: String(payload.source).slice(0, 80), inline: true });
-    }
-    return fields;
   }
 
   const plan = String(payload.plan || "unknown").toLowerCase();
@@ -96,28 +91,58 @@ function buildFields(payload: LicenseAlertPayload): Array<{ name: string; value:
   return fields;
 }
 
-/** Post a Discord webhook embed. Fire-and-forget safe — never throws to callers. */
-export async function postLicenseDiscordWebhook(
+function buildReleaseFields(
   payload: LicenseAlertPayload,
+): Array<{ name: string; value: string; inline: boolean }> {
+  const fields = [
+    {
+      name: "PRO",
+      value: formatVersionLine(
+        payload.pro,
+        payload.product?.toUpperCase().includes("PRO") ? payload.version : null,
+      ),
+      inline: false,
+    },
+    {
+      name: "FREE",
+      value: formatVersionLine(
+        payload.free,
+        payload.product?.toUpperCase().includes("FREE") ? payload.version : null,
+      ),
+      inline: false,
+    },
+  ];
+
+  const proUrl = payload.pro?.downloadUrl || (payload.product?.includes("PRO") ? payload.downloadUrl : null);
+  const freeUrl =
+    payload.free?.downloadUrl || (payload.product?.includes("FREE") ? payload.downloadUrl : null);
+  if (proUrl) {
+    fields.push({ name: "PRO installer", value: String(proUrl).slice(0, 300), inline: false });
+  }
+  if (freeUrl) {
+    fields.push({ name: "FREE installer", value: String(freeUrl).slice(0, 300), inline: false });
+  }
+  if (payload.recipients != null) {
+    fields.push({
+      name: "Update emails sent",
+      value: String(payload.recipients),
+      inline: true,
+    });
+  }
+  if (payload.note) {
+    fields.push({ name: "Note", value: String(payload.note).slice(0, 300), inline: false });
+  }
+  fields.push({ name: "Time", value: formatWhen(Date.now()), inline: true });
+  if (payload.source) {
+    fields.push({ name: "Source", value: String(payload.source).slice(0, 80), inline: true });
+  }
+  return fields;
+}
+
+async function postToDiscord(
+  url: string,
+  body: Record<string, unknown>,
 ): Promise<{ ok: boolean; skipped?: boolean; error?: string }> {
-  const url = webhookUrl();
-  if (!url) return { ok: false, skipped: true, error: "DISCORD_LICENSE_WEBHOOK_URL not set" };
-
-  const meta = EVENT_META[payload.event] || EVENT_META.session;
-  const body = {
-    username: "REFLUX Licenses Update",
-    content: payload.event === "test" ? String(payload.note || "This is a test").slice(0, 500) : undefined,
-    embeds: [
-      {
-        title: `${meta.emoji} ${meta.title}`,
-        color: meta.color,
-        fields: buildFields(payload),
-        footer: { text: "reflux-licenses-update · webhook only (no bot)" },
-        timestamp: new Date().toISOString(),
-      },
-    ],
-  };
-
   try {
     const res = await fetch(url, {
       method: "POST",
@@ -126,13 +151,78 @@ export async function postLicenseDiscordWebhook(
     });
     if (!res.ok) {
       const text = await res.text().catch(() => "");
-      console.error("[reflux-licenses-update] Discord webhook failed:", res.status, text.slice(0, 200));
+      console.error("[reflux-discord] webhook failed:", res.status, text.slice(0, 200));
       return { ok: false, error: `Discord ${res.status}` };
     }
     return { ok: true };
   } catch (err) {
     const message = err instanceof Error ? err.message : "webhook failed";
-    console.error("[reflux-licenses-update] Discord webhook error:", message);
+    console.error("[reflux-discord] webhook error:", message);
     return { ok: false, error: message };
   }
+}
+
+/** License channel — never used for red release cards. */
+export async function postLicenseDiscordWebhook(
+  payload: LicenseAlertPayload,
+): Promise<{ ok: boolean; skipped?: boolean; error?: string }> {
+  if (payload.event === "deployed") {
+    return postReleaseDiscordWebhook(payload);
+  }
+
+  const url = licenseWebhookUrl();
+  if (!url) return { ok: false, skipped: true, error: "DISCORD_LICENSE_WEBHOOK_URL not set" };
+
+  const meta = EVENT_META[payload.event as Exclude<LicenseAlertEvent, "deployed">] || EVENT_META.session;
+  return postToDiscord(url, {
+    username: "REFLUX Licenses Update",
+    content: payload.event === "test" ? String(payload.note || "This is a test").slice(0, 500) : undefined,
+    embeds: [
+      {
+        title: `${meta.emoji} ${meta.title}`,
+        color: meta.color,
+        fields: buildLicenseFields(payload),
+        footer: { text: "reflux-licenses-update · webhook only (no bot)" },
+        timestamp: new Date().toISOString(),
+      },
+    ],
+  });
+}
+
+/** Separate red releases channel — PRO + FREE versions. */
+export async function postReleaseDiscordWebhook(
+  payload: LicenseAlertPayload,
+): Promise<{ ok: boolean; skipped?: boolean; error?: string }> {
+  const url = releaseWebhookUrl();
+  if (!url) {
+    // Fall back to license webhook so ships still notify if release URL isn't set yet
+    const fallback = licenseWebhookUrl();
+    if (!fallback) {
+      return { ok: false, skipped: true, error: "DISCORD_RELEASE_WEBHOOK_URL not set" };
+    }
+  }
+
+  const target = releaseWebhookUrl() || licenseWebhookUrl();
+  const proTo = payload.pro?.to || (payload.product?.includes("PRO") ? payload.version : null);
+  const freeTo = payload.free?.to || (payload.product?.includes("FREE") ? payload.version : null);
+  const summaryBits = [
+    proTo ? `PRO → ${proTo}` : null,
+    freeTo ? `FREE → ${freeTo}` : null,
+  ].filter(Boolean);
+
+  return postToDiscord(target, {
+    username: "REFLUX Releases",
+    embeds: [
+      {
+        title: "New REFLUX build live",
+        color: RELEASE_RED,
+        description: summaryBits.length
+          ? summaryBits.join(" · ")
+          : String(payload.note || "Installer / deployment update").slice(0, 200),
+        fields: buildReleaseFields(payload),
+        footer: { text: "reflux-releases · red webhook" },
+        timestamp: new Date().toISOString(),
+      },
+    ],
+  });
 }
