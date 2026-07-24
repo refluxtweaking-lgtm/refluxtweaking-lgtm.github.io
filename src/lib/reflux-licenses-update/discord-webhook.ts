@@ -10,6 +10,8 @@ const EVENT_META: Record<
   session: { title: "License in use", color: 0xf15b50, emoji: "▶️" },
   expired: { title: "License ended", color: 0xf87171, emoji: "⛔" },
   transferred: { title: "License moved to new PC", color: 0xfbbf24, emoji: "💻" },
+  test: { title: "Webhook test", color: 0x94a3b8, emoji: "🧪" },
+  deployed: { title: "New installer / deployment", color: 0xa78bfa, emoji: "🚀" },
 };
 
 function webhookUrl(): string {
@@ -24,14 +26,51 @@ export function licenseAlertsConfigured(): boolean {
   return Boolean(webhookUrl());
 }
 
-/** Post a Discord webhook embed. Fire-and-forget safe — never throws to callers. */
-export async function postLicenseDiscordWebhook(
-  payload: LicenseAlertPayload,
-): Promise<{ ok: boolean; skipped?: boolean; error?: string }> {
-  const url = webhookUrl();
-  if (!url) return { ok: false, skipped: true, error: "DISCORD_LICENSE_WEBHOOK_URL not set" };
+function buildFields(payload: LicenseAlertPayload): Array<{ name: string; value: string; inline: boolean }> {
+  if (payload.event === "test") {
+    return [
+      {
+        name: "Message",
+        value: String(payload.note || "This is a test").slice(0, 500),
+        inline: false,
+      },
+      { name: "Time", value: formatWhen(Date.now()), inline: true },
+      { name: "Source", value: String(payload.source || "test").slice(0, 80), inline: true },
+    ];
+  }
 
-  const meta = EVENT_META[payload.event] || EVENT_META.session;
+  if (payload.event === "deployed") {
+    const fields = [
+      { name: "Product", value: String(payload.product || payload.label || "REFLUX").slice(0, 80), inline: true },
+      { name: "Version", value: String(payload.version || "—").slice(0, 40), inline: true },
+      { name: "Time", value: formatWhen(Date.now()), inline: true },
+    ];
+    if (payload.label) {
+      fields.push({ name: "Label", value: String(payload.label).slice(0, 120), inline: false });
+    }
+    if (payload.downloadUrl) {
+      fields.push({
+        name: "Installer / link",
+        value: String(payload.downloadUrl).slice(0, 300),
+        inline: false,
+      });
+    }
+    if (payload.recipients != null) {
+      fields.push({
+        name: "Update emails sent",
+        value: String(payload.recipients),
+        inline: true,
+      });
+    }
+    if (payload.note) {
+      fields.push({ name: "Note", value: String(payload.note).slice(0, 300), inline: false });
+    }
+    if (payload.source) {
+      fields.push({ name: "Source", value: String(payload.source).slice(0, 80), inline: true });
+    }
+    return fields;
+  }
+
   const plan = String(payload.plan || "unknown").toLowerCase();
   const fields = [
     { name: "Key", value: `\`${maskLicenseKey(payload.licenseKey)}\``, inline: true },
@@ -54,14 +93,25 @@ export async function postLicenseDiscordWebhook(
   if (payload.source) {
     fields.push({ name: "Source", value: String(payload.source).slice(0, 80), inline: true });
   }
+  return fields;
+}
 
+/** Post a Discord webhook embed. Fire-and-forget safe — never throws to callers. */
+export async function postLicenseDiscordWebhook(
+  payload: LicenseAlertPayload,
+): Promise<{ ok: boolean; skipped?: boolean; error?: string }> {
+  const url = webhookUrl();
+  if (!url) return { ok: false, skipped: true, error: "DISCORD_LICENSE_WEBHOOK_URL not set" };
+
+  const meta = EVENT_META[payload.event] || EVENT_META.session;
   const body = {
     username: "REFLUX Licenses Update",
+    content: payload.event === "test" ? String(payload.note || "This is a test").slice(0, 500) : undefined,
     embeds: [
       {
         title: `${meta.emoji} ${meta.title}`,
         color: meta.color,
-        fields,
+        fields: buildFields(payload),
         footer: { text: "reflux-licenses-update · webhook only (no bot)" },
         timestamp: new Date().toISOString(),
       },

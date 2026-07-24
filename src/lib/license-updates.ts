@@ -2,6 +2,7 @@ import { createKeyAuthLicense, deleteKeyAuthLicense, type KeyAuthPlan } from "@/
 import { sendLicenseUpdateEmail } from "@/lib/email";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { normalizeBuyerEmail } from "@/lib/normalize-email";
+import { notifyLicenseUpdateFireAndForget } from "@/lib/reflux-licenses-update";
 
 export type LicenseRow = {
   id: string;
@@ -285,6 +286,19 @@ export async function sendLicenseUpdates(options: {
           ? `Issued new key and revoked ${replaced.revoked} previous key(s).`
           : "Issued new key.",
       newKey: license.key,
+    });
+  }
+
+  if (!dryRun && summary.sent > 0) {
+    notifyLicenseUpdateFireAndForget({
+      event: "deployed",
+      product: "REFLUX PRO",
+      version,
+      label: `REFLUX PRO v${version} update emails`,
+      downloadUrl: "https://www.refluxtweaks.com/account",
+      recipients: summary.sent,
+      note: notes?.trim() || `Installer / license update emailed to ${summary.sent} buyer(s)`,
+      source: "license-updates",
     });
   }
 

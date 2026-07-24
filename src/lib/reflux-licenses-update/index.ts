@@ -14,6 +14,8 @@ function debounceKey(event: LicenseAlertEvent, payload: LicenseAlertPayload): st
 }
 
 function shouldSkip(event: LicenseAlertEvent, payload: LicenseAlertPayload): boolean {
+  // Never debounce explicit tests or deploy shares
+  if (event === "test" || event === "deployed") return false;
   // Session alerts: at most once per key+device per 12 hours
   const windowMs = event === "session" ? 12 * 60 * 60 * 1000 : 45 * 1000;
   const key = debounceKey(event, payload);

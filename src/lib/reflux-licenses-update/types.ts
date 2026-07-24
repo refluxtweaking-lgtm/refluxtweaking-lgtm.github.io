@@ -3,7 +3,9 @@ export type LicenseAlertEvent =
   | "activated"
   | "session"
   | "expired"
-  | "transferred";
+  | "transferred"
+  | "test"
+  | "deployed";
 
 export type LicenseAlertPayload = {
   event: LicenseAlertEvent;
@@ -15,4 +17,10 @@ export type LicenseAlertPayload = {
   activatedAt?: number | string | null;
   note?: string | null;
   source?: string | null;
+  /** Deployment / installer share fields */
+  product?: string | null;
+  version?: string | null;
+  label?: string | null;
+  downloadUrl?: string | null;
+  recipients?: number | null;
 };
