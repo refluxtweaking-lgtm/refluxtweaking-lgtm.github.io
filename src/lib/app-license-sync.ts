@@ -1,4 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import { notifyLicenseUpdateFireAndForget } from "@/lib/reflux-licenses-update";
 
 export type AppPlan = "monthly" | "yearly" | "lifetime";
 
@@ -193,7 +194,31 @@ export async function resyncLicenseAccess(
   const license = await fetchActiveLicense(email);
   if (!license) return { allowed: false, noLicense: true };
 
-  return buildSyncResponse(license, hwid);
+  const sync = buildSyncResponse(license, hwid);
+  if (sync.expired) {
+    notifyLicenseUpdateFireAndForget({
+      event: "expired",
+      licenseKey: license.license_key,
+      email,
+      plan: license.plan,
+      hwid,
+      accessExpiresAt: sync.accessExpiresAt,
+      activatedAt: sync.activatedAt,
+      source: "resyncLicenseAccess",
+    });
+  } else if (sync.allowed) {
+    notifyLicenseUpdateFireAndForget({
+      event: "session",
+      licenseKey: license.license_key,
+      email,
+      plan: license.plan,
+      hwid,
+      accessExpiresAt: sync.accessExpiresAt,
+      activatedAt: sync.activatedAt,
+      source: "resyncLicenseAccess",
+    });
+  }
+  return sync;
 }
 
 export async function markLicenseActivated(
@@ -255,7 +280,18 @@ export async function markLicenseActivated(
   }
 
   if (!data) return null;
-  return buildSyncResponse(data as LicenseRow, hwid);
+  const sync = buildSyncResponse(data as LicenseRow, hwid);
+  notifyLicenseUpdateFireAndForget({
+    event: "activated",
+    licenseKey: (data as LicenseRow).license_key,
+    email,
+    plan: (data as LicenseRow).plan,
+    hwid,
+    accessExpiresAt: sync.accessExpiresAt,
+    activatedAt: sync.activatedAt,
+    source: "markLicenseActivated",
+  });
+  return sync;
 }
 
 /** Move an active license to the current PC (one device at a time). Keeps remaining countdown. */
@@ -307,5 +343,16 @@ export async function transferLicenseToDevice(
   }
 
   if (!data) return null;
-  return buildSyncResponse(data as LicenseRow, hwid);
+  const sync = buildSyncResponse(data as LicenseRow, hwid);
+  notifyLicenseUpdateFireAndForget({
+    event: "transferred",
+    licenseKey: (data as LicenseRow).license_key,
+    email,
+    plan: (data as LicenseRow).plan,
+    hwid,
+    accessExpiresAt: sync.accessExpiresAt,
+    activatedAt: sync.activatedAt,
+    source: "transferLicenseToDevice",
+  });
+  return sync;
 }

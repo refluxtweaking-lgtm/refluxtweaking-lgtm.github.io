@@ -2,6 +2,7 @@ import { createKeyAuthLicense, type KeyAuthPlan } from "@/lib/keyauth";
 import { sendLicenseEmail } from "@/lib/email";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { normalizeBuyerEmail } from "@/lib/normalize-email";
+import { notifyLicenseUpdateFireAndForget } from "@/lib/reflux-licenses-update";
 
 export type DeliverLicenseResult =
   | { ok: true; key: string; emailed: boolean; stored: boolean }
@@ -63,6 +64,15 @@ export async function deliverLicense(
     if (!emailed) {
       console.error("[license-delivery] Resend failed — key stored on account but email not sent:", buyerEmail);
     }
+
+    notifyLicenseUpdateFireAndForget({
+      event: "issued",
+      licenseKey: license.key,
+      email: buyerEmail,
+      plan,
+      source: "license-delivery",
+      note: emailed ? "Key emailed to buyer" : "Key created (email may have failed)",
+    });
 
     return { ok: true, key: license.key, emailed, stored };
   } catch (err) {
