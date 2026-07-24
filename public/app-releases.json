@@ -1,14 +1,14 @@
 {
   "free": {
-    "version": "1.0.15",
-    "label": "REFLUX FREE v1.0.15",
+    "version": "1.0.16",
+    "label": "REFLUX FREE v1.0.16",
     "downloadUrl": "https://www.refluxtweaks.com/downloads/REFLUX-FREE-Setup.exe",
-    "message": "A new version of REFLUX FREE is ready. Please install the new version."
+    "message": "Darker UI background all around for a deeper, cleaner look."
   },
   "pro": {
-    "version": "1.0.23",
-    "label": "REFLUX PRO v1.0.23",
+    "version": "1.0.24",
+    "label": "REFLUX PRO v1.0.24",
     "downloadUrl": "https://www.refluxtweaks.com/account",
-    "message": "A new version of REFLUX PRO is ready. Please install the new version from your account."
+    "message": "Darker UI background all around for a deeper, cleaner look."
   }
 }
