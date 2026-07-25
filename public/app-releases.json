@@ -1,14 +1,14 @@
 {
   "free": {
-    "version": "1.0.16",
-    "label": "REFLUX FREE v1.0.16",
+    "version": "1.0.17",
+    "label": "REFLUX FREE v1.0.17",
     "downloadUrl": "https://www.refluxtweaks.com/downloads/REFLUX-FREE-Setup.exe",
-    "message": "Darker UI background all around for a deeper, cleaner look."
+    "message": "Fixed Enable Write Caching on Drives."
   },
   "pro": {
-    "version": "1.0.24",
-    "label": "REFLUX PRO v1.0.24",
+    "version": "1.0.25",
+    "label": "REFLUX PRO v1.0.25",
     "downloadUrl": "https://www.refluxtweaks.com/account",
-    "message": "Darker UI background all around for a deeper, cleaner look."
+    "message": "Fixed Enable Write Caching on Drives."
   }
 }
