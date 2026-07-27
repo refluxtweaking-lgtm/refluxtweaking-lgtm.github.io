@@ -6,9 +6,9 @@
     "message": "Fixed Enable Write Caching on Drives."
   },
   "pro": {
-    "version": "1.0.25",
-    "label": "REFLUX PRO v1.0.25",
+    "version": "1.0.26",
+    "label": "REFLUX PRO v1.0.26",
     "downloadUrl": "https://www.refluxtweaks.com/account",
-    "message": "Fixed Enable Write Caching on Drives."
+    "message": "Fixed Start Game opening a blank CMD window and not launching games."
   }
 }
