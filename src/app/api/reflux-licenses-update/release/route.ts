@@ -37,6 +37,8 @@ type Body = {
   proTo?: string | null;
   freeTo?: string | null;
   fixes?: string | null;
+  proFixes?: string | null;
+  freeFixes?: string | null;
 };
 
 /**
@@ -86,8 +88,12 @@ export async function POST(request: Request) {
 
   const proTo = String(body.proTo || manifest.pro?.version || "").trim() || null;
   const freeTo = String(body.freeTo || manifest.free?.version || "").trim() || null;
+  const proFixes =
+    String(body.proFixes || (proTo ? manifest.pro?.message : "") || "").trim() || null;
+  const freeFixes =
+    String(body.freeFixes || (freeTo ? manifest.free?.message : "") || "").trim() || null;
   const fixes =
-    String(body.fixes || manifest.pro?.message || manifest.free?.message || "").trim() ||
+    String(body.fixes || proFixes || freeFixes || "").trim() ||
     "Darker UI background all around for a deeper, cleaner look.";
 
   const result = await notifyLicenseUpdate({
@@ -99,6 +105,8 @@ export async function POST(request: Request) {
       ? { from: body.freeFrom ? String(body.freeFrom) : null, to: freeTo }
       : null,
     fixes,
+    proFixes,
+    freeFixes,
     source: "api-release",
   });
 
@@ -115,6 +123,8 @@ export async function POST(request: Request) {
     pro: proTo,
     free: freeTo,
     fixes,
+    proFixes,
+    freeFixes,
   });
 }
 

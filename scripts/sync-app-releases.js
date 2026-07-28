@@ -85,15 +85,12 @@ function versionLine(from, to) {
   return `\`${to}\``;
 }
 
-function collectFixes(proPkg, freePkg, proChanged, freeChanged) {
-  const bits = [];
-  if (proChanged && proPkg.releaseNotes) bits.push(String(proPkg.releaseNotes).trim());
-  if (freeChanged && freePkg.releaseNotes) bits.push(String(freePkg.releaseNotes).trim());
-  const unique = [...new Set(bits.filter(Boolean))];
-  return unique.length ? unique.join('\n') : DEFAULT_FIXES;
+function collectProductNotes(pkg, changed) {
+  if (!changed) return '';
+  return String(pkg.releaseNotes || '').trim() || DEFAULT_FIXES;
 }
 
-function postDiscordRelease({ pro, free, fixes }) {
+function postDiscordRelease({ pro, free, proFixes, freeFixes }) {
   const env = {
     ...process.env,
     ...loadEnvFile(path.join(ROOT, '.env.local')),
@@ -112,17 +109,29 @@ function postDiscordRelease({ pro, free, fixes }) {
   }
 
   const e = releaseEmojis(env);
-  const lines = [
-    `${e.status} **New build is live**`,
-    '',
-    `${e.pro} **PRO** · ${pro ? versionLine(pro.from, pro.to) : '_unchanged_'}`,
-    `${e.free} **FREE** · ${free ? versionLine(free.from, free.to) : '_unchanged_'}`,
-  ];
-  if (fixes) {
+  const lines = [`${e.status} **New builds are live**`, ''];
+
+  if (free) {
+    lines.push(`${e.free} **REFLUX FREE updated to \`${free.to}\`**`);
+    lines.push(versionLine(free.from, free.to));
+    if (freeFixes) {
+      lines.push(`${e.hammer} **What's new**`);
+      lines.push(String(freeFixes).slice(0, 400));
+    }
     lines.push('');
-    lines.push(`${e.hammer} **What's fixed**`);
-    lines.push(String(fixes).slice(0, 500));
   }
+
+  if (pro) {
+    lines.push(`${e.pro} **REFLUX PRO updated to \`${pro.to}\`**`);
+    lines.push(versionLine(pro.from, pro.to));
+    if (proFixes) {
+      lines.push(`${e.hammer} **What's new**`);
+      lines.push(String(proFixes).slice(0, 400));
+    }
+    lines.push('');
+  }
+
+  while (lines.length && lines[lines.length - 1] === '') lines.pop();
 
   const body = JSON.stringify({
     username: 'REFLUX Releases',
@@ -168,34 +177,29 @@ async function main() {
   const freePkg = readPkg(FREE_PKG);
   const proPkg = readPkg(PRO_PKG);
 
-  const fixesText = collectFixes(
-    proPkg,
-    freePkg,
-    !prev || prev.pro?.version !== proPkg.version,
-    !prev || prev.free?.version !== freePkg.version,
-  );
+  const freeChanged = !prev || prev.free?.version !== freePkg.version;
+  const proChanged = !prev || prev.pro?.version !== proPkg.version;
+  const freeNotes = collectProductNotes(freePkg, freeChanged);
+  const proNotes = collectProductNotes(proPkg, proChanged);
 
   const manifest = {
     free: {
       version: freePkg.version,
       label: formatFreeLabel(freePkg.version, freePkg.productName || freePkg.build?.productName),
       downloadUrl: 'https://www.refluxtweaks.com/downloads/REFLUX-FREE-Setup.exe',
-      message: fixesText,
+      message: freeNotes || prev?.free?.message || DEFAULT_FIXES,
     },
     pro: {
       version: proPkg.version,
       label: formatProLabel(proPkg.version),
       downloadUrl: 'https://www.refluxtweaks.com/account',
-      message: fixesText,
+      message: proNotes || prev?.pro?.message || DEFAULT_FIXES,
     },
   };
 
   fs.writeFileSync(OUT, `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
   console.log(`Wrote ${OUT}`);
   console.log(JSON.stringify(manifest, null, 2));
-
-  const freeChanged = !prev || prev.free?.version !== manifest.free.version;
-  const proChanged = !prev || prev.pro?.version !== manifest.pro.version;
 
   if (!freeChanged && !proChanged) {
     console.log('[discord] no version change — skipping release share');
@@ -215,7 +219,8 @@ async function main() {
           to: manifest.free.version,
         }
       : null,
-    fixes: fixesText,
+    proFixes: proChanged ? proNotes : '',
+    freeFixes: freeChanged ? freeNotes : '',
   });
 
   if (result.ok) console.log('[discord] shared clean red release card');

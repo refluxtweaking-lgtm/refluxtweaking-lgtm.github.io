@@ -40,25 +40,43 @@ if (!url || !/^https:\/\/(discord|discordapp)\.com\/api\/webhooks\//i.test(url))
 
 const prevPro = process.argv[2] || null;
 const prevFree = process.argv[3] || null;
-const fixes =
-  process.env.REFLUX_RELEASE_FIXES ||
+const freeFixes =
+  process.env.REFLUX_RELEASE_FREE_FIXES ||
+  manifest.free?.message ||
+  '';
+const proFixes =
+  process.env.REFLUX_RELEASE_PRO_FIXES ||
   manifest.pro?.message ||
-  'Darker UI background all around for a deeper, cleaner look.';
+  '';
 
 function line(from, to) {
   if (from && from !== to) return `\`${from}\` → \`${to}\``;
   return `\`${to}\``;
 }
 
-const description = [
-  `${e.status} **New build is live**`,
-  '',
-  `${e.pro} **PRO** · ${line(prevPro, manifest.pro.version)}`,
-  `${e.free} **FREE** · ${line(prevFree, manifest.free.version)}`,
-  '',
-  `${e.hammer} **What's fixed**`,
-  String(fixes).slice(0, 500),
-].join('\n');
+const lines = [`${e.status} **New builds are live**`, ''];
+
+if (manifest.free?.version) {
+  lines.push(`${e.free} **REFLUX FREE updated to \`${manifest.free.version}\`**`);
+  lines.push(line(prevFree, manifest.free.version));
+  if (freeFixes) {
+    lines.push(`${e.hammer} **What's new**`);
+    lines.push(String(freeFixes).slice(0, 400));
+  }
+  lines.push('');
+}
+
+if (manifest.pro?.version) {
+  lines.push(`${e.pro} **REFLUX PRO updated to \`${manifest.pro.version}\`**`);
+  lines.push(line(prevPro, manifest.pro.version));
+  if (proFixes) {
+    lines.push(`${e.hammer} **What's new**`);
+    lines.push(String(proFixes).slice(0, 400));
+  }
+  lines.push('');
+}
+
+while (lines.length && lines[lines.length - 1] === '') lines.pop();
 
 const body = JSON.stringify({
   username: 'REFLUX Releases',
@@ -66,7 +84,7 @@ const body = JSON.stringify({
     {
       title: `${e.status} REFLUX Update ${e.hammer}`,
       color: 0xe74c3c,
-      description,
+      description: lines.join('\n'),
     },
   ],
 });

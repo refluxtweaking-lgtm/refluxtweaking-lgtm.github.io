@@ -52,6 +52,36 @@ function formatVersionLine(change?: VersionChange | null, fallbackVersion?: stri
   return "—";
 }
 
+function productUpdated(change?: VersionChange | null): boolean {
+  if (!change?.to) return false;
+  const from = change.from ? String(change.from) : null;
+  const to = String(change.to);
+  return !from || from !== to;
+}
+
+function buildProductReleaseBlock(opts: {
+  emoji: string;
+  name: string;
+  change?: VersionChange | null;
+  notes?: string | null;
+  hammer: string;
+}): string[] {
+  const { emoji, name, change, notes, hammer } = opts;
+  if (!productUpdated(change)) return [];
+  const to = String(change!.to);
+  const from = change?.from ? String(change.from) : null;
+  const lines = [
+    `${emoji} **REFLUX ${name} updated to \`${to}\`**`,
+    from && from !== to ? `${formatVersionLine(change)}` : `Version \`${to}\``,
+  ];
+  const detail = String(notes || "").trim();
+  if (detail) {
+    lines.push(`${hammer} **What's new**`);
+    lines.push(detail.slice(0, 400));
+  }
+  return lines;
+}
+
 function buildReleaseDescription(payload: LicenseAlertPayload): string {
   const e = {
     hammer: discordEmojis.hammer(),
@@ -60,29 +90,47 @@ function buildReleaseDescription(payload: LicenseAlertPayload): string {
     free: discordEmojis.refluxFree(),
   };
 
-  const proLine = formatVersionLine(
-    payload.pro,
-    payload.product?.toUpperCase().includes("PRO") ? payload.version : null,
-  );
-  const freeLine = formatVersionLine(
-    payload.free,
-    payload.product?.toUpperCase().includes("FREE") ? payload.version : null,
-  );
+  const legacyFixes = String(payload.fixes || payload.note || "").trim();
+  const freeNotes = String(payload.freeFixes || "").trim() || (productUpdated(payload.free) ? legacyFixes : "");
+  const proNotes = String(payload.proFixes || "").trim() || (productUpdated(payload.pro) ? legacyFixes : "");
 
-  const lines: string[] = [
-    `${e.status} **New build is live**`,
-    "",
-    `${e.pro} **PRO** · ${proLine === "—" ? "_unchanged_" : proLine}`,
-    `${e.free} **FREE** · ${freeLine === "—" ? "_unchanged_" : freeLine}`,
-  ];
+  const freeBlock = buildProductReleaseBlock({
+    emoji: e.free,
+    name: "FREE",
+    change: payload.free,
+    notes: freeNotes,
+    hammer: e.hammer,
+  });
+  const proBlock = buildProductReleaseBlock({
+    emoji: e.pro,
+    name: "PRO",
+    change: payload.pro,
+    notes: proNotes,
+    hammer: e.hammer,
+  });
 
-  const fixes = String(payload.fixes || payload.note || "").trim();
-  if (fixes) {
+  const lines: string[] = [`${e.status} **New builds are live**`, ""];
+
+  if (freeBlock.length) {
+    lines.push(...freeBlock);
     lines.push("");
-    lines.push(`${e.hammer} **What's fixed**`);
-    lines.push(fixes.slice(0, 500));
+  }
+  if (proBlock.length) {
+    lines.push(...proBlock);
+    lines.push("");
   }
 
+  if (!freeBlock.length && !proBlock.length) {
+    lines.push(`${e.pro} **PRO** · _unchanged_`);
+    lines.push(`${e.free} **FREE** · _unchanged_`);
+    if (legacyFixes) {
+      lines.push("");
+      lines.push(`${e.hammer} **What's new**`);
+      lines.push(legacyFixes.slice(0, 500));
+    }
+  }
+
+  while (lines.length && lines[lines.length - 1] === "") lines.pop();
   return lines.join("\n");
 }
 

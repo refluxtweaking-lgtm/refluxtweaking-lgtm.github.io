@@ -33,6 +33,9 @@ export type LicenseAlertPayload = {
   /** Prefer these for red release webhook cards */
   pro?: VersionChange | null;
   free?: VersionChange | null;
-  /** Short “what’s fixed” blurb for release cards */
+  /** Short “what’s fixed” blurb for release cards (legacy combined) */
   fixes?: string | null;
+  /** Per-product release notes for detailed Discord cards */
+  proFixes?: string | null;
+  freeFixes?: string | null;
 };

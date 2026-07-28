@@ -1,14 +1,14 @@
 {
   "free": {
-    "version": "1.0.18",
-    "label": "REFLUX FREE v1.0.18",
+    "version": "1.0.19",
+    "label": "REFLUX FREE v1.0.19",
     "downloadUrl": "https://www.refluxtweaks.com/downloads/REFLUX-FREE-Setup.exe",
-    "message": "New branded startup intro with Enter to continue, then Welcome presentation on first launch."
+    "message": "First-run click tutorial with blurred background and red arrows that walks you through creating a safety backup before you continue."
   },
   "pro": {
-    "version": "1.0.27",
-    "label": "REFLUX PRO v1.0.27",
+    "version": "1.0.28",
+    "label": "REFLUX PRO v1.0.28",
     "downloadUrl": "https://www.refluxtweaks.com/account",
-    "message": "New branded startup intro with Enter to continue, then Welcome presentation on first launch."
+    "message": "First-run click tutorial with blurred background and red arrows that walks you through creating a safety backup before you continue."
   }
 }
