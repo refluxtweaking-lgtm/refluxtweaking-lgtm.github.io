@@ -12,6 +12,23 @@ const FREE_PKG = 'C:\\! REFLUX FREE TWEAKING UTILITY\\package.json';
 const PRO_PKG = 'C:\\! REFLUX PRO TWEAKING UTILITY\\package.json';
 const RELEASE_RED = 0xe74c3c;
 
+function resolveEmoji(envValue, name, fallback) {
+  const raw = String(envValue || '').trim();
+  if (!raw) return fallback;
+  if (raw.startsWith('<') && raw.endsWith('>')) return raw;
+  if (/^\d{5,}$/.test(raw)) return `<:${name}:${raw}>`;
+  return raw;
+}
+
+function releaseEmojis(env) {
+  return {
+    hammer: resolveEmoji(env.DISCORD_EMOJI_HAMMER1, 'hammer1', '🛠️'),
+    status: resolveEmoji(env.DISCORD_EMOJI_STATUS, 'status', '📡'),
+    pro: resolveEmoji(env.DISCORD_EMOJI_REFLUX_PRO, 'RefluxPro', '⚡'),
+    free: resolveEmoji(env.DISCORD_EMOJI_REFLUX, 'Reflux', '🌿'),
+  };
+}
+
 /** Default blurb when package.json has no releaseNotes. */
 const DEFAULT_FIXES =
   'Darker UI background all around for a deeper, cleaner look.';
@@ -77,20 +94,33 @@ function collectFixes(proPkg, freePkg, proChanged, freeChanged) {
 }
 
 function postDiscordRelease({ pro, free, fixes }) {
-  const url = releaseWebhookUrlFromEnv();
+  const env = {
+    ...process.env,
+    ...loadEnvFile(path.join(ROOT, '.env.local')),
+    ...loadEnvFile(path.join(ROOT, '.env.webhook-pull')),
+  };
+  const url = String(
+    env.DISCORD_RELEASE_WEBHOOK_URL ||
+      env.REFLUX_RELEASE_WEBHOOK_URL ||
+      env.DISCORD_LICENSE_WEBHOOK_URL ||
+      env.REFLUX_LICENSES_UPDATE_WEBHOOK_URL ||
+      '',
+  ).trim();
   if (!url) {
     console.log('[discord] skipped release share — DISCORD_RELEASE_WEBHOOK_URL not set');
     return Promise.resolve({ ok: false, skipped: true });
   }
 
-  const lines = [];
-  if (pro) lines.push(`⚡ **PRO**  ${versionLine(pro.from, pro.to)}`);
-  else lines.push('⚡ **PRO**  — unchanged');
-  if (free) lines.push(`🌿 **FREE**  ${versionLine(free.from, free.to)}`);
-  else lines.push('🌿 **FREE**  — unchanged');
+  const e = releaseEmojis(env);
+  const lines = [
+    `${e.status} **New build is live**`,
+    '',
+    `${e.pro} **PRO** · ${pro ? versionLine(pro.from, pro.to) : '_unchanged_'}`,
+    `${e.free} **FREE** · ${free ? versionLine(free.from, free.to) : '_unchanged_'}`,
+  ];
   if (fixes) {
     lines.push('');
-    lines.push("🛠️ **What's fixed**");
+    lines.push(`${e.hammer} **What's fixed**`);
     lines.push(String(fixes).slice(0, 500));
   }
 
@@ -98,7 +128,7 @@ function postDiscordRelease({ pro, free, fixes }) {
     username: 'REFLUX Releases',
     embeds: [
       {
-        title: '🚀 REFLUX Update',
+        title: `${e.status} REFLUX Update ${e.hammer}`,
         color: RELEASE_RED,
         description: lines.join('\n'),
       },

@@ -1,5 +1,6 @@
 import type { LicenseAlertEvent, LicenseAlertPayload, VersionChange } from "./types";
 import { formatWhen, maskEmail, maskLicenseKey, shortHwid } from "./format";
+import { discordEmojis } from "./discord-emojis";
 
 /** Strong red for the separate releases webhook. */
 const RELEASE_RED = 0xe74c3c;
@@ -52,7 +53,12 @@ function formatVersionLine(change?: VersionChange | null, fallbackVersion?: stri
 }
 
 function buildReleaseDescription(payload: LicenseAlertPayload): string {
-  const lines: string[] = [];
+  const e = {
+    hammer: discordEmojis.hammer(),
+    status: discordEmojis.status(),
+    pro: discordEmojis.refluxPro(),
+    free: discordEmojis.refluxFree(),
+  };
 
   const proLine = formatVersionLine(
     payload.pro,
@@ -63,16 +69,17 @@ function buildReleaseDescription(payload: LicenseAlertPayload): string {
     payload.product?.toUpperCase().includes("FREE") ? payload.version : null,
   );
 
-  if (proLine !== "—") lines.push(`⚡ **PRO**  ${proLine}`);
-  else lines.push(`⚡ **PRO**  — unchanged`);
-
-  if (freeLine !== "—") lines.push(`🌿 **FREE**  ${freeLine}`);
-  else lines.push(`🌿 **FREE**  — unchanged`);
+  const lines: string[] = [
+    `${e.status} **New build is live**`,
+    "",
+    `${e.pro} **PRO** · ${proLine === "—" ? "_unchanged_" : proLine}`,
+    `${e.free} **FREE** · ${freeLine === "—" ? "_unchanged_" : freeLine}`,
+  ];
 
   const fixes = String(payload.fixes || payload.note || "").trim();
   if (fixes) {
     lines.push("");
-    lines.push("🛠️ **What's fixed**");
+    lines.push(`${e.hammer} **What's fixed**`);
     lines.push(fixes.slice(0, 500));
   }
 
@@ -183,12 +190,14 @@ export async function postReleaseDiscordWebhook(
   }
 
   const target = releaseWebhookUrl() || licenseWebhookUrl();
+  const hammer = discordEmojis.hammer();
+  const status = discordEmojis.status();
 
   return postToDiscord(target, {
     username: "REFLUX Releases",
     embeds: [
       {
-        title: "🚀 REFLUX Update",
+        title: `${status} REFLUX Update ${hammer}`,
         color: RELEASE_RED,
         description: buildReleaseDescription(payload),
       },
