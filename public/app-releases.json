@@ -1,14 +1,14 @@
 {
   "free": {
-    "version": "1.0.17",
-    "label": "REFLUX FREE v1.0.17",
+    "version": "1.0.18",
+    "label": "REFLUX FREE v1.0.18",
     "downloadUrl": "https://www.refluxtweaks.com/downloads/REFLUX-FREE-Setup.exe",
-    "message": "Fixed Enable Write Caching on Drives."
+    "message": "New branded startup intro with Enter to continue, then Welcome presentation on first launch."
   },
   "pro": {
-    "version": "1.0.26",
-    "label": "REFLUX PRO v1.0.26",
+    "version": "1.0.27",
+    "label": "REFLUX PRO v1.0.27",
     "downloadUrl": "https://www.refluxtweaks.com/account",
-    "message": "Fixed Start Game opening a blank CMD window and not launching games."
+    "message": "New branded startup intro with Enter to continue, then Welcome presentation on first launch."
   }
 }
