@@ -30,7 +30,7 @@ export function NetworkProofSection() {
         </FlowIn>
 
         <FlowIn delay={120} className="mt-16 border-t border-white/[0.06] pt-14 md:mt-20 md:pt-16">
-          <p className="fps-proof-eyebrow mb-4 inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.2em] text-reflux-calm uppercase">
+          <p className="fps-proof-eyebrow mb-4 inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.2em] text-reflux-accent uppercase">
             <span className="fps-proof-eyebrow-dot fps-proof-eyebrow-dot--calm" aria-hidden="true" />
             Input path, not a line graph
           </p>

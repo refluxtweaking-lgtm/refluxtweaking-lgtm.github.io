@@ -74,8 +74,8 @@ function ShowcaseUi({
       <div className="showcase-ui-panel mx-auto w-[90%] divide-y divide-white/[0.06] overflow-hidden rounded-xl border border-white/[0.08] bg-[#050608]">
         {items.map((item) => (
           <div key={item.label} className="px-3 py-2.5">
-            <div className="mb-1 flex items-center gap-1.5 text-[9px] font-semibold text-reflux-green">
-              <span className="text-reflux-green">✓</span>
+            <div className="mb-1 flex items-center gap-1.5 text-[9px] font-semibold text-reflux-accent">
+              <span className="text-reflux-accent">✓</span>
               {item.label}
             </div>
             <div className="flex items-center gap-1.5 px-0.5 py-0.5">
@@ -106,13 +106,13 @@ function ShowcaseUi({
               <span className="text-[11px] font-semibold text-white">{g.name}</span>
             </div>
             {g.status === "optimize" ? (
-              <span className="rounded-md border border-reflux-green/40 bg-reflux-green/10 px-2 py-0.5 text-[8px] font-bold text-reflux-green">
+              <span className="rounded-md border border-reflux-accent/40 bg-reflux-accent/10 px-2 py-0.5 text-[8px] font-bold text-reflux-accent">
                 Optimize
               </span>
             ) : g.status === "done" ? (
-              <span className="text-[8px] font-bold text-reflux-green">Optimized ✓</span>
+              <span className="text-[8px] font-bold text-reflux-accent">Optimized ✓</span>
             ) : (
-              <span className="rounded-md border border-orange-400/30 bg-orange-400/8 px-2 py-0.5 text-[8px] font-bold text-orange-300">
+              <span className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 text-[8px] font-bold text-reflux-muted">
                 Not optimized
               </span>
             )}
@@ -134,8 +134,8 @@ function ShowcaseUi({
         label="Recoverable"
         value="12.4 GB"
         fill={72}
-        color="linear-gradient(90deg, #ff6b5b, #b392f0)"
-        glow="rgba(179,146,240,0.5)"
+        color="linear-gradient(90deg, #b4281f, #ff5a4e)"
+        glow="rgba(232,69,58,0.5)"
         active={animate}
       />
     </div>

@@ -120,8 +120,8 @@ export function ResultMetricChart({ metric, isLive, liveKey, large = false }: Re
           <div className="flex flex-wrap items-center gap-2">
             <p className="font-display text-base font-bold text-white">{metric.label}</p>
             {isRecording && (
-              <span className="reflux-glow-readable inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-reflux-green">
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-reflux-green shadow-[0_0_8px_#5dde86]" />
+              <span className="reflux-glow-readable inline-flex items-center gap-1.5 rounded-md px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-reflux-accent">
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-reflux-accent shadow-[0_0_8px_#ff5a4e]" />
                 Recording
               </span>
             )}

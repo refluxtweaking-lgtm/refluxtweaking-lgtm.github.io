@@ -5230,3 +5230,202 @@ html.reduce-effects .particles-canvas {
   font-size: clamp(2.6rem, 6.8vw, 4.6rem);
   line-height: 1.04;
 }
+
+/* ===== PROOF SECTIONS: brand recolor (gray = stock, red = REFLUX) + blend into background ===== */
+
+/* -- FPS proof theater: drop the heavy framed box -- */
+.fps-proof-stage {
+  background: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(232, 69, 58, 0.05), transparent 60%);
+  border: none;
+  box-shadow: none;
+  padding: 0.5rem 0;
+}
+.fps-proof-spec-band {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+.fps-proof-spec-tag {
+  background: transparent;
+  border: none;
+  padding-left: 0;
+  color: #ff5a4e;
+}
+.fps-proof-panel {
+  background: transparent;
+  border-radius: 12px;
+}
+.fps-proof-panel--before {
+  border: 1px solid rgba(138, 145, 156, 0.18);
+  box-shadow: none;
+}
+.fps-proof-panel--after {
+  border: 1px solid rgba(232, 69, 58, 0.3);
+  box-shadow: 0 0 48px -16px rgba(232, 69, 58, 0.35);
+}
+.fps-proof-panel--lat-before {
+  border: 1px solid rgba(138, 145, 156, 0.18);
+  box-shadow: none;
+}
+.fps-proof-panel--lat-after {
+  border: 1px solid rgba(232, 69, 58, 0.3);
+  box-shadow: 0 0 40px -16px rgba(232, 69, 58, 0.35);
+}
+.fps-proof-gain-ring {
+  background:
+    linear-gradient(var(--color-reflux-bg), var(--color-reflux-bg)) padding-box,
+    linear-gradient(135deg, #4a4f58, #e8453a) border-box;
+}
+.fps-proof-gain-value {
+  background: linear-gradient(135deg, #fff 30%, #ff5a4e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 12px rgba(232, 69, 58, 0.35));
+}
+.fps-proof-gain-mult {
+  color: rgba(255, 90, 78, 0.9);
+}
+.fps-proof-eyebrow-dot--calm {
+  background: #ff5a4e;
+  box-shadow: 0 0 10px rgba(232, 69, 58, 0.75);
+}
+
+/* -- Input lag proof: purple/green -> gray/red, blend boxes -- */
+.lag-proof-result {
+  background: radial-gradient(ellipse 60% 90% at 50% 50%, rgba(232, 69, 58, 0.06), transparent 60%);
+  border: none;
+  box-shadow: none;
+}
+.lag-proof-result-col--before .lag-proof-result-tag { color: rgba(160, 168, 180, 0.85); }
+.lag-proof-result-col--after .lag-proof-result-tag { color: rgba(255, 90, 78, 0.95); }
+.lag-proof-result-col--before .lag-proof-result-ms {
+  color: #8a919c;
+  text-shadow: none;
+}
+.lag-proof-result-col--after .lag-proof-result-ms {
+  color: #ff5a4e;
+  text-shadow: 0 0 24px rgba(232, 69, 58, 0.4);
+}
+.lag-proof-saved {
+  border-radius: 6px;
+  background: rgba(232, 69, 58, 0.14);
+  border: 1px solid rgba(232, 69, 58, 0.35);
+  box-shadow: none;
+}
+.lag-proof-pipeline {
+  background: transparent;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+.lag-proof-legend-item--stock::before {
+  background: linear-gradient(180deg, #8a919c, #4a4f58);
+  box-shadow: none;
+}
+.lag-proof-legend-item--reflux::before {
+  background: linear-gradient(180deg, #ff5a4e, #b4281f);
+  box-shadow: 0 0 8px rgba(232, 69, 58, 0.5);
+}
+.lag-proof-legend-item--stock { color: rgba(160, 168, 180, 0.8); }
+.lag-proof-legend-item--reflux { color: rgba(255, 90, 78, 0.9); }
+.lag-proof-column {
+  background: transparent;
+}
+.lag-proof-column--stock {
+  border-color: rgba(138, 145, 156, 0.14);
+  box-shadow: none;
+}
+.lag-proof-column--reflux {
+  border-color: rgba(232, 69, 58, 0.25);
+  box-shadow: none;
+}
+.lag-proof-column-icon--stock {
+  background: rgba(138, 145, 156, 0.12);
+  color: #8a919c;
+  border: 1px solid rgba(138, 145, 156, 0.3);
+}
+.lag-proof-column-icon--reflux {
+  background: rgba(232, 69, 58, 0.12);
+  color: #ff5a4e;
+  border: 1px solid rgba(232, 69, 58, 0.35);
+}
+.lag-proof-node-dot--fast {
+  background: #ff5a4e;
+  box-shadow: 0 0 8px rgba(232, 69, 58, 0.7);
+}
+.lag-proof-node-total { color: #8a919c; }
+.lag-proof-node-total--good { color: #ff5a4e; }
+.lag-proof-segment-bar {
+  background: linear-gradient(180deg, rgba(138, 145, 156, 0.15), rgba(74, 79, 88, 0.4));
+  border: 1px solid rgba(138, 145, 156, 0.3);
+  border-radius: 3px;
+}
+.lag-proof-segment-bar--reflux {
+  background: linear-gradient(180deg, rgba(255, 90, 78, 0.25), rgba(180, 40, 31, 0.45));
+  border-color: rgba(232, 69, 58, 0.4);
+}
+.lag-proof-segment-meta {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 0;
+}
+.lag-proof-segment--stock .lag-proof-segment-meta,
+.lag-proof-segment--reflux .lag-proof-segment-meta {
+  border-color: rgba(255, 255, 255, 0.04);
+}
+.lag-proof-segment-tweak { color: rgba(255, 90, 78, 0.85); }
+.lag-proof-segment-ms { color: #8a919c; }
+.lag-proof-segment-ms--good { color: #ff5a4e; }
+.lag-proof-tweak-card {
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.lag-proof-tweak-card:hover {
+  border-color: rgba(232, 69, 58, 0.35);
+}
+.lag-proof-tweak-check {
+  color: #ff5a4e;
+  background: rgba(232, 69, 58, 0.1);
+  border: 1px solid rgba(232, 69, 58, 0.3);
+  border-radius: 6px;
+}
+
+/* -- Free app showcase: kill the outer card boxes so mockups float on black -- */
+.showcase-card-inner.reflux-glow-box {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+.showcase-card-inner:hover {
+  transform: translateY(-3px);
+}
+#app-showcase .showcase-card-ui {
+  background: radial-gradient(ellipse 80% 70% at 50% 45%, rgba(232, 69, 58, 0.05), transparent 65%);
+}
+
+/* -- App gallery: flatten pill tabs -- */
+#app-gallery .app-gallery-tab,
+#app-gallery .reflux-glow-interactive {
+  border-radius: 8px;
+}
+#results .reflux-glow-interactive {
+  border-radius: 8px;
+}
+
+/* -- Real results: blend the giant card into the page -- */
+#results .glass-card-static.reflux-glow-box {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  padding-left: 0;
+  padding-right: 0;
+}

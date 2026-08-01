@@ -24,9 +24,9 @@ const FPS_BEFORE = [
   13, 17, 11, 15, 12, 18, 10, 14, 13, 16, 11, 15, 12, 19, 10, 14, 13, 17, 11, 15,
   14, 16, 11, 18, 12, 15, 10, 17, 13, 16, 11, 18, 12, 15, 13, 17, 11, 16, 12, 14,
 ];
-const FPS_AFTER = Array.from({ length: 40 }, (_, i) => 49 + (i % 4 === 0 ? 4 : i % 4 === 1 ? 2 : i % 4 === 2 ? -1 : 1));
+const FPS_AFTER = Array.from({ length: 40 }, (_, i) => 59 + (i % 4 === 0 ? 3 : i % 4 === 1 ? 1 : i % 4 === 2 ? -1 : 1));
 
-const FPS_CHART_MAX = 64;
+const FPS_CHART_MAX = 80;
 
 const LATENCY_BEFORE = [
   11, 13, 9, 12, 10, 14, 9, 11, 12, 13, 10, 11, 12, 14, 9, 12, 10, 11, 9, 13,
@@ -35,10 +35,10 @@ const LATENCY_BEFORE = [
 const LATENCY_AFTER = Array.from({ length: 40 }, (_, i) => 2 + (i % 4 === 0 ? 0.4 : 0));
 
 const CHART_COLORS = {
-  fpsBefore: { stroke: "#ff6b5b", fill: "rgba(255,107,91,0.2)", glow: "rgba(255,107,91,0.55)" },
-  fpsAfter: { stroke: "#5ec4ef", fill: "rgba(94,196,239,0.18)", glow: "rgba(94,196,239,0.55)" },
-  latBefore: { stroke: "#c084fc", fill: "rgba(192,132,252,0.16)", glow: "rgba(192,132,252,0.5)" },
-  latAfter: { stroke: "#5dde86", fill: "rgba(93,222,134,0.18)", glow: "rgba(52,211,153,0.55)" },
+  fpsBefore: { stroke: "#8a919c", fill: "rgba(138,145,156,0.12)", glow: "rgba(138,145,156,0.3)" },
+  fpsAfter: { stroke: "#ff5a4e", fill: "rgba(232,69,58,0.16)", glow: "rgba(232,69,58,0.55)" },
+  latBefore: { stroke: "#8a919c", fill: "rgba(138,145,156,0.12)", glow: "rgba(138,145,156,0.3)" },
+  latAfter: { stroke: "#ff5a4e", fill: "rgba(232,69,58,0.16)", glow: "rgba(232,69,58,0.55)" },
 };
 
 function valueToY(value: number, min: number, max: number, height: number, pad = 14) {
@@ -226,7 +226,7 @@ export function AmbientFpsGraph({ className = "" }: AmbientFpsGraphProps) {
               areaPath={beforeArea}
               min={min}
               max={max}
-              ticks={["60", "30", "0"]}
+              ticks={["80", "40", "0"]}
               panelClass="fps-proof-panel fps-proof-panel--before"
             />
 
@@ -249,7 +249,7 @@ export function AmbientFpsGraph({ className = "" }: AmbientFpsGraphProps) {
               areaPath={afterArea}
               min={min}
               max={max}
-              ticks={["60", "30", "0"]}
+              ticks={["80", "40", "0"]}
               panelClass="fps-proof-panel fps-proof-panel--after"
             />
           </div>

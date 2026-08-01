@@ -52,8 +52,8 @@ export function AppGallery() {
         <div className="grid items-start gap-8 lg:grid-cols-[1fr_1.05fr] lg:gap-10">
           <FlowIn delay={80}>
             <div className="app-gallery-copy sticky top-28">
-              <div className="mb-3 inline-flex items-center gap-2 rounded-full reflux-glow-readable px-3 py-1 text-[11px] font-bold text-reflux-green uppercase">
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-reflux-green" />
+              <div className="mb-3 inline-flex items-center gap-2 rounded-md reflux-glow-readable px-3 py-1 text-[11px] font-bold text-reflux-accent uppercase">
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-reflux-accent" />
                 Desktop app preview
               </div>
               <h3 className="mb-3 text-2xl font-extrabold tracking-tight text-white md:text-3xl">
@@ -65,7 +65,7 @@ export function AppGallery() {
               <ul className="mb-8 space-y-3">
                 {current.bullets.map((line) => (
                   <li key={line} className="flex items-start gap-2.5 text-sm text-[#c4ccd8]">
-                    <Icon name="check" size={16} className="mt-0.5 shrink-0 text-reflux-green" />
+                    <Icon name="check" size={16} className="mt-0.5 shrink-0 text-reflux-accent" />
                     {line}
                   </li>
                 ))}
