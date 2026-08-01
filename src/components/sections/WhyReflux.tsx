@@ -28,7 +28,7 @@ const reasons: {
   {
     title: "Full suite, not a tiny stub",
     body: "A lot of tools ship at 10 to 50 MB. REFLUX is about 75 MB because the desktop suite, hardware profiles, and safety tools are packed in.",
-    icon: "download",
+    icon: "rocket",
   },
 ];
 
