@@ -24,7 +24,7 @@ const refluxMetric = JetBrains_Mono({
 });
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.refluxtweaks.com";
-const SITE_TITLE = "REFLUX TWEAKS – Open. Already Optimized.";
+const SITE_TITLE = "REFLUX TWEAKS | Gaming Optimizer";
 const SITE_DESCRIPTION =
   "Custom hardware profiles applied when you open the app. About 20 to 100 FPS gains across PCs, Extreme Process Killer, FREE and PRO. Cheapest that still hits hard.";
 
