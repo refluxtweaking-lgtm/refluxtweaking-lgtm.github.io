@@ -2,7 +2,15 @@
 
 import { useEffect, useState } from "react";
 
-const GAMES = ["Fortnite", "Valorant", "Apex Legends", "CS2", "Warzone", "Rocket League"];
+const GAMES = [
+  "Fortnite",
+  "Roblox",
+  "Valorant",
+  "Apex Legends",
+  "CS2",
+  "Warzone",
+  "Rocket League",
+];
 
 export function HeroGameTicker() {
   const [index, setIndex] = useState(0);

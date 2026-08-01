@@ -4,54 +4,59 @@ import { HeroLaunchRail } from "./HeroLaunchRail";
 import { VendorLogo } from "@/components/ui/VendorLogo";
 import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
 import { HeroGameMarquee } from "./HeroGameMarquee";
+import { HeroGameTicker } from "./HeroGameTicker";
 import { HeroShowcase } from "./HeroShowcase";
 import { VouchMarquee } from "./VouchMarquee";
 
 const proofPoints = [
-  { icon: "bolt" as const, label: "20-100", unit: "FPS added", sub: "Low end to high end PCs" },
-  { icon: "internet" as const, label: "30→120", unit: "peak FPS", sub: "sno**** laptop story" },
-  { icon: "shield" as const, label: "On open", unit: "auto profile", sub: "Applied for your hardware" },
+  { icon: "bolt" as const, label: "20-100", unit: "FPS", sub: "Common gains low to high end" },
+  { icon: "internet" as const, label: "120", unit: "peak FPS", sub: "sno**** laptop from 30" },
+  { icon: "shield" as const, label: "Auto", unit: "on open", sub: "Profile built for your PC" },
 ];
 
 export function Hero() {
   return (
-    <section className="hero-stage hero-stage--bleed hero-stage--compact relative w-full overflow-x-clip pb-2 pt-0">
+    <section className="hero-stage hero-stage--bleed hero-stage--compact hero-stage--straight relative w-full overflow-x-clip pb-2 pt-0">
       <div className="hero-bg-glow pointer-events-none absolute inset-0" aria-hidden="true" />
 
       <div className="hero-stage-inner relative mx-auto w-full max-w-[1480px]">
-        <div className="hero-compact-flow flex flex-col gap-4 lg:gap-5">
-          <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.72fr)] lg:items-start lg:gap-6">
+        <div className="hero-compact-flow flex flex-col gap-5 lg:gap-6">
+          <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center lg:gap-8">
             <div className="hero-copy order-1 overflow-visible text-center lg:text-left">
               <div
-                className="animate-fade-in-up mb-3 flex flex-col items-center gap-2.5 lg:items-start"
+                className="animate-fade-in-up mb-4 flex flex-col items-center gap-3 lg:items-start"
                 style={{ animationDelay: "0.02s" }}
               >
-                <span className="hero-rank-kicker">Open REFLUX. Already tuned.</span>
+                <span className="hero-rank-kicker hero-rank-kicker--straight">
+                  Open REFLUX. Already tuned.
+                </span>
                 <HeroLaunchRail />
               </div>
 
               <h1
-                className="hero-headline hero-headline--compact animate-fade-in-up mb-3 font-extrabold tracking-tight"
+                className="hero-headline hero-headline--compact animate-fade-in-up mb-4 font-extrabold tracking-tight"
                 style={{ animationDelay: "0.05s" }}
               >
-                <span className="hero-headline-line block text-white">Your hardware.</span>
-                <span className="hero-headline-row hero-headline-row--accent mt-1 block md:mt-1.5">
-                  <span className="hero-gradient-shimmer-wrap inline-block">
-                    <span className="hero-gradient-shimmer">A custom profile on launch.</span>
-                  </span>
+                <span className="hero-headline-line block text-white">More FPS in</span>
+                <span className="hero-headline-row mt-1 block md:mt-1.5">
+                  <HeroGameTicker />
+                </span>
+                <span className="mt-2 block text-[0.92em] font-extrabold text-white md:mt-3">
+                  Built for your PC on launch.
                 </span>
               </h1>
 
               <p
-                className="hero-tune-copy hero-tune-copy--compact animate-fade-in-up mx-auto mb-4 max-w-lg text-sm leading-relaxed text-reflux-text-soft md:text-base lg:mx-0"
+                className="hero-tune-copy hero-tune-copy--compact animate-fade-in-up mx-auto mb-5 max-w-lg text-sm leading-relaxed text-reflux-text-soft md:text-base lg:mx-0"
                 style={{ animationDelay: "0.08s" }}
               >
-                Other tweakers make you hunt toggles. REFLUX reads your CPU and GPU, builds a profile for
-                your PC, and applies it when you open the app. Cheapest path to real FPS. FREE and PRO.
+                Other apps make you click Apply forever. REFLUX detects your CPU and GPU, builds a custom
+                profile, and applies it when you open the app. FREE is lighter. PRO goes deeper. About 20 to
+                100 FPS depending on the rig.
               </p>
 
               <div
-                className="animate-fade-in-up mb-1 flex flex-wrap justify-center gap-2.5 lg:justify-start"
+                className="animate-fade-in-up mb-2 flex flex-wrap justify-center gap-3 lg:justify-start"
                 style={{ animationDelay: "0.1s" }}
               >
                 <div className="hero-cta-glow">
@@ -61,27 +66,27 @@ export function Hero() {
                     variant="primary"
                     large
                     showIcon
-                    className="btn-angular min-w-[210px]"
+                    className="min-w-[220px]"
                   >
                     Download Free
                   </Button>
                 </div>
-                <Button href="#why-reflux" variant="secondary" large className="btn-angular">
-                  Why we win
+                <Button href="#why-reflux" variant="secondary" large>
+                  Why REFLUX wins
                 </Button>
               </div>
             </div>
 
-            <div className="hero-marquee-slot order-2 lg:order-3 lg:col-span-2">
-              <HeroGameMarquee prominent />
-            </div>
-
             <div
-              className="hero-showcase-col order-3 animate-fade-in-up w-full min-w-0 lg:order-2"
+              className="hero-showcase-col order-2 animate-fade-in-up w-full min-w-0"
               style={{ animationDelay: "0.12s" }}
             >
               <HeroShowcase compact />
             </div>
+          </div>
+
+          <div className="hero-marquee-slot order-3">
+            <HeroGameMarquee prominent />
           </div>
 
           <div
@@ -122,7 +127,7 @@ export function Hero() {
             </div>
           </div>
 
-          <div className="animate-fade-in-up order-last mt-1" style={{ animationDelay: "0.2s" }}>
+          <div className="animate-fade-in-up order-last" style={{ animationDelay: "0.2s" }}>
             <VouchMarquee />
           </div>
         </div>

@@ -5058,3 +5058,36 @@ html.reduce-effects .particles-canvas {
 .cta-bare {
   padding: 2rem 1rem 0.5rem;
 }
+
+/* ===== STRAIGHT HERO (kill slant / clip-path weirdness) ===== */
+.hero-stage--straight .btn-angular,
+.hero-stage--straight .hero-rank-kicker,
+.hero-rank-kicker--straight {
+  clip-path: none !important;
+  border-radius: 8px !important;
+}
+.btn-angular {
+  clip-path: none !important;
+  border-radius: 8px !important;
+}
+.header-shell-angular {
+  clip-path: none !important;
+  border-radius: 12px !important;
+}
+.hero-stage--straight .hero-device-stage,
+.hero-stage--straight .hero-showcase-wrap--compact .hero-device-stage,
+.hero-stage--straight .hero-showcase-wrap:hover .hero-device-stage {
+  transform: none !important;
+}
+@media (min-width: 1024px) {
+  .hero-stage--straight .hero-showcase-wrap--compact .hero-device-stage {
+    transform: scale(0.94) !important;
+    transform-origin: center center;
+  }
+}
+.hero-headline .hero-game-ticker {
+  font-size: clamp(2.4rem, 6.5vw, 4.2rem);
+  line-height: 1.05;
+  display: inline-block;
+  min-width: 8ch;
+}

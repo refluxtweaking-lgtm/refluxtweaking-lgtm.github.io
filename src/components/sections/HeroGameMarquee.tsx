@@ -1,18 +1,18 @@
 "use client";
 
 const MARQUEE_GAMES = [
-  { id: 730, name: "CS2" },
   { id: 1172470, name: "Apex Legends" },
-  { id: 1091500, name: "Cyberpunk 2077" },
+  { id: 730, name: "CS2" },
   { id: 1938090, name: "Call of Duty" },
   { id: 252490, name: "Rust" },
-  { id: 1085660, name: "Destiny 2" },
-  { id: 1245620, name: "Elden Ring" },
-  { id: 2357570, name: "Overwatch 2" },
-  { id: 578080, name: "PUBG" },
   { id: 359550, name: "Rainbow Six" },
-  { id: 440, name: "Team Fortress 2" },
+  { id: 578080, name: "PUBG" },
+  { id: 2357570, name: "Overwatch 2" },
   { id: 271590, name: "GTA V" },
+  { id: 1245620, name: "Elden Ring" },
+  { id: 1091500, name: "Cyberpunk 2077" },
+  { id: 1085660, name: "Destiny 2" },
+  { id: 440, name: "Team Fortress 2" },
 ] as const;
 
 function GameCapsule({ appId, name }: { appId: number; name: string }) {
