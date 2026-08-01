@@ -4,14 +4,13 @@ import { HeroLaunchRail } from "./HeroLaunchRail";
 import { VendorLogo } from "@/components/ui/VendorLogo";
 import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
 import { HeroGameMarquee } from "./HeroGameMarquee";
-import { HeroGameTicker } from "./HeroGameTicker";
 import { HeroShowcase } from "./HeroShowcase";
-import { ReviewRatingBadge } from "@/components/reviews/ReviewRatingBadge";
+import { VouchMarquee } from "./VouchMarquee";
 
 const proofPoints = [
-  { icon: "bolt" as const, label: "+52", unit: "avg FPS", sub: "Real user results", accent: "#5dde86" },
-  { icon: "internet" as const, label: "-6", unit: "ms ping", sub: "Lower input delay", accent: "#5ec4ef" },
-  { icon: "shield" as const, label: "100%", unit: "reversible", sub: "Restore anytime", accent: "#ff9588" },
+  { icon: "bolt" as const, label: "20-100", unit: "FPS added", sub: "Low end to high end PCs" },
+  { icon: "internet" as const, label: "30→120", unit: "peak FPS", sub: "sno**** laptop story" },
+  { icon: "shield" as const, label: "On open", unit: "auto profile", sub: "Applied for your hardware" },
 ];
 
 export function Hero() {
@@ -27,8 +26,7 @@ export function Hero() {
                 className="animate-fade-in-up mb-3 flex flex-col items-center gap-2.5 lg:items-start"
                 style={{ animationDelay: "0.02s" }}
               >
-                <span className="hero-rank-kicker">#1 Tweaking Software for PC</span>
-                <ReviewRatingBadge />
+                <span className="hero-rank-kicker">Open REFLUX. Already tuned.</span>
                 <HeroLaunchRail />
               </div>
 
@@ -36,10 +34,10 @@ export function Hero() {
                 className="hero-headline hero-headline--compact animate-fade-in-up mb-3 font-extrabold tracking-tight"
                 style={{ animationDelay: "0.05s" }}
               >
-                <span className="hero-headline-line block text-white">Stop losing to lag.</span>
+                <span className="hero-headline-line block text-white">Your hardware.</span>
                 <span className="hero-headline-row hero-headline-row--accent mt-1 block md:mt-1.5">
                   <span className="hero-gradient-shimmer-wrap inline-block">
-                    <span className="hero-gradient-shimmer">Start winning fights.</span>
+                    <span className="hero-gradient-shimmer">A custom profile on launch.</span>
                   </span>
                 </span>
               </h1>
@@ -48,8 +46,8 @@ export function Hero() {
                 className="hero-tune-copy hero-tune-copy--compact animate-fade-in-up mx-auto mb-4 max-w-lg text-sm leading-relaxed text-reflux-text-soft md:text-base lg:mx-0"
                 style={{ animationDelay: "0.08s" }}
               >
-                REFLUX tunes your PC for <HeroGameTicker /> and every game you grind. Intel, AMD, and NVIDIA
-                detected automatically.
+                Other tweakers make you hunt toggles. REFLUX reads your CPU and GPU, builds a profile for
+                your PC, and applies it when you open the app. Cheapest path to real FPS. FREE and PRO.
               </p>
 
               <div
@@ -68,8 +66,8 @@ export function Hero() {
                     Download Free
                   </Button>
                 </div>
-                <Button href="#app-gallery" variant="secondary" large className="btn-angular">
-                  See the app
+                <Button href="#why-reflux" variant="secondary" large className="btn-angular">
+                  Why we win
                 </Button>
               </div>
             </div>
@@ -78,7 +76,10 @@ export function Hero() {
               <HeroGameMarquee prominent />
             </div>
 
-            <div className="hero-showcase-col order-3 animate-fade-in-up w-full min-w-0 lg:order-2" style={{ animationDelay: "0.12s" }}>
+            <div
+              className="hero-showcase-col order-3 animate-fade-in-up w-full min-w-0 lg:order-2"
+              style={{ animationDelay: "0.12s" }}
+            >
               <HeroShowcase compact />
             </div>
           </div>
@@ -98,7 +99,11 @@ export function Hero() {
 
             <div className="hero-stat-rail hero-stat-rail--compact min-w-0 flex-1 sm:max-w-xl">
               {proofPoints.map((point, i) => (
-                <div key={point.label} className="hero-stat-rail-cell" style={{ ["--stat-accent" as string]: point.accent }}>
+                <div
+                  key={point.label}
+                  className="hero-stat-rail-cell"
+                  style={{ ["--stat-accent" as string]: "#F15B50" }}
+                >
                   {i > 0 ? <span className="hero-stat-rail-divider" aria-hidden="true" /> : null}
                   <div className="hero-stat-rail-inner">
                     <div className="hero-stat-tile-icon hero-stat-tile-icon--rail hero-stat-tile-icon--compact">
@@ -115,6 +120,10 @@ export function Hero() {
                 </div>
               ))}
             </div>
+          </div>
+
+          <div className="animate-fade-in-up order-last mt-1" style={{ animationDelay: "0.2s" }}>
+            <VouchMarquee />
           </div>
         </div>
       </div>

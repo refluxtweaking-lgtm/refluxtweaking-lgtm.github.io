@@ -17,11 +17,11 @@
   --reflux-text-soft: #b8c0cc;
   --reflux-muted: #6e7684;
 
-  /* Brand */
-  --reflux-accent: #ff4d3d;
-  --reflux-accent-mid: #ff6b5b;
-  --reflux-accent-soft: #ff9588;
-  --reflux-accent-glow: rgba(255, 77, 61, 0.45);
+  /* Brand: dark red only (no orange) */
+  --reflux-accent: #e8453a;
+  --reflux-accent-mid: #f15b50;
+  --reflux-accent-soft: #ff8a7a;
+  --reflux-accent-glow: rgba(232, 69, 58, 0.5);
 
   /* Type scale */
   --reflux-display-xl: clamp(2.75rem, 7.5vw, 4.75rem);

@@ -13,6 +13,39 @@ export const REVIEWS_PAGE_SIZE = 6;
 
 export const reviews: Review[] = [
   {
+    id: "v1",
+    quote: "vouch 20+ fps added -30 ping running stable 240fps and lower lag on fn",
+    author: "zen****",
+    game: "Fortnite",
+    rating: 5,
+    tone: "casual",
+  },
+  {
+    id: "v2",
+    quote:
+      "30 fps added free version. roblox went from 30 to 60+. laptop went 30 fps to 75 avg, peak 120",
+    author: "sno****",
+    game: "Roblox",
+    rating: 5,
+    tone: "casual",
+  },
+  {
+    id: "v3",
+    quote: "50+ fps -20 ms on roblox. helped step by step. ill buy premium soon",
+    author: "xvz****",
+    game: "Roblox",
+    rating: 5,
+    tone: "casual",
+  },
+  {
+    id: "v4",
+    quote: "from 60 fps to 80, less ping less delay, tested on roblox, free version",
+    author: "cuc****",
+    game: "Roblox",
+    rating: 5,
+    tone: "casual",
+  },
+  {
     id: "r1",
     quote: "ts acc worth it bro 😭",
     author: "Marcus L.",

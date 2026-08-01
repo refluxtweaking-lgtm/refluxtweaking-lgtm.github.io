@@ -18,7 +18,7 @@ interface ButtonProps {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "btn-shimmer btn-glow-primary bg-gradient-to-r from-[#ff6b5b] to-[#e85548] text-white border-[rgba(255,107,91,0.5)] hover:brightness-110",
+    "btn-shimmer btn-glow-primary bg-gradient-to-r from-[#f15b50] to-[#c62828] text-white border-[rgba(241,91,80,0.5)] hover:brightness-110",
   discord:
     "bg-gradient-to-r from-[#5865f2] to-[#4752c4] text-white border-[#5865f2] shadow-[0_4px_20px_rgba(88,101,242,0.35)] hover:brightness-110",
   secondary:
@@ -39,7 +39,7 @@ export function Button({
   onClick,
 }: ButtonProps) {
   const baseStyles =
-    "font-display inline-flex items-center justify-center gap-2 rounded-xl font-bold transition-colors duration-200 border cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-reflux-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
+    "font-display inline-flex items-center justify-center gap-2 rounded-md font-bold transition-colors duration-200 border cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-reflux-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
   const sizeStyles = large ? "text-[15px] px-7 py-3.5 min-h-[48px]" : "text-sm px-5 py-2.5";
 
   const content = (

@@ -1,38 +1,26 @@
 import Link from "next/link";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { FlowIn } from "@/components/ui/FlowIn";
 import { Icon } from "@/components/ui/Icon";
-import { ReviewCard } from "@/components/reviews/ReviewCard";
-import { reviews } from "@/data/reviews";
-
-const HOME_REVIEW_COUNT = 6;
+import { VouchMarquee } from "./VouchMarquee";
 
 export function Testimonials() {
-  const featured = reviews.slice(0, HOME_REVIEW_COUNT);
-
   return (
-    <section className="section-flow">
+    <section className="section-flow vouch-section">
       <div className="section-flow-divider" aria-hidden="true" />
       <SectionHeader
-        eyebrow="Social Proof"
+        eyebrow="Discord vouches"
         title={
           <>
-            Gamers <span className="gradient-text">feel the difference</span>
+            Real players. <span className="headline-accent">Real FPS.</span>
           </>
         }
-        subtitle="Honest feedback from players — some names hidden with ***."
+        subtitle="Names shortened. Quotes scroll left to right. Low end to high end, people report about 20 to 100 FPS added."
       />
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {featured.map((review, index) => (
-          <FlowIn key={review.id} delay={index * 80}>
-            <ReviewCard review={review} />
-          </FlowIn>
-        ))}
-      </div>
+      <VouchMarquee />
       <p className="mt-10 text-center">
         <Link
           href="/reviews"
-          className="reflux-glow-interactive inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-reflux-accent hover:text-white"
+          className="reflux-glow-interactive inline-flex items-center gap-2 px-2 py-2 text-sm font-semibold text-reflux-accent hover:text-white"
         >
           See all reviews
           <Icon name="arrowRight" size={16} strokeWidth={2.2} glow={false} />

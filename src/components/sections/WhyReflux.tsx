@@ -1,96 +1,86 @@
 import { FlowIn } from "@/components/ui/FlowIn";
-import { GlowCard } from "@/components/ui/GlowCard";
 import { AppIcon } from "@/components/ui/AppIcon";
-import { Icon } from "@/components/ui/Icon";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
-import { refluxAdvantages, refluxFeatures } from "@/data/reflux-highlights";
 import { REFLUX_FREE_DOWNLOAD } from "@/data/downloads";
-import { PRODUCT_LIMITS } from "@/data/tweaks";
 import type { AppIconName } from "@/data/app-icons";
 
-const advantageIcons: Record<string, AppIconName> = {
-  search: "cpu",
-  download: "home",
-  shield: "shield",
-  sparkle: "optimizer",
-};
+const reasons: {
+  title: string;
+  body: string;
+  icon: AppIconName;
+}[] = [
+  {
+    title: "Auto profile on open",
+    body: "Competitors make you click Apply on a pile of tweaks. REFLUX builds a custom profile for your CPU and GPU and applies it when you launch.",
+    icon: "bolt",
+  },
+  {
+    title: "Cheapest that still hits hard",
+    body: "FREE is a real desktop app with a lighter auto profile and file cleanup. PRO unlocks the full stack without forcing a fake premium wall for basics.",
+    icon: "optimizer",
+  },
+  {
+    title: "Extreme Process Killer",
+    body: "Clears background junk hard. Keeps Microsoft Edge. Warns you it empties Recycle Bin too. Make a restore point, run it, restart for the cleanest result.",
+    icon: "processkiller",
+  },
+  {
+    title: "Full suite, not a tiny stub",
+    body: "A lot of tools ship at 10 to 50 MB. REFLUX is about 75 MB because the desktop suite, hardware profiles, and safety tools are packed in.",
+    icon: "download",
+  },
+];
 
 export function WhyReflux() {
   return (
     <section id="why-reflux" className="section-flow">
       <div className="section-flow-divider" aria-hidden="true" />
       <SectionHeader
-        eyebrow="Still deciding?"
+        eyebrow="Why REFLUX wins"
         title={
           <>
-            Four doubts. <span className="headline-accent">Four shutdowns.</span>
+            Not another toggle farm. <span className="headline-accent">Yours builds itself.</span>
           </>
         }
-        subtitle="We designed REFLUX around the questions people actually ask before installing a PC tweaker."
+        subtitle="We beat the pink, green, and purple tweaker sites by doing the work on open, not by making you babysit every switch."
       />
 
-      <div className="mx-auto mb-12 grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {refluxAdvantages.map((item, i) => (
-          <FlowIn key={item.title} delay={i * 60}>
-            <GlowCard className="h-full p-5 transition-transform hover:-translate-y-0.5">
-              <span className="mb-2 inline-block rounded-full reflux-glow-readable px-2.5 py-0.5 text-[10px] font-bold tracking-wide text-reflux-accent uppercase">
-                {item.objection}
+      <div className="why-win-grid mx-auto mb-12 max-w-5xl">
+        {reasons.map((item, i) => (
+          <FlowIn key={item.title} delay={i * 70}>
+            <article className="why-win-row">
+              <span className="why-win-icon" aria-hidden="true">
+                <AppIcon name={item.icon} size={22} />
               </span>
-              <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-reflux-accent/25 bg-reflux-accent/10">
-                <AppIcon name={advantageIcons[item.icon] ?? "bolt"} size={20} />
-              </span>
-              <h3 className="mb-2 text-base font-bold text-white">{item.title}</h3>
-              <p className="text-sm leading-relaxed text-reflux-muted">{item.body}</p>
-            </GlowCard>
+              <div>
+                <h3 className="why-win-title">{item.title}</h3>
+                <p className="why-win-body">{item.body}</p>
+              </div>
+            </article>
           </FlowIn>
         ))}
       </div>
 
-      <FlowIn delay={100}>
-        <div className="reflux-glow-box mx-auto max-w-4xl overflow-hidden rounded-2xl">
-          <div className="px-5 py-4 sm:px-6">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <div className="text-xs font-bold tracking-wider text-reflux-accent uppercase">What you get</div>
-                <h3 className="text-lg font-extrabold text-white sm:text-xl">Everything in REFLUX</h3>
-              </div>
-              <span className="reflux-glow-readable inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold text-reflux-green">
-                <Icon name="check" size={12} />
-                {PRODUCT_LIMITS.totalTweaksLabel} Pro tweaks
-              </span>
-            </div>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="reflux-features-table w-full min-w-[480px] text-left text-sm">
-              <thead>
-                <tr className="border-b border-reflux-border/50 text-[11px] font-bold tracking-wider text-reflux-muted uppercase">
-                  <th className="px-5 py-3.5 sm:px-6">Feature</th>
-                  <th className="px-5 py-3.5 text-reflux-accent sm:px-6">REFLUX</th>
-                </tr>
-              </thead>
-              <tbody>
-                {refluxFeatures.map((row) => (
-                  <tr
-                    key={row.feature}
-                    className={`border-b border-reflux-border/30 transition-colors hover:bg-white/[0.02] ${
-                      row.highlight ? "bg-reflux-accent/[0.04]" : ""
-                    }`}
-                  >
-                    <td className="px-5 py-4 font-semibold text-white sm:px-6">{row.feature}</td>
-                    <td className="px-5 py-4 text-[#dce3ee] sm:px-6">{row.detail}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+      <FlowIn delay={120}>
+        <div className="why-story mx-auto max-w-3xl text-center">
+          <p className="why-story-kicker">sno**** on a laptop</p>
+          <p className="why-story-line">
+            Went from about <strong>30 FPS</strong> to <strong>75 average</strong>, with a high of{" "}
+            <strong>120 FPS</strong>. FREE version. That is the difference between fighting Windows and
+            letting REFLUX tune it.
+          </p>
+          <p className="why-story-note">
+            Across low end to high end PCs, players commonly report roughly <strong>20 to 100 FPS</strong>{" "}
+            added depending on the rig and game.
+          </p>
         </div>
       </FlowIn>
 
-      <FlowIn delay={140} className="mt-10 text-center">
+      <FlowIn delay={160} className="mt-10 text-center">
         <p className="mx-auto mb-5 max-w-xl text-sm text-reflux-muted">
-          Download REFLUX free, see your hardware detected live, and upgrade only when you want the full {PRODUCT_LIMITS.totalTweaksLabel} tweak arsenal.
+          Create a restore point first. Extreme cleanup clears Recycle Bin on FREE and PRO. Restart after
+          for the best return.
         </p>
         <div className="flex flex-wrap justify-center gap-3">
           <Button
@@ -99,11 +89,12 @@ export function WhyReflux() {
             variant="primary"
             large
             showIcon
+            className="btn-angular"
           >
-            Download Free
+            Download FREE
           </Button>
-          <Button href="#pricing" variant="secondary" large>
-            View pricing
+          <Button href="/pricing" variant="secondary" large className="btn-angular">
+            See PRO pricing
           </Button>
         </div>
       </FlowIn>
