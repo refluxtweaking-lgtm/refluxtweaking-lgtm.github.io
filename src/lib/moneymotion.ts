@@ -102,6 +102,13 @@ async function parseMoneyMotionResponse(response: Response) {
   return data;
 }
 
+/** MoneyMotion nests real error text at error.json.message (tRPC shape). */
+function moneyMotionErrorMessage(data: Record<string, unknown>): string | null {
+  const error = data.error as Record<string, unknown> | undefined;
+  const json = error?.json as Record<string, unknown> | undefined;
+  return typeof json?.message === "string" && json.message ? json.message : null;
+}
+
 async function createViaRestCheckoutSession(
   apiKey: string,
   plan: ProPlanId,
@@ -151,7 +158,11 @@ async function createViaRestCheckoutSession(
   const data = await parseMoneyMotionResponse(response);
 
   if (!response.ok) {
-    const reason = data.errors?.join(", ") || data.message || `HTTP ${response.status}`;
+    const reason =
+      data.errors?.join(", ") ||
+      data.message ||
+      moneyMotionErrorMessage(data) ||
+      `HTTP ${response.status}`;
     console.error("[MoneyMotion] REST createCheckoutSession failed:", reason, data);
     return { ok: false, error: reason };
   }
@@ -211,7 +222,11 @@ async function createViaTrpcCheckoutSession(
   const data = await parseMoneyMotionResponse(response);
 
   if (!response.ok) {
-    const reason = data.errors?.join(", ") || data.message || `HTTP ${response.status}`;
+    const reason =
+      data.errors?.join(", ") ||
+      data.message ||
+      moneyMotionErrorMessage(data) ||
+      `HTTP ${response.status}`;
     console.error("[MoneyMotion] tRPC createCheckoutSession failed:", reason, data);
     return { ok: false, error: reason };
   }
@@ -245,11 +260,14 @@ export async function createMoneyMotionCheckout(
   }
 
   try {
-    const restResult = await createViaRestCheckoutSession(apiKey, plan, options);
-    if (restResult.ok) return restResult;
+    // MoneyMotion's live API is tRPC-shaped; the plain REST path 404s, so try tRPC first.
+    const trpcResult = await createViaTrpcCheckoutSession(apiKey, plan, options);
+    if (trpcResult.ok) return trpcResult;
 
-    console.warn("[MoneyMotion] REST failed, trying tRPC fallback:", restResult.error);
-    return await createViaTrpcCheckoutSession(apiKey, plan, options);
+    console.warn("[MoneyMotion] tRPC failed, trying REST fallback:", trpcResult.error);
+    const restResult = await createViaRestCheckoutSession(apiKey, plan, options);
+    // Prefer the tRPC error message — it carries the real reason (e.g. inactive store).
+    return restResult.ok ? restResult : trpcResult;
   } catch {
     return { ok: false, error: "Could not reach MoneyMotion" };
   }
