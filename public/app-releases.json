@@ -1,14 +1,14 @@
 {
   "free": {
-    "version": "1.0.19",
-    "label": "REFLUX FREE v1.0.19",
+    "version": "1.0.20",
+    "label": "REFLUX FREE v1.0.20",
     "downloadUrl": "https://www.refluxtweaks.com/downloads/REFLUX-FREE-Setup.exe",
-    "message": "First-run click tutorial with blurred background and red arrows that walks you through creating a safety backup before you continue."
+    "message": "Light auto profile on launch — clears temp files, flushes DNS, and preps Game Mode when you open the app. Recycle Bin stays manual. Cleaner Home tiles."
   },
   "pro": {
-    "version": "1.0.28",
-    "label": "REFLUX PRO v1.0.28",
+    "version": "1.0.29",
+    "label": "REFLUX PRO v1.0.29",
     "downloadUrl": "https://www.refluxtweaks.com/account",
-    "message": "First-run click tutorial with blurred background and red arrows that walks you through creating a safety backup before you continue."
+    "message": "Auto profile on launch — your custom hardware profile re-applies itself every time you open the app. Cleaner boxes, dark red branding, and an Auto Profile status banner on Home."
   }
 }
