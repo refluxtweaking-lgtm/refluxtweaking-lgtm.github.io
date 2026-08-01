@@ -1,4 +1,5 @@
 import { NetworkProofSection } from "@/components/sections/NetworkProofSection";
+import { StatementBand } from "@/components/sections/StatementBand";
 import { AppShowcaseStrip } from "@/components/sections/AppShowcaseStrip";
 import { ProSpotlight } from "@/components/sections/ProSpotlight";
 import { SiteShell } from "@/components/layout/SiteShell";
@@ -18,6 +19,9 @@ export default function Home() {
   return (
     <SiteShell>
       <Hero />
+      <ScrollReveal sectionLabel="THE PITCH">
+        <StatementBand />
+      </ScrollReveal>
       <ScrollReveal sectionLabel="FPS PROOF">
         <NetworkProofSection />
       </ScrollReveal>

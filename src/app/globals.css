@@ -5091,3 +5091,142 @@ html.reduce-effects .particles-canvas {
   display: inline-block;
   min-width: 8ch;
 }
+
+/* ===== STATEMENT BAND (signature typographic moment) ===== */
+.statement-band {
+  position: relative;
+  padding: clamp(3.5rem, 8vw, 6rem) 1rem;
+  text-align: center;
+  overflow: hidden;
+}
+.statement-band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 55% at 50% 50%, rgba(232, 69, 58, 0.09), transparent 70%);
+  pointer-events: none;
+}
+.statement-band-kicker {
+  margin: 0 0 1rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #f15b50;
+}
+.statement-band-title {
+  position: relative;
+  margin: 0 0 2.5rem;
+  font-family: var(--reflux-font-display);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+}
+.statement-band-solid {
+  display: block;
+  font-size: clamp(3rem, 9vw, 6.5rem);
+  color: #fff;
+}
+.statement-band-outline {
+  display: block;
+  font-size: clamp(2.6rem, 8vw, 5.6rem);
+  color: transparent;
+  -webkit-text-stroke: 2px #e8453a;
+  text-shadow: 0 0 60px rgba(232, 69, 58, 0.25);
+}
+.statement-band-stats {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem 0;
+  max-width: 56rem;
+  margin: 0 auto;
+}
+.statement-band-stat {
+  display: flex;
+  align-items: center;
+  flex: 1 1 200px;
+  justify-content: center;
+}
+.statement-band-divider {
+  width: 1px;
+  height: 3.2rem;
+  margin: 0 1.75rem;
+  background: linear-gradient(180deg, transparent, rgba(232, 69, 58, 0.55), transparent);
+}
+.statement-band-value {
+  font-family: var(--reflux-font-metric);
+  font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+  font-weight: 700;
+  color: #fff;
+}
+.statement-band-unit {
+  margin-left: 0.45rem;
+  font-size: 0.55em;
+  font-weight: 700;
+  color: #f15b50;
+}
+.statement-band-note {
+  margin-top: 0.2rem;
+  font-size: 0.78rem;
+  color: #8a939f;
+}
+.statement-band-caption {
+  position: relative;
+  margin: 2rem 0 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: #6e7684;
+}
+@media (max-width: 640px) {
+  .statement-band-divider { display: none; }
+  .statement-band-stat { flex-basis: 100%; }
+}
+
+/* ===== VERSUS TABLE (us vs typical tweaker) ===== */
+.versus-wrap {
+  overflow-x: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.versus-table {
+  border-collapse: collapse;
+  min-width: 560px;
+}
+.versus-th {
+  padding: 1rem 1.25rem 0.8rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.versus-th--us { color: #f15b50; }
+.versus-th--them { color: #6e7684; }
+.versus-row { border-top: 1px solid rgba(255, 255, 255, 0.05); }
+.versus-label {
+  padding: 1rem 1.25rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #b8c0cc;
+  white-space: nowrap;
+}
+.versus-us {
+  padding: 1rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(232, 69, 58, 0.06);
+  border-left: 2px solid rgba(232, 69, 58, 0.55);
+}
+.versus-them {
+  padding: 1rem 1.25rem;
+  font-size: 0.88rem;
+  color: #6e7684;
+}
+
+/* Bigger, more confident hero headline */
+.hero-stage--straight .hero-headline--compact {
+  font-size: clamp(2.6rem, 6.8vw, 4.6rem);
+  line-height: 1.04;
+}

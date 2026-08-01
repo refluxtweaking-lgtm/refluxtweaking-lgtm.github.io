@@ -62,6 +62,36 @@ export function WhyReflux() {
         ))}
       </div>
 
+      <FlowIn delay={100}>
+        <div className="versus-wrap mx-auto mb-14 max-w-4xl">
+          <table className="versus-table w-full text-left">
+            <thead>
+              <tr>
+                <th className="versus-th versus-th--label" scope="col"></th>
+                <th className="versus-th versus-th--us" scope="col">REFLUX</th>
+                <th className="versus-th versus-th--them" scope="col">Typical tweaker</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                ["Applying tweaks", "Automatic on open", "You click Apply, forever"],
+                ["Tuned to hardware", "Custom CPU + GPU profile", "Same preset for everyone"],
+                ["Free version", "Real desktop app", "Demo or locked trial"],
+                ["Price", "$0 free · $6.99/mo PRO", "$20-40 one-off packs"],
+                ["Safety", "Restore point built in, reversible", "Hope for the best"],
+                ["Deep cleanup", "Extreme Process Killer, keeps Edge", "Kills random things you need"],
+              ].map(([label, us, them]) => (
+                <tr key={label} className="versus-row">
+                  <th className="versus-label" scope="row">{label}</th>
+                  <td className="versus-us">{us}</td>
+                  <td className="versus-them">{them}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </FlowIn>
+
       <FlowIn delay={120}>
         <div className="why-story mx-auto max-w-3xl text-center">
           <p className="why-story-kicker">sno**** on a laptop</p>
