@@ -1,14 +1,14 @@
 {
   "free": {
-    "version": "1.0.20",
-    "label": "REFLUX FREE v1.0.20",
+    "version": "1.0.21",
+    "label": "REFLUX FREE v1.0.21",
     "downloadUrl": "https://www.refluxtweaks.com/downloads/REFLUX-FREE-Setup.exe",
-    "message": "Light auto profile on launch — clears temp files, flushes DNS, and preps Game Mode when you open the app. Recycle Bin stays manual. Cleaner Home tiles."
+    "message": "Thermals & Cool Mode — live CPU/GPU temps on detailed chip and graphics-card SVGs. FREE includes Light Cool Mode for 10 minutes (Chill/Balanced are PRO). Tutorial arrows fixed. Sidebar shows your Windows display name and version (24H2 / 25H2)."
   },
   "pro": {
-    "version": "1.0.29",
-    "label": "REFLUX PRO v1.0.29",
+    "version": "1.0.30",
+    "label": "REFLUX PRO v1.0.30",
     "downloadUrl": "https://www.refluxtweaks.com/account",
-    "message": "Auto profile on launch — your custom hardware profile re-applies itself every time you open the app. Cleaner boxes, dark red branding, and an Auto Profile status banner on Home."
+    "message": "Thermals & Cool Mode — live CPU/GPU temps on detailed chip and graphics-card SVGs, plus interactive Cool Mode to drop heat. Tutorial arrows now point at the button. Sidebar shows your Windows display name and version (24H2 / 25H2)."
   }
 }

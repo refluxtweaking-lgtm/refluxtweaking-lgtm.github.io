@@ -12,9 +12,17 @@ const FREE_PKG = 'C:\\! REFLUX FREE TWEAKING UTILITY\\package.json';
 const PRO_PKG = 'C:\\! REFLUX PRO TWEAKING UTILITY\\package.json';
 const RELEASE_RED = 0xe74c3c;
 
-function resolveEmoji(envValue, name, fallback) {
+/** Live REFLUX server emoji IDs — not secrets. Env can override. */
+const EMOJI_DEFAULTS = {
+  hammer1: '<:hammer1:1531470925118312612>',
+  status: '<:status:1531470762672783380>',
+  RefluxPro: '<:RefluxPro:1529594517811101868>',
+  Reflux: '<:Reflux:1529595110801674464>',
+};
+
+function resolveEmoji(envValue, name) {
   const raw = String(envValue || '').trim();
-  if (!raw) return fallback;
+  if (!raw || raw === '[SENSITIVE]' || raw === '[encrypted]') return EMOJI_DEFAULTS[name];
   if (raw.startsWith('<') && raw.endsWith('>')) return raw;
   if (/^\d{5,}$/.test(raw)) return `<:${name}:${raw}>`;
   return raw;
@@ -22,10 +30,10 @@ function resolveEmoji(envValue, name, fallback) {
 
 function releaseEmojis(env) {
   return {
-    hammer: resolveEmoji(env.DISCORD_EMOJI_HAMMER1, 'hammer1', '🛠️'),
-    status: resolveEmoji(env.DISCORD_EMOJI_STATUS, 'status', '📡'),
-    pro: resolveEmoji(env.DISCORD_EMOJI_REFLUX_PRO, 'RefluxPro', '⚡'),
-    free: resolveEmoji(env.DISCORD_EMOJI_REFLUX, 'Reflux', '🌿'),
+    hammer: resolveEmoji(env.DISCORD_EMOJI_HAMMER1, 'hammer1'),
+    status: resolveEmoji(env.DISCORD_EMOJI_STATUS, 'status'),
+    pro: resolveEmoji(env.DISCORD_EMOJI_REFLUX_PRO, 'RefluxPro'),
+    free: resolveEmoji(env.DISCORD_EMOJI_REFLUX, 'Reflux'),
   };
 }
 
