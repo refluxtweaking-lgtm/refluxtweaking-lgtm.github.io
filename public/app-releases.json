@@ -1,14 +1,14 @@
 {
   "free": {
-    "version": "1.0.21",
-    "label": "REFLUX FREE v1.0.21",
+    "version": "1.0.22",
+    "label": "REFLUX FREE v1.0.22",
     "downloadUrl": "https://www.refluxtweaks.com/downloads/REFLUX-FREE-Setup.exe",
-    "message": "Thermals & Cool Mode — live CPU/GPU temps on detailed chip and graphics-card SVGs. FREE includes Light Cool Mode for 10 minutes (Chill/Balanced are PRO). Tutorial arrows fixed. Sidebar shows your Windows display name and version (24H2 / 25H2)."
+    "message": "Faster startup — hardware detection now runs in the background so the home page and setup tutorial are usable right away instead of waiting on it."
   },
   "pro": {
-    "version": "1.0.30",
-    "label": "REFLUX PRO v1.0.30",
+    "version": "1.0.31",
+    "label": "REFLUX PRO v1.0.31",
     "downloadUrl": "https://www.refluxtweaks.com/account",
-    "message": "Thermals & Cool Mode — live CPU/GPU temps on detailed chip and graphics-card SVGs, plus interactive Cool Mode to drop heat. Tutorial arrows now point at the button. Sidebar shows your Windows display name and version (24H2 / 25H2)."
+    "message": "Faster startup — the setup tutorial now opens right after you enter instead of waiting on hardware detection, which could take up to two minutes on slower PCs. Hardware detection and your auto profile now run in the background so the UI is usable immediately."
   }
 }
