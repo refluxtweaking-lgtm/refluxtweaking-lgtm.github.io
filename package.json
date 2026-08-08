@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "release:manifest": "node scripts/sync-app-releases.js",
+    "release:fire": "node scripts/fire-release.js",
+    "release:virustotal": "node scripts/post-virustotal-scan.js",
+    "release:virustotal:dry": "node scripts/post-virustotal-scan.js --dry-run"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.0",
