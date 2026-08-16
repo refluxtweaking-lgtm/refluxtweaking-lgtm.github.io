@@ -1,14 +1,14 @@
 {
   "free": {
-    "version": "1.0.22",
-    "label": "REFLUX FREE v1.0.22",
+    "version": "1.0.23",
+    "label": "REFLUX FREE v1.0.23",
     "downloadUrl": "https://www.refluxtweaks.com/downloads/REFLUX-FREE-Setup.exe",
-    "message": "Faster startup — hardware detection now runs in the background so the home page and setup tutorial are usable right away instead of waiting on it."
+    "message": "RAM update. The Performance & Info tab now shows your real rated vs running memory speed and only flags a memory profile when your PC can actually change it, so laptops no longer get a warning they cannot act on. Clear Standby List now does a real standby purge instead of nothing, and page file sizing scales to your installed RAM. Also fixes hardware detection failing outright on some PCs, and the live chart and CPU/GPU/RAM panel now sit at the top of the home page."
   },
   "pro": {
-    "version": "1.0.31",
-    "label": "REFLUX PRO v1.0.31",
+    "version": "1.0.32",
+    "label": "REFLUX PRO v1.0.32",
     "downloadUrl": "https://www.refluxtweaks.com/account",
-    "message": "Faster startup — the setup tutorial now opens right after you enter instead of waiting on hardware detection, which could take up to two minutes on slower PCs. Hardware detection and your auto profile now run in the background so the UI is usable immediately."
+    "message": "Big RAM update. The Performance & Info tab now shows your real rated vs running memory speed, and works out whether your PC can actually take a BIOS memory profile — laptops no longer get a warning they cannot act on. Desktops get a step-by-step guide with the exact menu path for your detected board. Clear Standby List now does a real standby purge instead of nothing, page file sizing scales to your installed RAM, and four new memory tweaks were added. Also fixes hardware detection failing outright on some PCs, and the live chart and CPU/GPU/RAM panel now sit at the top of the home page."
   }
 }
